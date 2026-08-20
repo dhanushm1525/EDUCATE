@@ -5,7 +5,7 @@ import rateLimit from "express-rate-limit";
 
 import { env } from "./infrastructure/config/env";
 
-import { logger } from "./infrastructure/services/logger";
+
 
 import { notFoundMiddleware } from "./presentation/middlewares/notFoundMiddleware";
 import { errorMiddleware } from "./presentation/middlewares/errorMiddleware";

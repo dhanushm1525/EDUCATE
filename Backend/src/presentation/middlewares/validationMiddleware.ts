@@ -1,14 +1,13 @@
-import { Request, Response, NextFunction } from "express";
-import { z } from "zod";
+import {
+  Request,
+  Response,
+  NextFunction
+} from "express";
 
-type ValidationData = {
-  body: unknown;
-  params: unknown;
-  query: unknown;
-};
+import { ZodType } from "zod";
 
 export const validate = (
-  schema: z.ZodType<ValidationData>
+  schema: ZodType
 ) => {
   return (
     req: Request,
@@ -18,20 +17,16 @@ export const validate = (
     const result = schema.safeParse({
       body: req.body,
       params: req.params,
-      query: req.query,
+      query: req.query
     });
 
     if (!result.success) {
       return res.status(400).json({
         success: false,
         message: "Validation failed",
-        errors: result.error.flatten(),
+        errors: result.error.flatten()
       });
     }
-
-    req.body = result.data.body;
-    req.params = result.data.params;
-    req.query = result.data.query;
 
     next();
   };
