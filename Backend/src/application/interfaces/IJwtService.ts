@@ -1,14 +1,29 @@
-export interface AccessTokenPayload{
-    userId:string;
-    roles:"student"|"teacher"|"admin";
+import { UserRole } from "../../shared/enums/UserRole";
+
+
+export interface AccessTokenPayload {
+    userId: string;
+    role: UserRole;
 }
 
-export interface IJwtService{
-    generateAccessToken(payload:AccessTokenPayload):string;
 
-    generateRefreshToken(userId:string):string;
+export interface IJwtService {
 
-    verifyAccessToken(token:string):AccessTokenPayload;
+    generateAccessToken(
+        payload: AccessTokenPayload
+    ): string;
 
-    verifyRefreshToken(token:string):{userId:string};
+    generateRefreshToken(
+        userId: string
+    ): string;
+
+    verifyAccessToken(
+        token: string
+    ): AccessTokenPayload;
+
+    verifyRefreshToken(
+        token: string
+    ): {
+        userId: string;
+    };
 }

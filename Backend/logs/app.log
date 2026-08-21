@@ -233,3 +233,5 @@
 {"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:14:46.310Z"}
 {"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:14:47.722Z"}
 {"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:14:47.726Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:17:10.738Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:17:10.745Z"}
