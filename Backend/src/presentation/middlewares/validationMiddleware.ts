@@ -11,7 +11,7 @@ export const validate = (
 ) => {
   return (
     req: Request,
-    res: Response,
+    _res: Response,
     next: NextFunction
   ) => {
     const result = schema.safeParse({
@@ -21,11 +21,7 @@ export const validate = (
     });
 
     if (!result.success) {
-      return res.status(400).json({
-        success: false,
-        message: "Validation failed",
-        errors: result.error.flatten()
-      });
+        return next(result.error)
     }
 
     next();

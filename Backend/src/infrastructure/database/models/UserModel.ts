@@ -1,4 +1,6 @@
 import { Document, Schema, model } from "mongoose";
+import { UserRole } from "../../../shared/enums/UserRole";
+import { UserStatus } from "../../../shared/enums/UserStatus";
 
 export interface IUserDocument extends Document {
     firstName: string;
@@ -6,8 +8,8 @@ export interface IUserDocument extends Document {
     email: string;
     password: string;
     avatar?: string;
-    role: "student" | "teacher" | "admin";
-    status: "active" | "blocked" | "pending";
+    role: UserRole;
+    status: UserStatus;
     isVerified: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -52,22 +54,14 @@ const userSchema = new Schema<IUserDocument>(
 
         role: {
             type: String,
-            enum: [
-                "student",
-                "teacher",
-                "admin"
-            ],
-            default: "student"
+            enum: Object.values(UserRole),
+            required: true
         },
 
         status: {
             type: String,
-            enum: [
-                "active",
-                "blocked",
-                "pending"
-            ],
-            default: "active"
+            enum: Object.values(UserStatus),
+            required: true
         },
 
         isVerified: {
@@ -81,4 +75,4 @@ const userSchema = new Schema<IUserDocument>(
     }
 );
 
-export const UserModel = model<IUserDocument>("User",userSchema);
+export const UserModel = model<IUserDocument>("User", userSchema);

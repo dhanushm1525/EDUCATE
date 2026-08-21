@@ -1,6 +1,8 @@
-export type UserRole = "student" | "teacher" | "admin";
+import { UserRole } from "../../shared/enums/UserRole";
 
-export type UserStatus = "active" | "blocked" | "pending";
+import { UserStatus } from "../../shared/enums/UserStatus";
+
+
 
 export interface UserProps {
     id?: string;

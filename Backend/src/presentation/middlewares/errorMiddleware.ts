@@ -1,26 +1,65 @@
-import { Request, Response, NextFunction } from "express";
-import { AppError } from "../../shared/errors/AppError";
+import {
+    Request,
+    Response,
+    NextFunction
+} from "express";
 
+import {
+    ZodError
+} from "zod";
+
+import {
+    AppError
+} from "../../shared/errors/AppError";
+
+import {
+    errorResponse
+} from "../../shared/response/apiResponse";
+
+import {
+    logger
+} from "../../infrastructure/services/logger";
 
 
 export const errorMiddleware = (
-    error: Error,
+    error: unknown,
     _req: Request,
     res: Response,
     _next: NextFunction
-)=>{
-    console.error(error)
+) => {
 
-    if(error instanceof AppError){
-        return res.status(error.statusCode).json({
-            success:false,
-            message:error.message
-        });
+    if (error instanceof ZodError) {
+
+        return errorResponse(
+            res,
+            400,
+            "Validation failed",
+            error.flatten()
+        );
     }
 
-    return res.status(500).json({
-        success:false,
-        message:"Internal Server error"
-    });
-}
 
+    if (error instanceof AppError) {
+
+        return errorResponse(
+            res,
+            error.statusCode,
+            error.message
+        );
+    }
+
+
+    logger.error(
+        "Unexpected server error",
+        {
+            error
+        }
+    );
+
+
+    return errorResponse(
+        res,
+        500,
+        "Internal Server error"
+    );
+};
