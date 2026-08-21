@@ -42,5 +42,10 @@ export const AUTH_MESSAGES = {
         "Email verification successful",
 
     INVALID_VERIFICATION_TOKEN:
-        "Invalid or expired verification token"
+        "Invalid or expired verification token",
+
+    INVALID_ACCESS_TOKEN:
+        "Invalid access token",
+
+    
 } as const;

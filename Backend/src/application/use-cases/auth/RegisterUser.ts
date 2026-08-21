@@ -6,20 +6,13 @@ import { RegisterUserDTO } from "../../dtos/auth/RegisterUserDTO"
 import { UserRole } from "../../../shared/enums/UserRole";
 import { UserStatus } from "../../../shared/enums/UserStatus";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
-
-export interface RegisterUserResponse {
-    id: string,
-    firstName: string,
-    lastName: string,
-    email: string,
-    role: string
-}
+import { RegisterUserResponseDTO } from "../../dtos/auth/RegisterUserResponseDTO";
 
 
 export class RegisterUser {
     constructor(private readonly userRepository: IUserRepository, private readonly passwordHasher: IPasswordHasher) { }
 
-    async execute(request: RegisterUserDTO): Promise<RegisterUserResponse> {
+    async execute(request: RegisterUserDTO): Promise<RegisterUserResponseDTO> {
         const email = request.email.trim().toLowerCase();
 
         const exists = await this.userRepository.existsByEmail(email);
@@ -42,8 +35,12 @@ export class RegisterUser {
 
         const createdUser = await this.userRepository.create(user);
 
+        if(!createdUser.id){
+            throw new AppError("user creation failed",500,false)
+        }
+
         return {
-            id: createdUser.id!,
+            id: createdUser.id,
             firstName: createdUser.firstName,
             lastName: createdUser.lastName,
             email: createdUser.email,
