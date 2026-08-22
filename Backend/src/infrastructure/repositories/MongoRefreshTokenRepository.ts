@@ -13,14 +13,10 @@ export class MongoRefreshTokenRepository implements IRefreshTokenRepository {
     }
 
 
-    async findActiveByTokenHash(tokenHash: string): Promise<{ id: string; userId: string; expiresAt: Date; } | null> {
+    async findByTokenHash(tokenHash: string): Promise<{ id: string; userId: string; expiresAt: Date; revokedAt:Date|null} | null> {
         const document = await RefreshTokenModel.findOne({
             tokenHash,
-            revokedAt: null,
-            expiresAt: {
-                $gt: new Date()
-            }
-        });
+    });
 
         if (!document) {
             return null
@@ -29,7 +25,8 @@ export class MongoRefreshTokenRepository implements IRefreshTokenRepository {
         return {
             id: document._id.toString(),
             userId: document.userId.toString(),
-            expiresAt: document.expiresAt
+            expiresAt: document.expiresAt,
+            revokedAt:document.revokedAt
         };
     }
 

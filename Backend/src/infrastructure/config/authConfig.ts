@@ -1,0 +1,7 @@
+import { IAuthConfig } from "../../application/interfaces/IAuthConfig";
+import { env } from "./env";
+
+export const authConfig: IAuthConfig = {
+    refreshTokenExpiresInMs:
+        env.refreshTokenCookieMaxAge
+};

@@ -5,12 +5,13 @@ export interface IRefreshTokenRepository {
         expiresAt: Date
     ): Promise<void>;
 
-    findActiveByTokenHash(
+    findByTokenHash(
         tokenHash: string,
     ): Promise<{
         id: string,
         userId: string,
         expiresAt: Date
+        revokedAt:Date | null
     } | null>
 
 

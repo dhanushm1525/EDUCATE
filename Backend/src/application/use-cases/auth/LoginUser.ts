@@ -74,9 +74,7 @@ export class LoginUser {
             );
 
 
-        /*
-         * Don't reveal whether an email exists.
-         */
+       
         if (!user) {
             throw new AppError(
                 AUTH_MESSAGES.INVALID_CREDENTIALS,

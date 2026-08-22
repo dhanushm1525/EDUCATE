@@ -6,7 +6,7 @@ export interface IRefreshTokenDocument extends Document {
     userId: Types.ObjectId;
     tokenHash: string,
     expiresAt: Date;
-    revokedAt: Date;
+    revokedAt: Date|null;
     createdAt: Date;
     updatedAt: Date;
 }

@@ -3,7 +3,6 @@ import { LoginUser } from "../../application/use-cases/auth/LoginUser";
 
 import { LoginController } from "../../presentation/controllers/auth/LoginController";
 
-import { IAuthConfig } from "../../application/interfaces/IAuthConfig";
 
 import { MongoUserRepository } from "../repositories/MongoUserRepository";
 import { MongoRefreshTokenRepository } from "../repositories/MongoRefreshTokenRepository";
@@ -13,7 +12,9 @@ import { JwtService } from "../services/JwtService";
 import { Sha256TokenHasher } from "../services/Sha256TokenHasher";
 
 import { refreshTokenCookie } from "../config/cookie";
-import { env } from "../config/env";
+
+import { RefreshAccessToken } from "../../application/use-cases/auth/RefreshAccessToken";
+import { authConfig } from "../config/authConfig";
 
 
 const userRepository =
@@ -31,10 +32,7 @@ const jwtService =
 const tokenHasher =
     new Sha256TokenHasher();
 
-const authConfig: IAuthConfig = {
-    refreshTokenExpiresInMs:
-        env.refreshTokenCookieMaxAge
-};
+
 
 
 export const registerUser =
@@ -60,3 +58,13 @@ export const loginController =
         loginUser,
         refreshTokenCookie
     );
+
+
+export const refreshAccessToken =
+    new RefreshAccessToken(
+        userRepository,
+        refreshTokenRepository,
+        jwtService,
+        tokenHasher,
+        authConfig
+    )
