@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { RegisterUser } from "../../../application/use-cases/auth/RegisterUser";
 import { successResponse } from "../../../shared/response/apiResponse";
 import { RegisterUserDTO } from "../../../application/dtos/auth/RegisterUserDTO";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 
 export class RegisterController {
@@ -19,7 +20,7 @@ export class RegisterController {
 
             const result = await this.registerUser.execute(dto);
 
-            return successResponse(res, 201, "registration successful", result);
+            return successResponse(res, 201, AUTH_MESSAGES.REGISTRATION_SUCCESS, result);
         } catch (error) {
             next(error)
         }

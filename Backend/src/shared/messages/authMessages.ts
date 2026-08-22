@@ -47,5 +47,6 @@ export const AUTH_MESSAGES = {
     INVALID_ACCESS_TOKEN:
         "Invalid access token",
 
-    
+    USER_NOT_FOUND:
+        "User not found",
 } as const;

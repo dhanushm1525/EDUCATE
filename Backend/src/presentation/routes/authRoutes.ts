@@ -9,6 +9,11 @@ import { RegisterController }from "../controllers/auth/RegisterController";
 import { registerUser }from "../../infrastructure/DI/authDependencies";
 
 
+import { loginSchema } from "../../shared/schema/auth/loginSchema";
+
+import { loginController } from "../../infrastructure/DI/authDependencies";
+
+
 const router = Router();
 
 
@@ -18,12 +23,22 @@ const registerController =
     );
 
 
+
+
+
 router.post("/register",validate(registerSchema),(req, res, next) =>registerController.handle(
             req,
             res,
             next
         )
 );
+
+
+
+router.post("/login",validate(loginSchema),loginController.handle.bind(loginController))
+
+
+
 
 
 export default router;

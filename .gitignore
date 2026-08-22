@@ -3,3 +3,6 @@ dist/
 
 Backend/.env
 Frontend/.env
+
+Backend/.env.example
+Frontend/.env.example

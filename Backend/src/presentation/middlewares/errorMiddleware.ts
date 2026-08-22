@@ -17,49 +17,54 @@ import {
 } from "../../shared/response/apiResponse";
 
 import {
-    logger
-} from "../../infrastructure/services/logger";
+    ILogger
+} from "../../application/interfaces/ILogger";
 
 
 export const errorMiddleware = (
-    error: unknown,
-    _req: Request,
-    res: Response,
-    _next: NextFunction
+    logger: ILogger
 ) => {
 
-    if (error instanceof ZodError) {
+    return (
+        error: unknown,
+        _req: Request,
+        res: Response,
+        _next: NextFunction
+    ) => {
 
-        return errorResponse(
-            res,
-            400,
-            "Validation failed",
-            error.flatten()
-        );
-    }
+        if (error instanceof ZodError) {
 
-
-    if (error instanceof AppError) {
-
-        return errorResponse(
-            res,
-            error.statusCode,
-            error.message
-        );
-    }
-
-
-    logger.error(
-        "Unexpected server error",
-        {
-            error
+            return errorResponse(
+                res,
+                400,
+                "Validation failed",
+                error.flatten()
+            );
         }
-    );
 
 
-    return errorResponse(
-        res,
-        500,
-        "Internal Server error"
-    );
+        if (error instanceof AppError) {
+
+            return errorResponse(
+                res,
+                error.statusCode,
+                error.message
+            );
+        }
+
+
+        logger.error(
+            "Unexpected server error",
+            {
+                error
+            }
+        );
+
+
+        return errorResponse(
+            res,
+            500,
+            "Internal Server error"
+        );
+    };
 };

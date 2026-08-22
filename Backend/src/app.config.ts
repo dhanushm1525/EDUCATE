@@ -4,6 +4,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
 import { env } from "./infrastructure/config/env";
+import cookieParser from "cookie-parser";
 
 
 
@@ -12,6 +13,7 @@ import { errorMiddleware } from "./presentation/middlewares/errorMiddleware";
 import { requestLoggerMiddleware } from "./presentation/middlewares/requestLoggerMiddleware";
 
 import apiRoutes from "./presentation/routes"
+import { logger } from "./infrastructure/services/logger";
 
 const app = express();
 
@@ -35,6 +37,8 @@ app.use(
   })
 );
 
+
+
 app.use(express.json({ limit: "1mb" }));
 
 app.use(
@@ -44,12 +48,17 @@ app.use(
   })
 );
 
+
+app.use(cookieParser());
+
+
+
 app.use(requestLoggerMiddleware)
 app.use("/api",apiRoutes)
 
 app.use(notFoundMiddleware);
 
-app.use(errorMiddleware);
+app.use(errorMiddleware(logger));
 
 
 

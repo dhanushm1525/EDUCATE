@@ -1,6 +1,7 @@
 import winston from "winston";
+import { ILogger } from "../../application/interfaces/ILogger";
 
-export const logger = winston.createLogger({
+export const logger:ILogger= winston.createLogger({
     level:"info",
 
     format:winston.format.combine(
