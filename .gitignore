@@ -6,3 +6,4 @@ Frontend/.env
 
 Backend/.env.example
 Frontend/.env.example
+Backend/logs
