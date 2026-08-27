@@ -15,6 +15,7 @@ import { refreshTokenCookie } from "../config/cookie";
 
 import { RefreshAccessToken } from "../../application/use-cases/auth/RefreshAccessToken";
 import { authConfig } from "../config/authConfig";
+import { RefreshTokenController } from "../../presentation/controllers/auth/RefreshTokenController";
 
 
 const userRepository =
@@ -68,3 +69,8 @@ export const refreshAccessToken =
         tokenHasher,
         authConfig
     )
+
+
+export const refreshTokenController = new RefreshTokenController(
+    refreshAccessToken,refreshTokenCookie
+)

@@ -1,475 +1,83 @@
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T06:52:30.541Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T06:52:30.545Z"}
-{"duration":"7ms","level":"info","message":"HTTP request","method":"POST","statusCode":400,"timestamp":"2026-08-21T06:53:57.330Z","url":"/api/auth/register","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"364ms","level":"info","message":"HTTP request","method":"POST","statusCode":201,"timestamp":"2026-08-21T06:54:12.481Z","url":"/api/auth/register","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"134ms","level":"info","message":"HTTP request","method":"POST","statusCode":409,"timestamp":"2026-08-21T07:03:14.515Z","url":"/api/auth/register","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"4ms","level":"info","message":"HTTP request","method":"POST","statusCode":400,"timestamp":"2026-08-21T07:03:34.890Z","url":"/api/auth/register","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"372ms","level":"info","message":"HTTP request","method":"POST","statusCode":201,"timestamp":"2026-08-21T07:03:55.906Z","url":"/api/auth/register","userAgent":"PostmanRuntime/7.51.1"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T07:33:21.276Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T07:33:21.282Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T07:33:36.883Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T07:33:36.886Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T07:33:49.975Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T07:33:49.979Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T07:33:51.456Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T07:33:51.461Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T07:33:52.733Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T07:33:52.736Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T07:49:53.970Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T07:49:53.975Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T07:53:59.675Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T07:53:59.680Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T07:54:46.307Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T07:54:46.311Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T07:54:47.935Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T07:54:47.939Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T07:55:07.450Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T07:55:07.454Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T10:28:26.087Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T10:28:26.095Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T10:43:37.225Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T10:43:37.232Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T10:45:47.574Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T10:45:47.583Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T11:20:26.211Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T11:20:26.216Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T11:22:12.908Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T11:22:12.912Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:12:19.803Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:12:19.807Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:12:22.710Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:12:22.715Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:12:24.339Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:12:24.347Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:12:26.581Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:12:26.585Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:12:28.944Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:12:28.948Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:12:33.226Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:12:33.231Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:12:34.866Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:12:34.871Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:12:39.958Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:12:39.963Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:12:45.250Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:12:45.254Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:12:49.126Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:12:49.132Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:13:08.298Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:13:08.305Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:13:10.704Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:13:10.708Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:13:52.625Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:13:52.632Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:13:54.234Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:13:54.238Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:14:19.700Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:14:19.707Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:14:21.217Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:14:21.223Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:14:24.456Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:14:24.461Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:14:26.216Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:14:26.221Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:14:32.075Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:14:32.083Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:14:33.662Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:14:33.666Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:14:37.272Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:14:37.276Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:15:05.695Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:15:05.701Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:15:07.900Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:15:07.906Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:15:10.774Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:15:10.779Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:15:14.230Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:15:14.234Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:15:16.699Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:15:16.705Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:15:19.590Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:15:19.595Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:15:22.242Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:15:22.247Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:16:17.013Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:16:17.021Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:16:20.614Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:16:20.619Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:16:22.519Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:16:22.528Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:16:40.937Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:16:40.942Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:17:18.881Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:17:18.886Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:17:30.664Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:17:30.669Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:17:33.433Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:17:33.438Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:25:35.072Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:25:35.080Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:25:41.085Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:25:41.089Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:25:45.542Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:25:45.548Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:25:47.994Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:25:47.998Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:25:50.478Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:25:50.482Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:27:16.463Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:27:16.468Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:27:18.722Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:27:18.726Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:27:22.172Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:27:22.177Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:27:28.965Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:27:28.968Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:27:33.177Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:27:33.181Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:27:38.169Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:27:38.179Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:34:32.495Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:34:32.500Z"}
-{"duration":"5ms","level":"info","message":"HTTP request","method":"GET","statusCode":304,"timestamp":"2026-08-21T12:40:18.085Z","url":"/api/health","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:55:41.181Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:55:41.189Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:58:05.924Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:58:05.928Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:58:07.885Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:58:07.889Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:58:41.534Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:58:41.539Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:58:43.167Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:58:43.171Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:58:47.987Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:58:47.991Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:58:50.908Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:58:50.911Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T12:58:53.175Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T12:58:53.180Z"}
-{"level":"info","message":"SIGINT received. Starting graceful shutdown.","timestamp":"2026-08-21T13:00:36.794Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:00:40.454Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:00:40.459Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:04:38.024Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:04:38.029Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:04:39.132Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:04:39.137Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:04:41.992Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:04:41.996Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:04:44.955Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:04:44.961Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:04:48.134Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:04:48.138Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:04:51.650Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:04:51.655Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:05:33.027Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:05:33.033Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:05:55.118Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:05:55.122Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:05:56.442Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:05:56.446Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:05:57.660Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:05:57.665Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:06:08.866Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:06:08.870Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:06:48.550Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:06:48.555Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:06:52.608Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:06:52.612Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:06:58.107Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:06:58.111Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:06:59.298Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:06:59.303Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:01.724Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:01.727Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:07.534Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:07.538Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:10.937Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:10.941Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:12.109Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:12.114Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:13.284Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:13.289Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:17.376Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:17.381Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:18.976Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:18.981Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:21.650Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:21.654Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:23.603Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:23.608Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:25.677Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:25.682Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:27.579Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:27.585Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:30.987Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:31.001Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:33.225Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:33.229Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:44.908Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:44.913Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:48.292Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:48.295Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:50.587Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:50.595Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:52.987Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:52.991Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:56.404Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:56.408Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:07:59.966Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:07:59.971Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:10:21.704Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:10:21.710Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:11:05.477Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:11:05.482Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:13:17.153Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:13:17.157Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:13:31.485Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:13:31.490Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:14:24.085Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:14:24.089Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:14:25.922Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:14:25.926Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:14:46.306Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:14:46.310Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:14:47.722Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:14:47.726Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T13:17:10.738Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T13:17:10.745Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:24:41.160Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:24:41.166Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:24:48.964Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:24:48.970Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:24:54.901Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:24:54.906Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:24:58.174Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:24:58.178Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:24:59.825Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:24:59.830Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:25:17.165Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:25:17.169Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:33:11.968Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:33:11.973Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:33:27.240Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:33:27.244Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:33:30.004Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:33:30.009Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:34:08.102Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:34:08.107Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:34:09.736Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:34:09.742Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:34:11.664Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:34:11.668Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:36:20.631Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:36:20.637Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:36:31.925Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:36:31.929Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:36:42.864Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:36:42.868Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:36:46.540Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:36:46.544Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:36:53.636Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:36:53.642Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:36:54.899Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:36:54.904Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:37:04.783Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:37:04.786Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:37:07.375Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:37:07.381Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:37:09.456Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:37:09.461Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:37:11.554Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:37:11.558Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-21T14:37:12.748Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-21T14:37:12.753Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T04:57:14.192Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T04:57:14.196Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T04:57:26.512Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T04:57:26.518Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T04:57:31.917Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T04:57:31.922Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:33:05.095Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:33:05.108Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:33:29.026Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:33:29.033Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:33:30.571Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:33:30.577Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:34:07.640Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:34:07.646Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:34:23.492Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:34:23.496Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:35:53.097Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:35:53.102Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:35:56.616Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:35:56.621Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:41:35.495Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:41:35.501Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:42:01.782Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:42:01.789Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:42:34.490Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:42:34.495Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:42:35.979Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:42:35.993Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:42:38.982Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:42:38.988Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:42:53.483Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:42:53.490Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T07:43:05.836Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T07:43:05.842Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T08:59:27.709Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T08:59:27.715Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T08:59:32.247Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T08:59:32.252Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T08:59:36.078Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T08:59:36.084Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T09:41:00.478Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T09:41:00.483Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T09:41:02.022Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T09:41:02.027Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T09:41:10.884Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T09:41:10.890Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T09:41:17.624Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T09:41:17.628Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T09:41:20.285Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T09:41:20.289Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:28:22.079Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:28:22.086Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:31:41.908Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:31:41.915Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:32:29.430Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:32:29.436Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:35:34.770Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:35:34.775Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:35:38.105Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:35:38.114Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:35:50.904Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:35:50.909Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:35:52.370Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:35:52.377Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:35:58.804Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:35:58.810Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:36:33.529Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:36:33.534Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:36:55.839Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:36:55.845Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:36:59.509Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:36:59.514Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:37:05.019Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:37:05.024Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:37:48.254Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:37:48.262Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:37:54.625Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:37:54.633Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:38:04.585Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:38:04.591Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:38:15.481Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:38:15.486Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:38:17.957Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:38:17.963Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:38:19.224Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:38:19.233Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:38:22.668Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:38:22.672Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:40:00.921Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:40:00.927Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:41:12.098Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:41:12.105Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:47:07.238Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:47:07.244Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:47:30.338Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:47:30.345Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:47:36.264Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:47:36.271Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:47:49.983Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:47:49.991Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:48:09.980Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:48:09.986Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:48:13.188Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:48:13.192Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:48:16.737Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:48:16.741Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:48:19.028Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:48:19.035Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:48:24.540Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:48:24.547Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:48:42.032Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:48:42.037Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:48:50.447Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:48:50.454Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:48:51.796Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:48:51.802Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:49:01.837Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:49:01.842Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:49:06.308Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:49:06.315Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:49:36.311Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:49:36.318Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:50:10.200Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:50:10.205Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:50:13.048Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:50:13.055Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:50:28.799Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:50:28.806Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:50:31.511Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:50:31.515Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:50:36.205Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:50:36.210Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:50:47.036Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:50:47.041Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:51:39.356Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:51:39.366Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T10:54:08.372Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T10:54:08.378Z"}
-{"duration":"500ms","level":"info","message":"HTTP request","method":"POST","statusCode":201,"timestamp":"2026-08-22T11:26:08.412Z","url":"/api/auth/register","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"415ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-22T11:29:06.347Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"371ms","level":"info","message":"HTTP request","method":"POST","statusCode":401,"timestamp":"2026-08-22T11:30:58.721Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"43ms","level":"info","message":"HTTP request","method":"POST","statusCode":401,"timestamp":"2026-08-22T11:31:18.540Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"45ms","level":"info","message":"HTTP request","method":"POST","statusCode":401,"timestamp":"2026-08-22T11:31:53.011Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"42ms","level":"info","message":"HTTP request","method":"POST","statusCode":403,"timestamp":"2026-08-22T11:32:03.341Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"46ms","level":"info","message":"HTTP request","method":"POST","statusCode":403,"timestamp":"2026-08-22T11:32:30.192Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
-{"duration":"43ms","level":"info","message":"HTTP request","method":"POST","statusCode":403,"timestamp":"2026-08-22T11:32:48.062Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T13:38:20.102Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T13:38:20.107Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:02:32.443Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:02:32.447Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:03:07.569Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:03:07.578Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:03:09.855Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:03:09.861Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:03:11.434Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:03:11.439Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:03:28.169Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:03:28.175Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:03:38.241Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:03:38.246Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:03:39.805Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:03:39.811Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:04:01.139Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:04:01.145Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:04:02.371Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:04:02.376Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:04:04.497Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:04:04.502Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:04:10.902Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:04:10.908Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:04:25.584Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:04:25.588Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:14:52.023Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:14:52.035Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:59:44.409Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:59:44.415Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T14:59:57.717Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T14:59:57.722Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T15:01:18.845Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T15:01:18.850Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T15:01:57.631Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T15:01:57.636Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T15:01:59.819Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T15:01:59.825Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T15:03:07.830Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T15:03:07.837Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T15:04:35.969Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T15:04:35.975Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T15:04:46.301Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T15:04:46.307Z"}
-{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-22T15:04:51.729Z"}
-{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-22T15:04:51.734Z"}
+{"level":"info","message":"SIGINT received. Starting graceful shutdown.","timestamp":"2026-08-27T08:44:05.799Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T08:44:24.877Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T08:44:24.886Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:02:33.906Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:02:33.913Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:02:41.313Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:02:41.318Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:03:51.236Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:03:51.251Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:05:10.239Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:05:10.244Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:05:25.804Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:05:25.811Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:05:43.876Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:05:43.881Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:05:45.170Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:05:45.174Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:06:11.579Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:06:11.584Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:06:16.850Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:06:16.858Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:06:21.307Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:06:21.313Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:06:23.152Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:06:23.158Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:08:01.260Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:08:01.268Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:08:03.832Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:08:03.843Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:08:05.445Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:08:05.450Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:08:07.184Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:08:07.190Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:08:09.497Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:08:09.504Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:10:57.786Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:10:57.792Z"}
+{"duration":"403ms","level":"info","message":"HTTP request","method":"POST","statusCode":201,"timestamp":"2026-08-27T12:12:21.068Z","url":"/api/auth/register","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"108ms","level":"info","message":"HTTP request","method":"POST","statusCode":403,"timestamp":"2026-08-27T12:12:39.267Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"366ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-27T12:16:42.572Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"219ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-27T12:19:08.385Z","url":"/api/auth/refresh","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"376ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-27T12:21:03.657Z","url":"/api/auth/refresh","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"398ms","level":"info","message":"HTTP request","method":"POST","statusCode":201,"timestamp":"2026-08-27T12:23:02.472Z","url":"/api/auth/register","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"477ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-27T12:23:49.677Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"196ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-27T12:24:44.901Z","url":"/api/auth/refresh","userAgent":"PostmanRuntime/7.51.1"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:31:06.316Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:31:06.322Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:11.379Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:11.386Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:13.994Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:14.000Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:15.915Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:15.920Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:18.239Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:18.245Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:20.735Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:20.741Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:36.501Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:36.507Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:38.342Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:38.348Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:41.885Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:41.891Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:45.987Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:45.993Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:51.220Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:51.225Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:56.208Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:56.213Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:38:58.485Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:38:58.491Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:39:01.811Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:39:01.818Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:39:04.347Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:39:04.353Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:39:29.166Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:39:29.171Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:39:43.264Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:39:43.272Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:42:17.342Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:42:17.351Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-27T12:42:45.620Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-27T12:42:45.625Z"}

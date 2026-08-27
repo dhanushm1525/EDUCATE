@@ -1,3 +1,11 @@
+export interface RefreshTokenRecord {
+    id: string;
+    userId: string;
+    expiresAt: Date;
+    revokedAt: Date | null;
+}
+
+
 export interface IRefreshTokenRepository {
     create(
         userId: string,
@@ -7,12 +15,7 @@ export interface IRefreshTokenRepository {
 
     findByTokenHash(
         tokenHash: string,
-    ): Promise<{
-        id: string,
-        userId: string,
-        expiresAt: Date
-        revokedAt:Date | null
-    } | null>
+    ): Promise<RefreshTokenRecord | null>
 
 
     revokeById(

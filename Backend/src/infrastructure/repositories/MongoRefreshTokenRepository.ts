@@ -1,6 +1,7 @@
-import { IRefreshTokenRepository } from "../../domain/repositories/IRefreshTokenRepository";
+import { IRefreshTokenRepository,RefreshTokenRecord } from "../../domain/repositories/IRefreshTokenRepository";
 import { RefreshTokenModel } from "../database/models/RefreshTokenModel";
 import { Types  } from "mongoose";
+
 
 
 export class MongoRefreshTokenRepository implements IRefreshTokenRepository {
@@ -13,22 +14,23 @@ export class MongoRefreshTokenRepository implements IRefreshTokenRepository {
     }
 
 
-    async findByTokenHash(tokenHash: string): Promise<{ id: string; userId: string; expiresAt: Date; revokedAt:Date|null} | null> {
-        const document = await RefreshTokenModel.findOne({
-            tokenHash,
-    });
+   async findByTokenHash(tokenHash: string): Promise<RefreshTokenRecord |null> {
 
-        if (!document) {
-            return null
-        }
+    const document = await RefreshTokenModel.findOne({tokenHash});
 
-        return {
-            id: document._id.toString(),
-            userId: document.userId.toString(),
-            expiresAt: document.expiresAt,
-            revokedAt:document.revokedAt
-        };
+
+    if (!document) {
+        return null;
     }
+
+
+    return {
+        id: document._id.toString(),
+        userId: document.userId.toString(),
+        expiresAt: document.expiresAt,
+        revokedAt: document.revokedAt
+    };
+}
 
 
     async revokeById(id: string): Promise<void> {

@@ -9,6 +9,7 @@ import { ITokenHasher } from "../../interfaces/ITokenHasher";
 import { IAuthConfig } from "../../interfaces/IAuthConfig";
 import { RefreshAccessTokenDTO } from "../../dtos/auth/RefreshAccessTokenDTO";
 import { RefreshAccessTokenResponseDTO } from "../../dtos/auth/RefreshAccessTokenResponseDTO";
+import { UserStatus } from "../../../shared/enums/UserStatus";
 
 
 export class RefreshAccessToken {
@@ -78,7 +79,7 @@ export class RefreshAccessToken {
         }
 
 
-        if (user.status === "blocked") {
+        if (user.status === UserStatus.BLOCKED) {
 
         throw new AppError(AUTH_MESSAGES.ACCOUNT_BLOCKED,403);
         }
