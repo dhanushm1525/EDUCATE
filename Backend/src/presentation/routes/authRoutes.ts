@@ -7,7 +7,9 @@ import { loginSchema } from "../../shared/schema/auth/loginSchema";
 
 import { RegisterController } from "../controllers/auth/RegisterController";
 
-import {registerUser,loginController,refreshTokenController} from "../../infrastructure/DI/authDependencies";
+import {registerUser,loginController,refreshTokenController,logoutController} from "../../infrastructure/DI/authDependencies";
+
+
 
 
 const router = Router();
@@ -39,5 +41,10 @@ router.post(
         refreshTokenController
     )
 );
+
+router.post(
+    "/logout",
+    logoutController.handle.bind(logoutController)
+)
 
 export default router;

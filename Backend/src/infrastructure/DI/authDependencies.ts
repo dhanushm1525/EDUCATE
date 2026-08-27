@@ -16,6 +16,9 @@ import { refreshTokenCookie } from "../config/cookie";
 import { RefreshAccessToken } from "../../application/use-cases/auth/RefreshAccessToken";
 import { authConfig } from "../config/authConfig";
 import { RefreshTokenController } from "../../presentation/controllers/auth/RefreshTokenController";
+import { LogoutUser } from "../../application/use-cases/auth/LogoutUser";
+import { LogoutController } from "../../presentation/controllers/auth/LogoutController";
+
 
 
 const userRepository =
@@ -54,11 +57,7 @@ export const loginUser =
     );
 
 
-export const loginController =
-    new LoginController(
-        loginUser,
-        refreshTokenCookie
-    );
+
 
 
 export const refreshAccessToken =
@@ -70,7 +69,11 @@ export const refreshAccessToken =
         authConfig
     )
 
+export const logoutUser = new LogoutUser(refreshTokenRepository,tokenHasher);
 
-export const refreshTokenController = new RefreshTokenController(
-    refreshAccessToken,refreshTokenCookie
-)
+
+export const loginController = new LoginController(loginUser,refreshTokenCookie);
+
+export const refreshTokenController = new RefreshTokenController(refreshAccessToken,refreshTokenCookie)
+
+export const logoutController = new LogoutController(logoutUser,refreshTokenCookie);
