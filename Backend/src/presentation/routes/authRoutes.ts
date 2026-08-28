@@ -14,6 +14,9 @@ import { verifyEmailOtpSchema } from "../../shared/schema/auth/verifyEmailOtpSch
 
 import { verifyEmailOtpController } from "../../infrastructure/DI/authDependencies";
 
+import { resendVerificationOtpSchema } from "../../shared/schema/auth/resendVerificationOtpSchema";
+
+import { resendVerificationOtpController } from "../../infrastructure/DI/authDependencies";
 
 const router = Router();
 
@@ -56,6 +59,15 @@ router.post(
     validate(verifyEmailOtpSchema),
     verifyEmailOtpController.handle.bind(
         verifyEmailOtpController
+    )
+);
+
+
+router.post(
+    "/resend-verification-otp",
+    validate(resendVerificationOtpSchema),
+    resendVerificationOtpController.handle.bind(
+        resendVerificationOtpController
     )
 );
 

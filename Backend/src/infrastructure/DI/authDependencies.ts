@@ -25,6 +25,8 @@ import { SendVerificationOtp } from "../../application/use-cases/auth/SendVerifi
 
 import { VerifyEmailOtp } from "../../application/use-cases/auth/VerifyEmailOtp";
 import { VerifyEmailOtpController } from "../../presentation/controllers/auth/VerifyEmailOtpController";
+import { ResendVerificationOtp } from "../../application/use-cases/auth/ResendVerificationOtp";
+import { ResendVerificationOtpController } from "../../presentation/controllers/auth/ResendVerificationOtpController";
 
 const userRepository =
     new MongoUserRepository();
@@ -108,3 +110,14 @@ export const registerUser =
 
 
 export const verifyEmailOtpController = new VerifyEmailOtpController(verifyEmailOtp)
+
+
+export const resendVerificationOtp =
+    new ResendVerificationOtp(
+        userRepository,
+        sendVerificationOtp
+    );
+
+
+
+export const resendVerificationOtpController = new ResendVerificationOtpController(resendVerificationOtp)
