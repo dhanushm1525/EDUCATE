@@ -30,7 +30,7 @@ const refreshTokenRepository =
 const passwordHasher =
     new BcryptPasswordHasher();
 
-const jwtService =
+export const jwtService =
     new JwtService();
 
 const tokenHasher =
