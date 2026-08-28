@@ -46,6 +46,12 @@ export class User {
         this._createdAt = props.createdAt ?? new Date();
         this._updatedAt = props.updatedAt ?? new Date();
     }
+
+    verifyEmail():void{
+        this._isVerified=true;
+        this._updatedAt = new Date()
+    }
+
     get id(): string | undefined {
         return this._id;
     }

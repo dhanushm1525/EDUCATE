@@ -10,6 +10,10 @@ import { RegisterController } from "../controllers/auth/RegisterController";
 import {registerUser,loginController,refreshTokenController,logoutController} from "../../infrastructure/DI/authDependencies";
 
 
+import { verifyEmailOtpSchema } from "../../shared/schema/auth/verifyEmailOtpSchema";
+
+import { verifyEmailOtpController } from "../../infrastructure/DI/authDependencies";
+
 
 const router = Router();
 
@@ -47,6 +51,12 @@ router.post(
 )
 
 
-
+router.post(
+    "/verify-email",
+    validate(verifyEmailOtpSchema),
+    verifyEmailOtpController.handle.bind(
+        verifyEmailOtpController
+    )
+);
 
 export default router;

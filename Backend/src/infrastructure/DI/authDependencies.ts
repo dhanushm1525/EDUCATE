@@ -23,6 +23,9 @@ import { OtpGenerator } from "../services/OtpGenerator";
 import { ResendEmailService } from "../services/ResendEmailService";
 import { SendVerificationOtp } from "../../application/use-cases/auth/SendVerificationOtp";
 
+import { VerifyEmailOtp } from "../../application/use-cases/auth/VerifyEmailOtp";
+import { VerifyEmailOtpController } from "../../presentation/controllers/auth/VerifyEmailOtpController";
+
 const userRepository =
     new MongoUserRepository();
 
@@ -88,7 +91,11 @@ export const sendVerificationOtp = new SendVerificationOtp(
 )
 
 
-
+export const verifyEmailOtp = new VerifyEmailOtp(
+    userRepository,
+    emailVerificationRepository,
+    tokenHasher
+)
 
 
 export const registerUser =
@@ -97,3 +104,7 @@ export const registerUser =
         passwordHasher,
         sendVerificationOtp
     );
+
+
+
+export const verifyEmailOtpController = new VerifyEmailOtpController(verifyEmailOtp)
