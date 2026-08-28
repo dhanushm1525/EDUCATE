@@ -287,3 +287,41 @@
 {"duration":"97ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T06:39:03.742Z","url":"/api/auth/logout","userAgent":"PostmanRuntime/7.51.1"}
 {"duration":"370ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T06:39:10.083Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
 {"duration":"206ms","level":"info","message":"HTTP request","method":"POST","statusCode":401,"timestamp":"2026-08-28T06:39:52.481Z","url":"/api/auth/refresh","userAgent":"PostmanRuntime/7.51.1"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T10:56:40.633Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T10:56:40.642Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T10:56:45.442Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T10:56:45.448Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T10:56:53.966Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T10:56:53.973Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T10:56:55.176Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T10:56:55.183Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T10:57:05.710Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T10:57:05.716Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T10:57:19.534Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T10:57:19.539Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T10:57:49.745Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T10:57:49.752Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T10:58:02.000Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T10:58:02.010Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T10:58:06.909Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T10:58:06.915Z"}
+{"duration":"4ms","level":"info","message":"HTTP request","method":"POST","statusCode":404,"timestamp":"2026-08-28T10:58:57.101Z","url":"/api/auth/admin-test","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"4ms","level":"info","message":"HTTP request","method":"GET","statusCode":401,"timestamp":"2026-08-28T10:59:04.202Z","url":"/api/auth/admin-test","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"518ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T10:59:30.707Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"1ms","level":"info","message":"HTTP request","method":"GET","statusCode":401,"timestamp":"2026-08-28T11:00:16.273Z","url":"/api/auth/admin-test","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"1ms","level":"info","message":"HTTP request","method":"GET","statusCode":401,"timestamp":"2026-08-28T11:01:08.445Z","url":"/api/auth/admin-test","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"468ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T11:04:52.346Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"1ms","level":"info","message":"HTTP request","method":"GET","statusCode":403,"timestamp":"2026-08-28T11:05:27.590Z","url":"/api/auth/admin-test","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"464ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T11:07:48.679Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"1ms","level":"info","message":"HTTP request","method":"POST","statusCode":404,"timestamp":"2026-08-28T11:08:16.647Z","url":"/api/auth/admin-test","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"1ms","level":"info","message":"HTTP request","method":"GET","statusCode":403,"timestamp":"2026-08-28T11:08:22.086Z","url":"/api/auth/admin-test","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"138ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T11:09:07.835Z","url":"/api/auth/logout","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"344ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T11:09:16.803Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"0ms","level":"info","message":"HTTP request","method":"GET","statusCode":403,"timestamp":"2026-08-28T11:09:47.763Z","url":"/api/auth/admin-test","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"83ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T11:11:47.152Z","url":"/api/auth/logout","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"550ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T11:11:55.567Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"2ms","level":"info","message":"HTTP request","method":"GET","statusCode":200,"timestamp":"2026-08-28T11:12:21.036Z","url":"/api/auth/admin-test","userAgent":"PostmanRuntime/7.51.1"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T11:14:57.205Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T11:14:57.211Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T11:15:02.657Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T11:15:02.663Z"}

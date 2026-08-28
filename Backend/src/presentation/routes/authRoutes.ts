@@ -11,7 +11,6 @@ import {registerUser,loginController,refreshTokenController,logoutController} fr
 
 
 
-
 const router = Router();
 
 
