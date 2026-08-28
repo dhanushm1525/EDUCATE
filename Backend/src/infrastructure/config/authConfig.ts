@@ -3,5 +3,8 @@ import { env } from "./env";
 
 export const authConfig: IAuthConfig = {
     refreshTokenExpiresInMs:
-        env.refreshTokenCookieMaxAge
+        env.refreshTokenCookieMaxAge,
+
+    emailVerificationOtpExpiresInMs:
+        env.emailVerificationOtpExpiresInMs
 };

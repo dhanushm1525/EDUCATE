@@ -7,10 +7,11 @@ import { UserRole } from "../../../shared/enums/UserRole";
 import { UserStatus } from "../../../shared/enums/UserStatus";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { RegisterUserResponseDTO } from "../../dtos/auth/RegisterUserResponseDTO";
+import { SendVerificationOtp } from "./SendVerificationOtp"
 
 
 export class RegisterUser {
-    constructor(private readonly userRepository: IUserRepository, private readonly passwordHasher: IPasswordHasher) { }
+    constructor(private readonly userRepository: IUserRepository, private readonly passwordHasher: IPasswordHasher,private readonly sendVerificationOtp:SendVerificationOtp) { }
 
     async execute(request: RegisterUserDTO): Promise<RegisterUserResponseDTO> {
         const email = request.email.trim().toLowerCase();
@@ -38,6 +39,11 @@ export class RegisterUser {
         if(!createdUser.id){
             throw new AppError("user creation failed",500,false)
         }
+
+        await this.sendVerificationOtp.execute({
+            userId:createdUser.id,
+            email:createdUser.email
+        })
 
         return {
             id: createdUser.id,

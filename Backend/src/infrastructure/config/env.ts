@@ -5,7 +5,9 @@ dotenv.config();
 const requiredEnv = [
     "MONGO_URI",
     "JWT_ACCESS_SECRET",
-    "JWT_REFRESH_SECRET"
+    "JWT_REFRESH_SECRET",
+    "RESEND_API_KEY",
+    "EMAIL_FROM"
 ];
 
 for (const key of requiredEnv) {
@@ -52,5 +54,15 @@ export const env = {
         Number(
             process.env.REFRESH_TOKEN_COOKIE_MAX_AGE ??
             259200000
-        )
+        ),
+
+    resendApiKey:process.env.RESEND_API_KEY!,
+
+    emailFrom:process.env.EMAIL_FROM!,
+
+    emailVerificationOtpExpiresInMs:
+    Number(
+        process.env.EMAIL_VERIFICATION_OTP_EXPIRES_IN_MS ??
+        600000
+    )
 };

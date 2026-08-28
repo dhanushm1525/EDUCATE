@@ -18,8 +18,10 @@ import { authConfig } from "../config/authConfig";
 import { RefreshTokenController } from "../../presentation/controllers/auth/RefreshTokenController";
 import { LogoutUser } from "../../application/use-cases/auth/LogoutUser";
 import { LogoutController } from "../../presentation/controllers/auth/LogoutController";
-
-
+import { MongoEmailVerificationRepository } from "../repositories/MongoEmailVerificationRepository";
+import { OtpGenerator } from "../services/OtpGenerator";
+import { ResendEmailService } from "../services/ResendEmailService";
+import { SendVerificationOtp } from "../../application/use-cases/auth/SendVerificationOtp";
 
 const userRepository =
     new MongoUserRepository();
@@ -37,13 +39,6 @@ const tokenHasher =
     new Sha256TokenHasher();
 
 
-
-
-export const registerUser =
-    new RegisterUser(
-        userRepository,
-        passwordHasher
-    );
 
 
 export const loginUser =
@@ -71,9 +66,34 @@ export const refreshAccessToken =
 
 export const logoutUser = new LogoutUser(refreshTokenRepository,tokenHasher);
 
+const emailVerificationRepository = new MongoEmailVerificationRepository()
+
+const otpGenerator = new OtpGenerator();
+
+const emailService = new ResendEmailService()
+
 
 export const loginController = new LoginController(loginUser,refreshTokenCookie);
 
 export const refreshTokenController = new RefreshTokenController(refreshAccessToken,refreshTokenCookie)
 
 export const logoutController = new LogoutController(logoutUser,refreshTokenCookie);
+
+export const sendVerificationOtp = new SendVerificationOtp(
+    emailVerificationRepository,
+    otpGenerator,
+    tokenHasher,
+    emailService,
+    authConfig
+)
+
+
+
+
+
+export const registerUser =
+    new RegisterUser(
+        userRepository,
+        passwordHasher,
+        sendVerificationOtp
+    );
