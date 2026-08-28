@@ -272,3 +272,18 @@
 {"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T04:47:07.928Z"}
 {"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T04:47:07.933Z"}
 {"duration":"7ms","level":"info","message":"HTTP request","method":"GET","statusCode":401,"timestamp":"2026-08-28T04:47:35.327Z","url":"/api/auth/protected","userAgent":"PostmanRuntime/7.51.1"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T04:50:25.112Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T04:50:25.119Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T06:14:24.362Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T06:14:24.369Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T06:27:46.155Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T06:27:46.161Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-08-28T06:27:48.545Z"}
+{"level":"info","message":"EDUCATE server running on port 5050","timestamp":"2026-08-28T06:27:48.552Z"}
+{"duration":"243ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T06:37:55.642Z","url":"/api/auth/logout","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"509ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T06:38:07.722Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"183ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T06:38:29.068Z","url":"/api/auth/logout","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"436ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T06:38:45.917Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"97ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T06:39:03.742Z","url":"/api/auth/logout","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"370ms","level":"info","message":"HTTP request","method":"POST","statusCode":200,"timestamp":"2026-08-28T06:39:10.083Z","url":"/api/auth/login","userAgent":"PostmanRuntime/7.51.1"}
+{"duration":"206ms","level":"info","message":"HTTP request","method":"POST","statusCode":401,"timestamp":"2026-08-28T06:39:52.481Z","url":"/api/auth/refresh","userAgent":"PostmanRuntime/7.51.1"}

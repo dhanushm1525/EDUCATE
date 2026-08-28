@@ -7,9 +7,9 @@ import { loginSchema } from "../../shared/schema/auth/loginSchema";
 
 import { RegisterController } from "../controllers/auth/RegisterController";
 
-import {registerUser,loginController,refreshTokenController,logoutController,jwtService} from "../../infrastructure/DI/authDependencies";
+import {registerUser,loginController,refreshTokenController,logoutController} from "../../infrastructure/DI/authDependencies";
 
-import { authMiddleware } from "../middlewares/authMiddleware";
+
 
 
 const router = Router();
