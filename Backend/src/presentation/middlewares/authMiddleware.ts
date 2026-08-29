@@ -12,6 +12,7 @@ export const authMiddleware=(
         _res:Response,
         next:NextFunction
     )=>{
+        
         try{
             const authorizationHeader = req.headers.authorization;
 
@@ -32,6 +33,7 @@ export const authMiddleware=(
                 userId:payload.userId,
                 role:payload.role
             };
+            
             next()
         }catch(error){
             if(error instanceof AppError){

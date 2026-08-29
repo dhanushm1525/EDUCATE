@@ -57,6 +57,10 @@ export const AUTH_MESSAGES = {
         "Password reset OTP has expired",
 
     PASSWORD_RESET_SUCCESS:
-        "Password reset successfully"
+        "Password reset successfully",
+
+    USER_ID_IS_MISSING:"User ID is missing",
+
+    PROFILE_RETRIEVED_SUCCESSFULLY:"Profile retrieved successfully"
 
 } as const;
