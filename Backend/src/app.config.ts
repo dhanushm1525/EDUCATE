@@ -53,7 +53,7 @@ app.use(cookieParser());
 
 
 
-app.use(requestLoggerMiddleware)
+app.use(requestLoggerMiddleware(logger))
 app.use("/api",apiRoutes)
 
 app.use(notFoundMiddleware);

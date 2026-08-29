@@ -7,11 +7,11 @@ import { UserRole } from "../../../shared/enums/UserRole";
 import { UserStatus } from "../../../shared/enums/UserStatus";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { RegisterUserResponseDTO } from "../../dtos/auth/RegisterUserResponseDTO";
-import { SendVerificationOtp } from "./SendVerificationOtp"
+import { ISendVerificationOtp } from "../../interfaces/ISendVerificationOtp"
 
 
 export class RegisterUser {
-    constructor(private readonly userRepository: IUserRepository, private readonly passwordHasher: IPasswordHasher,private readonly sendVerificationOtp:SendVerificationOtp) { }
+    constructor(private readonly userRepository: IUserRepository, private readonly passwordHasher: IPasswordHasher,private readonly sendVerificationOtp:ISendVerificationOtp) { }
 
     async execute(request: RegisterUserDTO): Promise<RegisterUserResponseDTO> {
         const email = request.email.trim().toLowerCase();

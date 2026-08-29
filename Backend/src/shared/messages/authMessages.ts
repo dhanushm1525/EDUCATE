@@ -1,52 +1,62 @@
 export const AUTH_MESSAGES = {
-    REGISTRATION_SUCCESS:
-        "Registration successful",
 
     EMAIL_ALREADY_EXISTS:
-        "Email is already registered",
+        "Email already exists",
+
+    USER_NOT_FOUND:
+        "User not found",
 
     INVALID_CREDENTIALS:
         "Invalid email or password",
 
-    LOGIN_SUCCESS:
-        "Login successful",
-
-    LOGOUT_SUCCESS:
-        "Logout successful",
-
-    EMAIL_NOT_VERIFIED:
-        "Please verify your email address",
-
     ACCOUNT_BLOCKED:
         "Your account has been blocked",
 
-    ACCOUNT_NOT_FOUND:
-        "Account not found",
+    EMAIL_NOT_VERIFIED:
+        "Please verify your email before logging in",
 
-    INVALID_REFRESH_TOKEN:
-        "Invalid refresh token",
-
-    REFRESH_TOKEN_EXPIRED:
-        "Refresh token has expired",
-
-    PASSWORD_RESET_SENT:
-        "If an account exists with this email, a password reset link has been sent",
-
-    INVALID_RESET_TOKEN:
-        "Invalid or expired password reset token",
-
-    PASSWORD_RESET_SUCCESS:
-        "Password reset successful",
-
-    EMAIL_VERIFICATION_SUCCESS:
-        "Email verification successful",
-
-    INVALID_VERIFICATION_TOKEN:
-        "Invalid or expired verification token",
 
     INVALID_ACCESS_TOKEN:
-        "Invalid access token",
+        "Invalid or expired access token",
 
-    USER_NOT_FOUND:
-        "User not found",
+    INVALID_REFRESH_TOKEN:
+        "Invalid or expired refresh token",
+
+
+    LOGIN_SUCCESS:
+        "Login successful",
+
+    REGISTRATION_SUCCESS:
+        "Registration successful",
+
+
+    UNAUTHORIZED:
+        "You are not authorized to access this resource",
+
+
+    EMAIL_VERIFIED:
+        "Email verified successfully",
+
+    OTP_SENT:
+        "OTP sent successfully",
+
+    INVALID_OTP:
+        "Invalid OTP",
+
+    OTP_EXPIRED:
+        "OTP has expired",
+
+
+    PASSWORD_RESET_OTP_SENT:
+        "Password reset OTP sent successfully",
+
+    INVALID_PASSWORD_RESET_OTP:
+        "Invalid password reset OTP",
+
+    PASSWORD_RESET_OTP_EXPIRED:
+        "Password reset OTP has expired",
+
+    PASSWORD_RESET_SUCCESS:
+        "Password reset successfully"
+
 } as const;

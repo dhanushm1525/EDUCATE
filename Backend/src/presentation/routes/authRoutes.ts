@@ -7,7 +7,7 @@ import { loginSchema } from "../../shared/schema/auth/loginSchema";
 
 import { RegisterController } from "../controllers/auth/RegisterController";
 
-import {registerUser,loginController,refreshTokenController,logoutController} from "../../infrastructure/DI/authDependencies";
+import {registerUser,loginController,refreshTokenController,logoutController, resetPasswordController} from "../../infrastructure/DI/authDependencies";
 
 
 import { verifyEmailOtpSchema } from "../../shared/schema/auth/verifyEmailOtpSchema";
@@ -16,7 +16,10 @@ import { verifyEmailOtpController } from "../../infrastructure/DI/authDependenci
 
 import { resendVerificationOtpSchema } from "../../shared/schema/auth/resendVerificationOtpSchema";
 
-import { resendVerificationOtpController } from "../../infrastructure/DI/authDependencies";
+import { resendVerificationOtpController,forgotPasswordController } from "../../infrastructure/DI/authDependencies";
+
+import { forgotPasswordSchema } from "../../shared/schema/auth/forgotPasswordSchema";
+import { resetPasswordSchema } from "../../shared/schema/auth/resetPasswordSchema";
 
 const router = Router();
 
@@ -68,6 +71,24 @@ router.post(
     validate(resendVerificationOtpSchema),
     resendVerificationOtpController.handle.bind(
         resendVerificationOtpController
+    )
+);
+
+
+router.post(
+    "/forgot-password",
+    validate(forgotPasswordSchema),
+    forgotPasswordController.handle.bind(
+        forgotPasswordController
+    )
+);
+
+
+router.post(
+    "/reset-password",
+    validate(resetPasswordSchema),
+    resetPasswordController.handle.bind(
+        resetPasswordController
     )
 );
 

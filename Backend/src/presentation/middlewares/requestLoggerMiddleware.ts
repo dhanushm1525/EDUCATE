@@ -4,13 +4,13 @@ import {
   NextFunction
 } from "express";
 
-import { logger } from "../../infrastructure/services/logger";
+import { ILogger } from "../../application/interfaces/ILogger";
 
-export const requestLoggerMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const requestLoggerMiddleware = (logger:ILogger) =>(
+    req:Request,
+    res:Response,
+    next:NextFunction
+)=> {
   const start = Date.now();
 
   res.on("finish", () => {

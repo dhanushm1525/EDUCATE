@@ -27,6 +27,11 @@ import { VerifyEmailOtp } from "../../application/use-cases/auth/VerifyEmailOtp"
 import { VerifyEmailOtpController } from "../../presentation/controllers/auth/VerifyEmailOtpController";
 import { ResendVerificationOtp } from "../../application/use-cases/auth/ResendVerificationOtp";
 import { ResendVerificationOtpController } from "../../presentation/controllers/auth/ResendVerificationOtpController";
+import { MongoPasswordResetRepository } from "../repositories/MongoPasswordResetRepository";
+import { ForgotPassword } from "../../application/use-cases/auth/ForgotPassword";
+import { ForgotPasswordController } from "../../presentation/controllers/auth/ForgotPasswordController";
+import { ResetPassword } from "../../application/use-cases/auth/ResetPassword";
+import { ResetPasswordController } from "../../presentation/controllers/auth/ResetPasswordController";
 
 const userRepository =
     new MongoUserRepository();
@@ -69,7 +74,7 @@ export const refreshAccessToken =
         authConfig
     )
 
-export const logoutUser = new LogoutUser(refreshTokenRepository,tokenHasher);
+export const logoutUser = new LogoutUser(refreshTokenRepository, tokenHasher);
 
 const emailVerificationRepository = new MongoEmailVerificationRepository()
 
@@ -78,11 +83,11 @@ const otpGenerator = new OtpGenerator();
 const emailService = new ResendEmailService()
 
 
-export const loginController = new LoginController(loginUser,refreshTokenCookie);
+export const loginController = new LoginController(loginUser, refreshTokenCookie);
 
-export const refreshTokenController = new RefreshTokenController(refreshAccessToken,refreshTokenCookie)
+export const refreshTokenController = new RefreshTokenController(refreshAccessToken, refreshTokenCookie)
 
-export const logoutController = new LogoutController(logoutUser,refreshTokenCookie);
+export const logoutController = new LogoutController(logoutUser, refreshTokenCookie);
 
 export const sendVerificationOtp = new SendVerificationOtp(
     emailVerificationRepository,
@@ -118,6 +123,15 @@ export const resendVerificationOtp =
         sendVerificationOtp
     );
 
+const passwordResetRepository = new MongoPasswordResetRepository();
 
+export const forgotPassword = new ForgotPassword(userRepository,passwordResetRepository,otpGenerator,tokenHasher,emailService,authConfig)
+
+export const forgotPasswordController=new ForgotPasswordController(forgotPassword)
 
 export const resendVerificationOtpController = new ResendVerificationOtpController(resendVerificationOtp)
+
+
+export const resetPassword = new ResetPassword(userRepository,passwordResetRepository,passwordHasher,tokenHasher,refreshTokenRepository)
+
+export const resetPasswordController = new ResetPasswordController(resetPassword)

@@ -6,5 +6,8 @@ export const authConfig: IAuthConfig = {
         env.refreshTokenCookieMaxAge,
 
     emailVerificationOtpExpiresInMs:
-        env.emailVerificationOtpExpiresInMs
+        env.emailVerificationOtpExpiresInMs,
+    
+    passwordResetOtpExpiresInMs:env.passwordResetOtpExpiresInMs
+
 };

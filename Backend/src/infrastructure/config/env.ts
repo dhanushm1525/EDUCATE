@@ -64,5 +64,9 @@ export const env = {
     Number(
         process.env.EMAIL_VERIFICATION_OTP_EXPIRES_IN_MS ??
         600000
-    )
+    ),
+    passwordResetOtpExpiresInMs:
+    Number(
+        process.env.PASSWORD_RESET_OTP_EXPIRES_IN_MS
+    ),
 };

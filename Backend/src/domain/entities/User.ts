@@ -25,7 +25,7 @@ export class User {
     private readonly _firstName: string;
     private readonly _lastName: string;
     private readonly _email: string;
-    private readonly _password: string;
+    private  _password: string;
     private readonly _avatar?: string;
     private _role: UserRole;
     private _status: UserStatus;
@@ -47,9 +47,16 @@ export class User {
         this._updatedAt = props.updatedAt ?? new Date();
     }
 
-    verifyEmail():void{
-        this._isVerified=true;
+    verifyEmail(): void {
+        this._isVerified = true;
         this._updatedAt = new Date()
+    }
+
+    changePassword(
+        hashedPassword: string
+    ): void {
+        this._password = hashedPassword;
+        this._updatedAt = new Date();
     }
 
     get id(): string | undefined {
