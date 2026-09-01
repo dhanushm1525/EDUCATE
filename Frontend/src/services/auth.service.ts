@@ -7,6 +7,8 @@ import type {
     VerifyEmailOtpResponse,
     ResendVerificationOtpRequest,
     ResendVerificationOtpResponse,
+    LoginRequest,
+    LoginResponse,
 } from "../types/auth";
 
 
@@ -48,6 +50,19 @@ export const authService = {
         );
 
         return response.data;
-    }
+    },
+
+
+    login: async (
+        data: LoginRequest
+    ): Promise<LoginResponse> => {
+
+        const response = await apiClient.post(
+            "/auth/login",
+            data
+        );
+
+        return response.data;
+    },
 
 };

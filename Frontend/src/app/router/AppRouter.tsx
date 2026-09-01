@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 
-import LandingPage from "../../pages/LandingPage";
-import LoginPage from "../../pages/LoginPage";
-import RegisterPage from "../../pages/RegisterPage";
-import VerifyEmailPage from "../../pages/VerifyEmailPage";
+import LandingPage from "../../pages/auth/LandingPage";
+import LoginPage from "../../pages/auth/LoginPage";
+import RegisterPage from "../../pages/auth/RegisterPage";
+import VerifyEmailPage from "../../pages/auth/VerifyEmailPage";
 
 export function AppRouter() {
     return (
