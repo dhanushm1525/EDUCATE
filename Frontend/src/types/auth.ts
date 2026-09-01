@@ -69,4 +69,18 @@ export interface LoginResponse {
         user: User;
         accessToken: string;
     };
+
+
+
+
+}
+
+
+export interface RefreshTokenResponse {
+    success: boolean;
+    message: string;
+
+    data: {
+        accessToken: string;
+    };
 }

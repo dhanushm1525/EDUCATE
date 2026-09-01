@@ -32,6 +32,9 @@ import { ForgotPassword } from "../../application/use-cases/auth/ForgotPassword"
 import { ForgotPasswordController } from "../../presentation/controllers/auth/ForgotPasswordController";
 import { ResetPassword } from "../../application/use-cases/auth/ResetPassword";
 import { ResetPasswordController } from "../../presentation/controllers/auth/ResetPasswordController";
+import { GetCurrentUser } from "../../application/use-cases/auth/GetCurrentUser";
+import { GetCurrentUserController } from "../../presentation/controllers/auth/GetCurrentUserController";
+import { authMiddleware } from "../../presentation/middlewares/authMiddleware";
 
 const userRepository =
     new MongoUserRepository();
@@ -135,3 +138,9 @@ export const resendVerificationOtpController = new ResendVerificationOtpControll
 export const resetPassword = new ResetPassword(userRepository,passwordResetRepository,passwordHasher,tokenHasher,refreshTokenRepository)
 
 export const resetPasswordController = new ResetPasswordController(resetPassword)
+
+const getCurrentUser =new GetCurrentUser(userRepository);
+
+export const getCurrentUserController = new GetCurrentUserController(getCurrentUser)
+
+export const authenticateUser = authMiddleware(jwtService)

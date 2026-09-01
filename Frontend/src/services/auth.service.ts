@@ -9,6 +9,7 @@ import type {
     ResendVerificationOtpResponse,
     LoginRequest,
     LoginResponse,
+    RefreshTokenResponse,
 } from "../types/auth";
 
 
@@ -64,5 +65,15 @@ export const authService = {
 
         return response.data;
     },
+
+    refreshAccessToken: async (): Promise<RefreshTokenResponse> => {
+
+    const response = await apiClient.post(
+        "/auth/refresh"
+    );
+
+    return response.data;
+
+},
 
 };

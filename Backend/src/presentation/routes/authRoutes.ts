@@ -7,7 +7,7 @@ import { loginSchema } from "../../shared/schema/auth/loginSchema";
 
 import { RegisterController } from "../controllers/auth/RegisterController";
 
-import {registerUser,loginController,refreshTokenController,logoutController, resetPasswordController} from "../../infrastructure/DI/authDependencies";
+import {registerUser,loginController,refreshTokenController,logoutController, resetPasswordController,getCurrentUserController} from "../../infrastructure/DI/authDependencies";
 
 
 import { verifyEmailOtpSchema } from "../../shared/schema/auth/verifyEmailOtpSchema";
@@ -20,6 +20,8 @@ import { resendVerificationOtpController,forgotPasswordController } from "../../
 
 import { forgotPasswordSchema } from "../../shared/schema/auth/forgotPasswordSchema";
 import { resetPasswordSchema } from "../../shared/schema/auth/resetPasswordSchema";
+import { authenticateUser } from "../../infrastructure/DI/authDependencies";
+
 
 const router = Router();
 
@@ -91,5 +93,11 @@ router.post(
         resetPasswordController
     )
 );
+
+router.get(
+    "/me",
+    authenticateUser,
+    getCurrentUserController.handle.bind(getCurrentUserController)
+)
 
 export default router;
