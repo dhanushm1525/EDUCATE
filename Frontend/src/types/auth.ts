@@ -6,7 +6,7 @@ export interface RegisterRequest {
 }
 
 
-export interface User {
+export interface RegisteredUser {
     id: string;
     firstName: string;
     lastName: string;
@@ -18,10 +18,7 @@ export interface User {
 export interface RegisterResponse {
     success: boolean;
     message: string;
-
-    data?: {
-        user?: User;
-    };
+    data: RegisteredUser;
 }
 
 

@@ -9,10 +9,12 @@ import {
 
 import { authService } from "../../services/auth.service";
 import { getApiErrorMessage } from "../../utils/apiError";
+import { useNavigate } from "react-router-dom";
 
 
 export default function RegisterForm() {
 
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] =
         useState(false);
 
@@ -101,7 +103,12 @@ export default function RegisterForm() {
 
                 });
 
-
+                navigate("/verify-email",{
+                    state:{
+                        userId:response.data.id,
+                        email:response.data.email
+                    }
+                })
             console.log(
                 "Registration successful:",
                 response
