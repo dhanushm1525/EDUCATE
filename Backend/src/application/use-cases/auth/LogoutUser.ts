@@ -15,7 +15,7 @@ export class LogoutUser{
 
         if(!refreshToken){return }
 
-        const tokenHash = this.tokenHasher.hash(refreshToken);
+        const tokenHash = await this.tokenHasher.hash(refreshToken);
 
         const storedToken = await this.refreshTokenRepository.findByTokenHash(tokenHash);
 

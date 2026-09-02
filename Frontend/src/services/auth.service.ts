@@ -1,5 +1,5 @@
 import { apiClient } from "./apiClient";
-import { refreshClient } from "./refreshClient";
+
 
 import type {
     RegisterRequest,
@@ -13,6 +13,7 @@ import type {
     RefreshTokenResponse,
     GetCurrentUserResponse,
 } from "../types/auth";
+import { refreshClient } from "./refreshClient";
 
 
 export const authService = {

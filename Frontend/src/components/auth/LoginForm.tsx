@@ -6,6 +6,7 @@ import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 
 import { authService } from "../../services/auth.service";
 import { getApiErrorMessage } from "../../utils/apiError";
+import { getRoleDashboardPath } from "../../utils/getRoleDashboardPath";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function LoginForm() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const [rememberMe, setRememberMe] = useState(false);
+  
 
   const [email, setEmail] = useState("");
 
@@ -39,29 +40,13 @@ export default function LoginForm() {
 
       const { user, accessToken } = response.data;
 
-     setAuth(user,accessToken)
+      setAuth(user, accessToken);
 
       /*
        * Role based redirection
        */
 
-      if (user.role === "student") {
-        navigate("/student");
-
-        return;
-      }
-
-      if (user.role === "teacher") {
-        navigate("/teacher");
-
-        return;
-      }
-
-      /*
-       * Fallback
-       */
-
-      navigate("/");
+      navigate(getRoleDashboardPath(user.role));
     } catch (error) {
       setError(getApiErrorMessage(error));
     } finally {
@@ -154,20 +139,7 @@ export default function LoginForm() {
           </div>
         </div>
 
-        {/* Remember Me */}
-
-        <div className="flex items-center pt-1">
-          <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-400 select-none">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(event) => setRememberMe(event.target.checked)}
-              className="w-4 h-4 rounded bg-[#0B1120] border-slate-700 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-0 cursor-pointer"
-            />
-
-            <span>Remember me for 30 days</span>
-          </label>
-        </div>
+     
 
         {/* Submit */}
 
