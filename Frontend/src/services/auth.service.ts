@@ -12,6 +12,10 @@ import type {
     LoginResponse,
     RefreshTokenResponse,
     GetCurrentUserResponse,
+    ForgotPasswordRequest,
+    ForgotPasswordResponse,
+    ResetPasswordRequest,
+    ResetPasswordResponse
 } from "../types/auth";
 import { refreshClient } from "./refreshClient";
 
@@ -91,10 +95,43 @@ export const authService = {
 
     logout: async (): Promise<void> => {
 
-    await apiClient.post(
-        "/auth/logout"
-    );
+        await apiClient.post(
+            "/auth/logout"
+        );
 
-},
+    },
+
+    forgotPassword: async (data: ForgotPasswordRequest): Promise<ForgotPasswordResponse> => {
+
+        const response =
+            await apiClient.post(
+
+                "/auth/forgot-password",
+
+                data
+
+            );
+
+
+        return response.data;
+
+    },
+
+
+    resetPassword: async (data: ResetPasswordRequest): Promise<ResetPasswordResponse> => {
+
+        const response =
+            await apiClient.post(
+
+                "/auth/reset-password",
+
+                data
+
+            );
+
+
+        return response.data;
+
+    },
 
 };

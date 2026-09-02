@@ -18,12 +18,16 @@ import RoleRoute from "./RoleRoute";
 
 import PublicRoute from "./PublicRoute";
 
+import ForgotPasswordPage from "../../pages/auth/ForgotPasswordPage";
+
+import ResetPasswordPage from "../../pages/auth/ResetPasswordPage";
+
 export function AppRouter() {
   return (
     <Routes>
-      {/* =========================
+      {/* 
           PUBLIC ROUTES
-      ========================= */}
+       */}
 
       <Route element={<PublicRoute />}>
         <Route path="/" element={<LandingPage />} />
@@ -33,27 +37,31 @@ export function AppRouter() {
         <Route path="/register" element={<RegisterPage />} />
 
         <Route path="/verify-email" element={<VerifyEmailPage />} />
+
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Route>
 
-      {/* =========================
+      {/* 
           STUDENT ROUTES
-      ========================= */}
+       */}
 
       <Route element={<RoleRoute allowedRoles={["student"]} />}>
         <Route path="/student" element={<StudentDashboardPage />} />
       </Route>
 
-      {/* =========================
+      {/* 
           TEACHER ROUTES
-      ========================= */}
+       */}
 
       <Route element={<RoleRoute allowedRoles={["teacher"]} />}>
         <Route path="/teacher" element={<TeacherDashboard />} />
       </Route>
 
-      {/* =========================
+      {/* 
           ADMIN ROUTES
-      ========================= */}
+      */}
 
       <Route element={<RoleRoute allowedRoles={["admin"]} />}>
         <Route path="/admin" element={<AdminDashboard />} />

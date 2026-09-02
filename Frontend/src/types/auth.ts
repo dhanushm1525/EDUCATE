@@ -141,3 +141,52 @@ export interface GetCurrentUserResponse {
     data: User;
 
 }
+
+
+
+
+export interface ForgotPasswordRequest {
+    email: string
+}
+
+
+export interface ForgotPasswordResponse {
+
+    success: boolean;
+
+    message: string;
+
+    data: {
+
+        message: string;
+
+    };
+
+}
+
+
+
+export interface ResetPasswordRequest {
+
+    email: string;
+
+    otp: string;
+
+    newPassword: string;
+
+}
+
+
+export interface ResetPasswordResponse {
+
+    success: boolean;
+
+    message: string;
+
+    data: {
+
+        message: string;
+
+    };
+
+}
