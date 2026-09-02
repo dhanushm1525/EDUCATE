@@ -8,59 +8,56 @@ import RegisterPage from "../../pages/auth/RegisterPage";
 
 import VerifyEmailPage from "../../pages/auth/VerifyEmailPage";
 
-
+import StudentDashboardPage from "../../pages/student/StudentDashboardPage";
 
 import TeacherDashboard from "../../pages/teacher/TeacherDashboard";
 
 import AdminDashboard from "../../pages/admin/AdminDashboard";
 
-import ProtectedRoute from "./ProtectedRoute";
+import RoleRoute from "./RoleRoute";
+
+import PublicRoute from "./PublicRoute";
 
 export function AppRouter() {
   return (
     <Routes>
-      {/* Public Routes */}
+      {/* =========================
+          PUBLIC ROUTES
+      ========================= */}
 
-      <Route path="/" element={<LandingPage />} />
+      <Route element={<PublicRoute />}>
+        <Route path="/" element={<LandingPage />} />
 
-      <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
-      <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-      <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
+      </Route>
 
-      {/* Student Routes */}
+      {/* =========================
+          STUDENT ROUTES
+      ========================= */}
 
-      <Route
-        path="/student"
-        element={
-          <ProtectedRoute allowedRoles={["student"]}>
-            <LandingPage/>
-          </ProtectedRoute>
-        }
-      />
+      <Route element={<RoleRoute allowedRoles={["student"]} />}>
+        <Route path="/student" element={<StudentDashboardPage />} />
+      </Route>
 
-      {/* Teacher Routes */}
+      {/* =========================
+          TEACHER ROUTES
+      ========================= */}
 
-      <Route
-        path="/teacher"
-        element={
-          <ProtectedRoute allowedRoles={["teacher"]}>
-            <TeacherDashboard />
-          </ProtectedRoute>
-        }
-      />
+      <Route element={<RoleRoute allowedRoles={["teacher"]} />}>
+        <Route path="/teacher" element={<TeacherDashboard />} />
+      </Route>
 
-      {/* Admin Routes */}
+      {/* =========================
+          ADMIN ROUTES
+      ========================= */}
 
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute allowedRoles={["admin"]}>
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
+      <Route element={<RoleRoute allowedRoles={["admin"]} />}>
+        <Route path="/admin" element={<AdminDashboard />} />
+      </Route>
     </Routes>
   );
 }

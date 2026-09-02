@@ -89,4 +89,12 @@ export const authService = {
 
     },
 
+    logout: async (): Promise<void> => {
+
+    await apiClient.post(
+        "/auth/logout"
+    );
+
+},
+
 };

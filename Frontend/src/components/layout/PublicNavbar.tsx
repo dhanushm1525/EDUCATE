@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+
 export function PublicNavbar() {
     return (
         <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">

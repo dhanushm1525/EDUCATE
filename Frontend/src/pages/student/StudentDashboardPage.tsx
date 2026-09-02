@@ -1,50 +1,36 @@
-import {
-    useAuthStore
-} from "../../store/authStore";
+
+import { Footer } from "../../components/layout/Footer";
+
+import { HeroSection } from "../../components/landing/HeroSection";
+import { CategorySection } from "../../components/landing/CategorySection";
+import { TrendingCoursesSection } from "../../components/landing/TrendingCoursesSection";
+import { QaCommunitySection } from "../../components/landing/QaCommunitySection";
+import { StudentNavbar } from "../../components/student/StudentNavbar";
 
 
-export default function StudentDashboardPage() {
-
-
-    const user =
-        useAuthStore(
-            (state) =>
-                state.user
-        );
-
-
+function LandingPage() {
     return (
+        <div className="min-h-screen bg-slate-50 text-slate-800">
 
-        <div className="
-            min-h-screen
-            bg-[#0B1120]
-            text-white
-            p-10
-        ">
+            <StudentNavbar />
 
-            <h1 className="
-                text-3xl
-                font-bold
-            ">
+            <main>
 
-                Student Dashboard
+                <HeroSection />
 
-            </h1>
+                <CategorySection />
 
+                <TrendingCoursesSection />
 
-            <p className="
-                mt-3
-                text-slate-400
-            ">
+                <QaCommunitySection />
 
-                Welcome{" "}
+            </main>
 
-                {user?.firstName}
-
-            </p>
+            <Footer />
 
         </div>
-
     );
-
 }
+
+
+export default LandingPage;

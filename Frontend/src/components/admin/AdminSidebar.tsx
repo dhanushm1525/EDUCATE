@@ -5,7 +5,10 @@ import {
   GraduationCap,
   Tags,
   Settings,
+  LogOut
 } from "lucide-react";
+
+import { useLogout } from "../../hooks/useLogout";
 
 const menuItems = [
   {
@@ -40,6 +43,7 @@ const menuItems = [
 ];
 
 export default function AdminSidebar() {
+    const {logout} = useLogout()
   return (
     <aside
       className="
@@ -152,6 +156,30 @@ export default function AdminSidebar() {
                         "
           />
           Settings
+        </button>
+        <button
+          type="button"
+          onClick={logout}
+          className="
+            flex
+            w-full
+            items-center
+            gap-3
+            rounded-lg
+            px-3
+            py-2.5
+            text-sm
+            text-red-400
+            hover:bg-red-500/10
+          "
+        >
+          <LogOut
+            className="
+              h-4
+              w-4
+            "
+          />
+          Logout
         </button>
       </div>
     </aside>

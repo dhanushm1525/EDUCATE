@@ -11,6 +11,8 @@ import {
 
 import { NavLink } from "react-router-dom";
 
+import { useLogout } from "../../hooks/useLogout";
+
 const menuItems = [
   {
     name: "Dashboard",
@@ -50,6 +52,7 @@ const menuItems = [
 ];
 
 export default function TeacherSidebar() {
+    const {logout} = useLogout()
   return (
     <aside
       className="
@@ -169,6 +172,7 @@ export default function TeacherSidebar() {
 
         <button
           type="button"
+          onClick={logout}
           className="
             flex
             w-full
