@@ -8,14 +8,6 @@ import {
 } from "../store/authStore";
 
 
-interface RetryRequestConfig
-    extends InternalAxiosRequestConfig {
-
-    _retry?: boolean;
-
-}
-
-
 export const apiClient =
     axios.create({
 
@@ -35,48 +27,78 @@ export const apiClient =
     });
 
 
-let isRefreshing = false;
+/*
+ * Separate client for refresh requests.
+ *
+ * This prevents the refresh request itself
+ * from triggering the same interceptors.
+ */
 
+const refreshClient =
+    axios.create({
+
+        baseURL:
+            import.meta.env
+                .VITE_API_BASE_URL,
+
+        withCredentials: true
+
+    });
+
+
+/*
+ * Track whether a refresh request
+ * is currently in progress.
+ */
+
+let isRefreshing =
+    false;
+
+
+/*
+ * Requests waiting for a new token.
+ */
 
 let failedQueue:
-    Array<{
-
+    {
         resolve:
-            (
-                token: string
-            ) => void;
+            (token: string) => void;
 
         reject:
-            (
-                error: unknown
-            ) => void;
+            (error: unknown) => void;
 
-    }> = [];
+    }[] =
+    [];
 
 
+/*
+ * Resolve or reject all requests
+ * waiting for token refresh.
+ */
 
 const processQueue = (
 
-    error: unknown | null,
+    error:
+        unknown,
 
-    token: string | null
+    token:
+        string | null = null
 
 ) => {
 
+
     failedQueue.forEach(
+
         (request) => {
 
-            if (
-                error
-            ) {
+
+            if (error) {
 
                 request.reject(
                     error
                 );
 
-            } else if (
-                token
-            ) {
+            } else if (token) {
 
                 request.resolve(
                     token
@@ -85,18 +107,29 @@ const processQueue = (
             }
 
         }
+
     );
 
 
-    failedQueue = [];
+    failedQueue =
+        [];
 
 };
 
 
+/*
+ * REQUEST INTERCEPTOR
+ *
+ * Attach access token to every request.
+ */
 
 apiClient.interceptors.request.use(
 
-    (config) => {
+    (
+        config:
+            InternalAxiosRequestConfig
+    ) => {
+
 
         const accessToken =
             useAuthStore
@@ -104,9 +137,7 @@ apiClient.interceptors.request.use(
                 .accessToken;
 
 
-        if (
-            accessToken
-        ) {
+        if (accessToken) {
 
             config.headers.Authorization =
                 `Bearer ${accessToken}`;
@@ -119,7 +150,9 @@ apiClient.interceptors.request.use(
     },
 
 
-    (error) => {
+    (
+        error
+    ) => {
 
         return Promise.reject(
             error
@@ -130,10 +163,18 @@ apiClient.interceptors.request.use(
 );
 
 
+/*
+ * RESPONSE INTERCEPTOR
+ *
+ * Refresh the access token when
+ * a request returns 401.
+ */
 
 apiClient.interceptors.response.use(
 
-    (response) => {
+    (
+        response
+    ) => {
 
         return response;
 
@@ -141,43 +182,31 @@ apiClient.interceptors.response.use(
 
 
     async (
-        error: AxiosError
+        error:
+            AxiosError
     ) => {
 
+
         const originalRequest =
-            error.config as RetryRequestConfig;
+            error.config as
+            InternalAxiosRequestConfig & {
+
+                _retry?:
+                    boolean;
+
+            };
 
 
-       
-
-        if (
-            !error.response
-        ) {
-
-            return Promise.reject(
-                error
-            );
-
-        }
-
-
-        
+        /*
+         * Only handle 401 errors.
+         */
 
         if (
-            error.response.status !== 401
-        ) {
 
-            return Promise.reject(
-                error
-            );
+            error.response?.status !== 401 ||
 
-        }
-
-
-       
-
-        if (
             originalRequest._retry
+
         ) {
 
             return Promise.reject(
@@ -187,12 +216,24 @@ apiClient.interceptors.response.use(
         }
 
 
+        /*
+         * Prevent retrying the same
+         * request multiple times.
+         */
 
-        if (
-            isRefreshing
-        ) {
+        originalRequest._retry =
+            true;
+
+
+        /*
+         * If refresh is already running,
+         * wait for it.
+         */
+
+        if (isRefreshing) {
 
             return new Promise<string>(
+
                 (
                     resolve,
                     reject
@@ -211,17 +252,28 @@ apiClient.interceptors.response.use(
             ).then(
 
                 (
-                    newAccessToken
+                    token
                 ) => {
 
-                    originalRequest
-                        .headers
-                        .Authorization =
-                        `Bearer ${newAccessToken}`;
+
+                    originalRequest.headers.Authorization =
+                        `Bearer ${token}`;
 
 
                     return apiClient(
                         originalRequest
+                    );
+
+                }
+
+            ).catch(
+
+                (
+                    queueError
+                ) => {
+
+                    return Promise.reject(
+                        queueError
                     );
 
                 }
@@ -231,9 +283,9 @@ apiClient.interceptors.response.use(
         }
 
 
-        originalRequest._retry =
-            true;
-
+        /*
+         * Start token refresh.
+         */
 
         isRefreshing =
             true;
@@ -241,29 +293,24 @@ apiClient.interceptors.response.use(
 
         try {
 
-            
-
-            const {
-                authService
-            } =
-                await import(
-                    "./auth.service"
-                );
-
-
-            
 
             const refreshResponse =
-                await authService
-                    .refreshAccessToken();
+                await refreshClient.post(
+                    "/auth/refresh"
+                );
 
 
             const newAccessToken =
                 refreshResponse
                     .data
+                    .data
                     .accessToken;
 
 
+            /*
+             * Update Zustand and
+             * sessionStorage.
+             */
 
             useAuthStore
                 .getState()
@@ -272,7 +319,9 @@ apiClient.interceptors.response.use(
                 );
 
 
-           
+            /*
+             * Process queued requests.
+             */
 
             processQueue(
 
@@ -283,35 +332,37 @@ apiClient.interceptors.response.use(
             );
 
 
+            /*
+             * Retry original request.
+             */
 
-            originalRequest
-                .headers
-                .Authorization =
+            originalRequest.headers.Authorization =
                 `Bearer ${newAccessToken}`;
 
-
-          
 
             return apiClient(
                 originalRequest
             );
 
+
         } catch (
             refreshError
         ) {
 
-           
+
+            /*
+             * Reject all queued requests.
+             */
 
             processQueue(
-
                 refreshError,
-
                 null
-
             );
 
 
-         
+            /*
+             * Session is no longer valid.
+             */
 
             useAuthStore
                 .getState()
@@ -322,7 +373,9 @@ apiClient.interceptors.response.use(
                 refreshError
             );
 
+
         } finally {
+
 
             isRefreshing =
                 false;

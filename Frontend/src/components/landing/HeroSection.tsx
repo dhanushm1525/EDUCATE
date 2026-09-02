@@ -22,7 +22,7 @@ export function HeroSection() {
     return (
         <section
             id="home"
-            className="bg-gradient-to-b from-blue-600 to-blue-700 px-6 py-20 text-center text-white"
+            className="bg-linear-to-b from-blue-600 to-blue-700 px-6 py-20 text-center text-white"
         >
             <div className="mx-auto max-w-4xl">
 

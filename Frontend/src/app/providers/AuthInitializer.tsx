@@ -67,44 +67,71 @@ export default function AuthInitializer({
 
     useEffect(() => {
 
+
         const initializeAuth =
             async () => {
 
+
                 try {
 
+
                     /*
-                     * 1.
-                     * Get a new access token
-                     * using the refresh token cookie.
+                     * Restore access token
+                     * from the browser session.
                      */
 
-                    const refreshResponse =
-                        await authService
-                            .refreshAccessToken();
-
-
-                    const accessToken =
-                        refreshResponse
-                            .data
-                            .accessToken;
+                    const storedAccessToken =
+                        sessionStorage.getItem(
+                            "accessToken"
+                        );
 
 
                     /*
-                     * 2.
-                     * Store access token temporarily.
+                     * No access token.
                      *
-                     * The Axios interceptor will now
-                     * attach it to GET /auth/me.
+                     * Try restoring the session
+                     * using the refresh cookie.
                      */
 
-                    setAccessToken(
-                        accessToken
-                    );
+                    if (!storedAccessToken) {
+
+
+                        const refreshResponse =
+                            await authService
+                                .refreshAccessToken();
+
+
+                        const newAccessToken =
+                            refreshResponse
+                                .data
+                                .accessToken;
+
+
+                        setAccessToken(
+                            newAccessToken
+                        );
+
+                    } else {
+
+
+                        /*
+                         * Restore token into
+                         * Zustand.
+                         */
+
+                        setAccessToken(
+                            storedAccessToken
+                        );
+
+                    }
 
 
                     /*
-                     * 3.
-                     * Get current user.
+                     * Get the authenticated user.
+                     *
+                     * If access token is expired,
+                     * the Axios interceptor will
+                     * automatically refresh it.
                      */
 
                     const userResponse =
@@ -113,7 +140,28 @@ export default function AuthInitializer({
 
 
                     /*
-                     * 4.
+                     * Get latest token.
+                     *
+                     * It may have changed after
+                     * automatic refresh.
+                     */
+
+                    const currentAccessToken =
+                        useAuthStore
+                            .getState()
+                            .accessToken;
+
+
+                    if (!currentAccessToken) {
+
+                        throw new Error(
+                            "Access token not available"
+                        );
+
+                    }
+
+
+                    /*
                      * Restore complete auth state.
                      */
 
@@ -121,11 +169,13 @@ export default function AuthInitializer({
 
                         userResponse.data,
 
-                        accessToken
+                        currentAccessToken
 
                     );
 
+
                 } catch {
+
 
                     /*
                      * No valid session.
@@ -135,9 +185,6 @@ export default function AuthInitializer({
 
                 } finally {
 
-                    /*
-                     * Authentication check finished.
-                     */
 
                     setInitialized(
                         true
@@ -192,12 +239,6 @@ export default function AuthInitializer({
     }
 
 
-    return (
-
-        <>
-            {children}
-        </>
-
-    );
+    return children;
 
 }

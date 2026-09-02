@@ -48,11 +48,13 @@ export const useAuthStore =
 
 
         setAuth: (user, accessToken) => {
+            sessionStorage.setItem("accessToken",accessToken)
             set({ user, accessToken, isAuthenticated: true });
         },
 
 
         setAccessToken: (accessToken) => {
+            sessionStorage.setItem("accessToken",accessToken)
 
             set({ accessToken });
 
@@ -60,6 +62,7 @@ export const useAuthStore =
 
 
         clearAuth: () => {
+            sessionStorage.removeItem("accessToken")
             set({ user: null, accessToken: null, isAuthenticated: false });
 
         },
