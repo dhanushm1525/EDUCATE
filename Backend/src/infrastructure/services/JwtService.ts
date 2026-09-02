@@ -13,7 +13,7 @@ export class JwtService implements IJwtService{
 
 
     generateRefreshToken(userId: string): string {
-        return jwt.sign({userId},env.jwtRefreshSecret,{expiresIn:env.jwtRefreshExpiresIn as SignOptions["expiresIn"]});
+        return jwt.sign({userId,jti:crypto.randomUUID},env.jwtRefreshSecret,{expiresIn:env.jwtRefreshExpiresIn as SignOptions["expiresIn"]});
     }
 
 

@@ -84,3 +84,10 @@ export interface RefreshTokenResponse {
         accessToken: string;
     };
 }
+
+
+export interface GetCurrentUserResponse {
+    success: boolean;
+    message: string;
+    data: User;
+}

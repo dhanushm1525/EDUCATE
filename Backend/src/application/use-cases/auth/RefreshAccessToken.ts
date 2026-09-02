@@ -23,7 +23,9 @@ export class RefreshAccessToken {
     ) { }
 
     async execute(request: RefreshAccessTokenDTO): Promise<RefreshAccessTokenResponseDTO> {
+         console.log("Refresh process started");
         const { refreshToken } = request;
+        console.log("Verifying refresh token");
 
         let payload;
 
@@ -33,9 +35,24 @@ export class RefreshAccessToken {
             throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN, 401)
         }
 
+           console.log(
+            "Token payload:",
+            payload
+        );
+
         const tokenHash = await this.tokenHasher.hash(refreshToken)
 
+         console.log(
+            "Looking for token in database"
+        );
+
+
         const storedToken = await this.refreshTokenRepository.findByTokenHash(tokenHash)
+
+           console.log(
+            "Stored token:",
+            storedToken
+        );
 
 
         if (!storedToken) {

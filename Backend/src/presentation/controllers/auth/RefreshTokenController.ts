@@ -42,6 +42,11 @@ export class RefreshTokenController{
 
 
         }catch(error){
+             console.error(
+        "REFRESH TOKEN ERROR:",
+        error
+    );
+
             next(error)
         }
     }

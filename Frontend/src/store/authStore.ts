@@ -11,6 +11,8 @@ interface AuthState {
 
     isAuthenticated: boolean;
 
+    isInitialized: boolean;
+
 
     setAuth: (
         user: User,
@@ -18,7 +20,17 @@ interface AuthState {
     ) => void;
 
 
+    setAccessToken: (
+        accessToken: string
+    ) => void;
+
+
     clearAuth: () => void;
+
+
+    setInitialized: (
+        isInitialized: boolean
+    ) => void;
 
 }
 
@@ -32,37 +44,29 @@ export const useAuthStore =
 
         isAuthenticated: false,
 
+        isInitialized: false,
 
-        setAuth: (
-            user,
-            accessToken
-        ) => {
 
-            set({
+        setAuth: (user, accessToken) => {
+            set({ user, accessToken, isAuthenticated: true });
+        },
 
-                user,
 
-                accessToken,
+        setAccessToken: (accessToken) => {
 
-                isAuthenticated: true
-
-            });
+            set({ accessToken });
 
         },
 
 
         clearAuth: () => {
+            set({ user: null, accessToken: null, isAuthenticated: false });
 
-            set({
+        },
 
-                user: null,
 
-                accessToken: null,
-
-                isAuthenticated: false
-
-            });
-
+        setInitialized: (isInitialized) => {
+            set({ isInitialized });
         }
 
     }));

@@ -140,7 +140,7 @@ export class LoginUser {
 
 
         const tokenHash =
-            this.tokenHasher.hash(
+            await this.tokenHasher.hash(
                 refreshToken
             );
 

@@ -1,7 +1,23 @@
-import { AppRouter } from "./app/router/AppRouter";
+import {
+    AppRouter
+} from "./app/router/AppRouter";
+
+import AuthInitializer from "./app/providers/AuthInitializer";
+
 
 function App() {
-    return <AppRouter />;
+
+    return (
+
+        <AuthInitializer>
+
+            <AppRouter />
+
+        </AuthInitializer>
+
+    );
+
 }
+
 
 export default App;

@@ -1,4 +1,5 @@
 import { apiClient } from "./apiClient";
+import { refreshClient } from "./refreshClient";
 
 import type {
     RegisterRequest,
@@ -10,6 +11,7 @@ import type {
     LoginRequest,
     LoginResponse,
     RefreshTokenResponse,
+    GetCurrentUserResponse,
 } from "../types/auth";
 
 
@@ -68,12 +70,22 @@ export const authService = {
 
     refreshAccessToken: async (): Promise<RefreshTokenResponse> => {
 
-    const response = await apiClient.post(
-        "/auth/refresh"
-    );
+        const response = await refreshClient.post(
+            "/auth/refresh"
+        );
 
-    return response.data;
+        return response.data;
 
-},
+    },
+
+    getCurrentUser: async (): Promise<GetCurrentUserResponse> => {
+
+        const response = await apiClient.get(
+            "/auth/me"
+        );
+
+        return response.data;
+
+    },
 
 };

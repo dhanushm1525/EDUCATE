@@ -70,7 +70,7 @@ export class SendVerificationOtp {
             userId,
             otpHash,
             expiresAt
-        );
+        )
 
 
         await this.emailService.send(
