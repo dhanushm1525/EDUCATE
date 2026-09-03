@@ -21,6 +21,9 @@ import PublicRoute from "./PublicRoute";
 import ForgotPasswordPage from "../../pages/auth/ForgotPasswordPage";
 
 import ResetPasswordPage from "../../pages/auth/ResetPasswordPage";
+import StudentProfilePage from "../../pages/student/StudentProfilePage";
+import TeacherProfilePage from "../../pages/teacher/TeacherProfilePafe";
+import AdminProfilePage from "../../components/admin/AdminProfilePage";
 
 export function AppRouter() {
   return (
@@ -49,6 +52,7 @@ export function AppRouter() {
 
       <Route element={<RoleRoute allowedRoles={["student"]} />}>
         <Route path="/student" element={<StudentDashboardPage />} />
+        <Route path="/student/profile" element={<StudentProfilePage />} />
       </Route>
 
       {/* 
@@ -57,6 +61,7 @@ export function AppRouter() {
 
       <Route element={<RoleRoute allowedRoles={["teacher"]} />}>
         <Route path="/teacher" element={<TeacherDashboard />} />
+        <Route path="/teacher/profile" element={<TeacherProfilePage />} />
       </Route>
 
       {/* 
@@ -65,6 +70,7 @@ export function AppRouter() {
 
       <Route element={<RoleRoute allowedRoles={["admin"]} />}>
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/profile" element={<AdminProfilePage />} />
       </Route>
     </Routes>
   );

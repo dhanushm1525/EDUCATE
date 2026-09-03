@@ -5,8 +5,10 @@ import {
   GraduationCap,
   Tags,
   Settings,
-  LogOut
+  LogOut,
+  User,
 } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 import { useLogout } from "../../hooks/useLogout";
 
@@ -43,7 +45,7 @@ const menuItems = [
 ];
 
 export default function AdminSidebar() {
-    const {logout} = useLogout()
+  const { logout } = useLogout();
   return (
     <aside
       className="
@@ -133,6 +135,28 @@ export default function AdminSidebar() {
                     border-slate-800
                 "
       >
+        <NavLink
+          to="/admin/profile"
+          className="
+    mb-2
+    flex
+    w-full
+    items-center
+    gap-3
+    rounded-lg
+    px-4
+    py-3
+    text-sm
+    text-slate-400
+    transition
+    hover:bg-slate-800
+    hover:text-white
+  "
+        >
+          <User className="w-5 h-5" />
+          Profile
+        </NavLink>
+
         <button
           className="
                         w-full

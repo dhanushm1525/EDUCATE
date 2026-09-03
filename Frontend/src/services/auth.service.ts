@@ -22,6 +22,7 @@ import type {
 import { refreshClient } from "./refreshClient";
 
 
+
 export const authService = {
 
     register: async (
@@ -153,5 +154,11 @@ export const authService = {
         return response.data;
 
     },
+
+
+
+
+
+
 
 };
