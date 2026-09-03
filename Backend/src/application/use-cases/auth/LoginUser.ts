@@ -41,6 +41,7 @@ import {
 import {
     AUTH_MESSAGES
 } from "../../../shared/messages/authMessages";
+import { AuthProvider } from "../../../shared/enums/AuthProvider";
 
 
 export class LoginUser {
@@ -52,7 +53,7 @@ export class LoginUser {
         private readonly refreshTokenRepository: IRefreshTokenRepository,
         private readonly tokenHasher: ITokenHasher,
         private readonly authConfig: IAuthConfig
-    ) {}
+    ) { }
 
 
     async execute(
@@ -74,12 +75,16 @@ export class LoginUser {
             );
 
 
-       
+
         if (!user) {
             throw new AppError(
                 AUTH_MESSAGES.INVALID_CREDENTIALS,
                 401
             );
+        }
+
+        if(user.authProvider === AuthProvider.GOOGLE){
+            throw new AppError("Please sign in using Google",400)
         }
 
 
@@ -99,6 +104,15 @@ export class LoginUser {
                 AUTH_MESSAGES.EMAIL_NOT_VERIFIED,
                 403
             );
+        }
+
+        if (!user.password) {
+
+            throw new AppError(
+                AUTH_MESSAGES.INVALID_CREDENTIALS,
+                401
+            );
+
         }
 
 

@@ -1,14 +1,17 @@
 import { Document, Schema, model } from "mongoose";
 import { UserRole } from "../../../shared/enums/UserRole";
 import { UserStatus } from "../../../shared/enums/UserStatus";
+import { AuthProvider } from "../../../shared/enums/AuthProvider";
 
 export interface IUserDocument extends Document {
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
+    password?: string;
+    googleId?: string;
     avatar?: string;
     role: UserRole;
+    authProvider: AuthProvider;
     status: UserStatus;
     isVerified: boolean;
     createdAt: Date;
@@ -30,7 +33,7 @@ const userSchema = new Schema<IUserDocument>(
             type: String,
             required: true,
             trim: true,
-            minlength: 2,
+            minlength: 1,
             maxlength: 50
         },
 
@@ -45,7 +48,36 @@ const userSchema = new Schema<IUserDocument>(
 
         password: {
             type: String,
-            required: true
+            
+        },
+
+        googleId: {
+
+            type: String,
+
+            unique: true,
+
+            sparse: true
+
+        },
+
+
+        authProvider: {
+
+            type:
+                String,
+
+            enum:
+                Object.values(
+                    AuthProvider
+                ),
+
+            required:
+                true,
+
+            default:
+                AuthProvider.LOCAL
+
         },
 
         avatar: {

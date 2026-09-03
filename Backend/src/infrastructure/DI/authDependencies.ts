@@ -35,6 +35,9 @@ import { ResetPasswordController } from "../../presentation/controllers/auth/Res
 import { GetCurrentUser } from "../../application/use-cases/auth/GetCurrentUser";
 import { GetCurrentUserController } from "../../presentation/controllers/auth/GetCurrentUserController";
 import { authMiddleware } from "../../presentation/middlewares/authMiddleware";
+import { GoogleAuthService } from "../services/GoogleAuthService";
+import { GoogleSignIn } from "../../application/use-cases/auth/GoogleSignIn";
+import { GoogleSignInController } from "../../presentation/controllers/auth/GoogleSignInController";
 
 const userRepository =
     new MongoUserRepository();
@@ -144,3 +147,11 @@ const getCurrentUser =new GetCurrentUser(userRepository);
 export const getCurrentUserController = new GetCurrentUserController(getCurrentUser)
 
 export const authenticateUser = authMiddleware(jwtService)
+
+
+
+const googleAuthService = new GoogleAuthService(process.env.GOOGLE_CLIENT_ID!)
+
+export const googleSignIn = new GoogleSignIn(userRepository,googleAuthService,jwtService,refreshTokenRepository,tokenHasher,authConfig)
+
+export const googleSignInController = new GoogleSignInController(googleSignIn,refreshTokenCookie)

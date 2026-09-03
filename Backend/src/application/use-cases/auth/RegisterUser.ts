@@ -8,6 +8,7 @@ import { UserStatus } from "../../../shared/enums/UserStatus";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { RegisterUserResponseDTO } from "../../dtos/auth/RegisterUserResponseDTO";
 import { ISendVerificationOtp } from "../../interfaces/ISendVerificationOtp"
+import { AuthProvider } from "../../../shared/enums/AuthProvider"
 
 
 export class RegisterUser {
@@ -29,6 +30,7 @@ export class RegisterUser {
             lastName: request.lastName.trim(),
             email,
             password: hashedPassword,
+            authProvider:AuthProvider.LOCAL,
             role: UserRole.STUDENT,
             status: UserStatus.ACTIVE,
             isVerified: false

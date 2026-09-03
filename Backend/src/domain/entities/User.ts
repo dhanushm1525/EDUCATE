@@ -1,3 +1,4 @@
+import { AuthProvider } from "../../shared/enums/AuthProvider";
 import { UserRole } from "../../shared/enums/UserRole";
 
 import { UserStatus } from "../../shared/enums/UserStatus";
@@ -9,7 +10,9 @@ export interface UserProps {
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
+    password?: string;
+    googleId?: string;
+    authProvider:AuthProvider;
     avatar?: string;
     role: UserRole;
     status: UserStatus;
@@ -25,7 +28,9 @@ export class User {
     private readonly _firstName: string;
     private readonly _lastName: string;
     private readonly _email: string;
-    private  _password: string;
+    private _password?: string;
+    private _googleId?: string;
+    private readonly _authProvider:AuthProvider;
     private readonly _avatar?: string;
     private _role: UserRole;
     private _status: UserStatus;
@@ -39,7 +44,9 @@ export class User {
         this._lastName = props.lastName;
         this._email = props.email;
         this._password = props.password;
+        this._googleId = props.googleId
         this._avatar = props.avatar;
+        this._authProvider = props.authProvider
         this._role = props.role;
         this._status = props.status;
         this._isVerified = props.isVerified;
@@ -52,12 +59,26 @@ export class User {
         this._updatedAt = new Date()
     }
 
+    linkGoogleAccount(
+        googleId: string
+    ): void {
+
+        this._googleId =
+            googleId;
+
+        this._updatedAt =
+            new Date();
+
+    }
+
     changePassword(
         hashedPassword: string
     ): void {
         this._password = hashedPassword;
         this._updatedAt = new Date();
     }
+
+
 
     get id(): string | undefined {
         return this._id;
@@ -75,12 +96,20 @@ export class User {
         return this._email;
     }
 
-    get password(): string {
+    get password(): string|undefined {
         return this._password;
+    }
+
+    get googleId():string|undefined{
+        return this._googleId;
     }
 
     get avatar(): string | undefined {
         return this._avatar;
+    }
+
+    get authProvider():AuthProvider{
+        return this._authProvider
     }
 
     get role(): UserRole {

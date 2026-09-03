@@ -18,7 +18,11 @@ export class UserMapper {
 
             password: document.password,
 
+            googleId:document.googleId,
+
             avatar: document.avatar,
+
+            authProvider:document.authProvider,
 
             role: document.role,
 
@@ -44,7 +48,11 @@ export class UserMapper {
 
             password: user.password,
 
+            googleId:user.googleId,
+
             avatar: user.avatar,
+
+            authProvider:user.authProvider,
 
             role: user.role,
 

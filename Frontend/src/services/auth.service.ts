@@ -15,7 +15,9 @@ import type {
     ForgotPasswordRequest,
     ForgotPasswordResponse,
     ResetPasswordRequest,
-    ResetPasswordResponse
+    ResetPasswordResponse,
+    GoogleSignInRequest,
+    GoogleSignInResponse
 } from "../types/auth";
 import { refreshClient } from "./refreshClient";
 
@@ -124,6 +126,24 @@ export const authService = {
             await apiClient.post(
 
                 "/auth/reset-password",
+
+                data
+
+            );
+
+
+        return response.data;
+
+    },
+
+
+
+    googleSignIn: async (data: GoogleSignInRequest): Promise<GoogleSignInResponse> => {
+
+        const response =
+            await apiClient.post(
+
+                "/auth/google",
 
                 data
 

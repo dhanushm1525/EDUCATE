@@ -7,7 +7,7 @@ import { loginSchema } from "../../shared/schema/auth/loginSchema";
 
 import { RegisterController } from "../controllers/auth/RegisterController";
 
-import {registerUser,loginController,refreshTokenController,logoutController, resetPasswordController,getCurrentUserController} from "../../infrastructure/DI/authDependencies";
+import {registerUser,loginController,refreshTokenController,logoutController, resetPasswordController,getCurrentUserController, googleSignInController} from "../../infrastructure/DI/authDependencies";
 
 
 import { verifyEmailOtpSchema } from "../../shared/schema/auth/verifyEmailOtpSchema";
@@ -21,6 +21,8 @@ import { resendVerificationOtpController,forgotPasswordController } from "../../
 import { forgotPasswordSchema } from "../../shared/schema/auth/forgotPasswordSchema";
 import { resetPasswordSchema } from "../../shared/schema/auth/resetPasswordSchema";
 import { authenticateUser } from "../../infrastructure/DI/authDependencies";
+
+import { googleSignInSchema } from "../../shared/schema/auth/googleSignInSchema";
 
 
 const router = Router();
@@ -99,5 +101,7 @@ router.get(
     authenticateUser,
     getCurrentUserController.handle.bind(getCurrentUserController)
 )
+
+router.post("/google",validate(googleSignInSchema),googleSignInController.handle.bind(googleSignInController))
 
 export default router;

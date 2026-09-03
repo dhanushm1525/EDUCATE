@@ -14,7 +14,7 @@ export const registerSchema =
       lastName:
         z.string()
           .trim()
-          .min(2)
+          .min(1)
           .max(50),
 
       email:

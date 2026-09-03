@@ -190,3 +190,32 @@ export interface ResetPasswordResponse {
     };
 
 }
+
+
+export interface GoogleSignInRequest {
+
+    credential:
+    string;
+
+}
+
+
+export interface GoogleSignInResponse {
+
+    success:
+    boolean;
+
+    message:
+    string;
+
+    data: {
+
+        user:
+        User;
+
+        accessToken:
+        string;
+
+    };
+
+}
