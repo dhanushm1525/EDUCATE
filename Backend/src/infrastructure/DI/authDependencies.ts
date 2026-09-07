@@ -38,8 +38,9 @@ import { authMiddleware } from "../../presentation/middlewares/authMiddleware";
 import { GoogleAuthService } from "../services/GoogleAuthService";
 import { GoogleSignIn } from "../../application/use-cases/auth/GoogleSignIn";
 import { GoogleSignInController } from "../../presentation/controllers/auth/GoogleSignInController";
+import { RegisterController } from "../../presentation/controllers/auth/RegisterController";
 
-const userRepository =
+export const userRepository =
     new MongoUserRepository();
 
 const refreshTokenRepository =
@@ -66,7 +67,6 @@ export const loginUser =
         tokenHasher,
         authConfig
     );
-
 
 
 
@@ -118,7 +118,7 @@ export const registerUser =
         sendVerificationOtp
     );
 
-
+export const registerController = new RegisterController(registerUser)
 
 export const verifyEmailOtpController = new VerifyEmailOtpController(verifyEmailOtp)
 

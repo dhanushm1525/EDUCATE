@@ -1,10 +1,10 @@
 import { GetMyProfile } from "../../application/use-cases/user/GetMyProfile";
-import { MongoUserRepository } from "../repositories/MongoUserRepository";
 import {GetMyProfileController} from "../../presentation/controllers/user/GetMyProfileController";
+import { userRepository } from "./authDependencies";
 
 
 
-const userRepository = new MongoUserRepository();
+
 
 export const getMyProfile = new GetMyProfile(userRepository)
 

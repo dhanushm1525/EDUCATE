@@ -42,9 +42,10 @@ import {
     AUTH_MESSAGES
 } from "../../../shared/messages/authMessages";
 import { AuthProvider } from "../../../shared/enums/AuthProvider";
+import { ILoginUser } from "../../interfaces/ILoginUser";
 
 
-export class LoginUser {
+export class LoginUser implements ILoginUser{
 
     constructor(
         private readonly userRepository: IUserRepository,

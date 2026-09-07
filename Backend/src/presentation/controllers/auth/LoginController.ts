@@ -5,10 +5,6 @@ import {
 } from "express";
 
 import {
-    LoginUser
-} from "../../../application/use-cases/auth/LoginUser";
-
-import {
     LoginUserDTO
 } from "../../../application/dtos/auth/LoginUserDTO";
 
@@ -21,6 +17,7 @@ import {
 } from "../../../shared/messages/authMessages";
 
 import { IRefreshTokenCookie } from "../../../application/interfaces/IRefreshTokenCookie";
+import { ILoginUser } from "../../../application/interfaces/ILoginUser";
 
 
 
@@ -28,7 +25,7 @@ import { IRefreshTokenCookie } from "../../../application/interfaces/IRefreshTok
 export class LoginController {
 
     constructor(
-        private readonly loginUser: LoginUser,
+        private readonly loginUser: ILoginUser,
         private readonly refreshTokenCookie:IRefreshTokenCookie
     ) {}
 
