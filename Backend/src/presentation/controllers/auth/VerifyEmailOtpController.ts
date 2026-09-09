@@ -6,7 +6,7 @@ import { successResponse } from "../../../shared/response/apiResponse";
 
 export class VerifyEmailOtpController {
     constructor(
-        private readonly verifyEmailOtp: VerifyEmailOtp
+        private readonly _verifyEmailOtp: VerifyEmailOtp
     ) { }
 
     async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -14,7 +14,7 @@ export class VerifyEmailOtpController {
         try {
             const { userId, otp } = req.body;
 
-            const result = await this.verifyEmailOtp.execute({
+            const result = await this._verifyEmailOtp.execute({
                 userId, otp
             });
 

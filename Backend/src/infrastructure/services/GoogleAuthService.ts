@@ -6,16 +6,16 @@ import {
 import { AppError } from "../../shared/errors/AppError";
 
 export class GoogleAuthService implements IGoogleAuthService {
-  private readonly client: OAuth2Client;
+  private readonly _client: OAuth2Client;
 
-  constructor(private readonly clientId: string) {
-    this.client = new OAuth2Client(clientId);
+  constructor(private readonly _clientId: string) {
+    this._client = new OAuth2Client(_clientId);
   }
 
   async verifyIdToken(credential: string): Promise<GoogleUserPayload> {
-    const ticket = await this.client.verifyIdToken({
+    const ticket = await this._client.verifyIdToken({
       idToken: credential,
-      audience: this.clientId,
+      audience: this._clientId,
     });
 
     const payload = ticket.getPayload();

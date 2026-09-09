@@ -12,9 +12,9 @@ import { VerifyEmailOtpResponseDTO } from "../../dtos/auth/VerifyEmailOtpRespons
 
 export class VerifyEmailOtp{
     constructor(
-        private readonly userRepository:IUserRepository,
-        private readonly emailVerificationRepository:IEmailVerificationRepository,
-        private readonly tokenHasher:ITokenHasher
+        private readonly _userRepository:IUserRepository,
+        private readonly _emailVerificationRepository:IEmailVerificationRepository,
+        private readonly _tokenHasher:ITokenHasher
     ){}
 
 
@@ -22,7 +22,7 @@ export class VerifyEmailOtp{
 
         const {userId,otp} = request;
 
-        const verificationRecord = await this.emailVerificationRepository.findByUserId(userId);
+        const verificationRecord = await this._emailVerificationRepository.findByUserId(userId);
 
 
         if(!verificationRecord){
@@ -30,21 +30,21 @@ export class VerifyEmailOtp{
         }
 
         if(verificationRecord.expiresAt.getTime()<=Date.now()){
-            await this.emailVerificationRepository.deleteByUserId(userId);
+            await this._emailVerificationRepository.deleteByUserId(userId);
 
             throw new AppError("Invalid or expired otp",400);
         }
 
 
 
-        const otpHash = await this.tokenHasher.hash(otp)
+        const otpHash = await this._tokenHasher.hash(otp)
 
         if(otpHash!==verificationRecord.otpHash){
             throw new AppError("Invalid OTP",400)
         }
 
 
-        const user = await this.userRepository.findById(userId)
+        const user = await this._userRepository.findById(userId)
 
 
         if(!user){
@@ -54,10 +54,10 @@ export class VerifyEmailOtp{
 
         user.verifyEmail();
 
-        await this.userRepository.update(user)
+        await this._userRepository.update(user)
 
 
-        await this.emailVerificationRepository.deleteByUserId(userId)
+        await this._emailVerificationRepository.deleteByUserId(userId)
 
 
         return {

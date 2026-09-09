@@ -13,18 +13,18 @@ import { IRegisterUser } from "../../interfaces/IRegisterUser"
 
 
 export class RegisterUser implements IRegisterUser {
-    constructor(private readonly userRepository: IUserRepository, private readonly passwordHasher: IPasswordHasher,private readonly sendVerificationOtp:ISendVerificationOtp) { }
+    constructor(private readonly _userRepository: IUserRepository, private readonly _passwordHasher: IPasswordHasher,private readonly _sendVerificationOtp:ISendVerificationOtp) { }
 
     async execute(request: RegisterUserDTO): Promise<RegisterUserResponseDTO> {
         const email = request.email.trim().toLowerCase();
 
-        const exists = await this.userRepository.existsByEmail(email);
+        const exists = await this._userRepository.existsByEmail(email);
 
         if (exists) {
             throw new AppError(AUTH_MESSAGES.EMAIL_ALREADY_EXISTS,409);
         }
 
-        const hashedPassword = await this.passwordHasher.hash(request.password);
+        const hashedPassword = await this._passwordHasher.hash(request.password);
 
         const user = new User({
             firstName: request.firstName.trim(),
@@ -37,13 +37,13 @@ export class RegisterUser implements IRegisterUser {
             isVerified: false
         });
 
-        const createdUser = await this.userRepository.create(user);
+        const createdUser = await this._userRepository.create(user);
 
         if(!createdUser.id){
             throw new AppError("user creation failed",500,false)
         }
 
-        await this.sendVerificationOtp.execute({
+        await this._sendVerificationOtp.execute({
             userId:createdUser.id,
             email:createdUser.email
         })

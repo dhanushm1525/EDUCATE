@@ -19,19 +19,19 @@ import { IAuthConfig }
 export class SendVerificationOtp {
 
     constructor(
-        private readonly emailVerificationRepository:
+        private readonly _emailVerificationRepository:
             IEmailVerificationRepository,
 
-        private readonly otpGenerator:
+        private readonly _otpGenerator:
             IOtpGenerator,
 
-        private readonly tokenHasher:
+        private readonly _tokenHasher:
             ITokenHasher,
 
-        private readonly emailService:
+        private readonly _emailService:
             IEmailService,
 
-        private readonly authConfig:
+        private readonly _authConfig:
             IAuthConfig
     ) {}
 
@@ -46,34 +46,34 @@ export class SendVerificationOtp {
         } = request;
 
 
-        await this.emailVerificationRepository
+        await this._emailVerificationRepository
             .deleteByUserId(userId);
 
 
         const otp =
-            this.otpGenerator.generate();
+            this._otpGenerator.generate();
 
 
         const otpHash =
-            await this.tokenHasher.hash(otp);
+            await this._tokenHasher.hash(otp);
 
 
         const expiresAt =
             new Date(
                 Date.now() +
-                this.authConfig
+                this._authConfig
                     .emailVerificationOtpExpiresInMs
             );
 
 
-        await this.emailVerificationRepository.create(
+        await this._emailVerificationRepository.create(
             userId,
             otpHash,
             expiresAt
         )
 
 
-        await this.emailService.send(
+        await this._emailService.send(
             email,
             "Verify your EDUCATE account",
             `

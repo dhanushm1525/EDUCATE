@@ -5,8 +5,8 @@ import { LogoutUserDTO } from "../../dtos/auth/LogoutUserDTO";
 
 export class LogoutUser{
     constructor(
-        private readonly refreshTokenRepository:IRefreshTokenRepository,
-        private readonly tokenHasher:ITokenHasher
+        private readonly _refreshTokenRepository:IRefreshTokenRepository,
+        private readonly _tokenHasher:ITokenHasher
     ){}
 
 
@@ -15,9 +15,9 @@ export class LogoutUser{
 
         if(!refreshToken){return }
 
-        const tokenHash = await this.tokenHasher.hash(refreshToken);
+        const tokenHash = await this._tokenHasher.hash(refreshToken);
 
-        const storedToken = await this.refreshTokenRepository.findByTokenHash(tokenHash);
+        const storedToken = await this._refreshTokenRepository.findByTokenHash(tokenHash);
 
 
         if(!storedToken){return}
@@ -27,6 +27,6 @@ export class LogoutUser{
         }
 
 
-        await this.refreshTokenRepository.revokeById(storedToken.id);
+        await this._refreshTokenRepository.revokeById(storedToken.id);
     }
 }

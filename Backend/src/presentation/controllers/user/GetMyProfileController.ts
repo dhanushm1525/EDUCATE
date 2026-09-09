@@ -6,7 +6,7 @@ import { AppError } from "../../../shared/errors/AppError";
 
 
 export class GetMyProfileController{
-    constructor(private readonly getMyprofile:IGetMyProfile){}
+    constructor(private readonly _getMyprofile:IGetMyProfile){}
 
     async handle(
         req:Request,
@@ -24,7 +24,7 @@ export class GetMyProfileController{
             }
             
             
-            const result = await this.getMyprofile.execute({userId});
+            const result = await this._getMyprofile.execute({userId});
 
             successResponse(res,200,AUTH_MESSAGES.PROFILE_RETRIEVED_SUCCESSFULLY,result)
         }catch(error){

@@ -5,10 +5,10 @@ import {env} from "../config/env"
 
 export class ResendEmailService implements IEmailService{
 
-    private readonly resend:Resend;
+    private readonly _resend:Resend;
 
     constructor(){
-        this.resend = new Resend(env.resendApiKey)
+        this._resend = new Resend(env.resendApiKey)
     }
 
 
@@ -17,7 +17,7 @@ export class ResendEmailService implements IEmailService{
         subject:string,
         html:string
     ):Promise<void>{
-        const {error} = await this.resend.emails.send({
+        const {error} = await this._resend.emails.send({
             from:env.emailFrom,
             to,
             subject,

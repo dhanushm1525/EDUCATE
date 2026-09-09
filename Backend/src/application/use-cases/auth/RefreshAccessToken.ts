@@ -16,11 +16,11 @@ import { IRefreshAccessToken } from "../../interfaces/IRefreshToken";
 export class RefreshAccessToken implements IRefreshAccessToken {
 
     constructor(
-        private readonly userRepository: IUserRepository,
-        private readonly refreshTokenRepository: IRefreshTokenRepository,
-        private readonly jwtService: IJwtService,
-        private readonly tokenHasher: ITokenHasher,
-        private readonly authConfig: IAuthConfig
+        private readonly _userRepository: IUserRepository,
+        private readonly _refreshTokenRepository: IRefreshTokenRepository,
+        private readonly _jwtService: IJwtService,
+        private readonly _tokenHasher: ITokenHasher,
+        private readonly _authConfig: IAuthConfig
     ) { }
 
     async execute(request: RefreshAccessTokenDTO): Promise<RefreshAccessTokenResponseDTO> {
@@ -31,7 +31,7 @@ export class RefreshAccessToken implements IRefreshAccessToken {
         let payload;
 
         try {
-            payload = this.jwtService.verifyRefreshToken(refreshToken)
+            payload = this._jwtService.verifyRefreshToken(refreshToken)
         } catch {
             throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN, 401)
         }
@@ -41,14 +41,14 @@ export class RefreshAccessToken implements IRefreshAccessToken {
             payload
         );
 
-        const tokenHash = await this.tokenHasher.hash(refreshToken)
+        const tokenHash = await this._tokenHasher.hash(refreshToken)
 
          console.log(
             "Looking for token in database"
         );
 
 
-        const storedToken = await this.refreshTokenRepository.findByTokenHash(tokenHash)
+        const storedToken = await this._refreshTokenRepository.findByTokenHash(tokenHash)
 
            console.log(
             "Stored token:",
@@ -62,7 +62,7 @@ export class RefreshAccessToken implements IRefreshAccessToken {
 
 
         if (storedToken.revokedAt !== null) {
-            await this.refreshTokenRepository.revokeAllByUserId(storedToken.userId)
+            await this._refreshTokenRepository.revokeAllByUserId(storedToken.userId)
 
             throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN, 401)
         }
@@ -85,7 +85,7 @@ export class RefreshAccessToken implements IRefreshAccessToken {
         }
 
 
-        const user =await this.userRepository.findById(storedToken.userId);
+        const user =await this._userRepository.findById(storedToken.userId);
 
 
         if (!user) {
@@ -103,23 +103,23 @@ export class RefreshAccessToken implements IRefreshAccessToken {
         }
 
 
-        await this.refreshTokenRepository.revokeById(storedToken.id);
+        await this._refreshTokenRepository.revokeById(storedToken.id);
 
 
-        const newRefreshToken =this.jwtService.generateRefreshToken(user.id!);
+        const newRefreshToken =this._jwtService.generateRefreshToken(user.id!);
 
 
-        const newTokenHash =await this.tokenHasher.hash(newRefreshToken);
+        const newTokenHash =await this._tokenHasher.hash(newRefreshToken);
 
 
         const newExpiresAt =
         new Date(
             Date.now() +
-            this.authConfig.refreshTokenExpiresInMs
+            this._authConfig.refreshTokenExpiresInMs
         );
 
 
-        await this.refreshTokenRepository.create(
+        await this._refreshTokenRepository.create(
         user.id!,
         newTokenHash,
         newExpiresAt
@@ -127,7 +127,7 @@ export class RefreshAccessToken implements IRefreshAccessToken {
 
 
         const newAccessToken =
-        this.jwtService.generateAccessToken({
+        this._jwtService.generateAccessToken({
             userId: user.id!,
             role: user.role
         });

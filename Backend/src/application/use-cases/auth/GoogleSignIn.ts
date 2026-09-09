@@ -14,12 +14,12 @@ import { IGoogleSignIn } from "../../interfaces/IGoogleSignIn";
 
 export class GoogleSignIn implements IGoogleSignIn{
   constructor(
-    private readonly userRepository: IUserRepository,
-    private readonly googleAuthService: IGoogleAuthService,
-    private readonly jwtService: IJwtService,
-    private readonly refreshTokenRepository: IRefreshTokenRepository,
-    private readonly tokenHasher: ITokenHasher,
-    private readonly authConfig: IAuthConfig
+    private readonly _userRepository: IUserRepository,
+    private readonly _googleAuthService: IGoogleAuthService,
+    private readonly _jwtService: IJwtService,
+    private readonly _refreshTokenRepository: IRefreshTokenRepository,
+    private readonly _tokenHasher: ITokenHasher,
+    private readonly _authConfig: IAuthConfig
   ) {}
 
   async execute(request: GoogleSignInDTO): Promise<{
@@ -27,12 +27,12 @@ export class GoogleSignIn implements IGoogleSignIn{
     refreshToken: string;
   }> {
   
-    const googleUser = await this.googleAuthService.verifyIdToken(
+    const googleUser = await this._googleAuthService.verifyIdToken(
       request.credential
     );
 
     
-    let user = await this.userRepository.findByEmail(googleUser.email);
+    let user = await this._userRepository.findByEmail(googleUser.email);
 
     if (!user) {
       user = new User({
@@ -46,7 +46,7 @@ export class GoogleSignIn implements IGoogleSignIn{
         isVerified: true,
       });
 
-      user = await this.userRepository.create(user);
+      user = await this._userRepository.create(user);
     }
 
    
@@ -55,24 +55,24 @@ export class GoogleSignIn implements IGoogleSignIn{
     }
 
    
-    const accessToken = this.jwtService.generateAccessToken({
+    const accessToken = this._jwtService.generateAccessToken({
       userId: user.id,
       role: user.role,
     });
 
    
-    const refreshToken = this.jwtService.generateRefreshToken(user.id);
+    const refreshToken = this._jwtService.generateRefreshToken(user.id);
 
    
-    const tokenHash = this.tokenHasher.hash(refreshToken);
+    const tokenHash = this._tokenHasher.hash(refreshToken);
 
     
     const expiresAt = new Date(
-      Date.now() + this.authConfig.refreshTokenExpiresInMs
+      Date.now() + this._authConfig.refreshTokenExpiresInMs
     );
 
     
-    await this.refreshTokenRepository.create(user.id, tokenHash, expiresAt);
+    await this._refreshTokenRepository.create(user.id, tokenHash, expiresAt);
 
     
     return {

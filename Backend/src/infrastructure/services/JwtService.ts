@@ -27,7 +27,7 @@ export class JwtService implements IJwtService{
 
         if (
             typeof decoded === "string" ||
-            !this.isAccessTokenPayload(decoded)
+            !this._isAccessTokenPayload(decoded)
         ) {
             throw new AppError(AUTH_MESSAGES.INVALID_ACCESS_TOKEN,401);
         }
@@ -42,13 +42,13 @@ export class JwtService implements IJwtService{
     const decoded = jwt.verify(token,env.jwtRefreshSecret);
 
 
-    if (typeof decoded === "string" ||!this.isRefreshTokenPayload(decoded)){
+    if (typeof decoded === "string" ||!this._isRefreshTokenPayload(decoded)){
         throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN,401);}
 
         return {userId: decoded.userId};
     }
 
-    private isAccessTokenPayload(payload: string |JwtPayload): payload is AccessTokenPayload {
+    private _isAccessTokenPayload(payload: string |JwtPayload): payload is AccessTokenPayload {
 
         return (
             typeof payload === "object" &&
@@ -61,7 +61,7 @@ export class JwtService implements IJwtService{
     }
 
 
-    private isRefreshTokenPayload(payload: string | JwtPayload): payload is { userId: string } {
+    private _isRefreshTokenPayload(payload: string | JwtPayload): payload is { userId: string } {
 
         return (
             typeof payload === "object" &&

@@ -25,8 +25,8 @@ import { ILoginUser } from "../../../application/interfaces/ILoginUser";
 export class LoginController {
 
     constructor(
-        private readonly loginUser: ILoginUser,
-        private readonly refreshTokenCookie:IRefreshTokenCookie
+        private readonly _loginUser: ILoginUser,
+        private readonly _refreshTokenCookie:IRefreshTokenCookie
     ) {}
 
 
@@ -45,13 +45,13 @@ export class LoginController {
 
 
             const result =
-                await this.loginUser.execute(dto);
+                await this._loginUser.execute(dto);
 
 
             res.cookie(
-                this.refreshTokenCookie.name,
+                this._refreshTokenCookie.name,
                 result.refreshToken,
-                this.refreshTokenCookie.options
+                this._refreshTokenCookie.options
             );
 
  

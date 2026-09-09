@@ -7,12 +7,12 @@ import { GetMyProfileDTO } from "../../dtos/user/GetMyProfileDTO";
 
 
 export class GetMyProfile implements IGetMyProfile{
-    constructor(private readonly userRepository:IUserRepository){}
+    constructor(private readonly _userRepository:IUserRepository){}
 
     async execute(request:GetMyProfileDTO):Promise<GetMyProfileResponseDTO>{
         
         const {userId} = request;
-        const user = await this.userRepository.findById(userId)
+        const user = await this._userRepository.findById(userId)
 
 
         if(!user){

@@ -6,7 +6,7 @@ import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 
 export class RegisterController {
-    constructor(private readonly registerUser: IRegisterUser) { }
+    constructor(private readonly _registerUser: IRegisterUser) { }
 
     async handle(req: Request, res: Response, next: NextFunction) {
         try {
@@ -18,7 +18,7 @@ export class RegisterController {
                 password: req.body.password
             };
 
-            const result = await this.registerUser.execute(dto);
+            const result = await this._registerUser.execute(dto);
 
             return successResponse(res, 201, AUTH_MESSAGES.REGISTRATION_SUCCESS, result);
         } catch (error) {

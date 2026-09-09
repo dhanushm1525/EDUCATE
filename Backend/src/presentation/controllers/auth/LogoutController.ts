@@ -7,8 +7,8 @@ import { IRefreshTokenCookie } from "../../../application/interfaces/IRefreshTok
 
 export class LogoutController{
     constructor(
-        private readonly logoutuser:ILogoutUser,
-        private readonly refreshTokenCookie:IRefreshTokenCookie
+        private readonly _logoutuser:ILogoutUser,
+        private readonly _refreshTokenCookie:IRefreshTokenCookie
     ){}
 
 
@@ -18,19 +18,19 @@ export class LogoutController{
         next:NextFunction
     ){
         try{
-            const refreshToken = req.cookies[this.refreshTokenCookie.name];
+            const refreshToken = req.cookies[this._refreshTokenCookie.name];
 
-            await this.logoutuser.execute({
+            await this._logoutuser.execute({
                 refreshToken
             });
 
             res.clearCookie(
-                this.refreshTokenCookie.name,
+                this._refreshTokenCookie.name,
                 {
-                    httpOnly:this.refreshTokenCookie.options.httpOnly,
-                    secure:this.refreshTokenCookie.options.secure,
-                    sameSite:this.refreshTokenCookie.options.sameSite,
-                    path:this.refreshTokenCookie.options.path
+                    httpOnly:this._refreshTokenCookie.options.httpOnly,
+                    secure:this._refreshTokenCookie.options.secure,
+                    sameSite:this._refreshTokenCookie.options.sameSite,
+                    path:this._refreshTokenCookie.options.path
                 }
             );
 

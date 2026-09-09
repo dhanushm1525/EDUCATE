@@ -13,7 +13,7 @@ import { IGetCurrentUser } from "../../interfaces/IGetCurrentUser";
 export class GetCurrentUser implements IGetCurrentUser{
 
     constructor(
-        private readonly userRepository:
+        private readonly _userRepository:
             IUserRepository
     ) {}
 
@@ -23,7 +23,7 @@ export class GetCurrentUser implements IGetCurrentUser{
     ):Promise<GetCurrentUserResponseDTO> {
         const {userId} = request
         const user =
-            await this.userRepository.findById(
+            await this._userRepository.findById(
                 userId
             );
 

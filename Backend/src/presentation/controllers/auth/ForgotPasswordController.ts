@@ -4,7 +4,7 @@ import { successResponse } from "../../../shared/response/apiResponse";
 
 
 export class ForgotPasswordController{
-    constructor(private readonly forgotPassword:ForgotPassword){}
+    constructor(private readonly _forgotPassword:ForgotPassword){}
 
     async handle(
         req:Request,
@@ -15,7 +15,7 @@ export class ForgotPasswordController{
         try{
             const {email} = req.body;
 
-            const result = await this.forgotPassword.execute({email});
+            const result = await this._forgotPassword.execute({email});
 
             successResponse(res,200,result.message,result);
         }catch(error){

@@ -20,10 +20,10 @@ import { ResendVerificationOtpResponseDTO }
 export class ResendVerificationOtp {
 
     constructor(
-        private readonly userRepository:
+        private readonly _userRepository:
             IUserRepository,
 
-        private readonly sendVerificationOtp:
+        private readonly _sendVerificationOtp:
             SendVerificationOtp
     ) { }
 
@@ -39,7 +39,7 @@ export class ResendVerificationOtp {
 
 
         const user =
-            await this.userRepository
+            await this._userRepository
                 .findByEmail(email);
 
 
@@ -68,7 +68,7 @@ export class ResendVerificationOtp {
         }
 
 
-        await this.sendVerificationOtp.execute({
+        await this._sendVerificationOtp.execute({
             userId: user.id,
             email: user.email
         });

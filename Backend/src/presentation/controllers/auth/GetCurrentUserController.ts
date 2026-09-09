@@ -15,7 +15,7 @@ import { AppError } from "../../../shared/errors/AppError";
 export class GetCurrentUserController {
 
     constructor(
-        private readonly getCurrentUser:
+        private readonly _getCurrentUser:
             IGetCurrentUser
     ) { }
 
@@ -40,7 +40,7 @@ export class GetCurrentUserController {
 
 
             const user =
-                await this.getCurrentUser.execute(
+                await this._getCurrentUser.execute(
                     {userId:req.user.userId}
                 );
 

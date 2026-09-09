@@ -5,8 +5,8 @@ import { IGoogleSignIn } from "../../../application/interfaces/IGoogleSignIn";
 
 export class GoogleSignInController {
   constructor(
-    private readonly googleSignIn: IGoogleSignIn,
-    private readonly refreshTokenCookie: IRefreshTokenCookie
+    private readonly _googleSignIn: IGoogleSignIn,
+    private readonly _refreshTokenCookie: IRefreshTokenCookie
   ) {}
 
   async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -14,13 +14,13 @@ export class GoogleSignInController {
       const { credential } = req.body;
 
       // Execute Google Sign-In use case
-      const result = await this.googleSignIn.execute({ credential });
+      const result = await this._googleSignIn.execute({ credential });
 
       // Store refresh token in HTTP-only cookie
       res.cookie(
-        this.refreshTokenCookie.name,
+        this._refreshTokenCookie.name,
         result.refreshToken,
-        this.refreshTokenCookie.options
+        this._refreshTokenCookie.options
       );
 
       // Return user data and access token

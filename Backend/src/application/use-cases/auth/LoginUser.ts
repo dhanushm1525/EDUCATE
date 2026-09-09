@@ -48,12 +48,12 @@ import { ILoginUser } from "../../interfaces/ILoginUser";
 export class LoginUser implements ILoginUser{
 
     constructor(
-        private readonly userRepository: IUserRepository,
-        private readonly passwordHasher: IPasswordHasher,
-        private readonly jwtService: IJwtService,
-        private readonly refreshTokenRepository: IRefreshTokenRepository,
-        private readonly tokenHasher: ITokenHasher,
-        private readonly authConfig: IAuthConfig
+        private readonly _userRepository: IUserRepository,
+        private readonly _passwordHasher: IPasswordHasher,
+        private readonly _jwtService: IJwtService,
+        private readonly _refreshTokenRepository: IRefreshTokenRepository,
+        private readonly _tokenHasher: ITokenHasher,
+        private readonly _authConfig: IAuthConfig
     ) { }
 
 
@@ -71,7 +71,7 @@ export class LoginUser implements ILoginUser{
 
 
         const user =
-            await this.userRepository.findByEmail(
+            await this._userRepository.findByEmail(
                 email
             );
 
@@ -118,7 +118,7 @@ export class LoginUser implements ILoginUser{
 
 
         const passwordMatches =
-            await this.passwordHasher.compare(
+            await this._passwordHasher.compare(
                 request.password,
                 user.password
             );
@@ -142,20 +142,20 @@ export class LoginUser implements ILoginUser{
 
 
         const accessToken =
-            this.jwtService.generateAccessToken({
+            this._jwtService.generateAccessToken({
                 userId: user.id,
                 role: user.role
             });
 
 
         const refreshToken =
-            this.jwtService.generateRefreshToken(
+            this._jwtService.generateRefreshToken(
                 user.id
             );
 
 
         const tokenHash =
-            await this.tokenHasher.hash(
+            await this._tokenHasher.hash(
                 refreshToken
             );
 
@@ -163,12 +163,12 @@ export class LoginUser implements ILoginUser{
         const expiresAt =
             new Date(
                 Date.now() +
-                this.authConfig
+                this._authConfig
                     .refreshTokenExpiresInMs
             );
 
 
-        await this.refreshTokenRepository.create(
+        await this._refreshTokenRepository.create(
             user.id,
             tokenHash,
             expiresAt

@@ -13,12 +13,12 @@ import { ForgotPasswordResponseDTO } from "../../dtos/auth/ForgotPasswordRespons
 
 export class ForgotPassword{
     constructor(
-        private readonly userRepository:IUserRepository,
-        private readonly passwordResetRepository:IPasswordResetRepository,
-        private readonly otpGenerator:IOtpGenerator,
-        private readonly tokenHasher:ITokenHasher,
-        private readonly emailService:IEmailService,
-        private readonly authConfig:IAuthConfig
+        private readonly _userRepository:IUserRepository,
+        private readonly _passwordResetRepository:IPasswordResetRepository,
+        private readonly _otpGenerator:IOtpGenerator,
+        private readonly _tokenHasher:ITokenHasher,
+        private readonly _emailService:IEmailService,
+        private readonly _authConfig:IAuthConfig
     ){}
 
     async execute(
@@ -26,7 +26,7 @@ export class ForgotPassword{
     ):Promise<ForgotPasswordResponseDTO>{
         const email = request.email.trim().toLowerCase()
 
-        const user = await this.userRepository.findByEmail(email)
+        const user = await this._userRepository.findByEmail(email)
 
         if(!user){
             throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND,404);
@@ -36,16 +36,16 @@ export class ForgotPassword{
             throw new AppError("user id is missing",500,false)
         }
 
-        await this.passwordResetRepository.deleteByUserId(user.id);
+        await this._passwordResetRepository.deleteByUserId(user.id);
 
-        const otp = this.otpGenerator.generate()
-        const otpHash = this.tokenHasher.hash(otp)
+        const otp = this._otpGenerator.generate()
+        const otpHash = this._tokenHasher.hash(otp)
 
-        const expiresAt  = new Date(Date.now()+this.authConfig.passwordResetOtpExpiresInMs);
+        const expiresAt  = new Date(Date.now()+this._authConfig.passwordResetOtpExpiresInMs);
 
-        await this.passwordResetRepository.create(user.id,otpHash,expiresAt)
+        await this._passwordResetRepository.create(user.id,otpHash,expiresAt)
 
-         await this.emailService.send(
+         await this._emailService.send(
             user.email,
             "Reset your password",
             `

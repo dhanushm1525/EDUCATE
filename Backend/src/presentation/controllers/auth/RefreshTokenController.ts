@@ -6,8 +6,8 @@ import { IRefreshAccessToken } from "../../../application/interfaces/IRefreshTok
 
 export class RefreshTokenController{
     constructor(
-        private readonly refreshAccessToken:IRefreshAccessToken,
-        private readonly refreshTokenCookie:{
+        private readonly _refreshAccessToken:IRefreshAccessToken,
+        private readonly _refreshTokenCookie:{
             name:string;
             options:CookieOptions;
         }
@@ -19,7 +19,7 @@ export class RefreshTokenController{
         next:NextFunction
     ){
         try{
-            const refreshToken = req.cookies[this.refreshTokenCookie.name]
+            const refreshToken = req.cookies[this._refreshTokenCookie.name]
 
             if(!refreshToken){
                 return res.status(401).json({
@@ -30,12 +30,12 @@ export class RefreshTokenController{
 
             const dto : RefreshAccessTokenDTO = {refreshToken};
 
-            const result = await this.refreshAccessToken.execute(dto);
+            const result = await this._refreshAccessToken.execute(dto);
 
             res.cookie(
-                this.refreshTokenCookie.name,
+                this._refreshTokenCookie.name,
                 result.refreshToken,
-                this.refreshTokenCookie.options
+                this._refreshTokenCookie.options
             );
 
             return successResponse(res,200,"access token refreshed successfully",{accessToken:result.accessToken});

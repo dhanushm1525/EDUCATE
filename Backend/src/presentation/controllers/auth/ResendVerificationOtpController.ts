@@ -6,7 +6,7 @@ import { successResponse } from "../../../shared/response/apiResponse";
 
 export class ResendVerificationOtpController{
     constructor(
-        private readonly resendVerificationOtp:ResendVerificationOtp
+        private readonly _resendVerificationOtp:ResendVerificationOtp
     ){}
 
 
@@ -20,7 +20,7 @@ export class ResendVerificationOtpController{
 
             const {email} = req.body;
 
-            const result = await this.resendVerificationOtp.execute({
+            const result = await this._resendVerificationOtp.execute({
                 email
             });
 

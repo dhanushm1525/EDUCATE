@@ -5,7 +5,7 @@ import { successResponse } from "../../../shared/response/apiResponse";
 
 export class ResetPasswordController{
     constructor(
-        private readonly resetPassword:ResetPassword
+        private readonly _resetPassword:ResetPassword
     ){}
 
 
@@ -18,7 +18,7 @@ export class ResetPasswordController{
 
             const {email,otp,newPassword} = req.body;
 
-            const result = await this.resetPassword.execute({
+            const result = await this._resetPassword.execute({
                 email,otp,newPassword
             });
 

@@ -38,19 +38,19 @@ import {
 export class ResetPassword {
 
     constructor(
-        private readonly userRepository:
+        private readonly _userRepository:
             IUserRepository,
 
-        private readonly passwordResetRepository:
+        private readonly _passwordResetRepository:
             IPasswordResetRepository,
 
-        private readonly passwordHasher:
+        private readonly _passwordHasher:
             IPasswordHasher,
 
-        private readonly tokenHasher:
+        private readonly _tokenHasher:
             ITokenHasher,
 
-        private readonly refreshTokenRepository:
+        private readonly _refreshTokenRepository:
             IRefreshTokenRepository
     ) {}
 
@@ -66,7 +66,7 @@ export class ResetPassword {
 
 
         
-        const user =await this.userRepository.findByEmail(email);
+        const user =await this._userRepository.findByEmail(email);
 
 
         if (!user) {
@@ -87,7 +87,7 @@ export class ResetPassword {
 
 
         
-        const passwordReset =await this.passwordResetRepository.findByUserId(user.id);
+        const passwordReset =await this._passwordResetRepository.findByUserId(user.id);
 
 
         if (!passwordReset) {
@@ -101,7 +101,7 @@ export class ResetPassword {
        
         if (passwordReset.expiresAt.getTime() <=Date.now()) {
 
-            await this.passwordResetRepository.deleteByUserId(user.id);
+            await this._passwordResetRepository.deleteByUserId(user.id);
 
 
             throw new AppError(
@@ -112,7 +112,7 @@ export class ResetPassword {
 
 
         
-        const submittedOtpHash = this.tokenHasher.hash(request.otp);
+        const submittedOtpHash = this._tokenHasher.hash(request.otp);
 
 
         
@@ -128,24 +128,24 @@ export class ResetPassword {
 
 
        
-        const hashedPassword =await this.passwordHasher.hash(request.newPassword);
+        const hashedPassword =await this._passwordHasher.hash(request.newPassword);
 
 
         
         user.changePassword(hashedPassword);
 
 
-        await this.userRepository
+        await this._userRepository
             .update(user);
 
 
         
-        await this.passwordResetRepository
+        await this._passwordResetRepository
             .deleteByUserId(user.id);
 
 
         
-        await this.refreshTokenRepository
+        await this._refreshTokenRepository
             .revokeAllByUserId(user.id);
 
 
