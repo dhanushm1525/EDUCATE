@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { RegisterUser } from "../../../application/use-cases/auth/RegisterUser";
+import { IRegisterUser } from "../../../application/interfaces/IRegisterUser";
 import { successResponse } from "../../../shared/response/apiResponse";
 import { RegisterUserDTO } from "../../../application/dtos/auth/RegisterUserDTO";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 
 export class RegisterController {
-    constructor(private readonly registerUser: RegisterUser) { }
+    constructor(private readonly registerUser: IRegisterUser) { }
 
     async handle(req: Request, res: Response, next: NextFunction) {
         try {

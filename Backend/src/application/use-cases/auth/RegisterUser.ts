@@ -9,9 +9,10 @@ import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { RegisterUserResponseDTO } from "../../dtos/auth/RegisterUserResponseDTO";
 import { ISendVerificationOtp } from "../../interfaces/ISendVerificationOtp"
 import { AuthProvider } from "../../../shared/enums/AuthProvider"
+import { IRegisterUser } from "../../interfaces/IRegisterUser"
 
 
-export class RegisterUser {
+export class RegisterUser implements IRegisterUser {
     constructor(private readonly userRepository: IUserRepository, private readonly passwordHasher: IPasswordHasher,private readonly sendVerificationOtp:ISendVerificationOtp) { }
 
     async execute(request: RegisterUserDTO): Promise<RegisterUserResponseDTO> {

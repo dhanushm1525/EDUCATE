@@ -5,9 +5,7 @@ import { validate } from "../middlewares/validationMiddleware";
 import { registerSchema } from "../../shared/schema/auth/registerSchema";
 import { loginSchema } from "../../shared/schema/auth/loginSchema";
 
-import { RegisterController } from "../controllers/auth/RegisterController";
-
-import {registerUser,loginController,refreshTokenController,logoutController, resetPasswordController,getCurrentUserController, googleSignInController} from "../../infrastructure/DI/authDependencies";
+import {registerController,loginController,refreshTokenController,logoutController, resetPasswordController,getCurrentUserController, googleSignInController} from "../../infrastructure/DI/authDependencies";
 
 
 import { verifyEmailOtpSchema } from "../../shared/schema/auth/verifyEmailOtpSchema";
@@ -28,10 +26,6 @@ import { googleSignInSchema } from "../../shared/schema/auth/googleSignInSchema"
 const router = Router();
 
 
-const registerController =
-    new RegisterController(
-        registerUser
-    );
 
 
 
