@@ -3,14 +3,15 @@ import { GetMyProfileResponseDTO } from "../../dtos/user/GetMyProfileResponseDTO
 import { AppError } from "../../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { IGetMyProfile } from "../../interfaces/IGetMyProfile";
+import { GetMyProfileDTO } from "../../dtos/user/GetMyProfileDTO";
 
 
 export class GetMyProfile implements IGetMyProfile{
     constructor(private readonly userRepository:IUserRepository){}
 
-    async execute(userId:string):Promise<GetMyProfileResponseDTO>{
+    async execute(request:GetMyProfileDTO):Promise<GetMyProfileResponseDTO>{
         
-        
+        const {userId} = request;
         const user = await this.userRepository.findById(userId)
 
 

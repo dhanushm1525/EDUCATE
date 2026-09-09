@@ -41,7 +41,7 @@ export class GetCurrentUserController {
 
             const user =
                 await this.getCurrentUser.execute(
-                    req.user.userId
+                    {userId:req.user.userId}
                 );
 
 

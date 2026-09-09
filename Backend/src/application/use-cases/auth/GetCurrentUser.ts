@@ -5,6 +5,8 @@ import {
 import {
     AppError
 } from "../../../shared/errors/AppError";
+import { GetCurrentUserDTO } from "../../dtos/auth/GetCurrentUserDTO";
+import { GetCurrentUserResponseDTO } from "../../dtos/auth/GetCurrentUserResponseDTO";
 import { IGetCurrentUser } from "../../interfaces/IGetCurrentUser";
 
 
@@ -17,9 +19,9 @@ export class GetCurrentUser implements IGetCurrentUser{
 
 
     async execute(
-        userId: string
-    ) {
-
+        request:GetCurrentUserDTO
+    ):Promise<GetCurrentUserResponseDTO> {
+        const {userId} = request
         const user =
             await this.userRepository.findById(
                 userId

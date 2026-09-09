@@ -2,6 +2,7 @@ import { Request,Response,NextFunction } from "express";
 import { IGetMyProfile } from "../../../application/interfaces/IGetMyProfile";
 import { successResponse } from "../../../shared/response/apiResponse";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
+import { AppError } from "../../../shared/errors/AppError";
 
 
 export class GetMyProfileController{
@@ -19,10 +20,11 @@ export class GetMyProfileController{
             
 
             if(!userId){
-                return next(new Error("Unauthorized"));
+                return next(new AppError(AUTH_MESSAGES.UNAUTHORIZED, 401));
             }
             
-            const result = await this.getMyprofile.execute(userId);
+            
+            const result = await this.getMyprofile.execute({userId});
 
             successResponse(res,200,AUTH_MESSAGES.PROFILE_RETRIEVED_SUCCESSFULLY,result)
         }catch(error){
