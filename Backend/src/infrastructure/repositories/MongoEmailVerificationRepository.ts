@@ -1,14 +1,18 @@
 import { Types } from "mongoose";
 import { IEmailVerificationRepository,EmailVerificationRecord } from "../../domain/repositories/IEmailVerificationRepository";
-import { EmailVerificationModel } from "../database/models/EmailVerificationModel";
+import { EmailVerificationModel, IEmailVerificationDocument } from "../database/models/EmailVerificationModel";
+import { BaseRepository } from "./BaseRepository";
 
 
 
 
-export class MongoEmailVerificationRepository implements IEmailVerificationRepository{
+export class MongoEmailVerificationRepository extends BaseRepository<IEmailVerificationDocument> implements IEmailVerificationRepository{
+    constructor() {
+        super(EmailVerificationModel);
+    }
 
     async create(userId: string, otpHash: string, expiresAt: Date): Promise<void> {
-        await EmailVerificationModel.create({
+        await  this.createDocument({
             userId:new Types.ObjectId(userId),
             otpHash,
             expiresAt
@@ -17,7 +21,7 @@ export class MongoEmailVerificationRepository implements IEmailVerificationRepos
 
 
     async findByUserId(userId: string): Promise<EmailVerificationRecord | null> {
-        const document = await EmailVerificationModel.findOne({userId:new Types.ObjectId(userId)});
+        const document = await this.findOneDocument({userId:new Types.ObjectId(userId)});
 
         if(!document){
             return null;
@@ -33,7 +37,7 @@ export class MongoEmailVerificationRepository implements IEmailVerificationRepos
 
 
     async deleteByUserId(userId: string): Promise<void> {
-        await EmailVerificationModel.deleteOne({
+        await this.deleteManyDocuments({
             userId:new Types.ObjectId(userId)
         });
     }

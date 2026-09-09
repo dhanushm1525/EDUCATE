@@ -1,10 +1,16 @@
 import { IPasswordResetRepository,PasswordResetRecord } from "../../domain/repositories/IPasswordResetRepository";
 import { PasswordResetModel } from "../database/models/PasswordResetModel";
+import { BaseRepository } from "./BaseRepository";
+import { IPasswordResetDocument } from "../database/models/PasswordResetModel";
 
 
-export class MongoPasswordResetRepository implements IPasswordResetRepository{
+export class MongoPasswordResetRepository extends BaseRepository<IPasswordResetDocument> implements IPasswordResetRepository{
+    constructor() {
+        super(PasswordResetModel);
+    }
+
     async create(userId: string, otpHash: string, expiresAt: Date): Promise<void> {
-        await PasswordResetModel.create({
+        await this.createDocument({
             userId,
             otpHash,
             expiresAt
@@ -13,7 +19,7 @@ export class MongoPasswordResetRepository implements IPasswordResetRepository{
 
 
     async findByUserId(userId: string): Promise<PasswordResetRecord | null> {
-        const passwordReset = await PasswordResetModel.findOne({
+        const passwordReset = await this.findOneDocument({
             userId
         })
 
@@ -32,7 +38,7 @@ export class MongoPasswordResetRepository implements IPasswordResetRepository{
 
 
     async deleteByUserId(userId: string): Promise<void> {
-        await PasswordResetModel.deleteOne({
+        await this.deleteManyDocuments({
             userId
         })
     }

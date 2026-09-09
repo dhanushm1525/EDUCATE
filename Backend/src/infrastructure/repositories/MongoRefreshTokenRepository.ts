@@ -1,12 +1,18 @@
 import { IRefreshTokenRepository,RefreshTokenRecord } from "../../domain/repositories/IRefreshTokenRepository";
 import { RefreshTokenModel } from "../database/models/RefreshTokenModel";
 import { Types  } from "mongoose";
+import { BaseRepository } from "./BaseRepository";
+import { IRefreshTokenDocument } from "../database/models/RefreshTokenModel";
 
 
 
-export class MongoRefreshTokenRepository implements IRefreshTokenRepository {
+export class MongoRefreshTokenRepository extends BaseRepository<IRefreshTokenDocument> implements IRefreshTokenRepository {
+    constructor() {
+        super(RefreshTokenModel);
+    }
+
     async create(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {
-        await RefreshTokenModel.create({
+        await this.createDocument({
             userId:new Types.ObjectId(userId),
             tokenHash,
             expiresAt
@@ -16,7 +22,7 @@ export class MongoRefreshTokenRepository implements IRefreshTokenRepository {
 
    async findByTokenHash(tokenHash: string): Promise<RefreshTokenRecord |null> {
 
-    const document = await RefreshTokenModel.findOne({tokenHash});
+    const document = await this.findOneDocument({ tokenHash });
 
 
     if (!document) {
@@ -34,14 +40,14 @@ export class MongoRefreshTokenRepository implements IRefreshTokenRepository {
 
 
     async revokeById(id: string): Promise<void> {
-        await RefreshTokenModel.findByIdAndUpdate(
+        await this.updateByIdDocument(
             id, { revokedAt: new Date() }
         );
     }
 
 
     async revokeAllByUserId(userId: string): Promise<void> {
-        await RefreshTokenModel.updateMany(
+        await this.updateManyDocuments(
             {
                 userId:new Types.ObjectId(userId),
                 revokedAt: null

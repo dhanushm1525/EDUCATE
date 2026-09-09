@@ -2,25 +2,27 @@ import { IUserRepository } from "../../domain/repositories/IUserRepository";
 
 import { User } from "../../domain/entities/User";
 
-import { UserModel } from "../database/models/UserModel";
+import { IUserDocument, UserModel } from "../database/models/UserModel";
 
 import { UserMapper } from "../mappers/UserMapper";
+import { BaseRepository } from "./BaseRepository";
 
 
-export class MongoUserRepository implements IUserRepository {
+export class MongoUserRepository extends BaseRepository<IUserDocument> implements IUserRepository {
+    constructor() {
+        super(UserModel);
+    }
+
     async create(user: User): Promise<User> {
-
-        const document =
-            await UserModel.create(
-                UserMapper.toPersistence(user)
-            );
+        const document = await this.createDocument(
+            UserMapper.toPersistence(user)
+        );
 
         return UserMapper.toDomain(document);
     }
 
     async findById(id: string): Promise<User | null> {
-
-        const document = await UserModel.findById(id);
+        const document = await this.findByIdDocument(id);
 
         if (!document) {
             return null;
@@ -31,8 +33,9 @@ export class MongoUserRepository implements IUserRepository {
 
 
     async findByEmail(email: string): Promise<User | null> {
-
-        const document = await UserModel.findOne({ email: email.toLowerCase() });
+        const document = await this.findOneDocument({
+            email: email.toLowerCase()
+        });
 
         if (!document) {
             return null;
@@ -42,15 +45,14 @@ export class MongoUserRepository implements IUserRepository {
     }
 
     async update(user: User): Promise<User> {
-        const document =
-            await UserModel.findByIdAndUpdate(
-                user.id,
-                UserMapper.toPersistence(user),
-                {
-                    new: true,
-                    runValidators: true
-                }
-            );
+        if (!user.id) {
+            throw new Error("User id is required to update");
+        }
+
+        const document = await this.updateByIdDocument(
+            user.id,
+            UserMapper.toPersistence(user)
+        );
 
         if (!document) {
             throw new Error(
@@ -62,11 +64,9 @@ export class MongoUserRepository implements IUserRepository {
     }
 
     async existsByEmail(email: string): Promise<boolean> {
-        const exists = await UserModel.exists({
+        return this.existsDocument({
             email: email.toLowerCase()
         });
-
-        return exists !== null;
     }
 
 }
