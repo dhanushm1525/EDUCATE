@@ -1,12 +1,12 @@
 import { Request,Response,NextFunction, CookieOptions } from "express";
-import { RefreshAccessToken } from "../../../application/use-cases/auth/RefreshAccessToken";
 import { RefreshAccessTokenDTO } from "../../../application/dtos/auth/RefreshAccessTokenDTO";
 import { successResponse } from "../../../shared/response/apiResponse";
+import { IRefreshAccessToken } from "../../../application/interfaces/IRefreshToken";
 
 
 export class RefreshTokenController{
     constructor(
-        private readonly refreshAccessToken:RefreshAccessToken,
+        private readonly refreshAccessToken:IRefreshAccessToken,
         private readonly refreshTokenCookie:{
             name:string;
             options:CookieOptions;

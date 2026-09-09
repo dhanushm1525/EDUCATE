@@ -10,9 +10,10 @@ import { IAuthConfig } from "../../interfaces/IAuthConfig";
 import { RefreshAccessTokenDTO } from "../../dtos/auth/RefreshAccessTokenDTO";
 import { RefreshAccessTokenResponseDTO } from "../../dtos/auth/RefreshAccessTokenResponseDTO";
 import { UserStatus } from "../../../shared/enums/UserStatus";
+import { IRefreshAccessToken } from "../../interfaces/IRefreshToken";
 
 
-export class RefreshAccessToken {
+export class RefreshAccessToken implements IRefreshAccessToken {
 
     constructor(
         private readonly userRepository: IUserRepository,
