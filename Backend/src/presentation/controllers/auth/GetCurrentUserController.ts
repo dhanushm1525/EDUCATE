@@ -4,9 +4,7 @@ import {
     NextFunction
 } from "express";
 
-import {
-    GetCurrentUser
-} from "../../../application/use-cases/auth/GetCurrentUser";
+import { IGetCurrentUser } from "../../../application/interfaces/IGetCurrentUser";
 
 import {
     successResponse
@@ -18,7 +16,7 @@ export class GetCurrentUserController {
 
     constructor(
         private readonly getCurrentUser:
-            GetCurrentUser
+            IGetCurrentUser
     ) { }
 
 

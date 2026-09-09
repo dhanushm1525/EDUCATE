@@ -1,5 +1,5 @@
 import { Request,Response,NextFunction } from "express";
-import { LogoutUser } from "../../../application/use-cases/auth/LogoutUser";
+import { ILogoutUser } from "../../../application/interfaces/ILogoutUser";
 import { successResponse } from "../../../shared/response/apiResponse";
 import { IRefreshTokenCookie } from "../../../application/interfaces/IRefreshTokenCookie";
 
@@ -7,7 +7,7 @@ import { IRefreshTokenCookie } from "../../../application/interfaces/IRefreshTok
 
 export class LogoutController{
     constructor(
-        private readonly logoutuser:LogoutUser,
+        private readonly logoutuser:ILogoutUser,
         private readonly refreshTokenCookie:IRefreshTokenCookie
     ){}
 

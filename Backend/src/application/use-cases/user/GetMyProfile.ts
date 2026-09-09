@@ -2,9 +2,10 @@ import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { GetMyProfileResponseDTO } from "../../dtos/user/GetMyProfileResponseDTO";
 import { AppError } from "../../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
+import { IGetMyProfile } from "../../interfaces/IGetMyProfile";
 
 
-export class GetMyProfile{
+export class GetMyProfile implements IGetMyProfile{
     constructor(private readonly userRepository:IUserRepository){}
 
     async execute(userId:string):Promise<GetMyProfileResponseDTO>{

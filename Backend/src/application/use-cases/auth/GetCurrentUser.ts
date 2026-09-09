@@ -5,9 +5,10 @@ import {
 import {
     AppError
 } from "../../../shared/errors/AppError";
+import { IGetCurrentUser } from "../../interfaces/IGetCurrentUser";
 
 
-export class GetCurrentUser {
+export class GetCurrentUser implements IGetCurrentUser{
 
     constructor(
         private readonly userRepository:

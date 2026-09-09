@@ -1,11 +1,11 @@
 import { Request,Response,NextFunction } from "express";
-import { GetMyProfile } from "../../../application/use-cases/user/GetMyProfile";
+import { IGetMyProfile } from "../../../application/interfaces/IGetMyProfile";
 import { successResponse } from "../../../shared/response/apiResponse";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 
 export class GetMyProfileController{
-    constructor(private readonly getMyprofile:GetMyProfile){}
+    constructor(private readonly getMyprofile:IGetMyProfile){}
 
     async handle(
         req:Request,

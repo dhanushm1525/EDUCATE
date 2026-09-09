@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { GoogleSignIn } from "../../../application/use-cases/auth/GoogleSignIn";
 import { successResponse } from "../../../shared/response/apiResponse";
 import { IRefreshTokenCookie } from "../../../application/interfaces/IRefreshTokenCookie";
+import { IGoogleSignIn } from "../../../application/interfaces/IGoogleSignIn";
 
 export class GoogleSignInController {
   constructor(
-    private readonly googleSignIn: GoogleSignIn,
+    private readonly googleSignIn: IGoogleSignIn,
     private readonly refreshTokenCookie: IRefreshTokenCookie
   ) {}
 

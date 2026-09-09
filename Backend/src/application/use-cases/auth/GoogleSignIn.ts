@@ -10,8 +10,9 @@ import { User } from "../../../domain/entities/User";
 import { UserRole } from "../../../shared/enums/UserRole";
 import { UserStatus } from "../../../shared/enums/UserStatus";
 import { AuthProvider } from "../../../shared/enums/AuthProvider";
+import { IGoogleSignIn } from "../../interfaces/IGoogleSignIn";
 
-export class GoogleSignIn {
+export class GoogleSignIn implements IGoogleSignIn{
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly googleAuthService: IGoogleAuthService,
