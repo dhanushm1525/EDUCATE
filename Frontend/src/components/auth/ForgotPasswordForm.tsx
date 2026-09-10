@@ -7,6 +7,7 @@ import { Mail, ArrowRight, ArrowLeft } from "lucide-react";
 import { authService } from "../../services/auth.service";
 
 import { getApiErrorMessage } from "../../utils/apiError";
+import { useToastStore } from "../../store/toastStore";
 
 export default function ForgotPasswordForm() {
   const navigate = useNavigate();
@@ -15,12 +16,10 @@ export default function ForgotPasswordForm() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [error, setError] = useState<string | null>(null);
+  const addToast = useToastStore((state) => state.addToast);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    setError(null);
 
     try {
       setIsLoading(true);
@@ -46,7 +45,7 @@ export default function ForgotPasswordForm() {
         },
       );
     } catch (error) {
-      setError(getApiErrorMessage(error));
+      addToast(getApiErrorMessage(error), "error");
     } finally {
       setIsLoading(false);
     }
@@ -111,26 +110,6 @@ export default function ForgotPasswordForm() {
           Enter your email address and we'll send you a reset OTP.
         </p>
       </div>
-
-      {/* Error */}
-
-      {error && (
-        <div
-          className="
-                            mb-4
-                            rounded-lg
-                            border
-                            border-red-500/30
-                            bg-red-500/10
-                            px-3
-                            py-2
-                            text-xs
-                            text-red-300
-                        "
-        >
-          {error}
-        </div>
-      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email */}

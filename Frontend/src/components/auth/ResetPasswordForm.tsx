@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { authService } from "../../services/auth.service";
 import { getApiErrorMessage } from "../../utils/apiError";
+import { useToastStore } from "../../store/toastStore";
 
 interface LocationState {
   email?: string;
@@ -28,16 +29,12 @@ export default function ResetPasswordForm() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const addToast = useToastStore((state) => state.addToast);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError(null);
-    setSuccess(null);
-
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+      addToast("Passwords do not match", "error");
       return;
     }
 
@@ -49,13 +46,13 @@ export default function ResetPasswordForm() {
         newPassword,
       });
 
-      setSuccess(response.message);
+      addToast(response.message, "success");
 
       setTimeout(() => {
         navigate("/login");
       }, 1500);
     } catch (err) {
-      setError(getApiErrorMessage(err));
+      addToast(getApiErrorMessage(err), "error");
     } finally {
       setIsLoading(false);
     }
@@ -82,19 +79,6 @@ export default function ResetPasswordForm() {
           Enter the OTP sent to your email and choose a new password.
         </p>
       </div>
-
-      {/* Alerts */}
-      {error && (
-        <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="mb-4 rounded-lg border border-green-500/30 bg-green-500/10 px-3 py-2 text-xs text-green-300">
-          {success}
-        </div>
-      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email */}

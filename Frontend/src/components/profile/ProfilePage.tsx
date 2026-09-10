@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { userService } from "../../services/user.service";
 import type { UserProfile } from "../../types/user";
 import ProfileAvatar from "./ProfileAvatar";
+import { useToastStore } from "../../store/toastStore";
+import { getApiErrorMessage } from "../../utils/apiError";
 
 interface ProfilePageProps {
   title?: string;
@@ -12,26 +14,24 @@ export default function ProfilePage({
 }: ProfilePageProps) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const addToast = useToastStore((state) => state.addToast);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         setIsLoading(true);
-        setError(null);
-
         const response = await userService.getMyProfile();
        
         setProfile(response.data);
-      } catch {
-        setError("Failed to load profile");
+      } catch (error) {
+        addToast(getApiErrorMessage(error), "error");
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchProfile();
-  }, []);
+  }, [addToast]);
 
   /*
    * Loading state
@@ -40,19 +40,6 @@ export default function ProfilePage({
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0B1120]">
         <span className="text-sm text-slate-400">Loading profile...</span>
-      </div>
-    );
-  }
-
-  /*
-   * Error state
-   */
-  if (error) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0B1120]">
-        <div className="text-center">
-          <p className="text-sm text-red-400">{error}</p>
-        </div>
       </div>
     );
   }

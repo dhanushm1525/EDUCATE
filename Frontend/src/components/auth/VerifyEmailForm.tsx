@@ -14,6 +14,7 @@ import {
 import { authService } from "../../services/auth.service";
 
 import { getApiErrorMessage } from "../../utils/apiError";
+import { useToastStore } from "../../store/toastStore";
 
 
 interface VerifyEmailFormProps {
@@ -32,9 +33,7 @@ export function VerifyEmailForm({
 
     const [otp, setOtp] = useState("");
 
-    const [error, setError] = useState("");
-
-    const [message, setMessage] = useState("");
+    const addToast = useToastStore((state) => state.addToast);
 
     const [isLoading, setIsLoading] =
         useState(false);
@@ -64,16 +63,8 @@ export function VerifyEmailForm({
         e.preventDefault();
 
 
-        setError("");
-
-        setMessage("");
-
-
         if (otp.length !== 6) {
-
-            setError(
-                "Please enter the 6-digit OTP."
-            );
+            addToast("Please enter the 6-digit OTP.", "error");
 
             return;
 
@@ -95,9 +86,7 @@ export function VerifyEmailForm({
                 });
 
 
-            setMessage(
-                response.message
-            );
+            addToast(response.message, "success");
 
 
             setTimeout(() => {
@@ -114,9 +103,7 @@ export function VerifyEmailForm({
 
         } catch (error: unknown) {
 
-            setError(
-                getApiErrorMessage(error)
-            );
+            addToast(getApiErrorMessage(error), "error");
 
         } finally {
 
@@ -129,11 +116,6 @@ export function VerifyEmailForm({
 
     const handleResendOtp =
         async () => {
-
-            setError("");
-
-            setMessage("");
-
 
             try {
 
@@ -149,16 +131,12 @@ export function VerifyEmailForm({
                         });
 
 
-                setMessage(
-                    response.message
-                );
+                addToast(response.message, "success");
 
 
             } catch (error: unknown) {
 
-                setError(
-                    getApiErrorMessage(error)
-                );
+                addToast(getApiErrorMessage(error), "error");
 
             } finally {
 
@@ -265,32 +243,6 @@ export function VerifyEmailForm({
                             maxLength={6}
                             className="w-full bg-[#0F172A] border border-slate-700 rounded-lg px-4 py-3 text-center text-lg tracking-[0.5em] text-white placeholder:text-slate-600 placeholder:tracking-normal focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                         />
-
-
-                        {/* Error */}
-
-                        {error && (
-
-                            <div className="mt-4 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
-
-                                {error}
-
-                            </div>
-
-                        )}
-
-
-                        {/* Success */}
-
-                        {message && (
-
-                            <div className="mt-4 rounded-lg bg-green-500/10 border border-green-500/20 px-4 py-3 text-sm text-green-400">
-
-                                {message}
-
-                            </div>
-
-                        )}
 
 
                         {/* Verify Button */}

@@ -1,22 +1,20 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { authService } from "../../services/auth.service";
 import { useAuthStore } from "../../store/authStore";
 import { getRoleDashboardPath } from "../../utils/getRoleDashboardPath";
 import { getApiErrorMessage } from "../../utils/apiError";
+import { useToastStore } from "../../store/toastStore";
 
 export default function GoogleSignInButton() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
-  const [error, setError] = useState<string | null>(null);
+  const addToast = useToastStore((state) => state.addToast);
 
   const handleSuccess = async (credentialResponse: {
     credential?: string;
   }) => {
     try {
-      setError(null);
-
       const credential = credentialResponse.credential;
 
       if (!credential) {
@@ -35,7 +33,7 @@ export default function GoogleSignInButton() {
         replace: true,
       });
     } catch (error) {
-      setError(getApiErrorMessage(error));
+      addToast(getApiErrorMessage(error), "error");
     }
   };
 
@@ -44,7 +42,7 @@ export default function GoogleSignInButton() {
       <GoogleLogin
         onSuccess={handleSuccess}
         onError={() => {
-          setError("Google sign-in failed");
+          addToast("Google sign-in failed", "error");
         }}
         // theme="filled_black"
         // shape="rectangular"
@@ -54,11 +52,6 @@ export default function GoogleSignInButton() {
     text="continue_with"
       />
 
-      {error && (
-        <p className="mt-3 text-center text-xs text-red-400">
-          {error}
-        </p>
-      )}
     </div>
   );
 }
