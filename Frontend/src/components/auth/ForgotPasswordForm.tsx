@@ -8,6 +8,7 @@ import { authService } from "../../services/auth.service";
 
 import { getApiErrorMessage } from "../../utils/apiError";
 import { useToastStore } from "../../store/toastStore";
+import { validateForgotPasswordForm } from "../../utils/formValidation";
 
 export default function ForgotPasswordForm() {
   const navigate = useNavigate();
@@ -20,6 +21,12 @@ export default function ForgotPasswordForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const validation = validateForgotPasswordForm(email);
+    if (!validation.isValid) {
+      addToast(validation.error ?? "Please check the form", "error");
+      return;
+    }
 
     try {
       setIsLoading(true);
@@ -111,7 +118,7 @@ export default function ForgotPasswordForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
         {/* Email */}
 
         <div>

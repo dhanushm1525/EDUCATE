@@ -9,6 +9,7 @@ import { getApiErrorMessage } from "../../utils/apiError";
 import { getRoleDashboardPath } from "../../utils/getRoleDashboardPath";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { useToastStore } from "../../store/toastStore";
+import { validateLoginForm } from "../../utils/formValidation";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -23,6 +24,12 @@ export default function LoginForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const validation = validateLoginForm(email, password);
+    if (!validation.isValid) {
+      addToast(validation.error ?? "Please check the form", "error");
+      return;
+    }
 
     try {
       setIsLoading(true);
@@ -59,7 +66,7 @@ export default function LoginForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
         {/* Email */}
         <div>
           <label className="mb-1.5 block text-xs font-medium text-slate-300">

@@ -12,6 +12,7 @@ import {
 import { authService } from "../../services/auth.service";
 import { getApiErrorMessage } from "../../utils/apiError";
 import { useToastStore } from "../../store/toastStore";
+import { validateResetPasswordForm } from "../../utils/formValidation";
 
 interface LocationState {
   email?: string;
@@ -33,8 +34,14 @@ export default function ResetPasswordForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (newPassword !== confirmPassword) {
-      addToast("Passwords do not match", "error");
+    const validation = validateResetPasswordForm(
+      email,
+      otp,
+      newPassword,
+      confirmPassword,
+    );
+    if (!validation.isValid) {
+      addToast(validation.error ?? "Please check the form", "error");
       return;
     }
 
@@ -80,7 +87,7 @@ export default function ResetPasswordForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
         {/* Email */}
         <div>
           <label className="mb-1.5 block text-xs font-medium text-slate-300">

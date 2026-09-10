@@ -5,6 +5,7 @@ import { authService } from "../../services/auth.service";
 import { getApiErrorMessage } from "../../utils/apiError";
 import { useNavigate, Link } from "react-router-dom";
 import { useToastStore } from "../../store/toastStore";
+import { validateRegisterForm } from "../../utils/formValidation";
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -39,9 +40,15 @@ export default function RegisterForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      addToast("Passwords do not match", "error");
-
+    const validation = validateRegisterForm(
+      formData.firstName,
+      formData.lastName,
+      formData.email,
+      formData.password,
+      formData.confirmPassword,
+    );
+    if (!validation.isValid) {
+      addToast(validation.error ?? "Please check the form", "error");
       return;
     }
 
@@ -111,7 +118,7 @@ export default function RegisterForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
         {/* First Name */}
 
         <div>

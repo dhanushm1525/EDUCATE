@@ -15,6 +15,7 @@ import { authService } from "../../services/auth.service";
 
 import { getApiErrorMessage } from "../../utils/apiError";
 import { useToastStore } from "../../store/toastStore";
+import { validateEmail, validateVerifyEmailForm } from "../../utils/formValidation";
 
 
 interface VerifyEmailFormProps {
@@ -63,8 +64,9 @@ export function VerifyEmailForm({
         e.preventDefault();
 
 
-        if (otp.length !== 6) {
-            addToast("Please enter the 6-digit OTP.", "error");
+        const validation = validateVerifyEmailForm(userId, otp);
+        if (!validation.isValid) {
+            addToast(validation.error ?? "Please check the form", "error");
 
             return;
 
@@ -116,6 +118,11 @@ export function VerifyEmailForm({
 
     const handleResendOtp =
         async () => {
+            const validation = validateEmail(email);
+            if (!validation.isValid) {
+                addToast(validation.error ?? "Please check the email", "error");
+                return;
+            }
 
             try {
 
@@ -219,6 +226,7 @@ export function VerifyEmailForm({
 
                     <form
                         onSubmit={handleVerify}
+                        noValidate
                         className="mt-8"
                     >
 
