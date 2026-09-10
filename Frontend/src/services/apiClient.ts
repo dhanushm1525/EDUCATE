@@ -6,7 +6,7 @@ import axios, {
 import {
     useAuthStore
 } from "../store/authStore";
-import { showErrorToast } from "../store/toastStore";
+import { useToastStore } from "../store/toastStore";
 import { getApiErrorMessage } from "../utils/apiError";
 
 export const apiClient =
@@ -187,7 +187,16 @@ apiClient.interceptors.response.use(
             AxiosError
     ) => {
         if (error.response?.status !== 401 || !error.config) {
-            showErrorToast(getApiErrorMessage(error));
+            useToastStore
+                .getState()
+                .addToast(
+                    getApiErrorMessage(error),
+                    "error"
+                );
+
+            return Promise.reject(
+                error
+            );
         }
 
         const originalRequest =
