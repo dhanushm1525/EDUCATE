@@ -33,7 +33,7 @@ const userSchema = new Schema<IUserDocument>(
             type: String,
             required: true,
             trim: true,
-            minlength: 1,
+            minlength: 0,
             maxlength: 50
         },
 

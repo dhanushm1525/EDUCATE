@@ -29,7 +29,7 @@ export class GoogleAuthService implements IGoogleAuthService {
     }
 
     const firstName = payload.given_name ?? "Google";
-    const lastName = payload.family_name ?? "";
+    const lastName = payload.family_name ?? ".";
 
     return {
       email: payload.email.trim().toLowerCase(),

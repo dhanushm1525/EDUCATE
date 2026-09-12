@@ -7,7 +7,11 @@ const requiredEnv = [
     "JWT_ACCESS_SECRET",
     "JWT_REFRESH_SECRET",
     "RESEND_API_KEY",
-    "EMAIL_FROM"
+    "EMAIL_FROM",
+     "AWS_REGION",
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY",
+    "AWS_S3_BUCKET_NAME",
 ];
 
 for (const key of requiredEnv) {
@@ -56,17 +60,30 @@ export const env = {
             259200000
         ),
 
-    resendApiKey:process.env.RESEND_API_KEY!,
+    resendApiKey: process.env.RESEND_API_KEY!,
 
-    emailFrom:process.env.EMAIL_FROM!,
+    emailFrom: process.env.EMAIL_FROM!,
 
     emailVerificationOtpExpiresInMs:
-    Number(
-        process.env.EMAIL_VERIFICATION_OTP_EXPIRES_IN_MS ??
-        600000
-    ),
+        Number(
+            process.env.EMAIL_VERIFICATION_OTP_EXPIRES_IN_MS ??
+            600000
+        ),
     passwordResetOtpExpiresInMs:
-    Number(
-        process.env.PASSWORD_RESET_OTP_EXPIRES_IN_MS
-    ),
+        Number(
+            process.env.PASSWORD_RESET_OTP_EXPIRES_IN_MS
+        ),
+
+
+    awsRegion:
+        process.env.AWS_REGION!,
+
+    awsAccessKeyId:
+        process.env.AWS_ACCESS_KEY_ID!,
+
+    awsSecretAccessKey:
+        process.env.AWS_SECRET_ACCESS_KEY!,
+
+    awsS3BucketName:
+        process.env.AWS_S3_BUCKET_NAME!,
 };
