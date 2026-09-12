@@ -1,16 +1,11 @@
 import { Resend } from "resend";
 import { IEmailService } from "../../application/interfaces/IEmailService";
-import {env} from "../config/env"
 
-
-export class ResendEmailService implements IEmailService{
-
-    private readonly _resend:Resend;
-
-    constructor(){
-        this._resend = new Resend(env.resendApiKey)
-    }
-
+export class ResendEmailService implements IEmailService {
+    constructor(
+        private readonly _resend: Resend,
+        private readonly _emailFrom: string
+    ) {}
 
     async send(
         to:string,
@@ -18,7 +13,7 @@ export class ResendEmailService implements IEmailService{
         html:string
     ):Promise<void>{
         const {error} = await this._resend.emails.send({
-            from:env.emailFrom,
+            from:this._emailFrom,
             to,
             subject,
             html

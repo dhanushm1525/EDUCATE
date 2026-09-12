@@ -17,23 +17,10 @@ export interface S3Config {
 }
 
 export class S3StorageService implements IStorageService {
-
-    private readonly s3Client: S3Client;
-
     constructor(
+        private readonly s3Client: S3Client,
         private readonly config: S3Config
-    ) {
-
-        this.s3Client = new S3Client({
-            region: this.config.region,
-
-            credentials: {
-                accessKeyId: this.config.accessKeyId,
-
-                secretAccessKey: this.config.secretAccessKey,
-            },
-        });
-    }
+    ) {}
 
     async generateUploadUrl(
         key: string,

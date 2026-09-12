@@ -39,6 +39,9 @@ import { GoogleAuthService } from "../services/GoogleAuthService";
 import { GoogleSignIn } from "../../application/use-cases/auth/GoogleSignIn";
 import { GoogleSignInController } from "../../presentation/controllers/auth/GoogleSignInController";
 import { RegisterController } from "../../presentation/controllers/auth/RegisterController";
+import { Resend } from "resend";
+import { OAuth2Client } from "google-auth-library";
+import { env } from "../config/env";
 
 export const userRepository =
     new MongoUserRepository();
@@ -86,7 +89,8 @@ const emailVerificationRepository = new MongoEmailVerificationRepository()
 
 const otpGenerator = new OtpGenerator();
 
-const emailService = new ResendEmailService()
+const emailClient = new Resend(env.resendApiKey);
+const emailService = new ResendEmailService(emailClient, env.emailFrom)
 
 
 export const loginController = new LoginController(loginUser, refreshTokenCookie);
@@ -150,7 +154,9 @@ export const authenticateUser = authMiddleware(jwtService)
 
 
 
-const googleAuthService = new GoogleAuthService(process.env.GOOGLE_CLIENT_ID!)
+const googleClientId = process.env.GOOGLE_CLIENT_ID!;
+const googleClient = new OAuth2Client(googleClientId);
+const googleAuthService = new GoogleAuthService(googleClient, googleClientId)
 
 export const googleSignIn = new GoogleSignIn(userRepository,googleAuthService,jwtService,refreshTokenRepository,tokenHasher,authConfig)
 
