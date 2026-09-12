@@ -18,8 +18,8 @@ export interface S3Config {
 
 export class S3StorageService implements IStorageService {
     constructor(
-        private readonly s3Client: S3Client,
-        private readonly config: S3Config
+        private readonly _s3Client: S3Client,
+        private readonly _config: S3Config
     ) {}
 
     async generateUploadUrl(
@@ -28,7 +28,7 @@ export class S3StorageService implements IStorageService {
     ): Promise<string> {
 
         const command = new PutObjectCommand({
-            Bucket: this.config.bucketName,
+            Bucket: this._config.bucketName,
 
             Key: key,
 
@@ -36,7 +36,7 @@ export class S3StorageService implements IStorageService {
         });
 
         return await getSignedUrl(
-            this.s3Client,
+            this._s3Client,
 
             command,
 
@@ -51,13 +51,13 @@ export class S3StorageService implements IStorageService {
     ): Promise<string> {
 
         const command = new GetObjectCommand({
-            Bucket: this.config.bucketName,
+            Bucket: this._config.bucketName,
 
             Key: key,
         });
 
         return await getSignedUrl(
-            this.s3Client,
+            this._s3Client,
 
             command,
 
@@ -72,11 +72,11 @@ export class S3StorageService implements IStorageService {
     ): Promise<void> {
 
         const command = new DeleteObjectCommand({
-            Bucket: this.config.bucketName,
+            Bucket: this._config.bucketName,
 
             Key: key,
         });
 
-        await this.s3Client.send(command);
+        await this._s3Client.send(command);
     }
 }
