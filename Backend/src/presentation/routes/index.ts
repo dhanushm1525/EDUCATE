@@ -2,6 +2,7 @@ import {Router} from "express";
 
 import authRoutes from "./authRoutes";
 import userRoutes from "./userRoutes"
+import storageRoutes from "./storageRoutes";
 
 const router = Router();
 
@@ -25,6 +26,11 @@ router.use(
 router.use(
     "/users",
     userRoutes
+)
+
+router.use(
+    "/storage",
+    storageRoutes
 )
 
 export default router;

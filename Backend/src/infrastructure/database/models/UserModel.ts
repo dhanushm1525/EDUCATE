@@ -18,7 +18,6 @@ export interface IUserDocument extends Document {
     updatedAt: Date;
 }
 
-
 const userSchema = new Schema<IUserDocument>(
     {
         firstName: {
@@ -33,7 +32,6 @@ const userSchema = new Schema<IUserDocument>(
             type: String,
             required: true,
             trim: true,
-            minlength: 0,
             maxlength: 50
         },
 
@@ -43,45 +41,32 @@ const userSchema = new Schema<IUserDocument>(
             unique: true,
             lowercase: true,
             trim: true,
-            index: true
+            index: true,
+            match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         },
 
         password: {
             type: String,
-            
+            trim: true
         },
 
         googleId: {
-
             type: String,
-
             unique: true,
-
-            sparse: true
-
+            sparse: true,
+            trim: true
         },
 
-
         authProvider: {
-
-            type:
-                String,
-
-            enum:
-                Object.values(
-                    AuthProvider
-                ),
-
-            required:
-                true,
-
-            default:
-                AuthProvider.LOCAL
-
+            type: String,
+            enum: Object.values(AuthProvider),
+            required: true,
+            default: AuthProvider.LOCAL
         },
 
         avatar: {
-            type: String
+            type: String,
+            trim: true
         },
 
         role: {
@@ -101,7 +86,6 @@ const userSchema = new Schema<IUserDocument>(
             default: false
         }
     },
-
     {
         timestamps: true
     }

@@ -2,9 +2,8 @@ import { RegisterUser } from "../../application/use-cases/auth/RegisterUser";
 import { LoginUser } from "../../application/use-cases/auth/LoginUser";
 
 import { LoginController } from "../../presentation/controllers/auth/LoginController";
+import { userRepository } from "./repositoryDependencies";
 
-
-import { MongoUserRepository } from "../repositories/MongoUserRepository";
 import { MongoRefreshTokenRepository } from "../repositories/MongoRefreshTokenRepository";
 
 import { BcryptPasswordHasher } from "../services/BcryptPasswordHasher";
@@ -43,8 +42,7 @@ import { Resend } from "resend";
 import { OAuth2Client } from "google-auth-library";
 import { env } from "../config/env";
 
-export const userRepository =
-    new MongoUserRepository();
+
 
 const refreshTokenRepository =
     new MongoRefreshTokenRepository();

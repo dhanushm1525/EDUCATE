@@ -4,23 +4,15 @@ import type {
 
 
 export interface UserProfile {
-
-    id: string;
-
-    firstName: string;
-
-    lastName: string;
-
-    email: string;
-
-    avatar?: string;
-
-    role: UserRole;
-
-    status: string;
-
-    isVerified: boolean;
-
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: UserRole;
+  isVerified: boolean;
+  avatar?: string;
+  status: string;
+  createdAt: string;
 }
 
 

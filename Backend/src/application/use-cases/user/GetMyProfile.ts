@@ -1,38 +1,61 @@
-import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { GetMyProfileResponseDTO } from "../../dtos/user/GetMyProfileResponseDTO";
 import { AppError } from "../../../shared/errors/AppError";
-import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
-import { IGetMyProfile } from "../../interfaces/IGetMyProfile";
-import { GetMyProfileDTO } from "../../dtos/user/GetMyProfileDTO";
 
+import type { IUserRepository } from "../../../domain/repositories/IUserRepository";
+import type { IStorageService } from "../../interfaces/IStorageService";
 
-export class GetMyProfile implements IGetMyProfile{
-    constructor(private readonly _userRepository:IUserRepository){}
+import type {
+    GetMyProfileDTO,
+} from "../../dtos/user/GetMyProfileDTO";
+import { GetMyProfileResponseDTO } from "../../dtos/user/GetMyProfileResponseDTO"
 
-    async execute(request:GetMyProfileDTO):Promise<GetMyProfileResponseDTO>{
-        
-        const {userId} = request;
-        const user = await this._userRepository.findById(userId)
+export class GetMyProfile {
+    constructor(
+        private readonly _userRepository: IUserRepository,
+        private readonly _storageService: IStorageService
+    ) { }
 
+    async execute(
+        request: GetMyProfileDTO
+    ): Promise<GetMyProfileResponseDTO> {
+        const user = await this._userRepository.findById(
+            request.userId
+        );
 
-        if(!user){
-            throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND,404);
+        if (!user) {
+            throw new AppError(
+                "User not found",
+                404
+            );
         }
 
-        if(!user.id){
-            throw new AppError(AUTH_MESSAGES.USER_ID_IS_MISSING,500,false)
+        if (!user.id) {
+            throw new AppError(
+                "User ID is missing",
+                500
+            );
+        }
+
+        let avatar = user.avatar;
+
+        // Convert only custom S3 object keys into download URLs.
+        // Google profile image URLs should remain unchanged.
+        if (avatar && avatar.startsWith("users/")) {
+            avatar =
+                await this._storageService.generateDownloadUrl(
+                    avatar
+                );
         }
 
         return {
-            id:user.id,
-            firstName:user.firstName,
-            lastName:user.lastName,
-            email:user.email,
-            avatar:user.avatar,
-            role:user.role,
-            status:user.status,
-            isVerified:user.isVerified,
-            createdAt:user.createdAt
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+            isVerified: user.isVerified,
+            avatar,
+            status: user.status,
+            createdAt: user.createdAt,
         };
     }
 }

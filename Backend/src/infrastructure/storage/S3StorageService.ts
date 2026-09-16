@@ -1,82 +1,40 @@
-import {
-    S3Client,
-    PutObjectCommand,
-    GetObjectCommand,
-    DeleteObjectCommand,
-} from "@aws-sdk/client-s3";
-
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-
+import { IS3Client } from "../../application/interfaces/IS3Client";
 import { IStorageService } from "../../application/interfaces/IStorageService";
 
 export interface S3Config {
-    region: string;
-    accessKeyId: string;
-    secretAccessKey: string;
     bucketName: string;
 }
 
 export class S3StorageService implements IStorageService {
     constructor(
-        private readonly _s3Client: S3Client,
+        private readonly _s3Client: IS3Client,
         private readonly _config: S3Config
     ) {}
 
-    async generateUploadUrl(
+    generateUploadUrl(
         key: string,
         contentType: string
     ): Promise<string> {
+        
+        return this._s3Client.generateUploadUrl(
+            this._config.bucketName,
+            key,
+            contentType,
+            300
+        );
 
-        const command = new PutObjectCommand({
-            Bucket: this._config.bucketName,
+        
+    }
 
-            Key: key,
-
-            ContentType: contentType,
-        });
-
-        return await getSignedUrl(
-            this._s3Client,
-
-            command,
-
-            {
-                expiresIn: 300,
-            }
+    generateDownloadUrl(key: string): Promise<string> {
+        return this._s3Client.generateDownloadUrl(
+            this._config.bucketName,
+            key,
+            300
         );
     }
 
-    async generateDownloadUrl(
-        key: string
-    ): Promise<string> {
-
-        const command = new GetObjectCommand({
-            Bucket: this._config.bucketName,
-
-            Key: key,
-        });
-
-        return await getSignedUrl(
-            this._s3Client,
-
-            command,
-
-            {
-                expiresIn: 300,
-            }
-        );
-    }
-
-    async deleteFile(
-        key: string
-    ): Promise<void> {
-
-        const command = new DeleteObjectCommand({
-            Bucket: this._config.bucketName,
-
-            Key: key,
-        });
-
-        await this._s3Client.send(command);
+    deleteFile(key: string): Promise<void> {
+        return this._s3Client.deleteFile(this._config.bucketName, key);
     }
 }

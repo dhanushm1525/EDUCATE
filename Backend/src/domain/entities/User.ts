@@ -12,7 +12,7 @@ export interface UserProps {
     email: string;
     password?: string;
     googleId?: string;
-    authProvider:AuthProvider;
+    authProvider: AuthProvider;
     avatar?: string;
     role: UserRole;
     status: UserStatus;
@@ -30,8 +30,8 @@ export class User {
     private readonly _email: string;
     private _password?: string;
     private _googleId?: string;
-    private readonly _authProvider:AuthProvider;
-    private readonly _avatar?: string;
+    private readonly _authProvider: AuthProvider;
+    private  _avatar?: string;
     private _role: UserRole;
     private _status: UserStatus;
     private _isVerified: boolean;
@@ -78,7 +78,10 @@ export class User {
         this._updatedAt = new Date();
     }
 
-
+    updateAvatar(avatarKey: string): void {
+        this._avatar = avatarKey;
+        this._updatedAt = new Date();
+    }
 
     get id(): string | undefined {
         return this._id;
@@ -96,11 +99,11 @@ export class User {
         return this._email;
     }
 
-    get password(): string|undefined {
+    get password(): string | undefined {
         return this._password;
     }
 
-    get googleId():string|undefined{
+    get googleId(): string | undefined {
         return this._googleId;
     }
 
@@ -108,7 +111,7 @@ export class User {
         return this._avatar;
     }
 
-    get authProvider():AuthProvider{
+    get authProvider(): AuthProvider {
         return this._authProvider
     }
 
