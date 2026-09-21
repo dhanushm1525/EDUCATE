@@ -1,7 +1,7 @@
 import { RegisterUser } from "../../application/use-cases/auth/RegisterUser";
 import { LoginUser } from "../../application/use-cases/auth/LoginUser";
 
-import { LoginController } from "../../presentation/controllers/auth/LoginController";
+import { LoginController } from "../../presentation/controllers/auth/loginLogoutController/LoginController";
 import { userRepository } from "./repositoryDependencies";
 
 import { MongoRefreshTokenRepository } from "../repositories/MongoRefreshTokenRepository";
@@ -14,30 +14,30 @@ import { refreshTokenCookie } from "../config/cookie";
 
 import { RefreshAccessToken } from "../../application/use-cases/auth/RefreshAccessToken";
 import { authConfig } from "../config/authConfig";
-import { RefreshTokenController } from "../../presentation/controllers/auth/RefreshTokenController";
+import { RefreshTokenController } from "../../presentation/controllers/auth/tokenController/RefreshTokenController";
 import { LogoutUser } from "../../application/use-cases/auth/LogoutUser";
-import { LogoutController } from "../../presentation/controllers/auth/LogoutController";
+import { LogoutController } from "../../presentation/controllers/auth/loginLogoutController/LogoutController";
 import { MongoEmailVerificationRepository } from "../repositories/MongoEmailVerificationRepository";
 import { OtpGenerator } from "../services/OtpGenerator";
 import { ResendEmailService } from "../services/ResendEmailService";
 import { SendVerificationOtp } from "../../application/use-cases/auth/SendVerificationOtp";
 
 import { VerifyEmailOtp } from "../../application/use-cases/auth/VerifyEmailOtp";
-import { VerifyEmailOtpController } from "../../presentation/controllers/auth/VerifyEmailOtpController";
+import { VerifyEmailOtpController } from "../../presentation/controllers/auth/otpController/VerifyEmailOtpController";
 import { ResendVerificationOtp } from "../../application/use-cases/auth/ResendVerificationOtp";
-import { ResendVerificationOtpController } from "../../presentation/controllers/auth/ResendVerificationOtpController";
+import { ResendVerificationOtpController } from "../../presentation/controllers/auth/otpController/ResendVerificationOtpController";
 import { MongoPasswordResetRepository } from "../repositories/MongoPasswordResetRepository";
 import { ForgotPassword } from "../../application/use-cases/auth/ForgotPassword";
-import { ForgotPasswordController } from "../../presentation/controllers/auth/ForgotPasswordController";
+import { ForgotPasswordController } from "../../presentation/controllers/auth/passwordController/ForgotPasswordController";
 import { ResetPassword } from "../../application/use-cases/auth/ResetPassword";
-import { ResetPasswordController } from "../../presentation/controllers/auth/ResetPasswordController";
+import { ResetPasswordController } from "../../presentation/controllers/auth/passwordController/ResetPasswordController";
 import { GetCurrentUser } from "../../application/use-cases/auth/GetCurrentUser";
-import { GetCurrentUserController } from "../../presentation/controllers/auth/GetCurrentUserController";
+import { GetCurrentUserController } from "../../presentation/controllers/auth/currentUserController/GetCurrentUserController";
 import { authMiddleware } from "../../presentation/middlewares/authMiddleware";
 import { GoogleAuthService } from "../services/GoogleAuthService";
 import { GoogleSignIn } from "../../application/use-cases/auth/GoogleSignIn";
-import { GoogleSignInController } from "../../presentation/controllers/auth/GoogleSignInController";
-import { RegisterController } from "../../presentation/controllers/auth/RegisterController";
+import { GoogleSignInController } from "../../presentation/controllers/auth/googleSignInController/GoogleSignInController";
+import { RegisterController } from "../../presentation/controllers/auth/registerController/RegisterController";
 import { Resend } from "resend";
 import { OAuth2Client } from "google-auth-library";
 import { env } from "../config/env";

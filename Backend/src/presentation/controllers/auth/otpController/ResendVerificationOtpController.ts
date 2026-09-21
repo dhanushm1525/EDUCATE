@@ -1,6 +1,6 @@
 import { Request,Response,NextFunction } from "express";
-import { ResendVerificationOtp } from "../../../application/use-cases/auth/ResendVerificationOtp";
-import { successResponse } from "../../../shared/response/apiResponse";
+import { ResendVerificationOtp } from "../../../../application/use-cases/auth/ResendVerificationOtp";
+import { successResponse } from "../../../../shared/response/apiResponse";
 
 
 

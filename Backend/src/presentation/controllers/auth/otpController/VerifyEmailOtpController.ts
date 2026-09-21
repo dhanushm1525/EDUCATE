@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { VerifyEmailOtp } from "../../../application/use-cases/auth/VerifyEmailOtp";
-import { successResponse } from "../../../shared/response/apiResponse";
+import { VerifyEmailOtp } from "../../../../application/use-cases/auth/VerifyEmailOtp";
+import { successResponse } from "../../../../shared/response/apiResponse";
 
 
 

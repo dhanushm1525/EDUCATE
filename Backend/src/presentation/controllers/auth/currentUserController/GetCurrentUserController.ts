@@ -4,12 +4,12 @@ import {
     NextFunction
 } from "express";
 
-import { IGetCurrentUser } from "../../../application/interfaces/IGetCurrentUser";
+import { IGetCurrentUser } from "../../../../application/interfaces/IGetCurrentUser";
 
 import {
     successResponse
-} from "../../../shared/response/apiResponse";
-import { AppError } from "../../../shared/errors/AppError";
+} from "../../../../shared/response/apiResponse";
+import { AppError } from "../../../../shared/errors/AppError";
 
 
 export class GetCurrentUserController {

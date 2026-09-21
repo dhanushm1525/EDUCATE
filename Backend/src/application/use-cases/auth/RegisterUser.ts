@@ -48,6 +48,7 @@ export class RegisterUser implements IRegisterUser {
             email:createdUser.email
         })
 
+        
         return {
             id: createdUser.id,
             firstName: createdUser.firstName,

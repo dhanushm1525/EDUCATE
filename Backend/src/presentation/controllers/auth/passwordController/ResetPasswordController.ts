@@ -1,6 +1,6 @@
 import { Request,Response,NextFunction } from "express";
-import { ResetPassword } from "../../../application/use-cases/auth/ResetPassword";
-import { successResponse } from "../../../shared/response/apiResponse";
+import { ResetPassword } from "../../../../application/use-cases/auth/ResetPassword";
+import { successResponse } from "../../../../shared/response/apiResponse";
 
 
 export class ResetPasswordController{

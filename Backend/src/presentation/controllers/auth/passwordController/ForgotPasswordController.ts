@@ -1,6 +1,6 @@
 import { Request,Response,NextFunction } from "express";
-import { ForgotPassword } from "../../../application/use-cases/auth/ForgotPassword";
-import { successResponse } from "../../../shared/response/apiResponse";
+import { ForgotPassword } from "../../../../application/use-cases/auth/ForgotPassword";
+import { successResponse } from "../../../../shared/response/apiResponse";
 
 
 export class ForgotPasswordController{

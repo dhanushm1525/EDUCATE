@@ -495,7 +495,7 @@ export default function RegisterForm() {
           className="
                         w-full
                         mt-2
-                        bg-gradient-to-r
+                        bg-linear-to-r
                         from-blue-600
                         to-indigo-600
                         hover:from-blue-500
