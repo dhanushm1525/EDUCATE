@@ -1,4 +1,4 @@
-import { IUserRepository } from "../../../domain/repositories/IUserRepository"
+import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository"
 import { IUpdateProfileImage } from "../../interfaces/IUpdateProfileImage";
 import { UpdateProfileImageDTO } from "../../dtos/user/UpdateProfileImageDTO";
 import { User } from "../../../domain/entities/User";

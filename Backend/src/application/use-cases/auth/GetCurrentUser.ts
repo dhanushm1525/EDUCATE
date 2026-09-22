@@ -1,6 +1,6 @@
 import {
     IUserRepository
-} from "../../../domain/repositories/IUserRepository";
+} from "../../../domain/repositories/userRepositories/IUserRepository";
 
 import {
     AppError

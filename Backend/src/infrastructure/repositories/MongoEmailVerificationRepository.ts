@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { IEmailVerificationRepository,EmailVerificationRecord } from "../../domain/repositories/IEmailVerificationRepository";
+import { IEmailVerificationRepository,EmailVerificationRecord } from "../../domain/repositories/userRepositories/IEmailVerificationRepository";
 import { EmailVerificationModel, IEmailVerificationDocument } from "../database/models/EmailVerificationModel";
 import { BaseRepository } from "./BaseRepository";
 

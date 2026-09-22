@@ -1,4 +1,4 @@
-import { IRefreshTokenRepository } from "../../../domain/repositories/IRefreshTokenRepository";
+import { IRefreshTokenRepository } from "../../../domain/repositories/userRepositories/IRefreshTokenRepository";
 import { ITokenHasher } from "../../interfaces/ITokenHasher";
 import { LogoutUserDTO } from "../../dtos/auth/LogoutUserDTO";
 

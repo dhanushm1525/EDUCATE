@@ -1,5 +1,5 @@
 import { User } from "../../../domain/entities/User"
-import { IUserRepository } from "../../../domain/repositories/IUserRepository"
+import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository"
 import { IPasswordHasher } from "../../interfaces/IPasswordHasher"
 import { AppError } from "../../../shared/errors/AppError"
 import { RegisterUserDTO } from "../../dtos/auth/RegisterUserDTO"

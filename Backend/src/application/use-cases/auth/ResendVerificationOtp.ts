@@ -5,7 +5,7 @@ import { AUTH_MESSAGES }
     from "../../../shared/messages/authMessages";
 
 import { IUserRepository }
-    from "../../../domain/repositories/IUserRepository";
+    from "../../../domain/repositories/userRepositories/IUserRepository";
 
 import { SendVerificationOtp }
     from "./SendVerificationOtp";

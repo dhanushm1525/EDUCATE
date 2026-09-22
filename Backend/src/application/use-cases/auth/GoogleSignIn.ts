@@ -1,7 +1,7 @@
-import { IUserRepository } from "../../../domain/repositories/IUserRepository";
+import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
 import { IGoogleAuthService } from "../../interfaces/IGoogleAuthService";
 import { IJwtService } from "../../interfaces/IJwtService";
-import { IRefreshTokenRepository } from "../../../domain/repositories/IRefreshTokenRepository";
+import { IRefreshTokenRepository } from "../../../domain/repositories/userRepositories/IRefreshTokenRepository";
 import { ITokenHasher } from "../../interfaces/ITokenHasher";
 import { IAuthConfig } from "../../interfaces/IAuthConfig";
 import { GoogleSignInDTO } from "../../dtos/auth/GoogleSignInDTO";

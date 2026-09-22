@@ -1,5 +1,5 @@
 import { IEmailVerificationRepository }
-    from "../../../domain/repositories/IEmailVerificationRepository";
+    from "../../../domain/repositories/userRepositories/IEmailVerificationRepository";
 
 import { ITokenHasher }
     from "../../interfaces/ITokenHasher";

@@ -1,8 +1,8 @@
 import { AppError } from "../../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
-import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { IRefreshTokenRepository } from "../../../domain/repositories/IRefreshTokenRepository";
+import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
+import { IRefreshTokenRepository } from "../../../domain/repositories/userRepositories/IRefreshTokenRepository";
 
 import { IJwtService } from "../../interfaces/IJwtService";
 import { ITokenHasher } from "../../interfaces/ITokenHasher";

@@ -1,7 +1,7 @@
 import { AppError } from "../../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
-import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { IPasswordResetRepository } from "../../../domain/repositories/IPasswordResetRepository";
+import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
+import { IPasswordResetRepository } from "../../../domain/repositories/userRepositories/IPasswordResetRepository";
 import { IOtpGenerator } from "../../interfaces/IOtpGenerator";
 import { ITokenHasher } from "../../interfaces/ITokenHasher";
 import { IEmailService } from "../../interfaces/IEmailService";

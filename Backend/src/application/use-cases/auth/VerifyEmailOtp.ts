@@ -1,7 +1,7 @@
 import { AppError } from "../../../shared/errors/AppError";
 
-import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { IEmailVerificationRepository } from "../../../domain/repositories/IEmailVerificationRepository";
+import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
+import { IEmailVerificationRepository } from "../../../domain/repositories/userRepositories/IEmailVerificationRepository";
 import { ITokenHasher } from "../../interfaces/ITokenHasher";
 import { VerifyEmailOtpDTO } from "../../dtos/auth/VerifyEmailOtpDTO";
 import { VerifyEmailOtpResponseDTO } from "../../dtos/auth/VerifyEmailOtpResponseDTO";

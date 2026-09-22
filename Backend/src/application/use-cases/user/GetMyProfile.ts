@@ -1,6 +1,6 @@
 import { AppError } from "../../../shared/errors/AppError";
 
-import type { IUserRepository } from "../../../domain/repositories/IUserRepository";
+import type { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
 import type { IStorageService } from "../../interfaces/IStorageService";
 
 import type {

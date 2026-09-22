@@ -1,10 +1,10 @@
 import {
     IUserRepository
-} from "../../../domain/repositories/IUserRepository";
+} from "../../../domain/repositories/userRepositories/IUserRepository";
 
 import {
     IRefreshTokenRepository
-} from "../../../domain/repositories/IRefreshTokenRepository";
+} from "../../../domain/repositories/userRepositories/IRefreshTokenRepository";
 
 import {
     IPasswordHasher

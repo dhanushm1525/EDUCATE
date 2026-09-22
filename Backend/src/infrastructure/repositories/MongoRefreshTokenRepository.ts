@@ -1,4 +1,4 @@
-import { IRefreshTokenRepository,RefreshTokenRecord } from "../../domain/repositories/IRefreshTokenRepository";
+import { IRefreshTokenRepository,RefreshTokenRecord } from "../../domain/repositories/userRepositories/IRefreshTokenRepository";
 import { RefreshTokenModel } from "../database/models/RefreshTokenModel";
 import { Types  } from "mongoose";
 import { BaseRepository } from "./BaseRepository";

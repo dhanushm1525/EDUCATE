@@ -1,4 +1,4 @@
-import { IPasswordResetRepository,PasswordResetRecord } from "../../domain/repositories/IPasswordResetRepository";
+import { IPasswordResetRepository,PasswordResetRecord } from "../../domain/repositories/userRepositories/IPasswordResetRepository";
 import { PasswordResetModel } from "../database/models/PasswordResetModel";
 import { BaseRepository } from "./BaseRepository";
 import { IPasswordResetDocument } from "../database/models/PasswordResetModel";
