@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { ITokenHasher } from "../../application/interfaces/ITokenHasher";
+import { ITokenHasher } from "../../application/interfaces/services/ITokenHasher";
 
 
 

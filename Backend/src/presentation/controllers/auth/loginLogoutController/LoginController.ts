@@ -16,8 +16,8 @@ import {
     AUTH_MESSAGES
 } from "../../../../shared/messages/authMessages";
 
-import { IRefreshTokenCookie } from "../../../../application/interfaces/IRefreshTokenCookie";
-import { ILoginUser } from "../../../../application/interfaces/ILoginUser";
+import { IRefreshTokenCookie } from "../../../../application/interfaces/auth/IRefreshTokenCookie";
+import { ILoginUser } from "../../../../application/interfaces/auth/ILoginUser";
 
 
 

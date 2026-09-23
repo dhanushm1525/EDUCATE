@@ -2,16 +2,16 @@ import { IEmailVerificationRepository }
     from "../../../domain/repositories/userRepositories/IEmailVerificationRepository";
 
 import { ITokenHasher }
-    from "../../interfaces/ITokenHasher";
+    from "../../interfaces/services/ITokenHasher";
 
 import { IOtpGenerator }
-    from "../../interfaces/IOtpGenerator";
+    from "../../interfaces/services/IOtpGenerator";
 
 import { IEmailService }
-    from "../../interfaces/IEmailService";
+    from "../../interfaces/services/IEmailService";
 
 import { IAuthConfig }
-    from "../../interfaces/IAuthConfig";
+    from "../../interfaces/config/IAuthConfig";
 
     import { SendVerificationOtpDTO } from "../../dtos/auth/SendVerificationOtpDTO";
 

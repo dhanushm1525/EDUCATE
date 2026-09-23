@@ -1,5 +1,5 @@
-import { IS3Client } from "../../application/interfaces/IS3Client";
-import { IStorageService } from "../../application/interfaces/IStorageService";
+import { IS3Client } from "../../application/interfaces/storage/IS3Client";
+import { IStorageService } from "../../application/interfaces/storage/IStorageService";
 
 export interface S3Config {
     bucketName: string;

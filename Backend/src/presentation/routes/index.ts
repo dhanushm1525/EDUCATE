@@ -3,6 +3,7 @@ import {Router} from "express";
 import authRoutes from "./authRoutes";
 import userRoutes from "./userRoutes"
 import storageRoutes from "./storageRoutes";
+import courseRoutes from "./courseRoutes"
 
 const router = Router();
 
@@ -18,19 +19,12 @@ router.get(
   }
 );
 
-router.use(
-  "/auth",
-  authRoutes
-);
+router.use("/auth",authRoutes);
 
-router.use(
-    "/users",
-    userRoutes
-)
+router.use("/users",userRoutes)
 
-router.use(
-    "/storage",
-    storageRoutes
-)
+router.use("/storage",storageRoutes)
+
+router.use("/courses",courseRoutes);
 
 export default router;

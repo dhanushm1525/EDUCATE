@@ -1,5 +1,5 @@
 import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository"
-import { IUpdateProfileImage } from "../../interfaces/IUpdateProfileImage";
+import { IUpdateProfileImage } from "../../interfaces/user/IUpdateProfileImage";
 import { UpdateProfileImageDTO } from "../../dtos/user/UpdateProfileImageDTO";
 import { User } from "../../../domain/entities/User";
 import { AppError } from "../../../shared/errors/AppError";

@@ -2,10 +2,10 @@ import { AppError } from "../../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
 import { IPasswordResetRepository } from "../../../domain/repositories/userRepositories/IPasswordResetRepository";
-import { IOtpGenerator } from "../../interfaces/IOtpGenerator";
-import { ITokenHasher } from "../../interfaces/ITokenHasher";
-import { IEmailService } from "../../interfaces/IEmailService";
-import { IAuthConfig } from "../../interfaces/IAuthConfig";
+import { IOtpGenerator } from "../../interfaces/services/IOtpGenerator";
+import { ITokenHasher } from "../../interfaces/services/ITokenHasher";
+import { IEmailService } from "../../interfaces/services/IEmailService";
+import { IAuthConfig } from "../../interfaces/config/IAuthConfig";
 import { ForgotPasswordDTO } from "../../dtos/auth/ForgotPasswordDTO";
 import { ForgotPasswordResponseDTO } from "../../dtos/auth/ForgotPasswordResponseDTO";
 

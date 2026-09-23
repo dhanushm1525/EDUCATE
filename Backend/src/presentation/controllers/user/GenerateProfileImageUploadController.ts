@@ -4,7 +4,7 @@ import {
     NextFunction
 } from "express";
 
-import { IGenerateProfileImageUrl } from "../../../application/interfaces/IGenerateProfileImageUploadUrl";
+import { IGenerateProfileImageUrl } from "../../../application/interfaces/user/IGenerateProfileImageUploadUrl";
 import { successResponse } from "../../../shared/response/apiResponse";
 import { AppError } from "../../../shared/errors/AppError";
 

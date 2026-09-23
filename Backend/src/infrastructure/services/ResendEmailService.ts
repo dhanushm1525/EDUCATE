@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { IEmailService } from "../../application/interfaces/IEmailService";
+import { IEmailService } from "../../application/interfaces/services/IEmailService";
 
 export class ResendEmailService implements IEmailService {
     constructor(

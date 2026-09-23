@@ -1,4 +1,4 @@
-import { SendVerificationOtpDTO } from "../dtos/auth/SendVerificationOtpDTO";
+import { SendVerificationOtpDTO } from "../../dtos/auth/SendVerificationOtpDTO";
 
 
 export interface ISendVerificationOtp{

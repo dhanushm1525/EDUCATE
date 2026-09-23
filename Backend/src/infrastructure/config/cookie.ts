@@ -1,4 +1,4 @@
-import { IRefreshTokenCookie } from "../../application/interfaces/IRefreshTokenCookie";
+import { IRefreshTokenCookie } from "../../application/interfaces/auth/IRefreshTokenCookie";
 import { env } from "./env";
 
 export const refreshTokenCookie: IRefreshTokenCookie = {

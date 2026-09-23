@@ -2,7 +2,7 @@ import { OAuth2Client } from "google-auth-library";
 import {
   IGoogleAuthService,
   GoogleUserPayload,
-} from "../../application/interfaces/IGoogleAuthService";
+} from "../../application/interfaces/auth/IGoogleAuthService";
 import { AppError } from "../../shared/errors/AppError";
 
 export class GoogleAuthService implements IGoogleAuthService {

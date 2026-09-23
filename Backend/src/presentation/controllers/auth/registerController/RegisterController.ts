@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { IRegisterUser } from "../../../../application/interfaces/IRegisterUser";
+import { IRegisterUser } from "../../../../application/interfaces/auth/IRegisterUser";
 import { successResponse } from "../../../../shared/response/apiResponse";
 import { RegisterUserDTO } from "../../../../application/dtos/auth/RegisterUserDTO";
 import { AUTH_MESSAGES } from "../../../../shared/messages/authMessages";

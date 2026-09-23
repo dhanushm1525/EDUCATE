@@ -1,7 +1,7 @@
 import { Request,Response,NextFunction, CookieOptions } from "express";
 import { RefreshAccessTokenDTO } from "../../../../application/dtos/auth/RefreshAccessTokenDTO";
 import { successResponse } from "../../../../shared/response/apiResponse";
-import { IRefreshAccessToken } from "../../../../application/interfaces/IRefreshToken";
+import { IRefreshAccessToken } from "../../../../application/interfaces/auth/IRefreshToken";
 
 
 export class RefreshTokenController{

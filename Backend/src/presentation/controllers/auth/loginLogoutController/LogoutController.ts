@@ -1,7 +1,7 @@
 import { Request,Response,NextFunction } from "express";
-import { ILogoutUser } from "../../../../application/interfaces/ILogoutUser";
+import { ILogoutUser } from "../../../../application/interfaces/auth/ILogoutUser";
 import { successResponse } from "../../../../shared/response/apiResponse";
-import { IRefreshTokenCookie } from "../../../../application/interfaces/IRefreshTokenCookie";
+import { IRefreshTokenCookie } from "../../../../application/interfaces/auth/IRefreshTokenCookie";
 
 
 

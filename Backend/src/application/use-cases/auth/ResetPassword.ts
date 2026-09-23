@@ -8,11 +8,11 @@ import {
 
 import {
     IPasswordHasher
-} from "../../interfaces/IPasswordHasher";
+} from "../../interfaces/services/IPasswordHasher";
 
 import {
     ITokenHasher
-} from "../../interfaces/ITokenHasher";
+} from "../../interfaces/services/ITokenHasher";
 
 import {
     IRefreshTokenRepository

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 
-import { IPasswordHasher } from "../../application/interfaces/IPasswordHasher";
+import { IPasswordHasher } from "../../application/interfaces/services/IPasswordHasher";
 
 
 

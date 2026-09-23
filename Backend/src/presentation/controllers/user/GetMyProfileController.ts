@@ -1,5 +1,5 @@
 import { Request,Response,NextFunction } from "express";
-import { IGetMyProfile } from "../../../application/interfaces/IGetMyProfile";
+import { IGetMyProfile } from "../../../application/interfaces/user/IGetMyProfile";
 import { successResponse } from "../../../shared/response/apiResponse";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { AppError } from "../../../shared/errors/AppError";

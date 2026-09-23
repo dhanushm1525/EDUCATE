@@ -6,7 +6,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-import { IS3Client } from "../../application/interfaces/IS3Client";
+import { IS3Client } from "../../application/interfaces/storage/IS3Client";
 
 export class AwsS3Client implements IS3Client {
     constructor(private readonly _client: S3Client) {}

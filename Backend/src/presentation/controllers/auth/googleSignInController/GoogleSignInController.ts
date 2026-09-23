@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { successResponse } from "../../../../shared/response/apiResponse";
-import { IRefreshTokenCookie } from "../../../../application/interfaces/IRefreshTokenCookie";
-import { IGoogleSignIn } from "../../../../application/interfaces/IGoogleSignIn";
+import { IRefreshTokenCookie } from "../../../../application/interfaces/auth/IRefreshTokenCookie";
+import { IGoogleSignIn } from "../../../../application/interfaces/auth/IGoogleSignIn";
 
 export class GoogleSignInController {
   constructor(

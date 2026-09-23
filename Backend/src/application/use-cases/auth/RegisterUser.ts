@@ -1,15 +1,15 @@
 import { User } from "../../../domain/entities/User"
 import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository"
-import { IPasswordHasher } from "../../interfaces/IPasswordHasher"
+import { IPasswordHasher } from "../../interfaces/services/IPasswordHasher"
 import { AppError } from "../../../shared/errors/AppError"
 import { RegisterUserDTO } from "../../dtos/auth/RegisterUserDTO"
 import { UserRole } from "../../../shared/enums/UserRole";
 import { UserStatus } from "../../../shared/enums/UserStatus";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { RegisterUserResponseDTO } from "../../dtos/auth/RegisterUserResponseDTO";
-import { ISendVerificationOtp } from "../../interfaces/ISendVerificationOtp"
+import { ISendVerificationOtp } from "../../interfaces/auth/ISendVerificationOtp"
 import { AuthProvider } from "../../../shared/enums/AuthProvider"
-import { IRegisterUser } from "../../interfaces/IRegisterUser"
+import { IRegisterUser } from "../../interfaces/auth/IRegisterUser"
 
 
 export class RegisterUser implements IRegisterUser {

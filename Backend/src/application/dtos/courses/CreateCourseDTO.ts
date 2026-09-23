@@ -1,11 +1,16 @@
 import { CourseLevel } from "../../../shared/enums/CourseLevel";
 
 export interface CreateCourseDTO {
+
+    teacherId: string;
+    categoryId: string;
+
     title: string;
     subtitle: string;
     description: string;
 
-    categoryId: string;
+    thumbnail?: string;
+    trailer?: string;
 
     language: string;
     level: CourseLevel;
@@ -15,8 +20,8 @@ export interface CreateCourseDTO {
     price: number;
     discount: number;
 
-    tagIds: string[];
+    tags?: string[];
 
-    objectives: string[];
-    requirements: string[];
+    objectives?: string[];
+    requirements?: string[];
 }

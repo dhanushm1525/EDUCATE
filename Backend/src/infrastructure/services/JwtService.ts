@@ -1,5 +1,5 @@
 import jwt,{SignOptions,JwtPayload} from "jsonwebtoken";
-import {AccessTokenPayload,IJwtService} from "../../application/interfaces/IJwtService";
+import {AccessTokenPayload,IJwtService} from "../../application/interfaces/auth/IJwtService";
 import {env} from "../config/env";
 import { UserRole } from "../../shared/enums/UserRole";
 import { AppError } from "../../shared/errors/AppError";

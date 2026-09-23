@@ -1,4 +1,4 @@
-import { IAuthConfig } from "../../application/interfaces/IAuthConfig";
+import { IAuthConfig } from "../../application/interfaces/config/IAuthConfig";
 import { env } from "./env";
 
 export const authConfig: IAuthConfig = {

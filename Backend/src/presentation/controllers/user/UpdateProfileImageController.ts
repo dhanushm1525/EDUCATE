@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-import { IUpdateProfileImage } from "../../../application/interfaces/IUpdateProfileImage";
+import { IUpdateProfileImage } from "../../../application/interfaces/user/IUpdateProfileImage";
 import { AppError } from "../../../shared/errors/AppError";
 import { successResponse } from "../../../shared/response/apiResponse";
 

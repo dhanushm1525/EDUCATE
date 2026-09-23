@@ -1,5 +1,5 @@
 import { IRefreshTokenRepository } from "../../../domain/repositories/userRepositories/IRefreshTokenRepository";
-import { ITokenHasher } from "../../interfaces/ITokenHasher";
+import { ITokenHasher } from "../../interfaces/services/ITokenHasher";
 import { LogoutUserDTO } from "../../dtos/auth/LogoutUserDTO";
 
 

@@ -2,7 +2,7 @@ import { CourseLevel } from "../../shared/enums/CourseLevel";
 import { CourseStatus } from "../../shared/enums/CourseStatus";
 
 export interface Course {
-    courseId: string;
+    courseId?: string;
 
     teacherId: string;
     categoryId: string;

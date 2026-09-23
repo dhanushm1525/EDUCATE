@@ -8,19 +8,19 @@ import {
 
 import {
     IPasswordHasher
-} from "../../interfaces/IPasswordHasher";
+} from "../../interfaces/services/IPasswordHasher";
 
 import {
     IJwtService
-} from "../../interfaces/IJwtService";
+} from "../../interfaces/auth/IJwtService";
 
 import {
     ITokenHasher
-} from "../../interfaces/ITokenHasher";
+} from "../../interfaces/services/ITokenHasher";
 
 import {
     IAuthConfig
-} from "../../interfaces/IAuthConfig";
+} from "../../interfaces/config/IAuthConfig";
 
 import {
     LoginUserDTO
@@ -42,7 +42,7 @@ import {
     AUTH_MESSAGES
 } from "../../../shared/messages/authMessages";
 import { AuthProvider } from "../../../shared/enums/AuthProvider";
-import { ILoginUser } from "../../interfaces/ILoginUser";
+import { ILoginUser } from "../../interfaces/auth/ILoginUser";
 
 
 export class LoginUser implements ILoginUser{

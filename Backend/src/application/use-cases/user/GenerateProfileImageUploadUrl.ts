@@ -1,6 +1,6 @@
-import { IStorageService } from "../../interfaces/IStorageService";
+import { IStorageService } from "../../interfaces/storage/IStorageService";
 
-import { IGenerateProfileImageUrl } from "../../interfaces/IGenerateProfileImageUploadUrl";
+import { IGenerateProfileImageUrl } from "../../interfaces/user/IGenerateProfileImageUploadUrl";
 
 import { GenerateProfileImageUploadUrlDTO } from "../../dtos/user/GenerateProfileImageUploadUrlDTO";
 import { GenerateProfileImageUploadUrlResponseDTO } from "../../dtos/user/GenerateProfileImageUploadUrlResponseDTO";

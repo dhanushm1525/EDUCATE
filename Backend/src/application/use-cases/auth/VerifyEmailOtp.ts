@@ -2,7 +2,7 @@ import { AppError } from "../../../shared/errors/AppError";
 
 import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
 import { IEmailVerificationRepository } from "../../../domain/repositories/userRepositories/IEmailVerificationRepository";
-import { ITokenHasher } from "../../interfaces/ITokenHasher";
+import { ITokenHasher } from "../../interfaces/services/ITokenHasher";
 import { VerifyEmailOtpDTO } from "../../dtos/auth/VerifyEmailOtpDTO";
 import { VerifyEmailOtpResponseDTO } from "../../dtos/auth/VerifyEmailOtpResponseDTO";
 

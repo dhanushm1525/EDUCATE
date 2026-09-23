@@ -18,7 +18,7 @@ import {
 
 import {
     ILogger
-} from "../../application/interfaces/ILogger";
+} from "../../application/interfaces/services/ILogger";
 
 
 export const errorMiddleware = (

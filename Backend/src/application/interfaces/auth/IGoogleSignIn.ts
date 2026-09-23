@@ -1,5 +1,5 @@
-import { GoogleSignInDTO } from "../dtos/auth/GoogleSignInDTO";
-import { GoogleSignInResponseDTO } from "../dtos/auth/GoogleSignInResponseDTO";
+import { GoogleSignInDTO } from "../../dtos/auth/GoogleSignInDTO";
+import { GoogleSignInResponseDTO } from "../../dtos/auth/GoogleSignInResponseDTO";
 
 export interface IGoogleSignIn {
   execute(request: GoogleSignInDTO): Promise<{

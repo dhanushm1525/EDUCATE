@@ -4,7 +4,7 @@ import {
     NextFunction
 } from "express";
 
-import { IGetCurrentUser } from "../../../../application/interfaces/IGetCurrentUser";
+import { IGetCurrentUser } from "../../../../application/interfaces/auth/IGetCurrentUser";
 
 import {
     successResponse

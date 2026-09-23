@@ -4,13 +4,13 @@ import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
 import { IRefreshTokenRepository } from "../../../domain/repositories/userRepositories/IRefreshTokenRepository";
 
-import { IJwtService } from "../../interfaces/IJwtService";
-import { ITokenHasher } from "../../interfaces/ITokenHasher";
-import { IAuthConfig } from "../../interfaces/IAuthConfig";
+import { IJwtService } from "../../interfaces/auth/IJwtService";
+import { ITokenHasher } from "../../interfaces/services/ITokenHasher";
+import { IAuthConfig } from "../../interfaces/config/IAuthConfig";
 import { RefreshAccessTokenDTO } from "../../dtos/auth/RefreshAccessTokenDTO";
 import { RefreshAccessTokenResponseDTO } from "../../dtos/auth/RefreshAccessTokenResponseDTO";
 import { UserStatus } from "../../../shared/enums/UserStatus";
-import { IRefreshAccessToken } from "../../interfaces/IRefreshToken";
+import { IRefreshAccessToken } from "../../interfaces/auth/IRefreshToken";
 
 
 export class RefreshAccessToken implements IRefreshAccessToken {

@@ -4,7 +4,7 @@ import {
   NextFunction
 } from "express";
 
-import { ILogger } from "../../application/interfaces/ILogger";
+import { ILogger } from "../../application/interfaces/services/ILogger";
 
 export const requestLoggerMiddleware = (logger:ILogger) =>(
     req:Request,

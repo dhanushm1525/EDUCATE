@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { IOtpGenerator } from "../../application/interfaces/IOtpGenerator";
+import { IOtpGenerator } from "../../application/interfaces/services/IOtpGenerator";
 
 
 export class OtpGenerator implements IOtpGenerator{

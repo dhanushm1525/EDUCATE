@@ -1,16 +1,16 @@
 import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
-import { IGoogleAuthService } from "../../interfaces/IGoogleAuthService";
-import { IJwtService } from "../../interfaces/IJwtService";
+import { IGoogleAuthService } from "../../interfaces/auth/IGoogleAuthService";
+import { IJwtService } from "../../interfaces/auth/IJwtService";
 import { IRefreshTokenRepository } from "../../../domain/repositories/userRepositories/IRefreshTokenRepository";
-import { ITokenHasher } from "../../interfaces/ITokenHasher";
-import { IAuthConfig } from "../../interfaces/IAuthConfig";
+import { ITokenHasher } from "../../interfaces/services/ITokenHasher";
+import { IAuthConfig } from "../../interfaces/config/IAuthConfig";
 import { GoogleSignInDTO } from "../../dtos/auth/GoogleSignInDTO";
 import { GoogleSignInResponseDTO } from "../../dtos/auth/GoogleSignInResponseDTO";
 import { User } from "../../../domain/entities/User";
 import { UserRole } from "../../../shared/enums/UserRole";
 import { UserStatus } from "../../../shared/enums/UserStatus";
 import { AuthProvider } from "../../../shared/enums/AuthProvider";
-import { IGoogleSignIn } from "../../interfaces/IGoogleSignIn";
+import { IGoogleSignIn } from "../../interfaces/auth/IGoogleSignIn";
 
 export class GoogleSignIn implements IGoogleSignIn{
   constructor(
