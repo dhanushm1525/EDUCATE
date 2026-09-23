@@ -10,7 +10,8 @@ import { createCategorySchema } from "../../shared/schema/category/createCategor
 import { authenticateUser } from "../../infrastructure/DI/authDependencies";
 
 import {
-    createCategoryController
+    createCategoryController,
+    getCategoriesController
 } from "../../infrastructure/DI/categoryDependencies";
 
 const router = Router();
@@ -21,6 +22,12 @@ router.post(
     roleMiddleware(UserRole.ADMIN),
     validate(createCategorySchema),
     createCategoryController.handle.bind(createCategoryController)
+);
+
+router.get(
+    "/",
+    authenticateUser,
+    getCategoriesController.handle.bind(getCategoriesController)
 );
 
 export default router;
