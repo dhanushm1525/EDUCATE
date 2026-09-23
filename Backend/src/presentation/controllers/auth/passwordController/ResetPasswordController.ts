@@ -1,11 +1,11 @@
 import { Request,Response,NextFunction } from "express";
-import { ResetPassword } from "../../../../application/use-cases/auth/ResetPassword";
+import { IResetPassword } from "../../../../application/interfaces/auth/IResetPassword";
 import { successResponse } from "../../../../shared/response/apiResponse";
 
 
 export class ResetPasswordController{
     constructor(
-        private readonly _resetPassword:ResetPassword
+        private readonly _resetPassword: IResetPassword
     ){}
 
 

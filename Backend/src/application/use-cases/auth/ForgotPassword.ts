@@ -8,11 +8,10 @@ import { IEmailService } from "../../interfaces/services/IEmailService";
 import { IAuthConfig } from "../../interfaces/config/IAuthConfig";
 import { ForgotPasswordDTO } from "../../dtos/auth/ForgotPasswordDTO";
 import { ForgotPasswordResponseDTO } from "../../dtos/auth/ForgotPasswordResponseDTO";
+import { IForgotPassword } from "../../interfaces/auth/IForgotPassword";
 
 
-
-export class ForgotPassword{
-    constructor(
+export class ForgotPassword implements IForgotPassword {    constructor(
         private readonly _userRepository:IUserRepository,
         private readonly _passwordResetRepository:IPasswordResetRepository,
         private readonly _otpGenerator:IOtpGenerator,

@@ -5,12 +5,13 @@ import { IEmailVerificationRepository } from "../../../domain/repositories/userR
 import { ITokenHasher } from "../../interfaces/services/ITokenHasher";
 import { VerifyEmailOtpDTO } from "../../dtos/auth/VerifyEmailOtpDTO";
 import { VerifyEmailOtpResponseDTO } from "../../dtos/auth/VerifyEmailOtpResponseDTO";
+import { IVerifyEmailOtp } from "../../interfaces/auth/IVerifyEmailOtp";
 
 
 
 
 
-export class VerifyEmailOtp{
+export class VerifyEmailOtp implements IVerifyEmailOtp {
     constructor(
         private readonly _userRepository:IUserRepository,
         private readonly _emailVerificationRepository:IEmailVerificationRepository,

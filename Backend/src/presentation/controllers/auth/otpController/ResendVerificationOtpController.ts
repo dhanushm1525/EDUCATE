@@ -1,12 +1,12 @@
 import { Request,Response,NextFunction } from "express";
-import { ResendVerificationOtp } from "../../../../application/use-cases/auth/ResendVerificationOtp";
+import { IResendVerificationOtp } from "../../../../application/interfaces/auth/IResendVerificationOtp";
 import { successResponse } from "../../../../shared/response/apiResponse";
 
 
 
 export class ResendVerificationOtpController{
     constructor(
-        private readonly _resendVerificationOtp:ResendVerificationOtp
+        private readonly _resendVerificationOtp: IResendVerificationOtp
     ){}
 
 

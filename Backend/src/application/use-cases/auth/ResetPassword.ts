@@ -34,8 +34,10 @@ import {
     ResetPasswordResponseDTO
 } from "../../dtos/auth/ResetPasswordResponseDTO"
 
+import { IResetPassword } from "../../interfaces/auth/IResetPassword";
 
-export class ResetPassword {
+
+export class ResetPassword implements IResetPassword {
 
     constructor(
         private readonly _userRepository:

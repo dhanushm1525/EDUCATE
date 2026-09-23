@@ -1,10 +1,10 @@
 import { Request,Response,NextFunction } from "express";
-import { ForgotPassword } from "../../../../application/use-cases/auth/ForgotPassword";
+import { IForgotPassword } from "../../../../application/interfaces/auth/IForgotPassword";
 import { successResponse } from "../../../../shared/response/apiResponse";
 
 
 export class ForgotPasswordController{
-    constructor(private readonly _forgotPassword:ForgotPassword){}
+    constructor(private readonly _forgotPassword: IForgotPassword){}
 
     async handle(
         req:Request,

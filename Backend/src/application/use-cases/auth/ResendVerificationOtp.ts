@@ -16,8 +16,10 @@ import { ResendVerificationOtpDTO }
 import { ResendVerificationOtpResponseDTO }
     from "../../dtos/auth/ResendVerificationOtpResponseDTO";
 
+import { IResendVerificationOtp } from "../../interfaces/auth/IResendVerificationOtp";
 
-export class ResendVerificationOtp {
+
+export class ResendVerificationOtp implements IResendVerificationOtp {
 
     constructor(
         private readonly _userRepository:

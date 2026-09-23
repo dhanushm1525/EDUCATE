@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { VerifyEmailOtp } from "../../../../application/use-cases/auth/VerifyEmailOtp";
+import { IVerifyEmailOtp } from "../../../../application/interfaces/auth/IVerifyEmailOtp";
 import { successResponse } from "../../../../shared/response/apiResponse";
+
 
 
 
 export class VerifyEmailOtpController {
     constructor(
-        private readonly _verifyEmailOtp: VerifyEmailOtp
+        private readonly _verifyEmailOtp: IVerifyEmailOtp
     ) { }
-
     async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
 
         try {

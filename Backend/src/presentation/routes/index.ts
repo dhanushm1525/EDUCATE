@@ -4,6 +4,7 @@ import authRoutes from "./authRoutes";
 import userRoutes from "./userRoutes"
 import storageRoutes from "./storageRoutes";
 import courseRoutes from "./courseRoutes"
+import categoryRoutes from "./categoryRoutes";
 
 const router = Router();
 
@@ -26,5 +27,7 @@ router.use("/users",userRoutes)
 router.use("/storage",storageRoutes)
 
 router.use("/courses",courseRoutes);
+
+router.use("/categories", categoryRoutes);
 
 export default router;
