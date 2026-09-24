@@ -1,4 +1,5 @@
 import winston from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
 import { ILogger } from "../../application/interfaces/services/ILogger";
 
 export const logger:ILogger= winston.createLogger({
@@ -10,10 +11,21 @@ export const logger:ILogger= winston.createLogger({
         winston.format.json()
     ),
 
-    transports:[
+    transports: [
         new winston.transports.Console(),
-        new winston.transports.File({
-            filename:"logs/app.log"
+
+        new DailyRotateFile({
+            filename: "logs/app-%DATE%.log",
+            datePattern: "YYYY-MM-DD",
+
+            // Keep logs for 14 days
+            maxFiles: "14d",
+
+            // Compress old log files
+            zippedArchive: true,
+
+            // Optional: maximum size of a single log file
+            maxSize: "20m"
         })
     ]
 });
