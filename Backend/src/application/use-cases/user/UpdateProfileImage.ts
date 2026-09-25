@@ -3,10 +3,12 @@ import { IUpdateProfileImage } from "../../interfaces/user/IUpdateProfileImage";
 import { UpdateProfileImageDTO } from "../../dtos/user/UpdateProfileImageDTO";
 import { User } from "../../../domain/entities/User";
 import { AppError } from "../../../shared/errors/AppError";
+import { IProfileImagePolicy } from "../../interfaces/user/IProfileImagePolicy";
 
 export class UpdateProfileImage implements IUpdateProfileImage {
     constructor(
-        private readonly _userRepository: IUserRepository
+        private readonly _userRepository: IUserRepository,
+        private readonly _profileImagePolicy: IProfileImagePolicy
     ) { }
 
     async execute(dto: UpdateProfileImageDTO): Promise<User> {
@@ -14,9 +16,10 @@ export class UpdateProfileImage implements IUpdateProfileImage {
             throw new AppError("Avatar key is required", 400);
         }
 
-        const expectedPrefix = `users/${dto.userId}/profile/`;
-
-        if (!dto.avatarKey.startsWith(expectedPrefix)) {
+        if (!this._profileImagePolicy.isOwnedByUser(
+            dto.avatarKey,
+            dto.userId
+        )) {
             throw new AppError("Invalid avatar key", 400);
         }
 

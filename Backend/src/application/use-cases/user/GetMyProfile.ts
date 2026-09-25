@@ -7,11 +7,13 @@ import type {
     GetMyProfileDTO,
 } from "../../dtos/user/GetMyProfileDTO";
 import { GetMyProfileResponseDTO } from "../../dtos/user/GetMyProfileResponseDTO"
+import { IProfileImagePolicy } from "../../interfaces/user/IProfileImagePolicy";
 
 export class GetMyProfile {
     constructor(
         private readonly _userRepository: IUserRepository,
-        private readonly _storageService: IStorageService
+        private readonly _storageService: IStorageService,
+        private readonly _profileImagePolicy: IProfileImagePolicy
     ) { }
 
     async execute(
@@ -39,7 +41,7 @@ export class GetMyProfile {
 
         // Convert only custom S3 object keys into download URLs.
         // Google profile image URLs should remain unchanged.
-        if (avatar && avatar.startsWith("users/")) {
+        if (avatar && this._profileImagePolicy.isManagedImage(avatar)) {
             avatar =
                 await this._storageService.generateDownloadUrl(
                     avatar

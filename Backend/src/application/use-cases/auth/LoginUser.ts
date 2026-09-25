@@ -7,12 +7,9 @@ import {
 } from "../../../domain/repositories/userRepositories/IRefreshTokenRepository";
 
 import {
-    IPasswordHasher
-} from "../../interfaces/services/IPasswordHasher";
-
-import {
     IJwtService
 } from "../../interfaces/auth/IJwtService";
+import { LoginProviderRegistry } from "../../services/auth/LoginProviderRegistry";
 
 import {
     ITokenHasher
@@ -41,7 +38,6 @@ import {
 import {
     AUTH_MESSAGES
 } from "../../../shared/messages/authMessages";
-import { AuthProvider } from "../../../shared/enums/AuthProvider";
 import { ILoginUser } from "../../interfaces/auth/ILoginUser";
 
 
@@ -49,11 +45,11 @@ export class LoginUser implements ILoginUser{
 
     constructor(
         private readonly _userRepository: IUserRepository,
-        private readonly _passwordHasher: IPasswordHasher,
         private readonly _jwtService: IJwtService,
         private readonly _refreshTokenRepository: IRefreshTokenRepository,
         private readonly _tokenHasher: ITokenHasher,
-        private readonly _authConfig: IAuthConfig
+        private readonly _authConfig: IAuthConfig,
+        private readonly _loginProviderRegistry: LoginProviderRegistry
     ) { }
 
 
@@ -84,11 +80,6 @@ export class LoginUser implements ILoginUser{
             );
         }
 
-        if(user.authProvider === AuthProvider.GOOGLE){
-            throw new AppError("Please sign in using Google",400)
-        }
-
-
         if (
             user.status ===
             UserStatus.BLOCKED
@@ -107,29 +98,13 @@ export class LoginUser implements ILoginUser{
             );
         }
 
-        if (!user.password) {
+        const loginProvider =
+            this._loginProviderRegistry.get(user.authProvider);
 
-            throw new AppError(
-                AUTH_MESSAGES.INVALID_CREDENTIALS,
-                401
-            );
-
-        }
-
-
-        const passwordMatches =
-            await this._passwordHasher.compare(
-                request.password,
-                user.password
-            );
-
-
-        if (!passwordMatches) {
-            throw new AppError(
-                AUTH_MESSAGES.INVALID_CREDENTIALS,
-                401
-            );
-        }
+        await loginProvider.authenticate(
+            user,
+            request.password
+        );
 
 
         if (!user.id) {

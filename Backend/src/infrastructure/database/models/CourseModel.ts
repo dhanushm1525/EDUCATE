@@ -1,4 +1,6 @@
 import { Document, Schema, model, Types } from "mongoose";
+import { CourseLevel } from "../../../shared/enums/CourseLevel";
+import { CourseStatus } from "../../../shared/enums/CourseStatus";
 
 export interface CourseDocument extends Document {
     teacherId: Types.ObjectId;
@@ -83,7 +85,7 @@ const courseSchema = new Schema(
 
         level: {
             type: String,
-            enum: ["Beginner", "Intermediate", "Advanced"],
+            enum: Object.values(CourseLevel),
             required: true,
         },
 
@@ -143,8 +145,8 @@ const courseSchema = new Schema(
 
         status: {
             type: String,
-            enum: ["draft", "pending", "published", "rejected"],
-            default: "draft",
+            enum: Object.values(CourseStatus),
+            default: CourseStatus.DRAFT,
         },
 
         rejectionReason: {

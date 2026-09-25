@@ -6,13 +6,14 @@ import { IUpdateCourseUseCase } from "../../interfaces/course/IUpdateCourseUseCa
 import { CourseUpdateMapper } from "../../mappers/CourseUpdateMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
-import { CourseStatus } from "../../../shared/enums/CourseStatus";
+import { CourseStatusPolicy } from "../../../domain/policies/CourseStatusPolicy";
 
 export class UpdateCourseUseCase
     implements IUpdateCourseUseCase {
 
     constructor(
-        private readonly courseRepository: ICourseRepository
+        private readonly courseRepository: ICourseRepository,
+        private readonly courseStatusPolicy: CourseStatusPolicy
     ) {}
 
     async execute(
@@ -38,10 +39,7 @@ export class UpdateCourseUseCase
             );
         }
 
-        if (
-            course.status !== CourseStatus.DRAFT &&
-            course.status !== CourseStatus.REJECTED
-        ) {
+        if (!this.courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "Only draft or rejected courses can be edited",
                 400

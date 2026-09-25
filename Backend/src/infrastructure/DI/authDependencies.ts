@@ -41,6 +41,9 @@ import { RegisterController } from "../../presentation/controllers/auth/register
 import { Resend } from "resend";
 import { OAuth2Client } from "google-auth-library";
 import { env } from "../config/env";
+import { LoginProviderRegistry } from "../../application/services/auth/LoginProviderRegistry";
+import { LocalPasswordLoginStrategy } from "../../application/services/auth/LocalPasswordLoginStrategy";
+import { GoogleLoginStrategy } from "../../application/services/auth/GoogleLoginStrategy";
 
 
 
@@ -49,6 +52,11 @@ const refreshTokenRepository =
 
 const passwordHasher =
     new BcryptPasswordHasher();
+
+const loginProviderRegistry = new LoginProviderRegistry([
+    new LocalPasswordLoginStrategy(passwordHasher),
+    new GoogleLoginStrategy(),
+]);
 
 export const jwtService =
     new JwtService();
@@ -62,11 +70,11 @@ const tokenHasher =
 export const loginUser =
     new LoginUser(
         userRepository,
-        passwordHasher,
         jwtService,
         refreshTokenRepository,
         tokenHasher,
-        authConfig
+        authConfig,
+        loginProviderRegistry
     );
 
 
