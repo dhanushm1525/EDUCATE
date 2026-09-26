@@ -18,6 +18,10 @@ import { GetLessonByIdUseCase } from "../../application/use-cases/lesson/GetLess
 
 import { GetLessonByIdController } from "../../presentation/controllers/lesson/GetLessonByIdController";
 
+import { UpdateLessonUseCase } from "../../application/use-cases/lesson/UpdateLessonUseCase";
+
+import { UpdateLessonController } from "../../presentation/controllers/lesson/UpdateLessonController";
+
 const courseStatusPolicy =
     new DefaultCourseStatusPolicy();
 
@@ -58,4 +62,18 @@ export const getLessonByIdUseCase =
 export const getLessonByIdController =
     new GetLessonByIdController(
         getLessonByIdUseCase
+    );
+
+
+export const updateLessonUseCase =
+    new UpdateLessonUseCase(
+        lessonRepository,
+        chapterRepository,
+        courseRepository,
+        courseStatusPolicy
+    );
+
+export const updateLessonController =
+    new UpdateLessonController(
+        updateLessonUseCase
     );
