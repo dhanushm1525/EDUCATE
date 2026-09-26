@@ -6,6 +6,7 @@ import storageRoutes from "./storageRoutes";
 import courseRoutes from "./courseRoutes"
 import categoryRoutes from "./categoryRoutes";
 import chapterRoutes from "./chapterRoutes"
+import lessonRoutes from "./lessonRoutes"
 
 const router = Router();
 
@@ -32,5 +33,7 @@ router.use("/courses",courseRoutes);
 router.use("/courses", chapterRoutes);
 
 router.use("/categories", categoryRoutes);
+
+router.use("/courses",lessonRoutes)
 
 export default router;

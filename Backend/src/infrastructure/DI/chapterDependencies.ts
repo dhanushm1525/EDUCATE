@@ -9,7 +9,9 @@ import { GetChapterByIdController } from "../../presentation/controllers/chapter
 import { UpdateChapterUseCase } from "../../application/use-cases/chapter/UpdateChapterUseCase";
 
 import { UpdateChapterController } from "../../presentation/controllers/chapter/UpdateChapterController";
+import { DeleteChapterUseCase } from "../../application/use-cases/chapter/DeleteChapterUseCase";
 
+import { DeleteChapterController } from "../../presentation/controllers/chapter/DeleteChapterController";
 
 
 
@@ -34,3 +36,7 @@ export const getChapterByIdController = new GetChapterByIdController(getChapterB
 export const updateChapterUseCase =new UpdateChapterUseCase(chapterRepository,courseRepository,courseStatusPolicy);
 
 export const updateChapterController = new UpdateChapterController(updateChapterUseCase);
+
+export const deleteChapterUseCase = new DeleteChapterUseCase(chapterRepository,courseRepository,courseStatusPolicy);
+
+export const deleteChapterController = new DeleteChapterController(deleteChapterUseCase);
