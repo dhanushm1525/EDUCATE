@@ -1,12 +1,11 @@
 import { z } from "zod";
+import { mongoIdSchema } from "../common/mongoIdSchema";
 
 export const deleteChapterSchema = z.object({
     body: z.any().optional(),
 
     params: z.object({
-        courseId: z
-            .string()
-            .min(1, "Course ID is required"),
+        courseId: mongoIdSchema,
 
         chapterId: z
             .string()

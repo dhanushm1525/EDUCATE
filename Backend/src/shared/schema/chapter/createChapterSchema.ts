@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { mongoIdSchema } from "../common/mongoIdSchema";
 
 export const createChapterSchema = z.object({
     body: z.object({
@@ -30,9 +31,7 @@ export const createChapterSchema = z.object({
     }),
 
     params: z.object({
-        courseId: z
-            .string()
-            .min(1, "Course ID is required"),
+        courseId: mongoIdSchema,
     }),
 
     query: z.object({}),

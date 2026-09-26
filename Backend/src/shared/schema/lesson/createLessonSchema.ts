@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { LessonType } from "../../../shared/enums/LessonType";
+import { mongoIdSchema } from "../common/mongoIdSchema";
 
 export const createLessonSchema = z.object({
 
@@ -45,10 +46,11 @@ export const createLessonSchema = z.object({
             .optional(),
     }),
 
-    params: z.object({
-        courseId: z.string().min(1),
-        chapterId: z.string().min(1),
-    }),
+   params: z.object({
+    courseId: mongoIdSchema,
+    chapterId: mongoIdSchema,
+    lessonId: mongoIdSchema,
+}),
 
     query: z.object({}),
 });
