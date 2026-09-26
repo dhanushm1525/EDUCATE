@@ -6,14 +6,14 @@ import { IUpdateCourseUseCase } from "../../interfaces/course/IUpdateCourseUseCa
 import { CourseUpdateMapper } from "../../mappers/CourseUpdateMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
-import { CourseStatusPolicy } from "../../../domain/policies/CourseStatusPolicy";
+import { ICourseStatusPolicy } from "../../../domain/policies/CourseStatusPolicy";
 
 export class UpdateCourseUseCase
     implements IUpdateCourseUseCase {
 
     constructor(
         private readonly courseRepository: ICourseRepository,
-        private readonly courseStatusPolicy: CourseStatusPolicy
+        private readonly courseStatusPolicy: ICourseStatusPolicy
     ) {}
 
     async execute(

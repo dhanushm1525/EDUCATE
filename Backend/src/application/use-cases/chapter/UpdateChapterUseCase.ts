@@ -5,15 +5,13 @@ import { ICourseRepository } from "../../../domain/repositories/courseRepositori
 
 import { ICourseStatusPolicy } from "../../../domain/policies/CourseStatusPolicy";
 
-import { CreateChapterDTO } from "../../dtos/chapter/CreateChapterDTO";
-import { ICreateChapterUseCase } from "../../interfaces/chapter/ICreateChapterUseCase";
-
-import { ChapterCreationMapper } from "../../mappers/ChapterCreationMapper";
+import { UpdateChapterDTO } from "../../dtos/chapter/UpdateChapterDTO";
+import { IUpdateChapterUseCase } from "../../interfaces/chapter/IUpdateChapterUseCase";
 
 import { AppError } from "../../../shared/errors/AppError";
 
-export class CreateChapterUseCase
-    implements ICreateChapterUseCase {
+export class UpdateChapterUseCase
+    implements IUpdateChapterUseCase {
 
     constructor(
         private readonly chapterRepository: IChapterRepository,
@@ -22,13 +20,27 @@ export class CreateChapterUseCase
     ) {}
 
     async execute(
-        courseId: string,
+        chapterId: string,
         teacherId: string,
-        dto: CreateChapterDTO
+        dto: UpdateChapterDTO
     ): Promise<Chapter> {
 
+        const chapter =
+            await this.chapterRepository.findById(
+                chapterId
+            );
+
+        if (!chapter) {
+            throw new AppError(
+                "Chapter not found",
+                404
+            );
+        }
+
         const course =
-            await this.courseRepository.findById(courseId);
+            await this.courseRepository.findById(
+                chapter.courseId
+            );
 
         if (!course) {
             throw new AppError(
@@ -39,7 +51,7 @@ export class CreateChapterUseCase
 
         if (course.teacherId !== teacherId) {
             throw new AppError(
-                "You are not authorized to modify this course",
+                "You are not authorized to modify this chapter",
                 403
             );
         }
@@ -51,14 +63,19 @@ export class CreateChapterUseCase
             );
         }
 
-        const chapter =
-            ChapterCreationMapper.toEntity(
-                courseId,
+        const updatedChapter =
+            await this.chapterRepository.update(
+                chapterId,
                 dto
             );
 
-        return await this.chapterRepository.create(
-            chapter
-        );
+        if (!updatedChapter) {
+            throw new AppError(
+                "Chapter update failed",
+                500
+            );
+        }
+
+        return updatedChapter;
     }
 }

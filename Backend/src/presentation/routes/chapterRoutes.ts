@@ -9,11 +9,12 @@ import { authenticateUser } from "../../infrastructure/DI/authDependencies";
 
 import { createChapterSchema } from "../../shared/schema/chapter/createChapterSchema";
 
-import { createChapterController, getChaptersByCourseController, getChapterByIdController, } from "../../infrastructure/DI/chapterDependencies";
+import { createChapterController, getChaptersByCourseController, getChapterByIdController,updateChapterController } from "../../infrastructure/DI/chapterDependencies";
 
 import { getChaptersByCourseSchema } from "../../shared/schema/chapter/getChaptersByCourseSchema";
 
 import { getChapterByIdSchema } from "../../shared/schema/chapter/getChapterByIdSchema";
+import { updateChapterSchema } from "../../shared/schema/chapter/updateChapterSchema";
 
 const router = Router();
 
@@ -44,6 +45,16 @@ router.get(
     validate(getChapterByIdSchema),
     getChapterByIdController.handle.bind(
         getChapterByIdController
+    )
+);
+
+router.patch(
+    "/:courseId/chapters/:chapterId",
+    authenticateUser,
+    roleMiddleware(UserRole.TEACHER),
+    validate(updateChapterSchema),
+    updateChapterController.handle.bind(
+        updateChapterController
     )
 );
 

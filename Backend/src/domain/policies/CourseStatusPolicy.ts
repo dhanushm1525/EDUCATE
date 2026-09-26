@@ -1,10 +1,10 @@
 import { CourseStatus } from "../../shared/enums/CourseStatus";
 
-export interface CourseStatusPolicy {
+export interface ICourseStatusPolicy {
     canEdit(status: CourseStatus): boolean;
 }
 
-export class DefaultCourseStatusPolicy implements CourseStatusPolicy {
+export class DefaultCourseStatusPolicy implements ICourseStatusPolicy {
     private readonly editableStatuses = new Set<CourseStatus>([
         CourseStatus.DRAFT,
         CourseStatus.REJECTED,
