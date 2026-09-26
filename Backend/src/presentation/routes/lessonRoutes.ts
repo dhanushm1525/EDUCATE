@@ -8,10 +8,12 @@ import { UserRole } from "../../shared/enums/UserRole";
 import { authenticateUser } from "../../infrastructure/DI/authDependencies";
 
 import {
-    createLessonController,getLessonsByChapterController,
+    createLessonController, getLessonsByChapterController, getLessonByIdController
 } from "../../infrastructure/DI/lessonDependencies";
 
 import { createLessonSchema } from "../../shared/schema/lesson/createLessonSchema";
+
+import { getLessonByIdSchema } from "../../shared/schema/lesson/getLessonByIdSchema";
 
 
 import { getLessonsByChapterSchema } from "../../shared/schema/lesson/getLessonsByChapterSchema";
@@ -34,6 +36,16 @@ router.get(
     validate(getLessonsByChapterSchema),
     getLessonsByChapterController.handle.bind(
         getLessonsByChapterController
+    )
+);
+
+router.get(
+    "/:courseId/chapters/:chapterId/lessons/:lessonId",
+    authenticateUser,
+    roleMiddleware(UserRole.TEACHER),
+    validate(getLessonByIdSchema),
+    getLessonByIdController.handle.bind(
+        getLessonByIdController
     )
 );
 export default router;

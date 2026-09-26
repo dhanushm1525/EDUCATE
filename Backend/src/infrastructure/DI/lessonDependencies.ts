@@ -14,6 +14,10 @@ import { GetLessonsByChapterUseCase } from "../../application/use-cases/lesson/G
 
 import { GetLessonsByChapterController } from "../../presentation/controllers/lesson/GetLessonsByChapterController";
 
+import { GetLessonByIdUseCase } from "../../application/use-cases/lesson/GetLessonsByIdUseCase";
+
+import { GetLessonByIdController } from "../../presentation/controllers/lesson/GetLessonByIdController";
+
 const courseStatusPolicy =
     new DefaultCourseStatusPolicy();
 
@@ -40,4 +44,18 @@ export const getLessonsByChapterUseCase =
 export const getLessonsByChapterController =
     new GetLessonsByChapterController(
         getLessonsByChapterUseCase
+    );
+
+
+
+export const getLessonByIdUseCase =
+    new GetLessonByIdUseCase(
+        lessonRepository,
+        chapterRepository,
+        courseRepository
+    );
+
+export const getLessonByIdController =
+    new GetLessonByIdController(
+        getLessonByIdUseCase
     );
