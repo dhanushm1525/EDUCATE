@@ -22,6 +22,10 @@ import { UpdateLessonUseCase } from "../../application/use-cases/lesson/UpdateLe
 
 import { UpdateLessonController } from "../../presentation/controllers/lesson/UpdateLessonController";
 
+import { DeleteLessonUseCase } from "../../application/use-cases/lesson/DeleteLessonUseCase";
+
+import { DeleteLessonController } from "../../presentation/controllers/lesson/DeleteLessonController";
+
 const courseStatusPolicy =
     new DefaultCourseStatusPolicy();
 
@@ -76,4 +80,18 @@ export const updateLessonUseCase =
 export const updateLessonController =
     new UpdateLessonController(
         updateLessonUseCase
+    );
+
+
+export const deleteLessonUseCase =
+    new DeleteLessonUseCase(
+        lessonRepository,
+        chapterRepository,
+        courseRepository,
+        courseStatusPolicy
+    );
+
+export const deleteLessonController =
+    new DeleteLessonController(
+        deleteLessonUseCase
     );

@@ -8,7 +8,7 @@ import { UserRole } from "../../shared/enums/UserRole";
 import { authenticateUser } from "../../infrastructure/DI/authDependencies";
 
 import {
-    createLessonController, getLessonsByChapterController, getLessonByIdController, updateLessonController
+    createLessonController, getLessonsByChapterController, getLessonByIdController, updateLessonController, deleteLessonController
 } from "../../infrastructure/DI/lessonDependencies";
 
 import { createLessonSchema } from "../../shared/schema/lesson/createLessonSchema";
@@ -19,6 +19,8 @@ import { getLessonByIdSchema } from "../../shared/schema/lesson/getLessonByIdSch
 import { getLessonsByChapterSchema } from "../../shared/schema/lesson/getLessonsByChapterSchema";
 
 import { updateLessonSchema } from "../../shared/schema/lesson/updateLessonSchema";
+
+import { deleteLessonSchema } from "../../shared/schema/lesson/deleteLessonSchema";
 
 const router = Router();
 
@@ -59,6 +61,16 @@ router.patch(
     validate(updateLessonSchema),
     updateLessonController.handle.bind(
         updateLessonController
+    )
+);
+
+router.delete(
+    "/:courseId/chapters/:chapterId/lessons/:lessonId",
+    authenticateUser,
+    roleMiddleware(UserRole.TEACHER),
+    validate(deleteLessonSchema),
+    deleteLessonController.handle.bind(
+        deleteLessonController
     )
 );
 export default router;
