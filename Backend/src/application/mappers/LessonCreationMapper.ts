@@ -14,7 +14,7 @@ export class LessonCreationMapper {
             description: dto.description,
             order: dto.order,
             type: dto.type,
-            videoUrl: dto.videoUrl,
+            videoKey: dto.videoKey,
             content: dto.content,
             attachments: dto.attachments,
             duration: dto.duration,

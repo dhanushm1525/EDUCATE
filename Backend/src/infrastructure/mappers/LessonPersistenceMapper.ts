@@ -11,7 +11,7 @@ export class LessonPersistenceMapper {
             description: document.description,
             order: document.order,
             type: document.type,
-            videoUrl: document.videoUrl,
+            videoKey: document.videoUrl,
             content: document.content,
             attachments: document.attachments,
             duration: document.duration,
@@ -27,22 +27,53 @@ export class LessonPersistenceMapper {
             description: lesson.description,
             order: lesson.order,
             type: lesson.type,
-            videoUrl: lesson.videoUrl,
+            videoUrl: lesson.videoKey,
             content: lesson.content,
             attachments: lesson.attachments ?? [],
             duration: lesson.duration,
         };
     }
 
-    static toPersistenceUpdate(lesson: Partial<Lesson>) {
+static toPersistenceUpdate(lesson: Partial<Lesson>) {
 
-        const {
-            lessonId: _lessonId,
-            createdAt: _createdAt,
-            updatedAt: _updatedAt,
-            ...updateData
-        } = lesson;
+    const updateData: Record<string, unknown> = {};
 
-        return updateData;
+    if (lesson.chapterId !== undefined) {
+        updateData.chapterId = lesson.chapterId;
     }
+
+    if (lesson.title !== undefined) {
+        updateData.title = lesson.title;
+    }
+
+    if (lesson.description !== undefined) {
+        updateData.description = lesson.description;
+    }
+
+    if (lesson.order !== undefined) {
+        updateData.order = lesson.order;
+    }
+
+    if (lesson.type !== undefined) {
+        updateData.type = lesson.type;
+    }
+
+    if (lesson.videoKey !== undefined) {
+        updateData.videoUrl = lesson.videoKey;
+    }
+
+    if (lesson.content !== undefined) {
+        updateData.content = lesson.content;
+    }
+
+    if (lesson.attachments !== undefined) {
+        updateData.attachments = lesson.attachments;
+    }
+
+    if (lesson.duration !== undefined) {
+        updateData.duration = lesson.duration;
+    }
+
+    return updateData;
+}
 }

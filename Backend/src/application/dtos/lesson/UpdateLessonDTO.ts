@@ -6,7 +6,7 @@ export interface UpdateLessonDTO {
     description?: string;
     order?: number;
     type?: LessonType;
-    videoUrl?: string;
+    videoKey?: string;
     content?: string;
     attachments?: string[];
     duration?: number;

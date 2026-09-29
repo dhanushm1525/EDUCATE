@@ -17,7 +17,7 @@ const awsClient = new S3Client({
     
 });
 
-const s3Client = new AwsS3Client(awsClient);
+export const s3Client = new AwsS3Client(awsClient);
 
 export const s3StorageService = new S3StorageService(s3Client, {
     bucketName: s3Config.bucketName,
@@ -26,9 +26,3 @@ export const s3StorageService = new S3StorageService(s3Client, {
 export const profileImagePolicy = new S3ProfileImagePolicy();
 export const imageTypePolicy = new ProfileImageTypePolicy();
 
-console.log("S3 region:", JSON.stringify(s3Config.region));
-console.log("S3 bucket:", JSON.stringify(s3Config.bucketName));
-console.log(
-    "S3 access key:",
-    s3Config.accessKeyId.slice(0, 6) + "..."
-);

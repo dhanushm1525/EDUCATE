@@ -54,7 +54,7 @@ export class UpdateLessonController {
                 description: req.body.description,
                 order: req.body.order,
                 type: req.body.type,
-                videoUrl: req.body.videoUrl,
+                videoKey: req.body.videoUrl,
                 content: req.body.content,
                 attachments: req.body.attachments,
                 duration: req.body.duration,

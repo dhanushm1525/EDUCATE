@@ -26,6 +26,18 @@ import { DeleteLessonUseCase } from "../../application/use-cases/lesson/DeleteLe
 
 import { DeleteLessonController } from "../../presentation/controllers/lesson/DeleteLessonController";
 
+import { GenerateLessonMediaUploadUrlUseCase } from "../../application/use-cases/lesson/GenerateLessonMediaUploadUrlUseCase";
+
+import { GenerateLessonMediaUploadUrlController } from "../../presentation/controllers/lesson/GenerateLessonMediaUploadUrlController";
+
+import { LessonMediaTypePolicy } from "../services/LessonMediaTypePolicy";
+
+import { S3LessonMediaKeyPolicy } from "../services/LessonMediaKeyPolicy";
+
+import { s3Client } from "./storageDependencies";
+
+import { env } from "../config/env";
+
 const courseStatusPolicy =
     new DefaultCourseStatusPolicy();
 
@@ -68,13 +80,16 @@ export const getLessonByIdController =
         getLessonByIdUseCase
     );
 
+ 
+const lessonMediaKeyPolicy = new S3LessonMediaKeyPolicy();
 
 export const updateLessonUseCase =
     new UpdateLessonUseCase(
         lessonRepository,
         chapterRepository,
         courseRepository,
-        courseStatusPolicy
+        courseStatusPolicy,
+        lessonMediaKeyPolicy
     );
 
 export const updateLessonController =
@@ -94,4 +109,26 @@ export const deleteLessonUseCase =
 export const deleteLessonController =
     new DeleteLessonController(
         deleteLessonUseCase
+    );
+
+
+const lessonMediaTypePolicy = new LessonMediaTypePolicy();
+
+
+
+export const generateLessonMediaUploadUrlUseCase =
+    new GenerateLessonMediaUploadUrlUseCase(
+        lessonRepository,
+        chapterRepository,
+        courseRepository,
+        courseStatusPolicy,
+        s3Client,
+        lessonMediaTypePolicy,
+        lessonMediaKeyPolicy,
+        env.awsS3BucketName
+    );
+
+export const generateLessonMediaUploadUrlController =
+    new GenerateLessonMediaUploadUrlController(
+        generateLessonMediaUploadUrlUseCase
     );

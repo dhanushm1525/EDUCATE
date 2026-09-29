@@ -31,10 +31,7 @@ export const updateLessonSchema = z.object({
             ])
             .optional(),
 
-        videoUrl: z
-            .string()
-            .url()
-            .optional(),
+        videoKey: z.string().min(1).optional(),
 
         content: z
             .string()
@@ -50,11 +47,11 @@ export const updateLessonSchema = z.object({
             .optional(),
     }),
 
-   params: z.object({
-    courseId: mongoIdSchema,
-    chapterId: mongoIdSchema,
-    lessonId: mongoIdSchema,
-}),
+    params: z.object({
+        courseId: mongoIdSchema,
+        chapterId: mongoIdSchema,
+        lessonId: mongoIdSchema,
+    }),
 
     query: z.object({}),
 });

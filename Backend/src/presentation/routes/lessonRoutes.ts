@@ -8,7 +8,7 @@ import { UserRole } from "../../shared/enums/UserRole";
 import { authenticateUser } from "../../infrastructure/DI/authDependencies";
 
 import {
-    createLessonController, getLessonsByChapterController, getLessonByIdController, updateLessonController, deleteLessonController
+    createLessonController, getLessonsByChapterController, getLessonByIdController, updateLessonController, deleteLessonController,generateLessonMediaUploadUrlController
 } from "../../infrastructure/DI/lessonDependencies";
 
 import { createLessonSchema } from "../../shared/schema/lesson/createLessonSchema";
@@ -21,6 +21,8 @@ import { getLessonsByChapterSchema } from "../../shared/schema/lesson/getLessons
 import { updateLessonSchema } from "../../shared/schema/lesson/updateLessonSchema";
 
 import { deleteLessonSchema } from "../../shared/schema/lesson/deleteLessonSchema";
+
+import { generateLessonMediaUploadUrlSchema } from "../../shared/schema/lesson/generateLessonMediaUploadUrlSchema";
 
 const router = Router();
 
@@ -73,4 +75,18 @@ router.delete(
         deleteLessonController
     )
 );
+
+
+router.post(
+    "/:courseId/chapters/:chapterId/lessons/:lessonId/media/upload-url",
+    authenticateUser,
+    roleMiddleware(UserRole.TEACHER),
+    validate(generateLessonMediaUploadUrlSchema),
+    generateLessonMediaUploadUrlController.handle.bind(
+        generateLessonMediaUploadUrlController
+    )
+);
+
+
+
 export default router;
