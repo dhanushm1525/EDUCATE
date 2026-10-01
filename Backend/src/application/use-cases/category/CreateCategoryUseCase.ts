@@ -12,7 +12,7 @@ export class CreateCategoryUseCase
     implements ICreateCategoryUseCase {
 
     constructor(
-        private readonly categoryRepository: ICategoryRepository
+        private readonly _categoryRepository: ICategoryRepository
     ) {}
 
     async execute(
@@ -20,7 +20,7 @@ export class CreateCategoryUseCase
     ): Promise<Category> {
 
         const existingCategory =
-            await this.categoryRepository.findByName(dto.name);
+            await this._categoryRepository.findByName(dto.name);
 
         if (existingCategory) {
             throw new AppError(
@@ -32,6 +32,6 @@ export class CreateCategoryUseCase
         const category =
             CategoryCreationMapper.toEntity(dto);
 
-        return await this.categoryRepository.create(category);
+        return await this._categoryRepository.create(category);
     }
 }

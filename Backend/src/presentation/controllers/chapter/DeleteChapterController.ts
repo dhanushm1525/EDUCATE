@@ -11,7 +11,7 @@ import { AppError } from "../../../shared/errors/AppError";
 export class DeleteChapterController {
 
     constructor(
-        private readonly deleteChapterUseCase: IDeleteChapterUseCase
+        private readonly _deleteChapterUseCase: IDeleteChapterUseCase
     ) {}
 
     async handle(
@@ -34,7 +34,7 @@ export class DeleteChapterController {
                 throw new AppError("Invalid course ID", 400);
             }
 
-            await this.deleteChapterUseCase.execute(
+            await this._deleteChapterUseCase.execute(
                 chapterId,
                 req.user.userId
             );

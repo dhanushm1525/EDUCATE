@@ -18,10 +18,10 @@ export class CreateLessonUseCase
     implements ICreateLessonUseCase {
 
     constructor(
-        private readonly lessonRepository: ILessonRepository,
-        private readonly chapterRepository: IChapterRepository,
-        private readonly courseRepository: ICourseRepository,
-        private readonly courseStatusPolicy: ICourseStatusPolicy
+        private readonly _lessonRepository: ILessonRepository,
+        private readonly _chapterRepository: IChapterRepository,
+        private readonly _courseRepository: ICourseRepository,
+        private readonly _courseStatusPolicy: ICourseStatusPolicy
     ) { }
 
     async execute(
@@ -32,7 +32,7 @@ export class CreateLessonUseCase
     ): Promise<Lesson> {
 
         const chapter =
-            await this.chapterRepository.findById(chapterId);
+            await this._chapterRepository.findById(chapterId);
 
 
 
@@ -48,7 +48,7 @@ export class CreateLessonUseCase
         }
 
         const course =
-            await this.courseRepository.findById(courseId);
+            await this._courseRepository.findById(courseId);
 
         if (!course) {
             throw new AppError("Course not found", 404);
@@ -61,7 +61,7 @@ export class CreateLessonUseCase
             );
         }
 
-        if (!this.courseStatusPolicy.canEdit(course.status)) {
+        if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "This course cannot be modified",
                 400
@@ -74,6 +74,6 @@ export class CreateLessonUseCase
                 dto
             );
 
-        return await this.lessonRepository.create(lesson);
+        return await this._lessonRepository.create(lesson);
     }
 }

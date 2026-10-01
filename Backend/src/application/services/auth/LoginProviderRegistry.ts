@@ -3,13 +3,13 @@ import { AuthProvider } from "../../../shared/enums/AuthProvider";
 import { ILoginProviderStrategy } from "../../interfaces/auth/ILoginProviderStrategy";
 
 export class LoginProviderRegistry {
-    private readonly strategies: Map<
+    private readonly _strategies: Map<
         AuthProvider,
         ILoginProviderStrategy
     >;
 
     constructor(strategies: ILoginProviderStrategy[]) {
-        this.strategies = new Map(
+        this._strategies = new Map(
             strategies.map(strategy => [
                 strategy.provider,
                 strategy
@@ -18,7 +18,7 @@ export class LoginProviderRegistry {
     }
 
     get(provider: AuthProvider): ILoginProviderStrategy {
-        const strategy = this.strategies.get(provider);
+        const strategy = this._strategies.get(provider);
 
         if (!strategy) {
             throw new AppError(

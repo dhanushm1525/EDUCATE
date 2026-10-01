@@ -12,7 +12,7 @@ import { AppError } from "../../../shared/errors/AppError";
 export class CreateChapterController {
 
     constructor(
-        private readonly createChapterUseCase: ICreateChapterUseCase
+        private readonly _createChapterUseCase: ICreateChapterUseCase
     ) { }
 
     async handle(
@@ -30,7 +30,7 @@ export class CreateChapterController {
             }
 
             const { courseId } = req.params;
-            
+
             if (Array.isArray(courseId)) {
                 throw new AppError("Invalid course ID", 400);
             }
@@ -43,7 +43,7 @@ export class CreateChapterController {
             };
 
             const chapter =
-                await this.createChapterUseCase.execute(
+                await this._createChapterUseCase.execute(
                     courseId,
                     req.user.userId,
                     dto

@@ -6,7 +6,7 @@ import { AppError } from "../../../shared/errors/AppError";
 
 export class UpdateCourseController {
     constructor(
-        private readonly updateCourseUseCase: IUpdateCourseUseCase
+        private readonly _updateCourseUseCase: IUpdateCourseUseCase
     ) { }
 
     async handle(
@@ -51,7 +51,7 @@ export class UpdateCourseController {
             };
 
             const course =
-                await this.updateCourseUseCase.execute(
+                await this._updateCourseUseCase.execute(
                     courseId,
                     req.user.userId,
                     dto

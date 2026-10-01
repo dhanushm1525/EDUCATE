@@ -5,7 +5,7 @@ import { CreateCategoryDTO } from "../../../application/dtos/category/CreateCate
 
 export class CreateCategoryController {
     constructor(
-        private readonly createCategoryUseCase: ICreateCategoryUseCase
+        private readonly _createCategoryUseCase: ICreateCategoryUseCase
     ) {}
 
     async handle(
@@ -21,7 +21,7 @@ export class CreateCategoryController {
             };
 
             const category =
-                await this.createCategoryUseCase.execute(dto);
+                await this._createCategoryUseCase.execute(dto);
 
             res.status(201).json({
                 success: true,

@@ -3,7 +3,7 @@ import { IGetCategoriesUseCase } from "../../../application/interfaces/category/
 
 export class GetCategoriesController {
     constructor(
-        private readonly getCategoriesUseCase: IGetCategoriesUseCase
+        private readonly _getCategoriesUseCase: IGetCategoriesUseCase
     ) {}
 
     async handle(
@@ -12,7 +12,7 @@ export class GetCategoriesController {
         next: NextFunction
     ): Promise<void> {
         try {
-            const categories = await this.getCategoriesUseCase.execute();
+            const categories = await this._getCategoriesUseCase.execute();
 
             res.status(200).json({
                 success: true,

@@ -11,7 +11,7 @@ import { IGetLessonsByChapterUseCase } from "../../../application/interfaces/les
 export class GetLessonsByChapterController {
 
     constructor(
-        private readonly getLessonsByChapterUseCase:
+        private readonly _getLessonsByChapterUseCase:
             IGetLessonsByChapterUseCase
     ) {}
 
@@ -44,7 +44,7 @@ export class GetLessonsByChapterController {
                         }
 
             const lessons =
-                await this.getLessonsByChapterUseCase.execute(
+                await this._getLessonsByChapterUseCase.execute(
                     courseId,
                     chapterId,
                     req.user.userId

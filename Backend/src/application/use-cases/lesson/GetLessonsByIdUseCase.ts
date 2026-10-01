@@ -12,9 +12,9 @@ export class GetLessonByIdUseCase
     implements IGetLessonByIdUseCase {
 
     constructor(
-        private readonly lessonRepository: ILessonRepository,
-        private readonly chapterRepository: IChapterRepository,
-        private readonly courseRepository: ICourseRepository
+        private readonly _lessonRepository: ILessonRepository,
+        private readonly _chapterRepository: IChapterRepository,
+        private readonly _courseRepository: ICourseRepository
     ) {}
 
     async execute(
@@ -25,7 +25,7 @@ export class GetLessonByIdUseCase
     ): Promise<Lesson> {
 
         const lesson =
-            await this.lessonRepository.findById(lessonId);
+            await this._lessonRepository.findById(lessonId);
 
         if (!lesson) {
             throw new AppError(
@@ -42,7 +42,7 @@ export class GetLessonByIdUseCase
         }
 
         const chapter =
-            await this.chapterRepository.findById(chapterId);
+            await this._chapterRepository.findById(chapterId);
 
         if (!chapter) {
             throw new AppError(
@@ -59,7 +59,7 @@ export class GetLessonByIdUseCase
         }
 
         const course =
-            await this.courseRepository.findById(courseId);
+            await this._courseRepository.findById(courseId);
 
         if (!course) {
             throw new AppError(

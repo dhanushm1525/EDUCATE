@@ -12,7 +12,7 @@ import { IUpdateLessonUseCase } from "../../../application/interfaces/lesson/IUp
 export class UpdateLessonController {
 
     constructor(
-        private readonly updateLessonUseCase:
+        private readonly _updateLessonUseCase:
             IUpdateLessonUseCase
     ) {}
 
@@ -61,7 +61,7 @@ export class UpdateLessonController {
             };
 
             const updatedLesson =
-                await this.updateLessonUseCase.execute(
+                await this._updateLessonUseCase.execute(
                     courseId,
                     chapterId,
                     lessonId,

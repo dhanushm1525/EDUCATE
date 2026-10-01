@@ -5,12 +5,12 @@ export interface ICourseStatusPolicy {
 }
 
 export class DefaultCourseStatusPolicy implements ICourseStatusPolicy {
-    private readonly editableStatuses = new Set<CourseStatus>([
+    private readonly _editableStatuses = new Set<CourseStatus>([
         CourseStatus.DRAFT,
         CourseStatus.REJECTED,
     ]);
 
     canEdit(status: CourseStatus): boolean {
-        return this.editableStatuses.has(status);
+        return this._editableStatuses.has(status);
     }
 }

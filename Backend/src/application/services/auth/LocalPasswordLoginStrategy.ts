@@ -10,7 +10,7 @@ export class LocalPasswordLoginStrategy
     readonly provider = AuthProvider.LOCAL;
 
     constructor(
-        private readonly passwordHasher: IPasswordHasher
+        private readonly _passwordHasher: IPasswordHasher
     ) {}
 
     async authenticate(
@@ -24,7 +24,7 @@ export class LocalPasswordLoginStrategy
             );
         }
 
-        const matches = await this.passwordHasher.compare(
+        const matches = await this._passwordHasher.compare(
             password,
             user.password
         );

@@ -8,7 +8,7 @@ import { AppError } from "../../../shared/errors/AppError";
 export class CreateCourseController {
 
     constructor(
-        private readonly createCourseUseCase: ICreateCourseUseCase
+        private readonly _createCourseUseCase: ICreateCourseUseCase
     ) { }
 
     async handle(
@@ -50,7 +50,7 @@ export class CreateCourseController {
             };
 
             const course =
-                await this.createCourseUseCase.execute(dto);
+                await this._createCourseUseCase.execute(dto);
 
             res.status(201).json({
                 success: true,

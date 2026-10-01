@@ -12,8 +12,8 @@ export class UpdateCourseUseCase
     implements IUpdateCourseUseCase {
 
     constructor(
-        private readonly courseRepository: ICourseRepository,
-        private readonly courseStatusPolicy: ICourseStatusPolicy
+        private readonly _courseRepository: ICourseRepository,
+        private readonly _courseStatusPolicy: ICourseStatusPolicy
     ) {}
 
     async execute(
@@ -23,7 +23,7 @@ export class UpdateCourseUseCase
     ): Promise<Course> {
 
         const course =
-            await this.courseRepository.findById(courseId);
+            await this._courseRepository.findById(courseId);
 
         if (!course) {
             throw new AppError(
@@ -39,7 +39,7 @@ export class UpdateCourseUseCase
             );
         }
 
-        if (!this.courseStatusPolicy.canEdit(course.status)) {
+        if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "Only draft or rejected courses can be edited",
                 400
@@ -67,7 +67,7 @@ export class UpdateCourseUseCase
         }
 
         const updatedCourse =
-            await this.courseRepository.update(
+            await this._courseRepository.update(
                 courseId,
                 updateData
             );

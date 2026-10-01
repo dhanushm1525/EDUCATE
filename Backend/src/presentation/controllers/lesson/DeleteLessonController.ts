@@ -11,7 +11,7 @@ import { IDeleteLessonUseCase } from "../../../application/interfaces/lesson/IDe
 export class DeleteLessonController {
 
     constructor(
-        private readonly deleteLessonUseCase:
+        private readonly _deleteLessonUseCase:
             IDeleteLessonUseCase
     ) { }
 
@@ -48,7 +48,7 @@ export class DeleteLessonController {
                 throw new AppError("Invalid lesson ID", 400);
             }
 
-            await this.deleteLessonUseCase.execute(
+            await this._deleteLessonUseCase.execute(
                 courseId,
                 chapterId,
                 lessonId,

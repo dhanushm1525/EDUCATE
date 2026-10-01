@@ -12,9 +12,9 @@ export class GetLessonsByChapterUseCase
     implements IGetLessonsByChapterUseCase {
 
     constructor(
-        private readonly lessonRepository: ILessonRepository,
-        private readonly chapterRepository: IChapterRepository,
-        private readonly courseRepository: ICourseRepository
+        private readonly _lessonRepository: ILessonRepository,
+        private readonly _chapterRepository: IChapterRepository,
+        private readonly _courseRepository: ICourseRepository
     ) {}
 
     async execute(
@@ -24,7 +24,7 @@ export class GetLessonsByChapterUseCase
     ): Promise<Lesson[]> {
 
         const chapter =
-            await this.chapterRepository.findById(chapterId);
+            await this._chapterRepository.findById(chapterId);
 
         if (!chapter) {
             throw new AppError("Chapter not found", 404);
@@ -38,7 +38,7 @@ export class GetLessonsByChapterUseCase
         }
 
         const course =
-            await this.courseRepository.findById(courseId);
+            await this._courseRepository.findById(courseId);
 
         if (!course) {
             throw new AppError("Course not found", 404);
@@ -51,7 +51,7 @@ export class GetLessonsByChapterUseCase
             );
         }
 
-        return await this.lessonRepository.findByChapterId(
+        return await this._lessonRepository.findByChapterId(
             chapterId
         );
     }

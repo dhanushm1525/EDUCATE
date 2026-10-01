@@ -19,14 +19,14 @@ export class GenerateLessonMediaUploadUrlUseCase
     implements IGenerateLessonMediaUploadUrlUseCase {
 
     constructor(
-        private readonly lessonRepository: ILessonRepository,
-        private readonly chapterRepository: IChapterRepository,
-        private readonly courseRepository: ICourseRepository,
-        private readonly courseStatusPolicy: ICourseStatusPolicy,
-        private readonly s3Client: IS3Client,
-        private readonly mediaTypePolicy: ILessonMediaTypePolicy,
-        private readonly mediaKeyPolicy: ILessonMediaKeyPolicy,
-        private readonly bucketName: string
+        private readonly _lessonRepository: ILessonRepository,
+        private readonly _chapterRepository: IChapterRepository,
+        private readonly _courseRepository: ICourseRepository,
+        private readonly _courseStatusPolicy: ICourseStatusPolicy,
+        private readonly _s3Client: IS3Client,
+        private readonly _mediaTypePolicy: ILessonMediaTypePolicy,
+        private readonly _mediaKeyPolicy: ILessonMediaKeyPolicy,
+        private readonly _bucketName: string
     ) {}
 
     async execute(
@@ -37,7 +37,7 @@ export class GenerateLessonMediaUploadUrlUseCase
         dto: GenerateLessonMediaUploadUrlDTO
     ): Promise<GenerateLessonMediaUploadUrlResponseDTO> {
 
-        if (!this.mediaTypePolicy.supports(dto.contentType)) {
+        if (!this._mediaTypePolicy.supports(dto.contentType)) {
             throw new AppError(
                 "Unsupported lesson media type",
                 400
@@ -45,7 +45,7 @@ export class GenerateLessonMediaUploadUrlUseCase
         }
 
         const lesson =
-            await this.lessonRepository.findById(lessonId);
+            await this._lessonRepository.findById(lessonId);
 
         if (!lesson) {
             throw new AppError(
@@ -62,7 +62,7 @@ export class GenerateLessonMediaUploadUrlUseCase
         }
 
         const chapter =
-            await this.chapterRepository.findById(chapterId);
+            await this._chapterRepository.findById(chapterId);
 
         if (!chapter) {
             throw new AppError(
@@ -79,7 +79,7 @@ export class GenerateLessonMediaUploadUrlUseCase
         }
 
         const course =
-            await this.courseRepository.findById(courseId);
+            await this._courseRepository.findById(courseId);
 
         if (!course) {
             throw new AppError(
@@ -95,7 +95,7 @@ export class GenerateLessonMediaUploadUrlUseCase
             );
         }
 
-        if (!this.courseStatusPolicy.canEdit(course.status)) {
+        if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "This course cannot be modified",
                 400
@@ -103,7 +103,7 @@ export class GenerateLessonMediaUploadUrlUseCase
         }
 
         const key =
-            this.mediaKeyPolicy.createKey(
+            this._mediaKeyPolicy.createKey(
                 courseId,
                 chapterId,
                 lessonId,
@@ -111,8 +111,8 @@ export class GenerateLessonMediaUploadUrlUseCase
             );
 
         const uploadUrl =
-            await this.s3Client.generateUploadUrl(
-                this.bucketName,
+            await this._s3Client.generateUploadUrl(
+                this._bucketName,
                 key,
                 dto.contentType,
                 300

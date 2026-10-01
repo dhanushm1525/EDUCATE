@@ -11,8 +11,8 @@ export class GetChapterByIdUseCase
     implements IGetChapterByIdUseCase {
 
     constructor(
-        private readonly chapterRepository: IChapterRepository,
-        private readonly courseRepository: ICourseRepository
+        private readonly _chapterRepository: IChapterRepository,
+        private readonly _courseRepository: ICourseRepository
     ) {}
 
     async execute(
@@ -21,7 +21,7 @@ export class GetChapterByIdUseCase
     ): Promise<Chapter> {
 
         const chapter =
-            await this.chapterRepository.findById(
+            await this._chapterRepository.findById(
                 chapterId
             );
 
@@ -33,7 +33,7 @@ export class GetChapterByIdUseCase
         }
 
         const course =
-            await this.courseRepository.findById(
+            await this._courseRepository.findById(
                 chapter.courseId
             );
 

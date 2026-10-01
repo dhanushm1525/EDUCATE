@@ -3,7 +3,7 @@ import { ILessonMediaTypePolicy } from "../../domain/policies/LessonMediaPolicy"
 export class LessonMediaTypePolicy
     implements ILessonMediaTypePolicy {
 
-    private readonly allowedTypes = new Set([
+    private readonly _allowedTypes = new Set([
         "video/mp4",
         "video/webm",
 
@@ -18,6 +18,6 @@ export class LessonMediaTypePolicy
     ]);
 
     supports(contentType: string): boolean {
-        return this.allowedTypes.has(contentType);
+        return this._allowedTypes.has(contentType);
     }
 }

@@ -11,7 +11,7 @@ import { AppError } from "../../../shared/errors/AppError";
 export class GetChapterByIdController {
 
     constructor(
-        private readonly getChapterByIdUseCase: IGetChapterByIdUseCase
+        private readonly _getChapterByIdUseCase: IGetChapterByIdUseCase
     ) { }
 
     async handle(
@@ -35,7 +35,7 @@ export class GetChapterByIdController {
             }
 
             const chapter =
-                await this.getChapterByIdUseCase.execute(
+                await this._getChapterByIdUseCase.execute(
                     chapterId,
                     req.user.userId
                 );

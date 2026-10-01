@@ -16,11 +16,11 @@ export class UpdateLessonUseCase
     implements IUpdateLessonUseCase {
 
     constructor(
-        private readonly lessonRepository: ILessonRepository,
-        private readonly chapterRepository: IChapterRepository,
-        private readonly courseRepository: ICourseRepository,
-        private readonly courseStatusPolicy: ICourseStatusPolicy,
-        private readonly lessonMediaKeyPolicy: ILessonMediaKeyPolicy
+        private readonly _lessonRepository: ILessonRepository,
+        private readonly _chapterRepository: IChapterRepository,
+        private readonly _courseRepository: ICourseRepository,
+        private readonly _courseStatusPolicy: ICourseStatusPolicy,
+        private readonly _lessonMediaKeyPolicy: ILessonMediaKeyPolicy
     ) { }
 
     async execute(
@@ -32,7 +32,7 @@ export class UpdateLessonUseCase
     ): Promise<Lesson> {
 
         const lesson =
-            await this.lessonRepository.findById(lessonId);
+            await this._lessonRepository.findById(lessonId);
 
         if (!lesson) {
             throw new AppError(
@@ -49,7 +49,7 @@ export class UpdateLessonUseCase
         }
 
         const chapter =
-            await this.chapterRepository.findById(chapterId);
+            await this._chapterRepository.findById(chapterId);
 
         if (!chapter) {
             throw new AppError(
@@ -66,7 +66,7 @@ export class UpdateLessonUseCase
         }
 
         const course =
-            await this.courseRepository.findById(courseId);
+            await this._courseRepository.findById(courseId);
 
         if (!course) {
             throw new AppError(
@@ -82,7 +82,7 @@ export class UpdateLessonUseCase
             );
         }
 
-        if (!this.courseStatusPolicy.canEdit(course.status)) {
+        if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "This course cannot be modified",
                 400
@@ -91,7 +91,7 @@ export class UpdateLessonUseCase
 
         if (dto.videoKey!==undefined) {
             const isOwned =
-                this.lessonMediaKeyPolicy.isOwnedByLesson(
+                this._lessonMediaKeyPolicy.isOwnedByLesson(
                     dto.videoKey,
                     courseId,
                     chapterId,
@@ -107,7 +107,7 @@ export class UpdateLessonUseCase
         }
 
         const updatedLesson =
-            await this.lessonRepository.update(
+            await this._lessonRepository.update(
                 lessonId,
                 dto
             );

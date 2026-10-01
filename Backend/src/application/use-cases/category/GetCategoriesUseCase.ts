@@ -6,10 +6,10 @@ export class GetCategoriesUseCase
     implements IGetCategoriesUseCase {
 
     constructor(
-        private readonly categoryRepository: ICategoryRepository
+        private readonly _categoryRepository: ICategoryRepository
     ) {}
 
     async execute(): Promise<Category[]> {
-        return await this.categoryRepository.findAll();
+        return await this._categoryRepository.findAll();
     }
 }

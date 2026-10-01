@@ -16,9 +16,9 @@ export class CreateChapterUseCase
     implements ICreateChapterUseCase {
 
     constructor(
-        private readonly chapterRepository: IChapterRepository,
-        private readonly courseRepository: ICourseRepository,
-        private readonly courseStatusPolicy: ICourseStatusPolicy
+        private readonly _chapterRepository: IChapterRepository,
+        private readonly _courseRepository: ICourseRepository,
+        private readonly _courseStatusPolicy: ICourseStatusPolicy
     ) {}
 
     async execute(
@@ -28,7 +28,7 @@ export class CreateChapterUseCase
     ): Promise<Chapter> {
 
         const course =
-            await this.courseRepository.findById(courseId);
+            await this._courseRepository.findById(courseId);
 
         if (!course) {
             throw new AppError(
@@ -44,7 +44,7 @@ export class CreateChapterUseCase
             );
         }
 
-        if (!this.courseStatusPolicy.canEdit(course.status)) {
+        if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "This course cannot be modified",
                 400
@@ -57,7 +57,7 @@ export class CreateChapterUseCase
                 dto
             );
 
-        return await this.chapterRepository.create(
+        return await this._chapterRepository.create(
             chapter
         );
     }

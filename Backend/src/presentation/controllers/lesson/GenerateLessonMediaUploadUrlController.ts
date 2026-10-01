@@ -13,7 +13,7 @@ import { IGenerateLessonMediaUploadUrlUseCase } from "../../../application/inter
 export class GenerateLessonMediaUploadUrlController {
 
     constructor(
-        private readonly generateLessonMediaUploadUrlUseCase:
+        private readonly _generateLessonMediaUploadUrlUseCase:
             IGenerateLessonMediaUploadUrlUseCase
     ) {}
 
@@ -56,7 +56,7 @@ export class GenerateLessonMediaUploadUrlController {
             };
 
             const result =
-                await this.generateLessonMediaUploadUrlUseCase.execute(
+                await this._generateLessonMediaUploadUrlUseCase.execute(
                     courseId,
                     chapterId,
                     lessonId,

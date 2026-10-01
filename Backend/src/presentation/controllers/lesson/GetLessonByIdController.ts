@@ -11,7 +11,7 @@ import { IGetLessonByIdUseCase } from "../../../application/interfaces/lesson/IG
 export class GetLessonByIdController {
 
     constructor(
-        private readonly getLessonByIdUseCase:
+        private readonly _getLessonByIdUseCase:
             IGetLessonByIdUseCase
     ) {}
 
@@ -49,7 +49,7 @@ export class GetLessonByIdController {
             }
 
             const lesson =
-                await this.getLessonByIdUseCase.execute(
+                await this._getLessonByIdUseCase.execute(
                     courseId,
                     chapterId,
                     lessonId,

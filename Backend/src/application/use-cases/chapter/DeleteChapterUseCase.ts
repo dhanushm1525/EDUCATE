@@ -11,9 +11,9 @@ export class DeleteChapterUseCase
     implements IDeleteChapterUseCase {
 
     constructor(
-        private readonly chapterRepository: IChapterRepository,
-        private readonly courseRepository: ICourseRepository,
-        private readonly courseStatusPolicy: ICourseStatusPolicy
+        private readonly _chapterRepository: IChapterRepository,
+        private readonly _courseRepository: ICourseRepository,
+        private readonly _courseStatusPolicy: ICourseStatusPolicy
     ) {}
 
     async execute(
@@ -22,7 +22,7 @@ export class DeleteChapterUseCase
     ): Promise<void> {
 
         const chapter =
-            await this.chapterRepository.findById(
+            await this._chapterRepository.findById(
                 chapterId
             );
 
@@ -34,7 +34,7 @@ export class DeleteChapterUseCase
         }
 
         const course =
-            await this.courseRepository.findById(
+            await this._courseRepository.findById(
                 chapter.courseId
             );
 
@@ -52,7 +52,7 @@ export class DeleteChapterUseCase
             );
         }
 
-        if (!this.courseStatusPolicy.canEdit(course.status)) {
+        if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "This course cannot be modified",
                 400
@@ -60,7 +60,7 @@ export class DeleteChapterUseCase
         }
 
         const deleted =
-            await this.chapterRepository.delete(
+            await this._chapterRepository.delete(
                 chapterId
             );
 

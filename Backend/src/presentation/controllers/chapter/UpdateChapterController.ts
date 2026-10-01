@@ -12,7 +12,7 @@ import { AppError } from "../../../shared/errors/AppError";
 export class UpdateChapterController {
 
     constructor(
-        private readonly updateChapterUseCase: IUpdateChapterUseCase
+        private readonly _updateChapterUseCase: IUpdateChapterUseCase
     ) { }
 
     async handle(
@@ -43,7 +43,7 @@ export class UpdateChapterController {
             };
 
             const chapter =
-                await this.updateChapterUseCase.execute(
+                await this._updateChapterUseCase.execute(
                     chapterId,
                     req.user.userId,
                     dto

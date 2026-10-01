@@ -8,7 +8,7 @@ import { ICreateLessonUseCase } from "../../../application/interfaces/lesson/ICr
 export class CreateLessonController {
 
     constructor(
-        private readonly createLessonUseCase: ICreateLessonUseCase
+        private readonly _createLessonUseCase: ICreateLessonUseCase
     ) { }
 
     async handle(
@@ -48,7 +48,7 @@ export class CreateLessonController {
             };
 
             const lesson =
-                await this.createLessonUseCase.execute(
+                await this._createLessonUseCase.execute(
                     courseId,
                     chapterId,
                     req.user.userId,
