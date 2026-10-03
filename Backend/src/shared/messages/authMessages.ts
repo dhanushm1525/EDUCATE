@@ -15,6 +15,11 @@ export const AUTH_MESSAGES = {
     EMAIL_NOT_VERIFIED:
         "Please verify your email before logging in",
 
+    AUTHENTICATION_REQUIRED:
+        "Authentication required",
+
+    ACCESS_DENIED:
+        "Access denied",
 
     INVALID_ACCESS_TOKEN:
         "Invalid or expired access token",
@@ -22,17 +27,14 @@ export const AUTH_MESSAGES = {
     INVALID_REFRESH_TOKEN:
         "Invalid or expired refresh token",
 
-
     LOGIN_SUCCESS:
         "Login successful",
 
     REGISTRATION_SUCCESS:
         "Registration successful",
 
-
     UNAUTHORIZED:
         "You are not authorized to access this resource",
-
 
     EMAIL_VERIFIED:
         "Email verified successfully",
@@ -46,6 +48,14 @@ export const AUTH_MESSAGES = {
     OTP_EXPIRED:
         "OTP has expired",
 
+    EMAIL_ALREADY_VERIFIED:
+        "Email is already verified",
+
+    VERIFICATION_OTP_SENT:
+        "Verification OTP sent successfully",
+
+    INVALID_OR_EXPIRED_OTP:
+        "Invalid or expired OTP",
 
     PASSWORD_RESET_OTP_SENT:
         "Password reset OTP sent successfully",
@@ -53,14 +63,17 @@ export const AUTH_MESSAGES = {
     INVALID_PASSWORD_RESET_OTP:
         "Invalid password reset OTP",
 
+    INVALID_OR_EXPIRED_PASSWORD_RESET_OTP:
+        "Invalid or expired password reset OTP",
+
     PASSWORD_RESET_OTP_EXPIRED:
         "Password reset OTP has expired",
 
     PASSWORD_RESET_SUCCESS:
         "Password reset successfully",
 
-    USER_ID_IS_MISSING:"User ID is missing",
+    USER_ID_IS_MISSING: "User ID is missing",
 
-    PROFILE_RETRIEVED_SUCCESSFULLY:"Profile retrieved successfully"
+    PROFILE_RETRIEVED_SUCCESSFULLY: "Profile retrieved successfully"
 
 } as const;

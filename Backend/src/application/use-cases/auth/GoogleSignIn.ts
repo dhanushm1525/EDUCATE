@@ -11,6 +11,7 @@ import { UserRole } from "../../../shared/enums/UserRole";
 import { UserStatus } from "../../../shared/enums/UserStatus";
 import { AuthProvider } from "../../../shared/enums/AuthProvider";
 import { IGoogleSignIn } from "../../interfaces/auth/IGoogleSignIn";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 export class GoogleSignIn implements IGoogleSignIn{
   constructor(
@@ -51,7 +52,7 @@ export class GoogleSignIn implements IGoogleSignIn{
 
    
     if (!user.id) {
-      throw new Error("User ID is missing");
+      throw new Error(AUTH_MESSAGES.USER_ID_IS_MISSING);
     }
 
    

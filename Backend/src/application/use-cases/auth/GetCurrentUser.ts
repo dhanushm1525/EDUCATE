@@ -10,6 +10,7 @@ import {
 import { GetCurrentUserDTO } from "../../dtos/auth/GetCurrentUserDTO";
 import { GetCurrentUserResponseDTO } from "../../dtos/auth/GetCurrentUserResponseDTO";
 import { IGetCurrentUser } from "../../interfaces/auth/IGetCurrentUser";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 
 export class GetCurrentUser implements IGetCurrentUser{
@@ -33,7 +34,7 @@ export class GetCurrentUser implements IGetCurrentUser{
         if (!user) {
 
             throw new AppError(
-                "User not found",
+                AUTH_MESSAGES.USER_NOT_FOUND,
                 HttpStatusCode.NOT_FOUND
             );
 

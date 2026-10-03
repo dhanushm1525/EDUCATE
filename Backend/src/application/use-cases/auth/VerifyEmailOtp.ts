@@ -8,6 +8,7 @@ import { ITokenHasher } from "../../interfaces/services/ITokenHasher";
 import { VerifyEmailOtpDTO } from "../../dtos/auth/VerifyEmailOtpDTO";
 import { VerifyEmailOtpResponseDTO } from "../../dtos/auth/VerifyEmailOtpResponseDTO";
 import { IVerifyEmailOtp } from "../../interfaces/auth/IVerifyEmailOtp";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 
 
@@ -29,13 +30,13 @@ export class VerifyEmailOtp implements IVerifyEmailOtp {
 
 
         if(!verificationRecord){
-            throw new AppError("Invalid or expired OTP",HttpStatusCode.BAD_REQUEST);
+            throw new AppError(AUTH_MESSAGES.INVALID_OR_EXPIRED_OTP,HttpStatusCode.BAD_REQUEST);
         }
 
         if(verificationRecord.expiresAt.getTime()<=Date.now()){
             await this._emailVerificationRepository.deleteByUserId(userId);
 
-            throw new AppError("Invalid or expired otp",HttpStatusCode.BAD_REQUEST);
+            throw new AppError(AUTH_MESSAGES.INVALID_OR_EXPIRED_OTP,HttpStatusCode.BAD_REQUEST);
         }
 
 
@@ -43,7 +44,7 @@ export class VerifyEmailOtp implements IVerifyEmailOtp {
         const otpHash = await this._tokenHasher.hash(otp)
 
         if(otpHash!==verificationRecord.otpHash){
-            throw new AppError("Invalid OTP",HttpStatusCode.BAD_REQUEST)
+            throw new AppError(AUTH_MESSAGES.INVALID_OTP,HttpStatusCode.BAD_REQUEST)
         }
 
 
@@ -51,7 +52,7 @@ export class VerifyEmailOtp implements IVerifyEmailOtp {
 
 
         if(!user){
-            throw new AppError("User not found",HttpStatusCode.NOT_FOUND);
+            throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND,HttpStatusCode.NOT_FOUND);
         }
 
 
@@ -64,7 +65,7 @@ export class VerifyEmailOtp implements IVerifyEmailOtp {
 
 
         return {
-            message:"Email verified successfully"
+            message: AUTH_MESSAGES.EMAIL_VERIFIED
         };
     }
 }

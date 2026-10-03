@@ -10,6 +10,7 @@ import type {
 } from "../../dtos/user/GetMyProfileDTO";
 import { GetMyProfileResponseDTO } from "../../dtos/user/GetMyProfileResponseDTO"
 import { IProfileImagePolicy } from "../../interfaces/user/IProfileImagePolicy";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 export class GetMyProfile {
     constructor(
@@ -27,14 +28,14 @@ export class GetMyProfile {
 
         if (!user) {
             throw new AppError(
-                "User not found",
+                AUTH_MESSAGES.USER_NOT_FOUND,
                 HttpStatusCode.NOT_FOUND
             );
         }
 
         if (!user.id) {
             throw new AppError(
-                "User ID is missing",
+                AUTH_MESSAGES.USER_ID_IS_MISSING,
                 HttpStatusCode.INTERNAL_SERVER_ERROR
             );
         }

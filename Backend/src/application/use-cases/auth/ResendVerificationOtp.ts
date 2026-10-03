@@ -57,7 +57,7 @@ export class ResendVerificationOtp implements IResendVerificationOtp {
 
         if (user.isVerified) {
             throw new AppError(
-                "Email is already verified",
+                AUTH_MESSAGES.EMAIL_ALREADY_VERIFIED,
                 HttpStatusCode.BAD_REQUEST
             );
         }
@@ -65,7 +65,7 @@ export class ResendVerificationOtp implements IResendVerificationOtp {
 
         if (!user.id) {
             throw new AppError(
-                "User ID is missing",
+                AUTH_MESSAGES.USER_ID_IS_MISSING,
                 HttpStatusCode.INTERNAL_SERVER_ERROR,
                 false
             );
@@ -80,7 +80,7 @@ export class ResendVerificationOtp implements IResendVerificationOtp {
 
         return {
             message:
-                "Verification OTP sent successfully"
+                AUTH_MESSAGES.VERIFICATION_OTP_SENT
         };
     }
 }

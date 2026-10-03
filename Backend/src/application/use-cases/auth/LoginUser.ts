@@ -111,7 +111,7 @@ export class LoginUser implements ILoginUser{
 
         if (!user.id) {
             throw new AppError(
-                "User ID is missing",
+                AUTH_MESSAGES.USER_ID_IS_MISSING,
                 HttpStatusCode.INTERNAL_SERVER_ERROR,
                 false
             );

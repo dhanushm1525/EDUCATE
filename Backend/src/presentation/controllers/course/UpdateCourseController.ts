@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
 import { IUpdateCourseUseCase } from "../../../application/interfaces/course/IUpdateCourseUseCase";
 import { CourseUpdateMapper } from "../../../application/mappers/CourseUpdateMapper";
 import { AppError } from "../../../shared/errors/AppError";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 export class UpdateCourseController {
     constructor(
@@ -19,7 +20,7 @@ export class UpdateCourseController {
         try {
             if (!req.user) {
                 throw new AppError(
-                    "Authentication required",
+                    AUTH_MESSAGES.AUTHENTICATION_REQUIRED,
                     HttpStatusCode.UNAUTHORIZED
                 );
             }

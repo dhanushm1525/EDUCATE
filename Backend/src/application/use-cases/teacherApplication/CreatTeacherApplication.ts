@@ -20,6 +20,7 @@ import { TeacherApplicationStatus }
 
 import { AppError } 
     from "../../../shared/errors/AppError";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 
 export class CreateTeacherApplication
@@ -42,7 +43,7 @@ export class CreateTeacherApplication
             await this._userRepository.findById(userId);
 
         if (!user) {
-            throw new AppError("User not found", HttpStatusCode.NOT_FOUND);
+            throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND, HttpStatusCode.NOT_FOUND);
         }
 
         const applications =

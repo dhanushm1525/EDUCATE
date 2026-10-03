@@ -6,6 +6,7 @@ import { UpdateProfileImageDTO } from "../../dtos/user/UpdateProfileImageDTO";
 import { User } from "../../../domain/entities/User";
 import { AppError } from "../../../shared/errors/AppError";
 import { IProfileImagePolicy } from "../../interfaces/user/IProfileImagePolicy";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 export class UpdateProfileImage implements IUpdateProfileImage {
     constructor(
@@ -28,7 +29,7 @@ export class UpdateProfileImage implements IUpdateProfileImage {
         const user = await this._userRepository.findById(dto.userId);
 
         if (!user) {
-            throw new AppError("User not found", HttpStatusCode.NOT_FOUND);
+            throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND, HttpStatusCode.NOT_FOUND);
         }
 
         user.updateAvatar(dto.avatarKey);

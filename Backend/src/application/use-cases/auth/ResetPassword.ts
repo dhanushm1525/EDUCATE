@@ -83,7 +83,7 @@ export class ResetPassword implements IResetPassword {
 
         if (!user.id) {
             throw new AppError(
-                "User ID is missing",
+                AUTH_MESSAGES.USER_ID_IS_MISSING,
                 HttpStatusCode.INTERNAL_SERVER_ERROR,
                 false
             );
@@ -96,7 +96,7 @@ export class ResetPassword implements IResetPassword {
 
         if (!passwordReset) {
             throw new AppError(
-                "Invalid or expired password reset OTP",
+                AUTH_MESSAGES.INVALID_OR_EXPIRED_PASSWORD_RESET_OTP,
                 HttpStatusCode.BAD_REQUEST
             );
         }
