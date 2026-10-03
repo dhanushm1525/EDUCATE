@@ -10,6 +10,8 @@ import {
     useAuthStore
 } from "../store/authStore";
 
+import { logger } from "../services/logger";
+
 
 export function useLogout() {
 
@@ -45,10 +47,7 @@ export function useLogout() {
                  * from the frontend.
                  */
 
-                console.error(
-                    "Logout failed:",
-                    error
-                );
+                logger.error("Logout failed", { error });
 
             } finally {
 

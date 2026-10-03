@@ -1,4 +1,5 @@
 import React from "react";
+import { logger } from "../../services/logger";
 
 
 interface ErrorBoundaryProps {
@@ -45,11 +46,7 @@ export class ErrorBoundary extends React.Component<
         errorInfo: React.ErrorInfo
     ) {
 
-        console.error(
-            "Application Error:",
-            error,
-            errorInfo
-        );
+        logger.error("Application Error", { error, errorInfo });
 
     }
 

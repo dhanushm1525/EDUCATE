@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Lock, Mail, User } from "lucide-react";
 
 import { authService } from "../../services/auth.service";
+import { logger } from "../../services/logger";
 import { getApiErrorMessage } from "../../utils/apiError";
 import { useToastStore } from "../../store/toastStore";
 import { validateRegisterForm } from "../../utils/formValidation";
@@ -64,7 +65,7 @@ export default function RegisterForm() {
           email: response.data.email,
         },
       });
-      console.log("Registration successful:", response);
+      logger.info("Registration successful");
     } catch (error: unknown) {
       addToast(getApiErrorMessage(error), "error");
     } finally {

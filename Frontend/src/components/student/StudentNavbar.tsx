@@ -7,6 +7,7 @@ import { useLogout } from "../../hooks/useLogout";
 import { useAuthStore } from "../../store/authStore";
 
 import { userService } from "../../services/user.service";
+import { logger } from "../../services/logger";
 
 import type { UserProfile } from "../../types/user";
 
@@ -52,10 +53,7 @@ export function StudentNavbar() {
 
       } catch (error) {
 
-        console.error(
-          "Failed to load navbar profile",
-          error
-        );
+        logger.error("Failed to load navbar profile", { error });
 
       }
 

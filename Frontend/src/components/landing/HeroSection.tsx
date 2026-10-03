@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { logger } from "../../services/logger";
 
 const quickPills = [
     "Web Development",
@@ -15,7 +16,7 @@ export function HeroSection() {
 
 
     const handleSearch = () => {
-        console.log("Search query:", searchQuery);
+        logger.info("Course search", { query: searchQuery });
     };
 
 
