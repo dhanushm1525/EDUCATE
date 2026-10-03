@@ -8,6 +8,7 @@ import {
 } from "../store/authStore";
 import { useToastStore } from "../store/toastStore";
 import { getApiErrorMessage } from "../utils/apiError";
+import { API_ROUTES } from "../constants/apiRoutes";
 
 export const apiClient =
     axios.create({
@@ -308,7 +309,7 @@ apiClient.interceptors.response.use(
 
             const refreshResponse =
                 await refreshClient.post(
-                    "/auth/refresh"
+                    API_ROUTES.auth.refresh
                 );
 
 

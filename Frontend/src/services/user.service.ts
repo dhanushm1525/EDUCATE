@@ -1,4 +1,5 @@
 import { apiClient } from "./apiClient";
+import { API_ROUTES } from "../constants/apiRoutes";
 
 import type {
     GetMyProfileResponse
@@ -11,7 +12,7 @@ export const userService = {
 
         const response =
             await apiClient.get(
-                "/users/profile"
+                API_ROUTES.users.profile
             );
 
         return response.data;

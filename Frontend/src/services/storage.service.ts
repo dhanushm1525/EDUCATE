@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { apiClient } from "./apiClient";
+import { API_ROUTES } from "../constants/apiRoutes";
 
 import type {
   GenerateProfileImageUploadUrlDTO,
@@ -13,7 +14,7 @@ export const storageService = {
   ): Promise<GenerateProfileImageUploadUrlResponse> => {
     const response =
       await apiClient.post<GenerateProfileImageUploadUrlResponse>(
-        "/storage/profile-image/upload-url",
+        API_ROUTES.storage.profileImageUploadUrl,
         payload
       );
 
@@ -34,7 +35,7 @@ export const storageService = {
   updateProfileImage: async (
     avatarKey: string
   ): Promise<void> => {
-    await apiClient.patch("/storage/profile-image", {
+    await apiClient.patch(API_ROUTES.storage.profileImage, {
       avatarKey,
     });
   },

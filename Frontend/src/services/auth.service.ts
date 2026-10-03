@@ -1,4 +1,5 @@
 import { apiClient } from "./apiClient";
+import { API_ROUTES } from "../constants/apiRoutes";
 
 
 import type {
@@ -30,7 +31,7 @@ export const authService = {
     ): Promise<RegisterResponse> => {
 
         const response = await apiClient.post(
-            "/auth/register",
+            API_ROUTES.auth.register,
             data
         );
 
@@ -43,7 +44,7 @@ export const authService = {
     ): Promise<VerifyEmailOtpResponse> => {
 
         const response = await apiClient.post(
-            "/auth/verify-email",
+            API_ROUTES.auth.verifyEmail,
             data
         );
 
@@ -56,7 +57,7 @@ export const authService = {
     ): Promise<ResendVerificationOtpResponse> => {
 
         const response = await apiClient.post(
-            "/auth/resend-verification-otp",
+            API_ROUTES.auth.resendVerificationOtp,
             data
         );
 
@@ -69,7 +70,7 @@ export const authService = {
     ): Promise<LoginResponse> => {
 
         const response = await apiClient.post(
-            "/auth/login",
+            API_ROUTES.auth.login,
             data
         );
 
@@ -79,7 +80,7 @@ export const authService = {
     refreshAccessToken: async (): Promise<RefreshTokenResponse> => {
 
         const response = await refreshClient.post(
-            "/auth/refresh"
+            API_ROUTES.auth.refresh
         );
 
         return response.data;
@@ -89,7 +90,7 @@ export const authService = {
     getCurrentUser: async (): Promise<GetCurrentUserResponse> => {
 
         const response = await apiClient.get(
-            "/auth/me"
+            API_ROUTES.auth.currentUser
         );
 
         return response.data;
@@ -99,7 +100,7 @@ export const authService = {
     logout: async (): Promise<void> => {
 
         await apiClient.post(
-            "/auth/logout"
+            API_ROUTES.auth.logout
         );
 
     },
@@ -109,7 +110,7 @@ export const authService = {
         const response =
             await apiClient.post(
 
-                "/auth/forgot-password",
+                API_ROUTES.auth.forgotPassword,
 
                 data
 
@@ -126,7 +127,7 @@ export const authService = {
         const response =
             await apiClient.post(
 
-                "/auth/reset-password",
+                API_ROUTES.auth.resetPassword,
 
                 data
 
@@ -144,7 +145,7 @@ export const authService = {
         const response =
             await apiClient.post(
 
-                "/auth/google",
+                API_ROUTES.auth.googleSignIn,
 
                 data
 
