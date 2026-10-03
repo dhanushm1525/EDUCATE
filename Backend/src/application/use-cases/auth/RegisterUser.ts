@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { User } from "../../../domain/entities/User"
 import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository"
 import { IPasswordHasher } from "../../interfaces/services/IPasswordHasher"
@@ -21,7 +23,7 @@ export class RegisterUser implements IRegisterUser {
         const exists = await this._userRepository.existsByEmail(email);
 
         if (exists) {
-            throw new AppError(AUTH_MESSAGES.EMAIL_ALREADY_EXISTS,409);
+            throw new AppError(AUTH_MESSAGES.EMAIL_ALREADY_EXISTS,HttpStatusCode.CONFLICT);
         }
 
         const hashedPassword = await this._passwordHasher.hash(request.password);
@@ -40,7 +42,7 @@ export class RegisterUser implements IRegisterUser {
         const createdUser = await this._userRepository.create(user);
 
         if(!createdUser.id){
-            throw new AppError("user creation failed",500,false)
+            throw new AppError("user creation failed",HttpStatusCode.INTERNAL_SERVER_ERROR,false)
         }
 
         await this._sendVerificationOtp.execute({

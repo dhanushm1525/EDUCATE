@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../shared/enums/HttpStatusCode";
+
 import { OAuth2Client } from "google-auth-library";
 import {
   IGoogleAuthService,
@@ -20,11 +22,11 @@ export class GoogleAuthService implements IGoogleAuthService {
     const payload = ticket.getPayload();
 
     if (!payload || !payload.email) {
-      throw new AppError("Invalid Google token", 401);
+      throw new AppError("Invalid Google token", HttpStatusCode.UNAUTHORIZED);
     }
 
     if (!payload.email_verified) {
-      throw new AppError("Google email is not verified", 401);
+      throw new AppError("Google email is not verified", HttpStatusCode.UNAUTHORIZED);
     }
 
     const firstName = payload.given_name ?? "Google";

@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { AppError } from "../../../shared/errors/AppError";
 import { AuthProvider } from "../../../shared/enums/AuthProvider";
 import { ILoginProviderStrategy } from "../../interfaces/auth/ILoginProviderStrategy";
@@ -23,7 +25,7 @@ export class LoginProviderRegistry {
         if (!strategy) {
             throw new AppError(
                 "Unsupported authentication provider",
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 

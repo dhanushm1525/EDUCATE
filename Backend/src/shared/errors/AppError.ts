@@ -1,10 +1,12 @@
+import { HttpStatusCode } from "../enums/HttpStatusCode";
+
 export class AppError extends Error{
     public readonly statusCode:number;
     public readonly isOperational:boolean;
 
     constructor(
         message:string,
-        statusCode = 500,
+        statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR,
         isOperational= true
     ){
         super(message);

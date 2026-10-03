@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Request, Response, NextFunction } from "express";
 
 import { IUpdateCourseUseCase } from "../../../application/interfaces/course/IUpdateCourseUseCase";
@@ -18,14 +20,14 @@ export class UpdateCourseController {
             if (!req.user) {
                 throw new AppError(
                     "Authentication required",
-                    401
+                    HttpStatusCode.UNAUTHORIZED
                 );
             }
 
             const { courseId } = req.params;
 
             if (Array.isArray(courseId)) {
-                throw new AppError("Invalid course ID", 400);
+                throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
             }
 
             const dto: UpdateCourseDTO = {
@@ -57,7 +59,7 @@ export class UpdateCourseController {
                     dto
                 );
 
-            res.status(200).json({
+            res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Course updated successfully",
                 data: course

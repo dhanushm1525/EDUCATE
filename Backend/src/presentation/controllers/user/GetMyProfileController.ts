@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Request,Response,NextFunction } from "express";
 import { IGetMyProfile } from "../../../application/interfaces/user/IGetMyProfile";
 import { successResponse } from "../../../shared/response/apiResponse";
@@ -20,13 +22,13 @@ export class GetMyProfileController{
             
 
             if(!userId){
-                return next(new AppError(AUTH_MESSAGES.UNAUTHORIZED, 401));
+                return next(new AppError(AUTH_MESSAGES.UNAUTHORIZED, HttpStatusCode.UNAUTHORIZED));
             }
             
             
             const result = await this._getMyprofile.execute({userId});
 
-            successResponse(res,200,AUTH_MESSAGES.PROFILE_RETRIEVED_SUCCESSFULLY,result)
+            successResponse(res,HttpStatusCode.OK,AUTH_MESSAGES.PROFILE_RETRIEVED_SUCCESSFULLY,result)
         }catch(error){
             
             next(error)

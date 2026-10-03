@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { IStorageService } from "../../interfaces/storage/IStorageService";
 
 import { IGenerateProfileImageUrl } from "../../interfaces/user/IGenerateProfileImageUploadUrl";
@@ -19,7 +21,7 @@ export class GenerateProfileImageUploadUrl implements IGenerateProfileImageUrl {
 
     async execute(dto: GenerateProfileImageUploadUrlDTO): Promise<GenerateProfileImageUploadUrlResponseDTO> {
         if (!this._imageTypePolicy.supports(dto.contentType)) {
-            throw new AppError("invalid image Type",400 )
+            throw new AppError("invalid image Type",HttpStatusCode.BAD_REQUEST )
         }
 
         const key = this._profileImagePolicy.createKey(dto.userId);

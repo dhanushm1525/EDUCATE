@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Course } from "../../../domain/entities/Course";
 import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
 
@@ -28,21 +30,21 @@ export class UpdateCourseUseCase
         if (!course) {
             throw new AppError(
                 "Course not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
         if (course.teacherId !== teacherId) {
             throw new AppError(
                 "You are not authorized to update this course",
-                403
+                HttpStatusCode.FORBIDDEN
             );
         }
 
         if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "Only draft or rejected courses can be edited",
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 
@@ -75,7 +77,7 @@ export class UpdateCourseUseCase
         if (!updatedCourse) {
             throw new AppError(
                 "Course update failed",
-                500
+                HttpStatusCode.INTERNAL_SERVER_ERROR
             );
         }
 

@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
+
 import { Request,Response,NextFunction, CookieOptions } from "express";
 import { RefreshAccessTokenDTO } from "../../../../application/dtos/auth/RefreshAccessTokenDTO";
 import { successResponse } from "../../../../shared/response/apiResponse";
@@ -22,7 +24,7 @@ export class RefreshTokenController{
             const refreshToken = req.cookies[this._refreshTokenCookie.name]
 
             if(!refreshToken){
-                return res.status(401).json({
+                return res.status(HttpStatusCode.UNAUTHORIZED).json({
                     success:false,
                     message:"Refresh token is required"
                 });
@@ -38,7 +40,7 @@ export class RefreshTokenController{
                 this._refreshTokenCookie.options
             );
 
-            return successResponse(res,200,"access token refreshed successfully",{accessToken:result.accessToken});
+            return successResponse(res,HttpStatusCode.OK,"access token refreshed successfully",{accessToken:result.accessToken});
 
 
         }catch(error){

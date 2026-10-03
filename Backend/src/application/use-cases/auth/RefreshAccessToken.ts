@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { AppError } from "../../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
@@ -33,7 +35,7 @@ export class RefreshAccessToken implements IRefreshAccessToken {
         try {
             payload = this._jwtService.verifyRefreshToken(refreshToken)
         } catch {
-            throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN, 401)
+            throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN, HttpStatusCode.UNAUTHORIZED)
         }
 
            console.log(
@@ -57,14 +59,14 @@ export class RefreshAccessToken implements IRefreshAccessToken {
 
 
         if (!storedToken) {
-            throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN, 401)
+            throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN, HttpStatusCode.UNAUTHORIZED)
         }
 
 
         if (storedToken.revokedAt !== null) {
             await this._refreshTokenRepository.revokeAllByUserId(storedToken.userId)
 
-            throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN, 401)
+            throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN, HttpStatusCode.UNAUTHORIZED)
         }
 
 
@@ -72,7 +74,7 @@ export class RefreshAccessToken implements IRefreshAccessToken {
 
             throw new AppError(
                 AUTH_MESSAGES.INVALID_REFRESH_TOKEN,
-                401
+                HttpStatusCode.UNAUTHORIZED
             );
         }
 
@@ -80,7 +82,7 @@ export class RefreshAccessToken implements IRefreshAccessToken {
 
             throw new AppError(
                 AUTH_MESSAGES.INVALID_REFRESH_TOKEN,
-                401
+                HttpStatusCode.UNAUTHORIZED
             );
         }
 
@@ -92,14 +94,14 @@ export class RefreshAccessToken implements IRefreshAccessToken {
 
         throw new AppError(
             AUTH_MESSAGES.INVALID_REFRESH_TOKEN,
-            401
+            HttpStatusCode.UNAUTHORIZED
         );
         }
 
 
         if (user.status === UserStatus.BLOCKED) {
 
-        throw new AppError(AUTH_MESSAGES.ACCOUNT_BLOCKED,403);
+        throw new AppError(AUTH_MESSAGES.ACCOUNT_BLOCKED,HttpStatusCode.FORBIDDEN);
         }
 
 

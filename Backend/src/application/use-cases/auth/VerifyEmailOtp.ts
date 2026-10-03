@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { AppError } from "../../../shared/errors/AppError";
 
 import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
@@ -27,13 +29,13 @@ export class VerifyEmailOtp implements IVerifyEmailOtp {
 
 
         if(!verificationRecord){
-            throw new AppError("Invalid or expired OTP",400);
+            throw new AppError("Invalid or expired OTP",HttpStatusCode.BAD_REQUEST);
         }
 
         if(verificationRecord.expiresAt.getTime()<=Date.now()){
             await this._emailVerificationRepository.deleteByUserId(userId);
 
-            throw new AppError("Invalid or expired otp",400);
+            throw new AppError("Invalid or expired otp",HttpStatusCode.BAD_REQUEST);
         }
 
 
@@ -41,7 +43,7 @@ export class VerifyEmailOtp implements IVerifyEmailOtp {
         const otpHash = await this._tokenHasher.hash(otp)
 
         if(otpHash!==verificationRecord.otpHash){
-            throw new AppError("Invalid OTP",400)
+            throw new AppError("Invalid OTP",HttpStatusCode.BAD_REQUEST)
         }
 
 
@@ -49,7 +51,7 @@ export class VerifyEmailOtp implements IVerifyEmailOtp {
 
 
         if(!user){
-            throw new AppError("User not found",404);
+            throw new AppError("User not found",HttpStatusCode.NOT_FOUND);
         }
 
 

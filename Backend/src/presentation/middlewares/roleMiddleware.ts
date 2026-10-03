@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../shared/enums/HttpStatusCode";
+
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../../shared/errors/AppError";
 import { UserRole } from "../../shared/enums/UserRole";
@@ -10,11 +12,11 @@ export const roleMiddleware = (requiredRole: UserRole) => {
     ) => {
         try {
             if (!req.user) {
-                throw new AppError("Authentication required", 401);
+                throw new AppError("Authentication required", HttpStatusCode.UNAUTHORIZED);
             }
 
             if (req.user.role !== requiredRole) {
-                throw new AppError("Access denied", 403);
+                throw new AppError("Access denied", HttpStatusCode.FORBIDDEN);
             }
 
             next();

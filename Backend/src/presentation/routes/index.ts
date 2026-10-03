@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../shared/enums/HttpStatusCode";
+
 import {Router} from "express";
 
 import authRoutes from "./authRoutes";
@@ -14,7 +16,7 @@ const router = Router();
 router.get(
   "/health",
   (_req, res) => {
-    return res.status(200).json({
+    return res.status(HttpStatusCode.OK).json({
       success: true,
       message:
         "EDUCATE API is running",

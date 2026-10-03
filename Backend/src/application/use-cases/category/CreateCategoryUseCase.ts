@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Category } from "../../../domain/entities/Category";
 import { ICategoryRepository } from "../../../domain/repositories/courseRepositories/ICategoryRepository";
 
@@ -25,7 +27,7 @@ export class CreateCategoryUseCase
         if (existingCategory) {
             throw new AppError(
                 "Category already exists",
-                409
+                HttpStatusCode.CONFLICT
             );
         }
 

@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../shared/enums/HttpStatusCode";
+
 import jwt,{SignOptions,JwtPayload} from "jsonwebtoken";
 import {AccessTokenPayload,IJwtService} from "../../application/interfaces/auth/IJwtService";
 import {env} from "../config/env";
@@ -29,7 +31,7 @@ export class JwtService implements IJwtService{
             typeof decoded === "string" ||
             !this._isAccessTokenPayload(decoded)
         ) {
-            throw new AppError(AUTH_MESSAGES.INVALID_ACCESS_TOKEN,401);
+            throw new AppError(AUTH_MESSAGES.INVALID_ACCESS_TOKEN,HttpStatusCode.UNAUTHORIZED);
         }
 
 
@@ -43,7 +45,7 @@ export class JwtService implements IJwtService{
 
 
     if (typeof decoded === "string" ||!this._isRefreshTokenPayload(decoded)){
-        throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN,401);}
+        throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN,HttpStatusCode.UNAUTHORIZED);}
 
         return {userId: decoded.userId};
     }

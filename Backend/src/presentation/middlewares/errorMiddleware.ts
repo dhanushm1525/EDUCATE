@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../shared/enums/HttpStatusCode";
+
 import {
     Request,
     Response,
@@ -36,7 +38,7 @@ export const errorMiddleware = (
 
             return errorResponse(
                 res,
-                400,
+                HttpStatusCode.BAD_REQUEST,
                 "Validation failed",
                 error.flatten()
             );
@@ -63,7 +65,7 @@ export const errorMiddleware = (
 
         return errorResponse(
             res,
-            500,
+            HttpStatusCode.INTERNAL_SERVER_ERROR,
             "Internal Server error"
         );
     };

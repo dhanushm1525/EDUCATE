@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import {
     Request,
     Response,
@@ -24,14 +26,14 @@ export class DeleteChapterController {
             if (!req.user) {
                 throw new AppError(
                     "Authentication required",
-                    401
+                    HttpStatusCode.UNAUTHORIZED
                 );
             }
 
             const { chapterId } = req.params;
 
                if (Array.isArray(chapterId)) {
-                throw new AppError("Invalid course ID", 400);
+                throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
             }
 
             await this._deleteChapterUseCase.execute(
@@ -39,7 +41,7 @@ export class DeleteChapterController {
                 req.user.userId
             );
 
-            res.status(200).json({
+            res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Chapter deleted successfully",
                 data: null,

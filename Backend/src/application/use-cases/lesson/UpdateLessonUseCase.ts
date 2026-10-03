@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { AppError } from "../../../shared/errors/AppError";
 
 import { Lesson } from "../../../domain/entities/Lesson";
@@ -37,14 +39,14 @@ export class UpdateLessonUseCase
         if (!lesson) {
             throw new AppError(
                 "Lesson not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
         if (lesson.chapterId !== chapterId) {
             throw new AppError(
                 "Lesson does not belong to this chapter",
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 
@@ -54,14 +56,14 @@ export class UpdateLessonUseCase
         if (!chapter) {
             throw new AppError(
                 "Chapter not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
         if (chapter.courseId !== courseId) {
             throw new AppError(
                 "Chapter does not belong to this course",
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 
@@ -71,21 +73,21 @@ export class UpdateLessonUseCase
         if (!course) {
             throw new AppError(
                 "Course not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
         if (course.teacherId !== teacherId) {
             throw new AppError(
                 "You are not authorized to modify this course",
-                403
+                HttpStatusCode.FORBIDDEN
             );
         }
 
         if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "This course cannot be modified",
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 
@@ -101,7 +103,7 @@ export class UpdateLessonUseCase
             if (!isOwned) {
                 throw new AppError(
                     "Invalid lesson media key",
-                    400
+                    HttpStatusCode.BAD_REQUEST
                 );
             }
         }
@@ -115,7 +117,7 @@ export class UpdateLessonUseCase
         if (!updatedLesson) {
             throw new AppError(
                 "Failed to update lesson",
-                500
+                HttpStatusCode.INTERNAL_SERVER_ERROR
             );
         }
 

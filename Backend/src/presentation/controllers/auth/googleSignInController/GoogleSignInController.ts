@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
+
 import { Request, Response, NextFunction } from "express";
 import { successResponse } from "../../../../shared/response/apiResponse";
 import { IRefreshTokenCookie } from "../../../../application/interfaces/auth/IRefreshTokenCookie";
@@ -26,7 +28,7 @@ export class GoogleSignInController {
       // Return user data and access token
       successResponse(
         res,
-        200,
+        HttpStatusCode.OK,
         "Google sign-in successful",
         result.response
       );

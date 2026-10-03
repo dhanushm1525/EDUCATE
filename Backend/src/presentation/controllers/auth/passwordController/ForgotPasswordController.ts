@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
+
 import { Request,Response,NextFunction } from "express";
 import { IForgotPassword } from "../../../../application/interfaces/auth/IForgotPassword";
 import { successResponse } from "../../../../shared/response/apiResponse";
@@ -17,7 +19,7 @@ export class ForgotPasswordController{
 
             const result = await this._forgotPassword.execute({email});
 
-            successResponse(res,200,result.message,result);
+            successResponse(res,HttpStatusCode.OK,result.message,result);
         }catch(error){
             next(error)
         }

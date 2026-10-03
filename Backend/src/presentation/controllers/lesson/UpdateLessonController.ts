@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import {
     Request,
     Response,
@@ -27,7 +29,7 @@ export class UpdateLessonController {
             if (!req.user) {
                 throw new AppError(
                     "Authentication required",
-                    401
+                    HttpStatusCode.UNAUTHORIZED
                 );
             }
 
@@ -38,15 +40,15 @@ export class UpdateLessonController {
             } = req.params;
 
              if (Array.isArray(chapterId)) {
-                throw new AppError("Invalid chapter ID", 400);
+                throw new AppError("Invalid chapter ID", HttpStatusCode.BAD_REQUEST);
             }
 
              if (Array.isArray(courseId)) {
-                throw new AppError("Invalid course ID", 400);
+                throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
             }
 
              if (Array.isArray(lessonId)) {
-                throw new AppError("Invalid lesson ID", 400);
+                throw new AppError("Invalid lesson ID", HttpStatusCode.BAD_REQUEST);
             }
 
             const dto: UpdateLessonDTO = {
@@ -69,7 +71,7 @@ export class UpdateLessonController {
                     dto
                 );
 
-            res.status(200).json({
+            res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Lesson updated successfully",
                 data: updatedLesson,

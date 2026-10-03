@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import {
     IUserRepository
 } from "../../../domain/repositories/userRepositories/IUserRepository";
@@ -32,7 +34,7 @@ export class GetCurrentUser implements IGetCurrentUser{
 
             throw new AppError(
                 "User not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
 
         }

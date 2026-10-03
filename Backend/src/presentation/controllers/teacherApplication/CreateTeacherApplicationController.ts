@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Request, Response, NextFunction } from "express";
 
 import { ICreateTeacherApplication }
@@ -44,7 +46,7 @@ export class CreateTeacherApplicationController {
             if (!req.user) {
                 throw new AppError(
                     "Authentication required",
-                    401
+                    HttpStatusCode.UNAUTHORIZED
                 );
             }
 
@@ -58,7 +60,7 @@ export class CreateTeacherApplicationController {
 
             return successResponse(
                 res,
-                201,
+                HttpStatusCode.CREATED,
                 "Teacher application submitted successfully",
                 result
             );

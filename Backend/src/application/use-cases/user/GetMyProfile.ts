@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { AppError } from "../../../shared/errors/AppError";
 
 import type { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
@@ -26,14 +28,14 @@ export class GetMyProfile {
         if (!user) {
             throw new AppError(
                 "User not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
         if (!user.id) {
             throw new AppError(
                 "User ID is missing",
-                500
+                HttpStatusCode.INTERNAL_SERVER_ERROR
             );
         }
 

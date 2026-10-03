@@ -2,13 +2,16 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { Mail, ArrowRight, ArrowLeft } from "lucide-react";
+import { Mail, ArrowLeft } from "lucide-react";
 
 import { authService } from "../../services/auth.service";
 
 import { getApiErrorMessage } from "../../utils/apiError";
 import { useToastStore } from "../../store/toastStore";
 import { validateForgotPasswordForm } from "../../utils/formValidation";
+import AuthCard from "./AuthCard";
+import AuthField from "./AuthField";
+import AuthSubmitButton from "./AuthSubmitButton";
 
 export default function ForgotPasswordForm() {
   const navigate = useNavigate();
@@ -59,20 +62,7 @@ export default function ForgotPasswordForm() {
   };
 
   return (
-    <div
-      className="
-                w-full
-                max-w-md
-                bg-[#162032]/80
-                border
-                border-slate-800/90
-                rounded-2xl
-                p-7
-                sm:p-9
-                shadow-2xl
-                backdrop-blur-md
-            "
-    >
+    <AuthCard>
       {/* Back Button */}
 
       <button
@@ -119,116 +109,23 @@ export default function ForgotPasswordForm() {
       </div>
 
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
-        {/* Email */}
-
-        <div>
-          <label
-            className="
-                            block
-                            text-xs
-                            font-medium
-                            text-slate-300
-                            mb-1.5
-                        "
-          >
-            Email Address
-          </label>
-
-          <div
-            className="
-                            relative
-                            flex
-                            items-center
-                        "
-          >
-            <Mail
-              className="
-                                w-4
-                                h-4
-                                text-slate-500
-                                absolute
-                                left-3.5
-                                pointer-events-none
-                            "
-            />
-
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="name@example.com"
-              className="
-                                w-full
-                                bg-[#0B1120]/80
-                                border
-                                border-slate-700/80
-                                rounded-lg
-                                pl-10
-                                pr-3.5
-                                py-2.5
-                                text-xs
-                                text-white
-                                placeholder:text-slate-500
-                                focus:outline-none
-                                focus:border-indigo-500
-                                focus:ring-1
-                                focus:ring-indigo-500
-                                transition-colors
-                            "
-            />
-          </div>
-        </div>
+        <AuthField
+          label="Email Address"
+          icon={Mail}
+          type="email"
+          name="email"
+          autoComplete="email"
+          required
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="name@example.com"
+        />
 
         {/* Submit */}
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="
-                        w-full
-                        mt-2
-                        bg-linear-to-r
-                        from-blue-600
-                        via-indigo-600
-                        to-indigo-700
-                        hover:from-blue-500
-                        hover:to-indigo-600
-                        disabled:opacity-60
-                        disabled:cursor-not-allowed
-                        text-white
-                        font-semibold
-                        py-2.5
-                        px-4
-                        rounded-lg
-                        text-xs
-                        flex
-                        items-center
-                        justify-center
-                        gap-1.5
-                        transition-all
-                        shadow-md
-                        shadow-indigo-600/30
-                        cursor-pointer
-                        active:scale-[0.99]
-                    "
-        >
-          {isLoading ? (
-            "Sending OTP..."
-          ) : (
-            <>
-              <span>Send Reset OTP</span>
-
-              <ArrowRight
-                className="
-                                            w-3.5
-                                            h-3.5
-                                        "
-              />
-            </>
-          )}
-        </button>
+        <AuthSubmitButton isLoading={isLoading} loadingText="Sending OTP...">
+          Send Reset OTP
+        </AuthSubmitButton>
       </form>
-    </div>
+    </AuthCard>
   );
 }

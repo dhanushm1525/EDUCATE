@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
+
 import { Request,Response,NextFunction } from "express";
 import { ILogoutUser } from "../../../../application/interfaces/auth/ILogoutUser";
 import { successResponse } from "../../../../shared/response/apiResponse";
@@ -34,7 +36,7 @@ export class LogoutController{
                 }
             );
 
-            return successResponse(res,200,"LoggedOut successfully",null);
+            return successResponse(res,HttpStatusCode.OK,"LoggedOut successfully",null);
         }catch(error){
             next(error)
         }

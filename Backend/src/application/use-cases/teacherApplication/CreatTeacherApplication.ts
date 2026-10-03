@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { ICreateTeacherApplication } 
     from "../../interfaces/teacherApplication/ICreateTeacherApplication";
 
@@ -40,7 +42,7 @@ export class CreateTeacherApplication
             await this._userRepository.findById(userId);
 
         if (!user) {
-            throw new AppError("User not found", 404);
+            throw new AppError("User not found", HttpStatusCode.NOT_FOUND);
         }
 
         const applications =
@@ -57,7 +59,7 @@ export class CreateTeacherApplication
         if (hasPendingApplication) {
             throw new AppError(
                 "You already have a pending teacher application",
-                409
+                HttpStatusCode.CONFLICT
             );
         }
 
@@ -71,7 +73,7 @@ export class CreateTeacherApplication
         if (hasApprovedApplication) {
             throw new AppError(
                 "You are already a teacher",
-                409
+                HttpStatusCode.CONFLICT
             );
         }
 

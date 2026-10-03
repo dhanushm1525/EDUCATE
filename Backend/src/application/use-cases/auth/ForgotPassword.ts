@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { AppError } from "../../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
@@ -28,11 +30,11 @@ export class ForgotPassword implements IForgotPassword {    constructor(
         const user = await this._userRepository.findByEmail(email)
 
         if(!user){
-            throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND,404);
+            throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND,HttpStatusCode.NOT_FOUND);
         }
 
         if(!user.id){
-            throw new AppError("user id is missing",500,false)
+            throw new AppError("user id is missing",HttpStatusCode.INTERNAL_SERVER_ERROR,false)
         }
 
         await this._passwordResetRepository.deleteByUserId(user.id);

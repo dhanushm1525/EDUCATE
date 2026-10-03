@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { User } from "../../../domain/entities/User";
 import { AuthProvider } from "../../../shared/enums/AuthProvider";
 import { AppError } from "../../../shared/errors/AppError";
@@ -14,7 +16,7 @@ export class GoogleLoginStrategy
     ): Promise<void> {
         throw new AppError(
             "Please sign in using Google",
-            400
+            HttpStatusCode.BAD_REQUEST
         );
     }
 }

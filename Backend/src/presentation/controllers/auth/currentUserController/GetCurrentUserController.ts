@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
+
 import {
     Request,
     Response,
@@ -33,7 +35,7 @@ export class GetCurrentUserController {
 
                 throw new AppError(
                     "User not authenticated",
-                    401
+                    HttpStatusCode.UNAUTHORIZED
                 );
 
             }
@@ -47,7 +49,7 @@ export class GetCurrentUserController {
 
             return successResponse(
                 res,
-                200,
+                HttpStatusCode.OK,
                 "Current user retrieved successfully",
                 user
             );

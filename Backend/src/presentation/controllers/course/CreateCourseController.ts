@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Request, Response, NextFunction } from "express";
 
 import { ICreateCourseUseCase } from "../../../application/interfaces/course/ICreateCourseUseCase";
@@ -20,7 +22,7 @@ export class CreateCourseController {
         try {
 
             if (!req.user) {
-                throw new AppError("Unauthorized", 401);
+                throw new AppError("Unauthorized", HttpStatusCode.UNAUTHORIZED);
             }
 
             const dto: CreateCourseDTO = {
@@ -52,7 +54,7 @@ export class CreateCourseController {
             const course =
                 await this._createCourseUseCase.execute(dto);
 
-            res.status(201).json({
+            res.status(HttpStatusCode.CREATED).json({
                 success: true,
                 message: "Course created successfully",
                 data: course

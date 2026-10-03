@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import {
     IUserRepository
 } from "../../../domain/repositories/userRepositories/IUserRepository";
@@ -74,7 +76,7 @@ export class ResetPassword implements IResetPassword {
         if (!user) {
             throw new AppError(
                 AUTH_MESSAGES.USER_NOT_FOUND,
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
@@ -82,7 +84,7 @@ export class ResetPassword implements IResetPassword {
         if (!user.id) {
             throw new AppError(
                 "User ID is missing",
-                500,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
                 false
             );
         }
@@ -95,7 +97,7 @@ export class ResetPassword implements IResetPassword {
         if (!passwordReset) {
             throw new AppError(
                 "Invalid or expired password reset OTP",
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 
@@ -108,7 +110,7 @@ export class ResetPassword implements IResetPassword {
 
             throw new AppError(
                 AUTH_MESSAGES.PASSWORD_RESET_OTP_EXPIRED,
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 
@@ -124,7 +126,7 @@ export class ResetPassword implements IResetPassword {
         if (!otpMatches) {
             throw new AppError(
                 AUTH_MESSAGES.INVALID_PASSWORD_RESET_OTP,
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 

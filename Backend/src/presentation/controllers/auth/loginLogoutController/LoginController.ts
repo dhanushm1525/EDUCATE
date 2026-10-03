@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
+
 import {
     Request,
     Response,
@@ -57,7 +59,7 @@ export class LoginController {
  
             return successResponse(
                 res,
-                200,
+                HttpStatusCode.OK,
                 AUTH_MESSAGES.LOGIN_SUCCESS,
                 result.response
             );

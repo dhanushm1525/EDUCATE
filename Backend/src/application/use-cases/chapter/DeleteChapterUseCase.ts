@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { IChapterRepository } from "../../../domain/repositories/courseRepositories/IChapterRepository";
 import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
 
@@ -29,7 +31,7 @@ export class DeleteChapterUseCase
         if (!chapter) {
             throw new AppError(
                 "Chapter not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
@@ -41,21 +43,21 @@ export class DeleteChapterUseCase
         if (!course) {
             throw new AppError(
                 "Course not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
         if (course.teacherId !== teacherId) {
             throw new AppError(
                 "You are not authorized to delete this chapter",
-                403
+                HttpStatusCode.FORBIDDEN
             );
         }
 
         if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "This course cannot be modified",
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 
@@ -67,7 +69,7 @@ export class DeleteChapterUseCase
         if (!deleted) {
             throw new AppError(
                 "Chapter deletion failed",
-                500
+                HttpStatusCode.INTERNAL_SERVER_ERROR
             );
         }
     }

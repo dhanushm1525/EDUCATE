@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import {
     Request,
     Response,
@@ -28,7 +30,7 @@ export class GenerateLessonMediaUploadUrlController {
             if (!req.user) {
                 throw new AppError(
                     "Authentication required",
-                    401
+                    HttpStatusCode.UNAUTHORIZED
                 );
             }
 
@@ -39,15 +41,15 @@ export class GenerateLessonMediaUploadUrlController {
             } = req.params;
 
             if(Array.isArray(courseId)){
-                throw new AppError("Invalid courseId",400)
+                throw new AppError("Invalid courseId",HttpStatusCode.BAD_REQUEST)
             }
 
             if(Array.isArray(chapterId)){
-                throw new AppError("Invalid chapterID",400)
+                throw new AppError("Invalid chapterID",HttpStatusCode.BAD_REQUEST)
             }
 
             if(Array.isArray(lessonId)){
-                throw new AppError("Invalid lesson ID",400)
+                throw new AppError("Invalid lesson ID",HttpStatusCode.BAD_REQUEST)
             }
 
             const dto: GenerateLessonMediaUploadUrlDTO = {
@@ -64,7 +66,7 @@ export class GenerateLessonMediaUploadUrlController {
                     dto
                 );
 
-            res.status(200).json({
+            res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Lesson media upload URL generated successfully",
                 data: result,

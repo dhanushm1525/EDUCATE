@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { User } from "../../../domain/entities/User";
 import { AuthProvider } from "../../../shared/enums/AuthProvider";
 import { AppError } from "../../../shared/errors/AppError";
@@ -20,7 +22,7 @@ export class LocalPasswordLoginStrategy
         if (!user.password) {
             throw new AppError(
                 "Invalid credentials",
-                401
+                HttpStatusCode.UNAUTHORIZED
             );
         }
 
@@ -32,7 +34,7 @@ export class LocalPasswordLoginStrategy
         if (!matches) {
             throw new AppError(
                 "Invalid credentials",
-                401
+                HttpStatusCode.UNAUTHORIZED
             );
         }
     }

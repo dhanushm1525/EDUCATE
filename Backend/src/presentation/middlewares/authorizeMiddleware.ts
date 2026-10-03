@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../shared/enums/HttpStatusCode";
+
 import { Request,Response,NextFunction } from "express";
 import { UserRole } from "../../shared/enums/UserRole";
 import { AppError } from "../../shared/errors/AppError";
@@ -13,11 +15,11 @@ export const authorize=(
     )=>{
         try{
             if(!req.user){
-                throw new AppError("Authentication required",401);
+                throw new AppError("Authentication required",HttpStatusCode.UNAUTHORIZED);
             }
 
             if(!allowedRoles.includes(req.user.role)){
-                throw new AppError("You are not authorized to access this resource",403);
+                throw new AppError("You are not authorized to access this resource",HttpStatusCode.FORBIDDEN);
             }
 
 

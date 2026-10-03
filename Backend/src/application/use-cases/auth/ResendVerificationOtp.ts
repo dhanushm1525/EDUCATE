@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { AppError }
     from "../../../shared/errors/AppError";
 
@@ -48,7 +50,7 @@ export class ResendVerificationOtp implements IResendVerificationOtp {
         if (!user) {
             throw new AppError(
                 AUTH_MESSAGES.USER_NOT_FOUND,
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
@@ -56,7 +58,7 @@ export class ResendVerificationOtp implements IResendVerificationOtp {
         if (user.isVerified) {
             throw new AppError(
                 "Email is already verified",
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 
@@ -64,7 +66,7 @@ export class ResendVerificationOtp implements IResendVerificationOtp {
         if (!user.id) {
             throw new AppError(
                 "User ID is missing",
-                500,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
                 false
             );
         }

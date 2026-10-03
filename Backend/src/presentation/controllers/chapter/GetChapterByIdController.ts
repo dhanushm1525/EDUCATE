@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import {
     Request,
     Response,
@@ -24,14 +26,14 @@ export class GetChapterByIdController {
             if (!req.user) {
                 throw new AppError(
                     "Authentication required",
-                    401
+                    HttpStatusCode.UNAUTHORIZED
                 );
             }
 
             const { chapterId } = req.params;
 
             if (Array.isArray(chapterId)) {
-                throw new AppError("Invalid chapter ID", 400);
+                throw new AppError("Invalid chapter ID", HttpStatusCode.BAD_REQUEST);
             }
 
             const chapter =
@@ -40,7 +42,7 @@ export class GetChapterByIdController {
                     req.user.userId
                 );
 
-            res.status(200).json({
+            res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Chapter fetched successfully",
                 data: chapter,

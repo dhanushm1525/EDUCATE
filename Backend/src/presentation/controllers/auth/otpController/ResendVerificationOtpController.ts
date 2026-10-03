@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
+
 import { Request,Response,NextFunction } from "express";
 import { IResendVerificationOtp } from "../../../../application/interfaces/auth/IResendVerificationOtp";
 import { successResponse } from "../../../../shared/response/apiResponse";
@@ -24,7 +26,7 @@ export class ResendVerificationOtpController{
                 email
             });
 
-            successResponse(res,200,result.message,result);
+            successResponse(res,HttpStatusCode.OK,result.message,result);
         }catch(error){
             next(error)
         }

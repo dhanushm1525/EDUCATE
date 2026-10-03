@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Request, Response, NextFunction } from "express";
 
 import { IUpdateProfileImage } from "../../../application/interfaces/user/IUpdateProfileImage";
@@ -16,7 +18,7 @@ export class UpdateProfileImageController {
     ): Promise<void> {
         try {
             if (!req.user) {
-                throw new AppError("User not authenticated", 401);
+                throw new AppError("User not authenticated", HttpStatusCode.UNAUTHORIZED);
             }
 
             const result = await this._updateProfileImage.execute({
@@ -26,7 +28,7 @@ export class UpdateProfileImageController {
 
             successResponse(
                 res,
-                200,
+                HttpStatusCode.OK,
                 "Profile image updated successfully",
                 {
                     avatar: result.avatar

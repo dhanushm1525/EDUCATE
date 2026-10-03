@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Request, Response, NextFunction } from "express";
 
 import { ICreateCategoryUseCase } from "../../../application/interfaces/category/ICreateCategoryUseCase";
@@ -23,7 +25,7 @@ export class CreateCategoryController {
             const category =
                 await this._createCategoryUseCase.execute(dto);
 
-            res.status(201).json({
+            res.status(HttpStatusCode.CREATED).json({
                 success: true,
                 message: "Category created successfully",
                 data: category

@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Chapter } from "../../../domain/entities/Chapter";
 
 import { IChapterRepository } from "../../../domain/repositories/courseRepositories/IChapterRepository";
@@ -33,21 +35,21 @@ export class CreateChapterUseCase
         if (!course) {
             throw new AppError(
                 "Course not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
         if (course.teacherId !== teacherId) {
             throw new AppError(
                 "You are not authorized to modify this course",
-                403
+                HttpStatusCode.FORBIDDEN
             );
         }
 
         if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "This course cannot be modified",
-                400
+                HttpStatusCode.BAD_REQUEST
             );
         }
 

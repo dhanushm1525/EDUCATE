@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Chapter } from "../../../domain/entities/Chapter";
 
 import { IChapterRepository } from "../../../domain/repositories/courseRepositories/IChapterRepository";
@@ -28,7 +30,7 @@ export class GetChapterByIdUseCase
         if (!chapter) {
             throw new AppError(
                 "Chapter not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
@@ -40,14 +42,14 @@ export class GetChapterByIdUseCase
         if (!course) {
             throw new AppError(
                 "Course not found",
-                404
+                HttpStatusCode.NOT_FOUND
             );
         }
 
         if (course.teacherId !== teacherId) {
             throw new AppError(
                 "You are not authorized to view this chapter",
-                403
+                HttpStatusCode.FORBIDDEN
             );
         }
 

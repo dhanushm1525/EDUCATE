@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import {
     Request,
     Response,
@@ -20,7 +22,7 @@ export class GenerateProfileImageUploadUrlController {
     ): Promise<void> {
         try {
             if (!req.user) {
-                throw new AppError("User not authenticated", 401);
+                throw new AppError("User not authenticated", HttpStatusCode.UNAUTHORIZED);
             }
 
             const result = await this._generateProfileImageUploadUrl.execute({
@@ -31,7 +33,7 @@ export class GenerateProfileImageUploadUrlController {
 
             successResponse(
                 res,
-                200,
+                HttpStatusCode.OK,
                 "Profile image upload URL generated successfully",
                 result
             );

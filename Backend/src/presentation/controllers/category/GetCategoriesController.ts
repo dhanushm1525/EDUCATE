@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import { Request, Response, NextFunction } from "express";
 import { IGetCategoriesUseCase } from "../../../application/interfaces/category/IGetCategoriesUseCase";
 
@@ -14,7 +16,7 @@ export class GetCategoriesController {
         try {
             const categories = await this._getCategoriesUseCase.execute();
 
-            res.status(200).json({
+            res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Categories fetched successfully",
                 data: categories

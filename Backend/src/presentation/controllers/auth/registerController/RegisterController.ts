@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
+
 import { Request, Response, NextFunction } from "express";
 import { IRegisterUser } from "../../../../application/interfaces/auth/IRegisterUser";
 import { successResponse } from "../../../../shared/response/apiResponse";
@@ -20,7 +22,7 @@ export class RegisterController {
 
             const result = await this._registerUser.execute(dto);
 
-            return successResponse(res, 201, AUTH_MESSAGES.REGISTRATION_SUCCESS, result);
+            return successResponse(res, HttpStatusCode.CREATED, AUTH_MESSAGES.REGISTRATION_SUCCESS, result);
         } catch (error) {
             next(error)
         }

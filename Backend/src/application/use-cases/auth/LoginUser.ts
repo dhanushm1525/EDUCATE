@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 import {
     IUserRepository
 } from "../../../domain/repositories/userRepositories/IUserRepository";
@@ -76,7 +78,7 @@ export class LoginUser implements ILoginUser{
         if (!user) {
             throw new AppError(
                 AUTH_MESSAGES.INVALID_CREDENTIALS,
-                401
+                HttpStatusCode.UNAUTHORIZED
             );
         }
 
@@ -86,7 +88,7 @@ export class LoginUser implements ILoginUser{
         ) {
             throw new AppError(
                 AUTH_MESSAGES.ACCOUNT_BLOCKED,
-                403
+                HttpStatusCode.FORBIDDEN
             );
         }
 
@@ -94,7 +96,7 @@ export class LoginUser implements ILoginUser{
         if (!user.isVerified) {
             throw new AppError(
                 AUTH_MESSAGES.EMAIL_NOT_VERIFIED,
-                403
+                HttpStatusCode.FORBIDDEN
             );
         }
 
@@ -110,7 +112,7 @@ export class LoginUser implements ILoginUser{
         if (!user.id) {
             throw new AppError(
                 "User ID is missing",
-                500,
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
                 false
             );
         }
