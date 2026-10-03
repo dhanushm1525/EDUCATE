@@ -10,7 +10,13 @@ import {
 
 describe("login validation", () => {
   it("rejects empty fields", () => {
-    expect(validateLoginForm("", "").error).toBe("Email is required");
+    expect(validateLoginForm("", "").errors).toEqual([
+      "Email is required",
+      "Password is required",
+    ]);
+    expect(validateLoginForm("", "").error).toBe(
+      "Email is required\nPassword is required",
+    );
   });
 
   it("rejects malformed email addresses", () => {
@@ -64,6 +70,16 @@ describe("registration validation", () => {
     ).toBe("Last name is required");
   });
 
+  it("reports all missing registration fields together", () => {
+    expect(validateRegisterForm("", "", "", "", "").errors).toEqual([
+      "First name is required",
+      "Last name is required",
+      "Email is required",
+      "Password is required",
+      "Please confirm your password",
+    ]);
+  });
+
   it("rejects invalid email and short password", () => {
     expect(
       validateRegisterForm("Jane", "Doe", "invalid", "password123", "password123")
@@ -102,9 +118,12 @@ describe("registration validation", () => {
 
 describe("password reset validation", () => {
   it("rejects empty fields, invalid OTP, short password, and mismatch", () => {
-    expect(validateResetPasswordForm("", "", "", "").error).toBe(
+    expect(validateResetPasswordForm("", "", "", "").errors).toEqual([
       "Email is required",
-    );
+      "Reset OTP is required",
+      "Password is required",
+      "Please confirm your password",
+    ]);
     expect(
       validateResetPasswordForm(
         "user@example.com",

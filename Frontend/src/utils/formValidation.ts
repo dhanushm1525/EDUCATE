@@ -1,14 +1,21 @@
 export interface ValidationResult {
   isValid: boolean;
   error?: string;
+  errors?: string[];
 }
 
 const valid = (): ValidationResult => ({ isValid: true });
 
-const invalid = (error: string): ValidationResult => ({
+const invalid = (...errors: string[]): ValidationResult => ({
   isValid: false,
-  error,
+  error: errors.join("\n"),
+  errors,
 });
+
+const combine = (...results: ValidationResult[]): ValidationResult => {
+  const errors = results.flatMap((result) => result.errors ?? []);
+  return errors.length ? invalid(...errors) : valid();
+};
 
 export function validateEmail(email: string): ValidationResult {
   const value = email.trim();
@@ -48,10 +55,7 @@ function validateName(value: string, fieldName: string, minimumLength: number) {
 }
 
 export function validateLoginForm(email: string, password: string): ValidationResult {
-  const emailResult = validateEmail(email);
-  if (!emailResult.isValid) return emailResult;
-
-  return validatePassword(password);
+  return combine(validateEmail(email), validatePassword(password));
 }
 
 export function validateRegisterForm(
@@ -61,24 +65,20 @@ export function validateRegisterForm(
   password: string,
   confirmPassword: string,
 ): ValidationResult {
-  const firstNameResult = validateName(firstName, "First name", 2);
-  if (!firstNameResult.isValid) return firstNameResult;
+  const results = [
+    validateName(firstName, "First name", 2),
+    validateName(lastName, "Last name", 1),
+    validateEmail(email),
+    validatePassword(password),
+  ];
 
-  const lastNameResult = validateName(lastName, "Last name", 1);
-  if (!lastNameResult.isValid) return lastNameResult;
-
-  const emailResult = validateEmail(email);
-  if (!emailResult.isValid) return emailResult;
-
-  const passwordResult = validatePassword(password);
-  if (!passwordResult.isValid) return passwordResult;
-
-  if (!confirmPassword) return invalid("Please confirm your password");
-  if (password !== confirmPassword) {
-    return invalid("Passwords do not match");
+  if (!confirmPassword) {
+    results.push(invalid("Please confirm your password"));
+  } else if (password && password !== confirmPassword) {
+    results.push(invalid("Passwords do not match"));
   }
 
-  return valid();
+  return combine(...results);
 }
 
 export function validateForgotPasswordForm(email: string): ValidationResult {
@@ -100,24 +100,24 @@ export function validateResetPasswordForm(
   newPassword: string,
   confirmPassword: string,
 ): ValidationResult {
-  const emailResult = validateEmail(email);
-  if (!emailResult.isValid) return emailResult;
+  const results = [
+    validateEmail(email),
+    validateOtp(otp, "Reset OTP"),
+    validatePassword(newPassword),
+  ];
 
-  const otpResult = validateOtp(otp, "Reset OTP");
-  if (!otpResult.isValid) return otpResult;
-
-  const passwordResult = validatePassword(newPassword);
-  if (!passwordResult.isValid) return passwordResult;
-
-  if (!confirmPassword) return invalid("Please confirm your password");
-  if (newPassword !== confirmPassword) {
-    return invalid("Passwords do not match");
+  if (!confirmPassword) {
+    results.push(invalid("Please confirm your password"));
+  } else if (newPassword && newPassword !== confirmPassword) {
+    results.push(invalid("Passwords do not match"));
   }
 
-  return valid();
+  return combine(...results);
 }
 
 export function validateVerifyEmailForm(userId: string, otp: string): ValidationResult {
-  if (!userId.trim()) return invalid("User ID is required");
-  return validateOtp(otp, "Verification code");
+  return combine(
+    userId.trim() ? valid() : invalid("User ID is required"),
+    validateOtp(otp, "Verification code"),
+  );
 }
