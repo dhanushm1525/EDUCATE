@@ -3,8 +3,8 @@ import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
 import { Request, Response, NextFunction } from "express";
 import { IRegisterUser } from "../../../../application/interfaces/auth/IRegisterUser";
 import { successResponse } from "../../../../shared/response/apiResponse";
-import { RegisterUserDTO } from "../../../../application/dtos/auth/RegisterUserDTO";
 import { AUTH_MESSAGES } from "../../../../shared/messages/authMessages";
+import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMapper";
 
 
 export class RegisterController {
@@ -13,12 +13,7 @@ export class RegisterController {
     async handle(req: Request, res: Response, next: NextFunction) {
         try {
 
-            const dto: RegisterUserDTO = {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                email: req.body.email,
-                password: req.body.password
-            };
+            const dto = AuthRequestMapper.toRegisterUserDTO(req.body);
 
             const result = await this._registerUser.execute(dto);
 

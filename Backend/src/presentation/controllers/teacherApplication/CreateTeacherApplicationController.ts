@@ -5,8 +5,8 @@ import { Request, Response, NextFunction } from "express";
 import { ICreateTeacherApplication }
     from "../../../application/interfaces/teacherApplication/ICreateTeacherApplication";
 
-import { CreateTeacherApplicationDTO }
-    from "../../../application/dtos/TeacherApplication/CreateTeacherApplicationDTO";
+import { TeacherApplicationCreationMapper }
+    from "../../../application/mappers/TeacherApplicationCreationMapper";
 
 import { successResponse }
     from "../../../shared/response/apiResponse";
@@ -28,20 +28,9 @@ export class CreateTeacherApplicationController {
 
         try {
 
-            const dto: CreateTeacherApplicationDTO = {
-
-                qualification: req.body.qualification,
-
-                experience: req.body.experience,
-
-                skills: req.body.skills,
-
-                bio: req.body.bio,
-
-                documents: req.body.documents,
-
-                certificates: req.body.certificates
-            };
+            const dto =
+                TeacherApplicationCreationMapper
+                    .toCreateTeacherApplicationDTO(req.body);
 
             if (!req.user) {
                 throw new AppError(

@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express";
 
 import { AppError } from "../../../shared/errors/AppError";
 
-import { CreateLessonDTO } from "../../../application/dtos/lesson/CreateLessonDTO";
+import { LessonCreationMapper } from "../../../application/mappers/LessonCreationMapper";
 import { ICreateLessonUseCase } from "../../../application/interfaces/lesson/ICreateLessonUseCase";
 
 export class CreateLessonController {
@@ -38,16 +38,8 @@ export class CreateLessonController {
                 throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
             }
 
-            const dto: CreateLessonDTO = {
-                title: req.body.title,
-                description: req.body.description,
-                order: req.body.order,
-                type: req.body.type,
-                videoKey: req.body.videoUrl,
-                content: req.body.content,
-                attachments: req.body.attachments,
-                duration: req.body.duration,
-            };
+            const dto =
+                LessonCreationMapper.toCreateLessonDTO(req.body);
 
             const lesson =
                 await this._createLessonUseCase.execute(

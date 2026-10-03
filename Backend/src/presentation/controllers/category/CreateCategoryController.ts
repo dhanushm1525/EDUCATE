@@ -3,7 +3,7 @@ import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { Request, Response, NextFunction } from "express";
 
 import { ICreateCategoryUseCase } from "../../../application/interfaces/category/ICreateCategoryUseCase";
-import { CreateCategoryDTO } from "../../../application/dtos/category/CreateCategoryDTO";
+import { CategoryCreationMapper } from "../../../application/mappers/CategoryCreationMapper";
 
 export class CreateCategoryController {
     constructor(
@@ -16,11 +16,8 @@ export class CreateCategoryController {
         next: NextFunction
     ): Promise<void> {
         try {
-            const dto: CreateCategoryDTO = {
-                name: req.body.name,
-                description: req.body.description,
-                image: req.body.image
-            };
+            const dto =
+                CategoryCreationMapper.toCreateCategoryDTO(req.body);
 
             const category =
                 await this._createCategoryUseCase.execute(dto);

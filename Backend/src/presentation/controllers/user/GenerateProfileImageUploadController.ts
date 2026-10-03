@@ -9,6 +9,7 @@ import {
 import { IGenerateProfileImageUrl } from "../../../application/interfaces/user/IGenerateProfileImageUploadUrl";
 import { successResponse } from "../../../shared/response/apiResponse";
 import { AppError } from "../../../shared/errors/AppError";
+import { UserRequestMapper } from "../../../application/mappers/UserRequestMapper";
 
 export class GenerateProfileImageUploadUrlController {
     constructor(
@@ -25,11 +26,14 @@ export class GenerateProfileImageUploadUrlController {
                 throw new AppError("User not authenticated", HttpStatusCode.UNAUTHORIZED);
             }
 
-            const result = await this._generateProfileImageUploadUrl.execute({
-                userId: req.user.userId,
-                fileName: req.body.fileName,
-                contentType: req.body.contentType
-            });
+            const dto =
+                UserRequestMapper.toGenerateProfileImageUploadUrlDTO(
+                    req.user.userId,
+                    req.body
+                );
+
+            const result =
+                await this._generateProfileImageUploadUrl.execute(dto);
 
             successResponse(
                 res,

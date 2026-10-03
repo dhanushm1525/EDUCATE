@@ -12,6 +12,7 @@ import {
     successResponse
 } from "../../../../shared/response/apiResponse";
 import { AppError } from "../../../../shared/errors/AppError";
+import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMapper";
 
 
 export class GetCurrentUserController {
@@ -43,7 +44,7 @@ export class GetCurrentUserController {
 
             const user =
                 await this._getCurrentUser.execute(
-                    {userId:req.user.userId}
+                    AuthRequestMapper.toGetCurrentUserDTO(req.user.userId)
                 );
 
 

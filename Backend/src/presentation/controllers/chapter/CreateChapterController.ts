@@ -7,7 +7,7 @@ import {
 } from "express";
 
 import { ICreateChapterUseCase } from "../../../application/interfaces/chapter/ICreateChapterUseCase";
-import { CreateChapterDTO } from "../../../application/dtos/chapter/CreateChapterDTO";
+import { ChapterCreationMapper } from "../../../application/mappers/ChapterCreationMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 
@@ -37,12 +37,8 @@ export class CreateChapterController {
                 throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
             }
 
-            const dto: CreateChapterDTO = {
-                title: req.body.title,
-                description: req.body.description,
-                order: req.body.order,
-                outcomes: req.body.outcomes,
-            };
+            const dto =
+                ChapterCreationMapper.toCreateChapterDTO(req.body);
 
             const chapter =
                 await this._createChapterUseCase.execute(

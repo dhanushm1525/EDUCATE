@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import { successResponse } from "../../../../shared/response/apiResponse";
 import { IRefreshTokenCookie } from "../../../../application/interfaces/auth/IRefreshTokenCookie";
 import { IGoogleSignIn } from "../../../../application/interfaces/auth/IGoogleSignIn";
+import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMapper";
 
 export class GoogleSignInController {
   constructor(
@@ -13,10 +14,9 @@ export class GoogleSignInController {
 
   async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { credential } = req.body;
-
       // Execute Google Sign-In use case
-      const result = await this._googleSignIn.execute({ credential });
+      const dto = AuthRequestMapper.toGoogleSignInDTO(req.body);
+      const result = await this._googleSignIn.execute(dto);
 
       // Store refresh token in HTTP-only cookie
       res.cookie(

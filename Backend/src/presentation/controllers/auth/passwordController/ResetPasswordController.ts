@@ -3,6 +3,7 @@ import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
 import { Request,Response,NextFunction } from "express";
 import { IResetPassword } from "../../../../application/interfaces/auth/IResetPassword";
 import { successResponse } from "../../../../shared/response/apiResponse";
+import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMapper";
 
 
 export class ResetPasswordController{
@@ -18,11 +19,8 @@ export class ResetPasswordController{
     ):Promise<void>{
         try{
 
-            const {email,otp,newPassword} = req.body;
-
-            const result = await this._resetPassword.execute({
-                email,otp,newPassword
-            });
+            const dto = AuthRequestMapper.toResetPasswordDTO(req.body);
+            const result = await this._resetPassword.execute(dto);
 
 
             successResponse(res,HttpStatusCode.OK,result.message,result)

@@ -3,7 +3,7 @@ import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { Request, Response, NextFunction } from "express";
 
 import { IUpdateCourseUseCase } from "../../../application/interfaces/course/IUpdateCourseUseCase";
-import { UpdateCourseDTO } from "../../../application/dtos/courses/UpdateCourseDTO";
+import { CourseUpdateMapper } from "../../../application/mappers/CourseUpdateMapper";
 import { AppError } from "../../../shared/errors/AppError";
 
 export class UpdateCourseController {
@@ -30,27 +30,8 @@ export class UpdateCourseController {
                 throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
             }
 
-            const dto: UpdateCourseDTO = {
-                categoryId: req.body.categoryId,
-                title: req.body.title,
-                subtitle: req.body.subtitle,
-                description: req.body.description,
-
-                thumbnail: req.body.thumbnail,
-                trailer: req.body.trailer,
-
-                language: req.body.language,
-                level: req.body.level,
-
-                duration: req.body.duration,
-
-                price: req.body.price,
-                discount: req.body.discount,
-
-                tags: req.body.tags,
-                objectives: req.body.objectives,
-                requirements: req.body.requirements
-            };
+            const dto =
+                CourseUpdateMapper.toUpdateCourseDTO(req.body);
 
             const course =
                 await this._updateCourseUseCase.execute(

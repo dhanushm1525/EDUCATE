@@ -4,6 +4,7 @@ import { Request,Response,NextFunction } from "express";
 import { ILogoutUser } from "../../../../application/interfaces/auth/ILogoutUser";
 import { successResponse } from "../../../../shared/response/apiResponse";
 import { IRefreshTokenCookie } from "../../../../application/interfaces/auth/IRefreshTokenCookie";
+import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMapper";
 
 
 
@@ -22,9 +23,9 @@ export class LogoutController{
         try{
             const refreshToken = req.cookies[this._refreshTokenCookie.name];
 
-            await this._logoutuser.execute({
-                refreshToken
-            });
+            await this._logoutuser.execute(
+                AuthRequestMapper.toLogoutUserDTO(refreshToken)
+            );
 
             res.clearCookie(
                 this._refreshTokenCookie.name,

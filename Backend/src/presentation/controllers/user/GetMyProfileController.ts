@@ -5,6 +5,7 @@ import { IGetMyProfile } from "../../../application/interfaces/user/IGetMyProfil
 import { successResponse } from "../../../shared/response/apiResponse";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { AppError } from "../../../shared/errors/AppError";
+import { UserRequestMapper } from "../../../application/mappers/UserRequestMapper";
 
 
 export class GetMyProfileController{
@@ -26,7 +27,9 @@ export class GetMyProfileController{
             }
             
             
-            const result = await this._getMyprofile.execute({userId});
+            const result = await this._getMyprofile.execute(
+                UserRequestMapper.toGetMyProfileDTO(userId)
+            );
 
             successResponse(res,HttpStatusCode.OK,AUTH_MESSAGES.PROFILE_RETRIEVED_SUCCESSFULLY,result)
         }catch(error){

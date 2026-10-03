@@ -1,9 +1,9 @@
 import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
 
 import { Request,Response,NextFunction, CookieOptions } from "express";
-import { RefreshAccessTokenDTO } from "../../../../application/dtos/auth/RefreshAccessTokenDTO";
 import { successResponse } from "../../../../shared/response/apiResponse";
 import { IRefreshAccessToken } from "../../../../application/interfaces/auth/IRefreshToken";
+import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMapper";
 
 
 export class RefreshTokenController{
@@ -30,7 +30,7 @@ export class RefreshTokenController{
                 });
             }
 
-            const dto : RefreshAccessTokenDTO = {refreshToken};
+            const dto = AuthRequestMapper.toRefreshAccessTokenDTO(refreshToken);
 
             const result = await this._refreshAccessToken.execute(dto);
 

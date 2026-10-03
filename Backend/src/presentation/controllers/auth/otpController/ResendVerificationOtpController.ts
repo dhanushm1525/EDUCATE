@@ -3,6 +3,7 @@ import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
 import { Request,Response,NextFunction } from "express";
 import { IResendVerificationOtp } from "../../../../application/interfaces/auth/IResendVerificationOtp";
 import { successResponse } from "../../../../shared/response/apiResponse";
+import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMapper";
 
 
 
@@ -20,11 +21,8 @@ export class ResendVerificationOtpController{
 
         try{
 
-            const {email} = req.body;
-
-            const result = await this._resendVerificationOtp.execute({
-                email
-            });
+            const dto = AuthRequestMapper.toResendVerificationOtpDTO(req.body);
+            const result = await this._resendVerificationOtp.execute(dto);
 
             successResponse(res,HttpStatusCode.OK,result.message,result);
         }catch(error){

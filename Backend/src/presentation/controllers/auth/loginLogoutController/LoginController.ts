@@ -7,10 +7,6 @@ import {
 } from "express";
 
 import {
-    LoginUserDTO
-} from "../../../../application/dtos/auth/LoginUserDTO";
-
-import {
     successResponse
 } from "../../../../shared/response/apiResponse";
 
@@ -20,6 +16,7 @@ import {
 
 import { IRefreshTokenCookie } from "../../../../application/interfaces/auth/IRefreshTokenCookie";
 import { ILoginUser } from "../../../../application/interfaces/auth/ILoginUser";
+import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMapper";
 
 
 
@@ -40,10 +37,7 @@ export class LoginController {
 
         try {
 
-            const dto: LoginUserDTO = {
-                email: req.body.email,
-                password: req.body.password
-            };
+            const dto = AuthRequestMapper.toLoginUserDTO(req.body);
 
 
             const result =

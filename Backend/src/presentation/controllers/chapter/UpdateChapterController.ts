@@ -7,7 +7,7 @@ import {
 } from "express";
 
 import { IUpdateChapterUseCase } from "../../../application/interfaces/chapter/IUpdateChapterUseCase";
-import { UpdateChapterDTO } from "../../../application/dtos/chapter/UpdateChapterDTO";
+import { ChapterCreationMapper } from "../../../application/mappers/ChapterCreationMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 
@@ -37,12 +37,8 @@ export class UpdateChapterController {
                 throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
             }
 
-            const dto: UpdateChapterDTO = {
-                title: req.body.title,
-                description: req.body.description,
-                order: req.body.order,
-                outcomes: req.body.outcomes,
-            };
+            const dto =
+                ChapterCreationMapper.toUpdateChapterDTO(req.body);
 
             const chapter =
                 await this._updateChapterUseCase.execute(

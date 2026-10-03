@@ -8,7 +8,7 @@ import {
 
 import { AppError } from "../../../shared/errors/AppError";
 
-import { UpdateLessonDTO } from "../../../application/dtos/lesson/UpdateLessonDTO";
+import { LessonCreationMapper } from "../../../application/mappers/LessonCreationMapper";
 import { IUpdateLessonUseCase } from "../../../application/interfaces/lesson/IUpdateLessonUseCase";
 
 export class UpdateLessonController {
@@ -51,16 +51,8 @@ export class UpdateLessonController {
                 throw new AppError("Invalid lesson ID", HttpStatusCode.BAD_REQUEST);
             }
 
-            const dto: UpdateLessonDTO = {
-                title: req.body.title,
-                description: req.body.description,
-                order: req.body.order,
-                type: req.body.type,
-                videoKey: req.body.videoUrl,
-                content: req.body.content,
-                attachments: req.body.attachments,
-                duration: req.body.duration,
-            };
+            const dto =
+                LessonCreationMapper.toUpdateLessonDTO(req.body);
 
             const updatedLesson =
                 await this._updateLessonUseCase.execute(

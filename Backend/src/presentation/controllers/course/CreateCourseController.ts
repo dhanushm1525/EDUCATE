@@ -3,7 +3,7 @@ import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { Request, Response, NextFunction } from "express";
 
 import { ICreateCourseUseCase } from "../../../application/interfaces/course/ICreateCourseUseCase";
-import { CreateCourseDTO } from "../../../application/dtos/courses/CreateCourseDTO";
+import { CourseMapper } from "../../../application/mappers/CourseCreationMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 
@@ -25,31 +25,8 @@ export class CreateCourseController {
                 throw new AppError("Unauthorized", HttpStatusCode.UNAUTHORIZED);
             }
 
-            const dto: CreateCourseDTO = {
-
-                teacherId: req.user.userId,
-
-                categoryId: req.body.categoryId,
-
-                title: req.body.title,
-                subtitle: req.body.subtitle,
-                description: req.body.description,
-
-                thumbnail: req.body.thumbnail,
-                trailer: req.body.trailer,
-
-                language: req.body.language,
-                level: req.body.level,
-
-                duration: req.body.duration,
-
-                price: req.body.price,
-                discount: req.body.discount,
-
-                tags: req.body.tags,
-                objectives: req.body.objectives,
-                requirements: req.body.requirements
-            };
+            const dto =
+                CourseMapper.toCreateCourseDTO(req.body, req.user.userId);
 
             const course =
                 await this._createCourseUseCase.execute(dto);

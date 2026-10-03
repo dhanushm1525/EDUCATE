@@ -8,7 +8,7 @@ import {
 
 import { AppError } from "../../../shared/errors/AppError";
 
-import { GenerateLessonMediaUploadUrlDTO } from "../../../application/dtos/lesson/GenerateLessonMediaUploadUrlDTO,";
+import { LessonCreationMapper } from "../../../application/mappers/LessonCreationMapper";
 
 import { IGenerateLessonMediaUploadUrlUseCase } from "../../../application/interfaces/lesson/IGenerateLessonMediaUploadUrlUseCase";
 
@@ -52,10 +52,8 @@ export class GenerateLessonMediaUploadUrlController {
                 throw new AppError("Invalid lesson ID",HttpStatusCode.BAD_REQUEST)
             }
 
-            const dto: GenerateLessonMediaUploadUrlDTO = {
-                fileName: req.body.fileName,
-                contentType: req.body.contentType,
-            };
+            const dto =
+                LessonCreationMapper.toGenerateMediaUploadUrlDTO(req.body);
 
             const result =
                 await this._generateLessonMediaUploadUrlUseCase.execute(

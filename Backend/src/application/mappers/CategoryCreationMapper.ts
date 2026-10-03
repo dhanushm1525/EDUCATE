@@ -4,6 +4,14 @@ import { CategoryStatus } from "../../shared/enums/CategoryStatus";
 
 export class CategoryCreationMapper {
 
+    static toCreateCategoryDTO(dto: CreateCategoryDTO): CreateCategoryDTO {
+        return {
+            name: dto.name,
+            description: dto.description,
+            image: dto.image,
+        };
+    }
+
     static toEntity(dto: CreateCategoryDTO): Category {
         return {
             name: dto.name,
