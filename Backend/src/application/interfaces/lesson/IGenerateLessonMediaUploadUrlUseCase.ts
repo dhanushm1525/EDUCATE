@@ -1,4 +1,4 @@
-import { GenerateLessonMediaUploadUrlDTO } from "../../dtos/lesson/GenerateLessonMediaUploadUrlDTO,";
+import { GenerateLessonMediaUploadUrlDTO } from "../../dtos/lesson/GenerateLessonMediaUploadUrlDTO";
 import { GenerateLessonMediaUploadUrlResponseDTO } from "../../dtos/lesson/GenerateLessonMediaUploadUrlResponseDTO";
 
 export interface IGenerateLessonMediaUploadUrlUseCase {

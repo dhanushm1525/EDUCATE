@@ -1,7 +1,7 @@
 import { Lesson } from "../../domain/entities/Lesson";
 import { CreateLessonDTO } from "../dtos/lesson/CreateLessonDTO";
 import { UpdateLessonDTO } from "../dtos/lesson/UpdateLessonDTO";
-import { GenerateLessonMediaUploadUrlDTO } from "../dtos/lesson/GenerateLessonMediaUploadUrlDTO,";
+import { GenerateLessonMediaUploadUrlDTO } from "../dtos/lesson/GenerateLessonMediaUploadUrlDTO";
 
 type LessonRequestBody =
     Omit<CreateLessonDTO, "videoKey"> & {

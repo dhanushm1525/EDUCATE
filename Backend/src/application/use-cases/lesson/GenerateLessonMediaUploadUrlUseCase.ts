@@ -12,7 +12,7 @@ import { ILessonMediaKeyPolicy } from "../../../domain/policies/LessonMediaKeyPo
 
 import { IS3Client } from "../../interfaces/storage/IS3Client";
 
-import { GenerateLessonMediaUploadUrlDTO } from "../../dtos/lesson/GenerateLessonMediaUploadUrlDTO,";
+import { GenerateLessonMediaUploadUrlDTO } from "../../dtos/lesson/GenerateLessonMediaUploadUrlDTO";
 import { GenerateLessonMediaUploadUrlResponseDTO } from "../../dtos/lesson/GenerateLessonMediaUploadUrlResponseDTO";
 
 import { IGenerateLessonMediaUploadUrlUseCase } from "../../interfaces/lesson/IGenerateLessonMediaUploadUrlUseCase";
