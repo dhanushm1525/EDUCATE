@@ -1,5 +1,5 @@
 import { CreateAssignmentDTO } from "../dtos/assingment/CreateAssignmentDTO";
-
+import { UpdateAssignmentDTO } from "../dtos/assingment/UpdateAssignmentDTO";
 export class AssignmentCreationMapper {
 
     static toCreateAssignmentDTO(
@@ -16,4 +16,19 @@ export class AssignmentCreationMapper {
             attemptsAllowed: body.attemptsAllowed,
         };
     }
+
+
+    static toUpdateAssignmentDTO(
+    body: UpdateAssignmentDTO
+): UpdateAssignmentDTO {
+
+    return {
+        title: body.title,
+        description: body.description,
+        questions: body.questions,
+        passingMarks: body.passingMarks,
+        timeLimit: body.timeLimit,
+        attemptsAllowed: body.attemptsAllowed,
+    };
+}
 }
