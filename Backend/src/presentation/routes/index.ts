@@ -10,6 +10,7 @@ import categoryRoutes from "./categoryRoutes";
 import chapterRoutes from "./chapterRoutes"
 import lessonRoutes from "./lessonRoutes"
 import teacherApplicationRoutes from "./teacherApplicationRoutes"
+import assingmentRoutes from "./assingmentRoutes"
 
 const router = Router();
 
@@ -40,4 +41,6 @@ router.use("/categories", categoryRoutes);
 router.use("/courses",lessonRoutes)
 
 router.use("/teacher-applications",teacherApplicationRoutes)
+
+router.use("/",assingmentRoutes);
 export default router;
