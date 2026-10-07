@@ -133,14 +133,6 @@ export class CreateAssignmentUseCase
         );
 
 
-        if (dto.totalMarks !== totalMarks) {
-            throw new AppError(
-                "Total marks must match the sum of question marks",
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
-
-
         if (
             dto.passingMarks <= 0 ||
             dto.passingMarks > totalMarks

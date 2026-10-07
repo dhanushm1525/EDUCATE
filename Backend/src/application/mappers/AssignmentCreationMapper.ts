@@ -11,7 +11,6 @@ export class AssignmentCreationMapper {
             title: body.title,
             description: body.description,
             questions: body.questions,
-            totalMarks: body.totalMarks,
             passingMarks: body.passingMarks,
             timeLimit: body.timeLimit,
             attemptsAllowed: body.attemptsAllowed,
