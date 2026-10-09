@@ -24,6 +24,7 @@ import ResetPasswordPage from "../../pages/auth/ResetPasswordPage";
 import StudentProfilePage from "../../pages/student/StudentProfilePage";
 import TeacherProfilePage from "../../pages/teacher/TeacherProfilePafe";
 import AdminProfilePage from "../../components/admin/AdminProfilePage";
+import CourseBuilderPage from "../../pages/teacher/CourseBuilderPage";
 
 export function AppRouter() {
   return (
@@ -62,6 +63,7 @@ export function AppRouter() {
       <Route element={<RoleRoute allowedRoles={["teacher"]} />}>
         <Route path="/teacher" element={<TeacherDashboard />} />
         <Route path="/teacher/profile" element={<TeacherProfilePage />} />
+        <Route path="/teacher/courses/:courseId" element={<CourseBuilderPage />}/>
       </Route>
 
       {/* 
