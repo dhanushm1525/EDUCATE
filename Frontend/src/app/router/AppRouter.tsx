@@ -25,6 +25,7 @@ import StudentProfilePage from "../../pages/student/StudentProfilePage";
 import TeacherProfilePage from "../../pages/teacher/TeacherProfilePafe";
 import AdminProfilePage from "../../components/admin/AdminProfilePage";
 import CourseBuilderPage from "../../pages/teacher/CourseBuilderPage";
+import LessonManagementPage from "../../pages/teacher/LessonManagementPage";
 
 export function AppRouter() {
   return (
@@ -63,7 +64,14 @@ export function AppRouter() {
       <Route element={<RoleRoute allowedRoles={["teacher"]} />}>
         <Route path="/teacher" element={<TeacherDashboard />} />
         <Route path="/teacher/profile" element={<TeacherProfilePage />} />
-        <Route path="/teacher/courses/:courseId" element={<CourseBuilderPage />}/>
+        <Route
+          path="/teacher/courses/:courseId"
+          element={<CourseBuilderPage />}
+        />
+        <Route
+          path="/teacher/courses/:courseId/chapters/:chapterId/lessons"
+          element={<LessonManagementPage />}
+        />
       </Route>
 
       {/* 

@@ -44,8 +44,38 @@ export const API_ROUTES = {
 
     byId: (
       courseId: string,
-      chapterId: string
+      chapterId: string,
     ) =>
       `/courses/${courseId}/chapters/${chapterId}`,
+  },
+
+  lessons: {
+    byChapter: (
+      courseId: string,
+      chapterId: string,
+    ) =>
+      `/courses/${courseId}/chapters/${chapterId}/lessons`,
+
+    byId: (
+      courseId: string,
+      chapterId: string,
+      lessonId: string,
+    ) =>
+      `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}`,
+
+    mediaUploadUrl: (
+      courseId: string,
+      chapterId: string,
+      lessonId: string,
+    ) =>
+      `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/media/upload-url`,
+  },
+
+  assignments: {
+    byLesson: (lessonId: string) =>
+      `/lessons/${lessonId}/assignment`,
+
+    byId: (assignmentId: string) =>
+      `/assignments/${assignmentId}`,
   },
 } as const;
