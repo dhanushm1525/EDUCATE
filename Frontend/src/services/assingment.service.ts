@@ -24,4 +24,16 @@ export const assignmentService = {
         return response.data;
     },
 
+    getByLesson: async (
+        lessonId: string
+    ): Promise<AssignmentResponse> => {
+
+        const response =
+            await apiClient.get<AssignmentResponse>(
+                API_ROUTES.assignments.byLesson(lessonId)
+            );
+
+        return response.data;
+    },
+
 };

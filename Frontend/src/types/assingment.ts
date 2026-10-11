@@ -37,5 +37,5 @@ export interface CreateAssignmentRequest {
 export interface AssignmentResponse {
     success: boolean;
     message: string;
-    data: Assignment;
+    data: Assignment | null;
 }

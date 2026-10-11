@@ -1,11 +1,15 @@
-import { Assignment } from "../../../domain/entities/Assingment";
 import { IAssignmentRepository } from "../../../domain/repositories/courseRepositories/IAssingmentRepository";
 import { ILessonRepository } from "../../../domain/repositories/courseRepositories/ILessonRepository";
 import { IChapterRepository } from "../../../domain/repositories/courseRepositories/IChapterRepository";
-import { ICourseRepository } from "../../../domain/repositories//courseRepositories/ICourseRepository";
+import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
 
-import { UpdateAssignmentDTO } from "../../dtos/assingment/UpdateAssignmentDTO";
 import { IUpdateAssignmentUseCase } from "../../interfaces/assingment/IUpdateAssignmentUseCase";
+import { UpdateAssignmentDTO } from "../../dtos/assingment/UpdateAssignmentDTO";
+
+import { Assignment } from "../../../domain/entities/Assingment";
+
+import { AppError } from "../../../shared/errors/AppError";
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 export class UpdateAssignmentUseCase
     implements IUpdateAssignmentUseCase {
@@ -15,7 +19,7 @@ export class UpdateAssignmentUseCase
         private readonly _lessonRepository: ILessonRepository,
         private readonly _chapterRepository: IChapterRepository,
         private readonly _courseRepository: ICourseRepository
-    ) {}
+    ) { }
 
     async execute(
         assignmentId: string,
@@ -24,23 +28,27 @@ export class UpdateAssignmentUseCase
     ): Promise<Assignment> {
 
         // 1. Find assignment
-        const assignment =
-            await this._assignmentRepository.findById(
-                assignmentId
-            );
+        const existingAssignment =
+            await this._assignmentRepository.findById(assignmentId);
 
-        if (!assignment) {
-            throw new Error("Assignment not found");
+        if (!existingAssignment) {
+            throw new AppError(
+                "Assignment not found",
+                HttpStatusCode.NOT_FOUND
+            );
         }
 
         // 2. Find lesson
         const lesson =
             await this._lessonRepository.findById(
-                assignment.lessonId
+                existingAssignment.lessonId
             );
 
         if (!lesson) {
-            throw new Error("Lesson not found");
+            throw new AppError(
+                "Lesson not found",
+                HttpStatusCode.NOT_FOUND
+            );
         }
 
         // 3. Find chapter
@@ -50,7 +58,10 @@ export class UpdateAssignmentUseCase
             );
 
         if (!chapter) {
-            throw new Error("Chapter not found");
+            throw new AppError(
+                "Chapter not found",
+                HttpStatusCode.NOT_FOUND
+            );
         }
 
         // 4. Find course
@@ -60,38 +71,54 @@ export class UpdateAssignmentUseCase
             );
 
         if (!course) {
-            throw new Error("Course not found");
-        }
-
-        // 5. Verify ownership
-        if (course.teacherId !== teacherId) {
-            throw new Error(
-                "You are not authorized to update this assignment"
+            throw new AppError(
+                "Course not found",
+                HttpStatusCode.NOT_FOUND
             );
         }
 
-        // 6. Validate questions if supplied
-        let totalMarks = assignment.totalMarks;
+        // 5. Check ownership
+        if (course.teacherId !== teacherId) {
+            throw new AppError(
+                "You are not authorized to update this assignment",
+                HttpStatusCode.FORBIDDEN
+            );
+        }
 
-        if (dto.questions) {
+        // 6. Validate title if provided
+        if (
+            dto.title !== undefined &&
+            !dto.title.trim()
+        ) {
+            throw new AppError(
+                "Assignment title is required",
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
+
+        // 7. Validate questions if provided
+        if (dto.questions !== undefined) {
 
             if (dto.questions.length === 0) {
-                throw new Error(
-                    "Assignment must contain at least one question"
+                throw new AppError(
+                    "Assignment must contain at least one question",
+                    HttpStatusCode.BAD_REQUEST
                 );
             }
 
             for (const question of dto.questions) {
 
-                if (!question.question?.trim()) {
-                    throw new Error(
-                        "Question text is required"
+                if (!question.question.trim()) {
+                    throw new AppError(
+                        "Question cannot be empty",
+                        HttpStatusCode.BAD_REQUEST
                     );
                 }
 
-                if (!question.options || question.options.length < 2) {
-                    throw new Error(
-                        "Each question must contain at least two options"
+                if (question.options.length < 2) {
+                    throw new AppError(
+                        "Each question must contain at least two options",
+                        HttpStatusCode.BAD_REQUEST
                     );
                 }
 
@@ -100,63 +127,89 @@ export class UpdateAssignmentUseCase
                         question.correctAnswer
                     )
                 ) {
-                    throw new Error(
-                        "Correct answer must be one of the options"
+                    throw new AppError(
+                        "Correct answer must be one of the available options",
+                        HttpStatusCode.BAD_REQUEST
                     );
                 }
 
                 if (question.marks <= 0) {
-                    throw new Error(
-                        "Question marks must be greater than zero"
+                    throw new AppError(
+                        "Question marks must be greater than zero",
+                        HttpStatusCode.BAD_REQUEST
                     );
                 }
             }
-
-            // Recalculate total marks
-            totalMarks = dto.questions.reduce(
-                (total, question) =>
-                    total + question.marks,
-                0
-            );
         }
 
-        // 7. Determine passing marks
+        // 8. Determine final questions
+        const questions =
+            dto.questions ?? existingAssignment.questions;
+
+        // 9. Calculate total marks
+        const totalMarks = questions.reduce(
+            (total, question) =>
+                total + question.marks,
+            0
+        );
+
+        // 10. Determine final passing marks
         const passingMarks =
-            dto.passingMarks ?? assignment.passingMarks;
+            dto.passingMarks ??
+            existingAssignment.passingMarks;
 
         if (
             passingMarks <= 0 ||
             passingMarks > totalMarks
         ) {
-            throw new Error(
-                "Passing marks must be greater than zero and cannot exceed total marks"
+            throw new AppError(
+                "Passing marks must be greater than zero and cannot exceed total marks",
+                HttpStatusCode.BAD_REQUEST
             );
         }
 
-        // 8. Update assignment
+        // 11. Build update object
+        const updateData: Partial<Assignment> = {
+            title:
+                dto.title !== undefined
+                    ? dto.title.trim()
+                    : existingAssignment.title,
+
+            description:
+                dto.description !== undefined
+                    ? dto.description
+                    : existingAssignment.description,
+
+            questions,
+
+            totalMarks,
+
+            passingMarks,
+
+            timeLimit:
+                dto.timeLimit !== undefined
+                    ? dto.timeLimit
+                    : existingAssignment.timeLimit,
+
+            attemptsAllowed:
+                dto.attemptsAllowed !== undefined
+                    ? dto.attemptsAllowed
+                    : existingAssignment.attemptsAllowed,
+
+            updatedAt: new Date(),
+        };
+
+        // 12. Update assignment
         const updatedAssignment =
             await this._assignmentRepository.update(
                 assignmentId,
-                {
-                    title: dto.title ?? assignment.title,
-                    description:
-                        dto.description ?? assignment.description,
-                    questions:
-                        dto.questions ?? assignment.questions,
-                    totalMarks,
-                    passingMarks,
-                    timeLimit:
-                        dto.timeLimit ?? assignment.timeLimit,
-                    attemptsAllowed:
-                        dto.attemptsAllowed ??
-                        assignment.attemptsAllowed,
-                    updatedAt: new Date(),
-                }
+                updateData
             );
 
         if (!updatedAssignment) {
-            throw new Error(
-                "Failed to update assignment"
+            throw new AppError(
+                "Failed to update assignment",
+                HttpStatusCode.INTERNAL_SERVER_ERROR
             );
         }
 
