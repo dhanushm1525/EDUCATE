@@ -17,7 +17,7 @@ import {
 } from "./repositoryDependencies";
 
 
-const assignmentRepository =
+export const assignmentRepository =
     new MongoAssignmentRepository();
 
 
@@ -32,7 +32,10 @@ const createAssignmentUseCase =
 
 const getAssignmentUseCase =
     new GetAssignmentUseCase(
-        assignmentRepository
+        assignmentRepository,
+        lessonRepository,
+        chapterRepository,
+        courseRepository
     );
 
 

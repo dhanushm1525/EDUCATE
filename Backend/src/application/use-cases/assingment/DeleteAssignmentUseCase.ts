@@ -5,6 +5,9 @@ import { ICourseRepository } from "../../../domain/repositories/courseRepositori
 
 import { IDeleteAssignmentUseCase } from "../../interfaces/assingment/IDeleteAssignmentUseCase";
 
+import { AppError } from "../../../shared/errors/AppError";
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+
 export class DeleteAssignmentUseCase
     implements IDeleteAssignmentUseCase {
 
@@ -26,7 +29,10 @@ export class DeleteAssignmentUseCase
             );
 
         if (!assignment) {
-            throw new Error("Assignment not found");
+            throw new AppError(
+                "Assignment not found",
+                HttpStatusCode.NOT_FOUND
+            );
         }
 
         const lesson =
@@ -35,7 +41,10 @@ export class DeleteAssignmentUseCase
             );
 
         if (!lesson) {
-            throw new Error("Lesson not found");
+            throw new AppError(
+                "Lesson not found",
+                HttpStatusCode.NOT_FOUND
+            );
         }
 
         const chapter =
@@ -44,7 +53,10 @@ export class DeleteAssignmentUseCase
             );
 
         if (!chapter) {
-            throw new Error("Chapter not found");
+            throw new AppError(
+                "Chapter not found",
+                HttpStatusCode.NOT_FOUND
+            );
         }
 
         const course =
@@ -53,12 +65,16 @@ export class DeleteAssignmentUseCase
             );
 
         if (!course) {
-            throw new Error("Course not found");
+            throw new AppError(
+                "Course not found",
+                HttpStatusCode.NOT_FOUND
+            );
         }
 
         if (course.teacherId !== teacherId) {
-            throw new Error(
-                "You are not authorized to delete this assignment"
+            throw new AppError(
+                "You are not authorized to delete this assignment",
+                HttpStatusCode.FORBIDDEN
             );
         }
 
@@ -68,8 +84,9 @@ export class DeleteAssignmentUseCase
             );
 
         if (!deleted) {
-            throw new Error(
-                "Failed to delete assignment"
+            throw new AppError(
+                "Failed to delete assignment",
+                HttpStatusCode.INTERNAL_SERVER_ERROR
             );
         }
     }

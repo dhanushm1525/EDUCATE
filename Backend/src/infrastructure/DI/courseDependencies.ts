@@ -8,6 +8,7 @@ import { UpdateCourseController } from "../../presentation/controllers/course/Up
 import { DefaultCourseStatusPolicy } from "../../domain/policies/CourseStatusPolicy";
 import { SubmitCourseUseCase } from "../../application/use-cases/course/SubmitCourseUseCase";
 import { SubmitCourseController } from "../../presentation/controllers/course/SubmitCourseController";
+import { assignmentRepository } from "./assignmentDependencies";
 
 export const createCourseUseCase =
     new CreateCourseUseCase(courseRepository);
@@ -31,6 +32,7 @@ const submitCourseUseCase =
         courseRepository,
         chapterRepository,
         lessonRepository,
+        assignmentRepository,
         courseStatusPolicy
     );
 

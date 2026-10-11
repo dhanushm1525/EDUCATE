@@ -7,6 +7,7 @@ import { ICreateAssignmentUseCase } from "../../interfaces/assingment/ICreateAss
 import { CreateAssignmentDTO } from "../../dtos/assingment/CreateAssignmentDTO";
 
 import { Assignment } from "../../../domain/entities/Assingment";
+import { AssignmentPolicy } from "../../../domain/policies/AssignmentPolicy";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
@@ -26,7 +27,6 @@ export class CreateAssignmentUseCase
         teacherId: string
     ): Promise<Assignment> {
 
-
         const lesson =
             await this._lessonRepository.findById(
                 dto.lessonId
@@ -38,7 +38,6 @@ export class CreateAssignmentUseCase
                 HttpStatusCode.NOT_FOUND
             );
         }
-
 
         const chapter =
             await this._chapterRepository.findById(
@@ -64,7 +63,6 @@ export class CreateAssignmentUseCase
             );
         }
 
-
         if (course.teacherId !== teacherId) {
             throw new AppError(
                 "You are not authorized to create an assignment for this course",
@@ -72,9 +70,10 @@ export class CreateAssignmentUseCase
             );
         }
 
-
         const existingAssignment =
-            await this._assignmentRepository.findByLessonId(dto.lessonId);
+            await this._assignmentRepository.findByLessonId(
+                dto.lessonId
+            );
 
         if (existingAssignment) {
             throw new AppError(
@@ -83,88 +82,29 @@ export class CreateAssignmentUseCase
             );
         }
 
-
-        if (dto.questions.length === 0) {
-            throw new AppError(
-                "Assignment must contain at least one question",
-                HttpStatusCode.BAD_REQUEST
+        const totalMarks =
+            AssignmentPolicy.validate(
+                dto.title,
+                dto.questions,
+                dto.passingMarks,
+                dto.timeLimit,
+                dto.attemptsAllowed
             );
-        }
-
-
-        for (const question of dto.questions) {
-
-            if (!question.question.trim()) {
-                throw new AppError(
-                    "Question cannot be empty",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
-
-            if (question.options.length < 2) {
-                throw new AppError(
-                    "Each question must contain at least two options",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
-
-            if (
-                !question.options.includes(
-                    question.correctAnswer
-                )
-            ) {
-                throw new AppError(
-                    "Correct answer must be one of the available options",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
-
-            if (question.marks <= 0) {
-                throw new AppError(
-                    "Question marks must be greater than zero",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
-        }
-
-
-        const totalMarks = dto.questions.reduce(
-            (total, question) => total + question.marks,
-            0
-        );
-
-
-        if (
-            dto.passingMarks <= 0 ||
-            dto.passingMarks > totalMarks
-        ) {
-            throw new AppError(
-                "Passing marks must be greater than zero and cannot exceed total marks",
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
-
 
         const now = new Date();
 
         const assignment: Assignment = {
             lessonId: dto.lessonId,
-
-            title: dto.title,
+            title: dto.title.trim(),
             description: dto.description,
-
             questions: dto.questions,
-
-            totalMarks: totalMarks,
+            totalMarks,
             passingMarks: dto.passingMarks,
-
             timeLimit: dto.timeLimit,
             attemptsAllowed: dto.attemptsAllowed,
-
             createdAt: now,
             updatedAt: now,
         };
-
 
         return await this._assignmentRepository.create(
             assignment

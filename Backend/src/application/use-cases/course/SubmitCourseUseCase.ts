@@ -1,58 +1,70 @@
-import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
+import { IAssignmentRepository } from "../../../domain/repositories/courseRepositories/IAssingmentRepository";
 import { IChapterRepository } from "../../../domain/repositories/courseRepositories/IChapterRepository";
+import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
 import { ILessonRepository } from "../../../domain/repositories/courseRepositories/ILessonRepository";
 
-import { ISubmitCourseUseCase } from "../../interfaces/course/ISubmitCourseUseCase";
+import { ICourseStatusPolicy } from "../../../domain/policies/CourseStatusPolicy";
+import { AssignmentPolicy } from "../../../domain/policies/AssignmentPolicy";
 
 import { SubmitCourseDTO } from "../../dtos/courses/SubmitCourseDTO";
+import { ISubmitCourseUseCase } from "../../interfaces/course/ISubmitCourseUseCase";
 
-import { ICourseStatusPolicy } from "../../../domain/policies/CourseStatusPolicy";
-
+import { Course } from "../../../domain/entities/Course";
 import { LessonType } from "../../../shared/enums/LessonType";
-import { CourseStatus } from "../../../shared/enums/CourseStatus";
-import { COURSE_MESSAGES } from "../../../shared/messages/courseMessages";
 
+import { CourseStatus } from "../../../shared/enums/CourseStatus";
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-export class SubmitCourseUseCase implements ISubmitCourseUseCase {
+export class SubmitCourseUseCase
+    implements ISubmitCourseUseCase {
 
     constructor(
         private readonly _courseRepository: ICourseRepository,
         private readonly _chapterRepository: IChapterRepository,
         private readonly _lessonRepository: ILessonRepository,
+        private readonly _assignmentRepository: IAssignmentRepository,
         private readonly _courseStatusPolicy: ICourseStatusPolicy
-    ) { }
+    ) {}
 
-    async execute(dto: SubmitCourseDTO) {
+    async execute(
+        dto: SubmitCourseDTO
+    ): Promise<Course> {
 
-
+        // 1. Find course
         const course =
-            await this._courseRepository.findById(dto.courseId);
+            await this._courseRepository.findById(
+                dto.courseId
+            );
 
         if (!course) {
             throw new AppError(
-                COURSE_MESSAGES.COURSE_NOT_FOUND,
+                "Course not found",
                 HttpStatusCode.NOT_FOUND
             );
         }
 
+        // 2. Verify teacher ownership
         if (course.teacherId !== dto.teacherId) {
             throw new AppError(
-                COURSE_MESSAGES.COURSE_NOT_AUTHORIZED,
+                "You are not authorized to submit this course",
                 HttpStatusCode.FORBIDDEN
             );
         }
 
-
-        if (!this._courseStatusPolicy.canSubmit(course.status)) {
+        // 3. Verify course status
+        if (
+            !this._courseStatusPolicy.canSubmit(
+                course.status
+            )
+        ) {
             throw new AppError(
-                COURSE_MESSAGES.COURSE_CANNOT_BE_SUBMITTED,
+                "Course cannot be submitted in its current status",
                 HttpStatusCode.BAD_REQUEST
             );
         }
 
-
+        // 4. Find chapters
         const chapters =
             await this._chapterRepository.findByCourseId(
                 dto.courseId
@@ -60,67 +72,78 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
 
         if (chapters.length === 0) {
             throw new AppError(
-                COURSE_MESSAGES.COURSE_MUST_HAVE_CHAPTER,
+                "Course must contain at least one chapter",
                 HttpStatusCode.BAD_REQUEST
             );
         }
 
-
+        // 5. Validate every chapter
         for (const chapter of chapters) {
-
-            if (!chapter.chapterId) {
-                throw new AppError(
-                    "Invalid chapter",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
 
             const lessons =
                 await this._lessonRepository.findByChapterId(
-                    chapter.chapterId
+                    chapter.chapterId!
                 );
-
 
             if (lessons.length === 0) {
                 throw new AppError(
-                    `${COURSE_MESSAGES.CHAPTER_MUST_HAVE_LESSON}: "${chapter.title}"`,
+                    "Each chapter must contain at least one lesson",
                     HttpStatusCode.BAD_REQUEST
                 );
             }
 
-
+            // 6. Validate every lesson
             for (const lesson of lessons) {
 
                 if (!lesson.title.trim()) {
                     throw new AppError(
-                        `Lesson title is required in chapter "${chapter.title}"`,
+                        "Lesson title is required",
                         HttpStatusCode.BAD_REQUEST
                     );
                 }
 
-                if (lesson.type === LessonType.VIDEO) {
-
-                    if (!lesson.videoKey) {
-                        throw new AppError(
-                            `Video lesson "${lesson.title}" must contain a video`,
-                            HttpStatusCode.BAD_REQUEST
-                        );
-                    }
+                if (
+                    lesson.type === LessonType.VIDEO &&
+                    !lesson.videoKey
+                ) {
+                    throw new AppError(
+                        "Video lesson must contain a video",
+                        HttpStatusCode.BAD_REQUEST
+                    );
                 }
 
-                if (lesson.type === LessonType.READING) {
-
-                    if (!lesson.content?.trim()) {
-                        throw new AppError(
-                            `Reading lesson "${lesson.title}" must contain content`,
-                            HttpStatusCode.BAD_REQUEST
-                        );
-                    }
+                if (
+                    lesson.type === LessonType.READING &&
+                    !lesson.content?.trim()
+                ) {
+                    throw new AppError(
+                        "Reading lesson must contain content",
+                        HttpStatusCode.BAD_REQUEST
+                    );
                 }
+
+                // Assignment is optional
+                const assignment =
+                    await this._assignmentRepository.findByLessonId(
+                        lesson.lessonId!
+                    );
+
+                if (!assignment) {
+                    continue;
+                }
+
+                // Validate assignment
+                AssignmentPolicy.validate(
+                    assignment.title,
+                    assignment.questions,
+                    assignment.passingMarks,
+                    assignment.timeLimit,
+                    assignment.attemptsAllowed
+                );
             }
         }
 
-
+        // 7. Submit course
         const updatedCourse =
             await this._courseRepository.update(
                 dto.courseId,
