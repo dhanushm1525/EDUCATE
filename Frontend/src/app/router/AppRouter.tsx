@@ -26,6 +26,7 @@ import TeacherProfilePage from "../../pages/teacher/TeacherProfilePafe";
 import AdminProfilePage from "../../components/admin/AdminProfilePage";
 import CourseBuilderPage from "../../pages/teacher/CourseBuilderPage";
 import LessonManagementPage from "../../pages/teacher/LessonManagementPage";
+import AssignmentManagementPage from "../../pages/teacher/AssignmentManagementPage";
 
 export function AppRouter() {
   return (
@@ -71,6 +72,11 @@ export function AppRouter() {
         <Route
           path="/teacher/courses/:courseId/chapters/:chapterId/lessons"
           element={<LessonManagementPage />}
+        />
+
+        <Route
+          path="/teacher/courses/:courseId/chapters/:chapterId/lessons/:lessonId/assignment"
+          element={<AssignmentManagementPage />}
         />
       </Route>
 

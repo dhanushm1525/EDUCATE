@@ -78,7 +78,8 @@ export class CreateAssignmentUseCase
 
         if (existingAssignment) {
             throw new AppError(
-                "An assignment already exists for this lesson"
+                "An assignment already exists for this lesson",
+                HttpStatusCode.CONFLICT
             );
         }
 
@@ -125,7 +126,7 @@ export class CreateAssignmentUseCase
                 );
             }
         }
- 
+
 
         const totalMarks = dto.questions.reduce(
             (total, question) => total + question.marks,
