@@ -4,10 +4,10 @@ import {
     NextFunction
 } from "express";
 
-import { Types } from "mongoose";
-
 import { IGetAssignmentByLessonUseCase }
     from "../../../application/interfaces/assingment/IGetAssignmentByLessonUseCase";
+import { IIdentifierValidator }
+    from "../../../application/interfaces/services/IIdentifierValidator";
 
 import { AppError }
     from "../../../shared/errors/AppError";
@@ -22,7 +22,8 @@ export class GetAssignmentByLessonController {
 
     constructor(
         private readonly _getAssignmentByLessonUseCase:
-            IGetAssignmentByLessonUseCase
+            IGetAssignmentByLessonUseCase,
+        private readonly _identifierValidator: IIdentifierValidator
     ) { }
 
     async handle(
@@ -56,7 +57,7 @@ export class GetAssignmentByLessonController {
                 );
             }
 
-            if (!Types.ObjectId.isValid(lessonId)) {
+            if (!this._identifierValidator.isValid(lessonId)) {
                 throw new AppError(
                     "Invalid lesson ID",
                     HttpStatusCode.BAD_REQUEST

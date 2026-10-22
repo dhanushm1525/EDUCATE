@@ -2,9 +2,10 @@ import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { AuthProvider } from "../../../shared/enums/AuthProvider";
+import { ILoginProviderRegistry } from "../../interfaces/auth/ILoginProviderRegistry";
 import { ILoginProviderStrategy } from "../../interfaces/auth/ILoginProviderStrategy";
 
-export class LoginProviderRegistry {
+export class LoginProviderRegistry implements ILoginProviderRegistry {
     private readonly _strategies: Map<
         AuthProvider,
         ILoginProviderStrategy

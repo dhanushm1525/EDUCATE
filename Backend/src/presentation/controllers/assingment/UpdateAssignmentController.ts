@@ -4,9 +4,8 @@ import {
     NextFunction
 } from "express";
 
-import { Types } from "mongoose";
-
 import { IUpdateAssignmentUseCase } from "../../../application/interfaces/assingment/IUpdateAssignmentUseCase";
+import { IIdentifierValidator } from "../../../application/interfaces/services/IIdentifierValidator";
 
 import { AssignmentCreationMapper } from "../../../application/mappers/AssignmentCreationMapper";
 
@@ -19,7 +18,8 @@ export class UpdateAssignmentController {
 
     constructor(
         private readonly _updateAssignmentUseCase:
-            IUpdateAssignmentUseCase
+            IUpdateAssignmentUseCase,
+        private readonly _identifierValidator: IIdentifierValidator
     ) { }
 
     async handle(
@@ -53,7 +53,7 @@ export class UpdateAssignmentController {
                 );
             }
 
-            if (!Types.ObjectId.isValid(assignmentId)) {
+            if (!this._identifierValidator.isValid(assignmentId)) {
                 throw new AppError(
                     "Invalid assignment ID",
                     HttpStatusCode.BAD_REQUEST

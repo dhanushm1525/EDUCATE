@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { Types } from "mongoose";
 
 import { ICreateAssignmentUseCase } from "../../../application/interfaces/assingment/ICreateAssignmentUseCase";
+import { IIdentifierValidator } from "../../../application/interfaces/services/IIdentifierValidator";
 import { AssignmentCreationMapper } from "../../../application/mappers/AssignmentCreationMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
@@ -12,7 +12,8 @@ import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 export class CreateAssignmentController {
 
     constructor(
-        private readonly _createAssignmentUseCase: ICreateAssignmentUseCase
+        private readonly _createAssignmentUseCase: ICreateAssignmentUseCase,
+        private readonly _identifierValidator: IIdentifierValidator
     ) {}
 
     async handle(
@@ -43,7 +44,7 @@ export class CreateAssignmentController {
                 );
             }
 
-            if (!Types.ObjectId.isValid(lessonId)) {
+            if (!this._identifierValidator.isValid(lessonId)) {
                 throw new AppError(
                     "Invalid lesson ID",
                     HttpStatusCode.BAD_REQUEST

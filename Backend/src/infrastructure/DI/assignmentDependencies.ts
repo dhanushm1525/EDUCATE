@@ -9,6 +9,7 @@ import { CreateAssignmentController } from "../../presentation/controllers/assin
 import { GetAssignmentController } from "../../presentation/controllers/assingment/GetAssignmentController";
 import { UpdateAssignmentController } from "../../presentation/controllers/assingment/UpdateAssignmentController";
 import { DeleteAssignmentController } from "../../presentation/controllers/assingment/DeleteAssignmentController";
+import { MongoObjectIdValidator } from "../services/MongoObjectIdValidator";
 
 import {
     lessonRepository,
@@ -19,6 +20,8 @@ import {
 
 export const assignmentRepository =
     new MongoAssignmentRepository();
+
+const identifierValidator = new MongoObjectIdValidator();
 
 
 const createAssignmentUseCase =
@@ -59,7 +62,8 @@ const deleteAssignmentUseCase =
 
 export const createAssignmentController =
     new CreateAssignmentController(
-        createAssignmentUseCase
+        createAssignmentUseCase,
+        identifierValidator
     );
 
 
@@ -71,11 +75,13 @@ export const getAssignmentController =
 
 export const updateAssignmentController =
     new UpdateAssignmentController(
-        updateAssignmentUseCase
+        updateAssignmentUseCase,
+        identifierValidator
     );
 
 
 export const deleteAssignmentController =
     new DeleteAssignmentController(
-        deleteAssignmentUseCase
+        deleteAssignmentUseCase,
+        identifierValidator
     );

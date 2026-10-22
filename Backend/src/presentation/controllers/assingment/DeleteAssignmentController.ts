@@ -4,9 +4,8 @@ import {
     NextFunction
 } from "express";
 
-import { Types } from "mongoose";
-
 import { IDeleteAssignmentUseCase } from "../../../application/interfaces/assingment/IDeleteAssignmentUseCase";
+import { IIdentifierValidator } from "../../../application/interfaces/services/IIdentifierValidator";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
@@ -17,7 +16,8 @@ export class DeleteAssignmentController {
 
     constructor(
         private readonly _deleteAssignmentUseCase:
-            IDeleteAssignmentUseCase
+            IDeleteAssignmentUseCase,
+        private readonly _identifierValidator: IIdentifierValidator
     ) { }
 
     async handle(
@@ -51,7 +51,7 @@ export class DeleteAssignmentController {
                 );
             }
 
-            if (!Types.ObjectId.isValid(assignmentId)) {
+            if (!this._identifierValidator.isValid(assignmentId)) {
                 throw new AppError(
                     "Invalid assignment ID",
                     HttpStatusCode.BAD_REQUEST

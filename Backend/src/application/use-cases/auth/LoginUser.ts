@@ -11,7 +11,7 @@ import {
 import {
     IJwtService
 } from "../../interfaces/auth/IJwtService";
-import { LoginProviderRegistry } from "../../services/auth/LoginProviderRegistry";
+import { ILoginProviderRegistry } from "../../interfaces/auth/ILoginProviderRegistry";
 
 import {
     ITokenHasher
@@ -51,7 +51,7 @@ export class LoginUser implements ILoginUser{
         private readonly _refreshTokenRepository: IRefreshTokenRepository,
         private readonly _tokenHasher: ITokenHasher,
         private readonly _authConfig: IAuthConfig,
-        private readonly _loginProviderRegistry: LoginProviderRegistry
+        private readonly _loginProviderRegistry: ILoginProviderRegistry
     ) { }
 
 

@@ -1,3 +1,4 @@
+
 import { IAssignmentRepository } from "../../../domain/repositories/courseRepositories/IAssingmentRepository";
 import { IChapterRepository } from "../../../domain/repositories/courseRepositories/IChapterRepository";
 import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
@@ -16,26 +17,20 @@ import { CourseStatus } from "../../../shared/enums/CourseStatus";
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-export class SubmitCourseUseCase
-    implements ISubmitCourseUseCase {
-
+export class SubmitCourseUseCase implements ISubmitCourseUseCase {
     constructor(
         private readonly _courseRepository: ICourseRepository,
         private readonly _chapterRepository: IChapterRepository,
         private readonly _lessonRepository: ILessonRepository,
         private readonly _assignmentRepository: IAssignmentRepository,
         private readonly _courseStatusPolicy: ICourseStatusPolicy
-    ) {}
+    ) { }
 
-    async execute(
-        dto: SubmitCourseDTO
-    ): Promise<Course> {
-
+    async execute(dto: SubmitCourseDTO): Promise<Course> {
         // 1. Find course
-        const course =
-            await this._courseRepository.findById(
-                dto.courseId
-            );
+        const course = await this._courseRepository.findById(
+            dto.courseId
+        );
 
         if (!course) {
             throw new AppError(
@@ -52,23 +47,39 @@ export class SubmitCourseUseCase
             );
         }
 
-        // 3. Verify course status
+        // 3. Validate required course details
         if (
-            !this._courseStatusPolicy.canSubmit(
-                course.status
-            )
+            !course.title?.trim() ||
+            !course.subtitle?.trim() ||
+            !course.description?.trim() ||
+            !course.categoryId?.trim() ||
+            !course.language?.trim()
         ) {
+            throw new AppError(
+                "Course details are incomplete",
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
+
+        if (course.duration <= 0) {
+            throw new AppError(
+                "Course duration must be greater than zero",
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
+
+        // 4. Verify course status
+        if (!this._courseStatusPolicy.canSubmit(course.status)) {
             throw new AppError(
                 "Course cannot be submitted in its current status",
                 HttpStatusCode.BAD_REQUEST
             );
         }
 
-        // 4. Find chapters
-        const chapters =
-            await this._chapterRepository.findByCourseId(
-                dto.courseId
-            );
+        // 5. Find chapters
+        const chapters = await this._chapterRepository.findByCourseId(
+            dto.courseId
+        );
 
         if (chapters.length === 0) {
             throw new AppError(
@@ -77,13 +88,25 @@ export class SubmitCourseUseCase
             );
         }
 
-        // 5. Validate every chapter
+        // 6. Validate every chapter
         for (const chapter of chapters) {
-
-            const lessons =
-                await this._lessonRepository.findByChapterId(
-                    chapter.chapterId!
+            if (!chapter.title?.trim()) {
+                throw new AppError(
+                    "Every chapter must have a title",
+                    HttpStatusCode.BAD_REQUEST
                 );
+            }
+
+            if (!chapter.chapterId) {
+                throw new AppError(
+                    "Invalid chapter data",
+                    HttpStatusCode.BAD_REQUEST
+                );
+            }
+
+            const lessons = await this._lessonRepository.findByChapterId(
+                chapter.chapterId
+            );
 
             if (lessons.length === 0) {
                 throw new AppError(
@@ -92,10 +115,9 @@ export class SubmitCourseUseCase
                 );
             }
 
-            // 6. Validate every lesson
+            // 7. Validate every lesson
             for (const lesson of lessons) {
-
-                if (!lesson.title.trim()) {
+                if (!lesson.title?.trim()) {
                     throw new AppError(
                         "Lesson title is required",
                         HttpStatusCode.BAD_REQUEST
@@ -104,7 +126,7 @@ export class SubmitCourseUseCase
 
                 if (
                     lesson.type === LessonType.VIDEO &&
-                    !lesson.videoKey
+                    !lesson.videoKey?.trim()
                 ) {
                     throw new AppError(
                         "Video lesson must contain a video",
@@ -122,17 +144,24 @@ export class SubmitCourseUseCase
                     );
                 }
 
-                // Assignment is optional
+                // 8. Validate assignment when one exists
+                if (!lesson.lessonId) {
+                    throw new AppError(
+                        "Invalid lesson data",
+                        HttpStatusCode.BAD_REQUEST
+                    );
+                }
+
                 const assignment =
                     await this._assignmentRepository.findByLessonId(
-                        lesson.lessonId!
+                        lesson.lessonId
                     );
 
+                // Assignments remain optional for now
                 if (!assignment) {
                     continue;
                 }
 
-                // Validate assignment
                 AssignmentPolicy.validate(
                     assignment.title,
                     assignment.questions,
@@ -143,15 +172,14 @@ export class SubmitCourseUseCase
             }
         }
 
-        // 7. Submit course
-        const updatedCourse =
-            await this._courseRepository.update(
-                dto.courseId,
-                {
-                    status: CourseStatus.PENDING,
-                    rejectionReason: undefined,
-                }
-            );
+        // 9. Submit course for admin review
+        const updatedCourse = await this._courseRepository.update(
+            dto.courseId,
+            {
+                status: CourseStatus.PENDING,
+                rejectionReason: undefined,
+            }
+        );
 
         if (!updatedCourse) {
             throw new AppError(
