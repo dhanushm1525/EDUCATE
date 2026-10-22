@@ -30,6 +30,7 @@ export const API_ROUTES = {
 
   courses: {
     base: "/courses",
+    myCourses: "/courses/my-courses",
 
     byId: (courseId: string) =>
       `/courses/${courseId}`,

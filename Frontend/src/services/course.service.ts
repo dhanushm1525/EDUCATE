@@ -50,6 +50,16 @@ export const courseService = {
         return response.data.data;
     },
 
+ 
+getMyCourses: async (): Promise<Course[]> => {
+    const response = await apiClient.get<
+        CourseApiResponse<Course[]>
+    >(API_ROUTES.courses.myCourses);
+
+    return response.data.data;
+},
+
+
     updateCourse: async (
         courseId: string,
         payload: UpdateCourseRequest

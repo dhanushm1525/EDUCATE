@@ -16,6 +16,9 @@ export const roleMiddleware = (requiredRole: UserRole) => {
                 throw new AppError(AUTH_MESSAGES.AUTHENTICATION_REQUIRED, HttpStatusCode.UNAUTHORIZED);
             }
 
+            console.log("Authenticated user role:", req.user.role);
+            console.log("Required role:", requiredRole);
+
             if (req.user.role !== requiredRole) {
                 throw new AppError(AUTH_MESSAGES.ACCESS_DENIED, HttpStatusCode.FORBIDDEN);
             }

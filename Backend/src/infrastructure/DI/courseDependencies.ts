@@ -9,6 +9,11 @@ import { DefaultCourseStatusPolicy } from "../../domain/policies/CourseStatusPol
 import { SubmitCourseUseCase } from "../../application/use-cases/course/SubmitCourseUseCase";
 import { SubmitCourseController } from "../../presentation/controllers/course/SubmitCourseController";
 import { assignmentRepository } from "./assignmentDependencies";
+import { GetMyCoursesUseCase } from "../../application/use-cases/course/GetMyCoursesUseCase";
+import { GetMyCoursesController } from "../../presentation/controllers/course/GetMyCoursesController";
+
+export const getMyCoursesUseCase =
+    new GetMyCoursesUseCase(courseRepository);
 
 export const createCourseUseCase =
     new CreateCourseUseCase(courseRepository);
@@ -40,3 +45,9 @@ export const submitCourseController =
     new SubmitCourseController(
         submitCourseUseCase
     );
+
+
+
+export const getMyCoursesController =
+    new GetMyCoursesController(getMyCoursesUseCase);
+
