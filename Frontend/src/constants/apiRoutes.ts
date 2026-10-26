@@ -70,6 +70,9 @@ export const API_ROUTES = {
       lessonId: string,
     ) =>
       `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/media/upload-url`,
+
+    media: (courseId: string, chapterId: string, lessonId: string) =>
+      `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/media`,
   },
 
   assignments: {

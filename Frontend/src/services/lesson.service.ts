@@ -134,17 +134,39 @@ export const lessonService = {
 
     uploadMedia: async (
         uploadUrl: string,
-        file: File
+        file: File,
+        onProgress?: (percentage: number) => void
     ): Promise<void> => {
+        await axios.put(uploadUrl, file, {
+            headers: {
+                "Content-Type": file.type,
+            },
+            onUploadProgress: (event) => {
+                if (event.total) {
+                    const percentage = Math.round(
+                        (event.loaded / event.total) * 100
+                    );
 
-        await axios.put(
-            uploadUrl,
-            file,
+                    onProgress?.(percentage);
+                }
+            },
+        });
+    },
+
+    cleanupMedia: async (
+        courseId: string,
+        chapterId: string,
+        lessonId: string,
+        key: string
+    ): Promise<void> => {
+        await apiClient.delete(
+            API_ROUTES.lessons.media(
+                courseId,
+                chapterId,
+                lessonId
+            ),
             {
-                headers: {
-                    "Content-Type":
-                        file.type,
-                },
+                data: { key },
             }
         );
     },

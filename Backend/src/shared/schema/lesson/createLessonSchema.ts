@@ -1,9 +1,9 @@
+
 import { z } from "zod";
 import { LessonType } from "../../../shared/enums/LessonType";
 import { mongoIdSchema } from "../common/mongoIdSchema";
 
 export const createLessonSchema = z.object({
-
     body: z.object({
         title: z
             .string()
@@ -29,7 +29,9 @@ export const createLessonSchema = z.object({
 
         videoUrl: z
             .string()
-            .url()
+            .trim()
+            .transform((value) => value === "" ? undefined : value)
+            .pipe(z.string().url().optional())
             .optional(),
 
         content: z
@@ -46,11 +48,10 @@ export const createLessonSchema = z.object({
             .optional(),
     }),
 
-   params: z.object({
-    courseId: mongoIdSchema,
-    chapterId: mongoIdSchema,
-    lessonId: mongoIdSchema,
-}),
+    params: z.object({
+        courseId: mongoIdSchema,
+        chapterId: mongoIdSchema,
+    }),
 
     query: z.object({}),
 });

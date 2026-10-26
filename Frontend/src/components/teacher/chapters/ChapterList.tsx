@@ -114,8 +114,12 @@ export function ChapterList({
                 </div>
 
                 <div className="rounded-md border border-dashed border-slate-700 p-5 text-center">
-                  <p className="text-xs text-slate-500">
-                    Lesson management will appear here.
+                  <p className="text-sm text-slate-400">
+                    No lesson preview available here.
+                  </p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Open lesson management to add and organize lessons for this
+                    chapter.
                   </p>
                 </div>
               </div>
