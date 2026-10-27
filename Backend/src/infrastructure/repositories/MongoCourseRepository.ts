@@ -72,4 +72,14 @@ export class MongoCourseRepository
 
         return await this.deleteByIdDocument(courseId);
     }
+
+    async incrementTotalStudents(courseId: string): Promise<boolean> {
+        const updatedCourse = await this.model.findByIdAndUpdate(
+            courseId,
+            { $inc: { totalStudents: 1 } },
+            { new: true, runValidators: true }
+        ).exec();
+
+        return updatedCourse !== null;
+    }
 }

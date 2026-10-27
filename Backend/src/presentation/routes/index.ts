@@ -11,6 +11,7 @@ import chapterRoutes from "./chapterRoutes"
 import lessonRoutes from "./lessonRoutes"
 import teacherApplicationRoutes from "./teacherApplicationRoutes"
 import assingmentRoutes from "./assingmentRoutes"
+import enrollmentRoutes from "./enrollmentRoutes";
 
 const router = Router();
 
@@ -43,4 +44,6 @@ router.use("/courses",lessonRoutes)
 router.use("/teacher-applications",teacherApplicationRoutes)
 
 router.use("/",assingmentRoutes);
+
+router.use("/enrollments", enrollmentRoutes);
 export default router;

@@ -11,4 +11,6 @@ export interface ICourseRepository {
     update(courseId: string,course: Partial<Course>): Promise<Course | null>;
 
     delete(courseId: string): Promise<boolean>;
+
+    incrementTotalStudents(courseId: string): Promise<boolean>;
 }

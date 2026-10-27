@@ -1,11 +1,17 @@
-import { HttpStatusCode } from "../../shared/enums/HttpStatusCode";
 
+import { HttpStatusCode } from "../../shared/enums/HttpStatusCode";
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../../shared/errors/AppError";
 import { UserRole } from "../../shared/enums/UserRole";
 import { AUTH_MESSAGES } from "../../shared/messages/authMessages";
 
-export const roleMiddleware = (requiredRole: UserRole) => {
+export const roleMiddleware = (
+    requiredRole: UserRole | UserRole[]
+) => {
+    const allowedRoles = Array.isArray(requiredRole)
+        ? requiredRole
+        : [requiredRole];
+
     return (
         req: Request,
         _res: Response,
@@ -13,14 +19,17 @@ export const roleMiddleware = (requiredRole: UserRole) => {
     ) => {
         try {
             if (!req.user) {
-                throw new AppError(AUTH_MESSAGES.AUTHENTICATION_REQUIRED, HttpStatusCode.UNAUTHORIZED);
+                throw new AppError(
+                    AUTH_MESSAGES.AUTHENTICATION_REQUIRED,
+                    HttpStatusCode.UNAUTHORIZED
+                );
             }
 
-            console.log("Authenticated user role:", req.user.role);
-            console.log("Required role:", requiredRole);
-
-            if (req.user.role !== requiredRole) {
-                throw new AppError(AUTH_MESSAGES.ACCESS_DENIED, HttpStatusCode.FORBIDDEN);
+            if (!allowedRoles.includes(req.user.role)) {
+                throw new AppError(
+                    AUTH_MESSAGES.ACCESS_DENIED,
+                    HttpStatusCode.FORBIDDEN
+                );
             }
 
             next();
