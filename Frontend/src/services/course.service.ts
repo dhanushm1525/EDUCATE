@@ -5,6 +5,7 @@ import { API_ROUTES } from "../constants/apiRoutes";
 import type {
     Course,
     CourseApiResponse,
+    CourseSearchFilters,
     CreateCourseRequest,
     UpdateCourseRequest,
 } from "../types/course";
@@ -24,14 +25,14 @@ export const courseService = {
         return response.data.data;
     },
 
-    getCourses: async (): Promise<Course[]> => {
-
-        const response =
-            await apiClient.get<
-                CourseApiResponse<Course[]>
-            >(
-                API_ROUTES.courses.base
-            );
+    getCourses: async (
+        filters: CourseSearchFilters = {}
+    ): Promise<Course[]> => {
+        const response = await apiClient.get<
+            CourseApiResponse<Course[]>
+        >(API_ROUTES.courses.base, {
+            params: filters,
+        });
 
         return response.data.data;
     },
@@ -50,14 +51,14 @@ export const courseService = {
         return response.data.data;
     },
 
- 
-getMyCourses: async (): Promise<Course[]> => {
-    const response = await apiClient.get<
-        CourseApiResponse<Course[]>
-    >(API_ROUTES.courses.myCourses);
 
-    return response.data.data;
-},
+    getMyCourses: async (): Promise<Course[]> => {
+        const response = await apiClient.get<
+            CourseApiResponse<Course[]>
+        >(API_ROUTES.courses.myCourses);
+
+        return response.data.data;
+    },
 
 
     updateCourse: async (

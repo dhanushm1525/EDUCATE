@@ -1,12 +1,18 @@
+
+import { Types } from "mongoose";
+
 import { ICourseRepository } from "../../domain/repositories/courseRepositories/ICourseRepository";
+import { CourseSearchCriteria } from "../../domain/repositories/courseRepositories/CourseSearchCriteria";
 import { Course } from "../../domain/entities/Course";
 
 import { BaseRepository } from "./BaseRepository";
-import { CourseDocument, CourseModel } from "../database/models/CourseModel";
+import {
+    CourseDocument,
+    CourseModel,
+} from "../database/models/CourseModel";
 
 import { CoursePersistenceMapper } from "../mappers/CoursePersistanceMapper";
-
-import { Types } from "mongoose";
+import { CourseStatus } from "../../shared/enums/CourseStatus";
 
 export class MongoCourseRepository
     extends BaseRepository<CourseDocument>
@@ -17,7 +23,6 @@ export class MongoCourseRepository
     }
 
     async create(course: Course): Promise<Course> {
-
         const documentData =
             CoursePersistenceMapper.toPersistence(course);
 
@@ -28,7 +33,6 @@ export class MongoCourseRepository
     }
 
     async findById(courseId: string): Promise<Course | null> {
-
         const document =
             await this.findByIdDocument(courseId);
 
@@ -40,9 +44,8 @@ export class MongoCourseRepository
     }
 
     async findByTeacherId(teacherId: string): Promise<Course[]> {
-
         const documents = await this.findManyDocuments({
-            teacherId: new Types.ObjectId(teacherId)
+            teacherId: new Types.ObjectId(teacherId),
         });
 
         return documents.map(
@@ -50,8 +53,95 @@ export class MongoCourseRepository
         );
     }
 
-    async update(courseId: string, course: Partial<Course>): Promise<Course | null> {
+    async findPublished(
+        criteria: CourseSearchCriteria
+    ): Promise<Course[]> {
+        const conditions: {
+            status: CourseStatus;
+            $or?: Array<Record<string, unknown>>;
+            categoryId?: Types.ObjectId;
+            level?: string;
+            finalPrice?: {
+                $gte?: number;
+                $lte?: number;
+            };
+        } = {
+            status: CourseStatus.PUBLISHED,
+        };
 
+        if (criteria.search?.trim()) {
+            const escapedSearch = criteria.search
+                .trim()
+                .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+            const searchRegex = {
+                $regex: escapedSearch,
+                $options: "i",
+            };
+
+            conditions.$or = [
+                { title: searchRegex },
+                { subtitle: searchRegex },
+                { description: searchRegex },
+            ];
+        }
+
+        if (criteria.categoryId) {
+            conditions.categoryId = new Types.ObjectId(
+                criteria.categoryId
+            );
+        }
+
+        if (criteria.level) {
+            conditions.level = criteria.level;
+        }
+
+        if (
+            criteria.minPrice !== undefined ||
+            criteria.maxPrice !== undefined
+        ) {
+            conditions.finalPrice = {};
+
+            if (criteria.minPrice !== undefined) {
+                conditions.finalPrice.$gte = criteria.minPrice;
+            }
+
+            if (criteria.maxPrice !== undefined) {
+                conditions.finalPrice.$lte = criteria.maxPrice;
+            }
+        }
+
+        const documents = await this.model
+            .find(conditions)
+            .sort({ createdAt: -1 })
+            .exec();
+
+        return documents.map(
+            CoursePersistenceMapper.toDomain
+        );
+    }
+
+    async findPublishedById(
+        courseId: string
+    ): Promise<Course | null> {
+        const document = await this.model
+            .findOne({
+                _id: courseId,
+                status: CourseStatus.PUBLISHED,
+            })
+            .exec();
+
+        if (!document) {
+            return null;
+        }
+
+        return CoursePersistenceMapper.toDomain(document);
+    }
+
+    async update(
+        courseId: string,
+        course: Partial<Course>
+    ): Promise<Course | null> {
         const updateData =
             CoursePersistenceMapper.toPersistenceUpdate(course);
 
@@ -69,16 +159,19 @@ export class MongoCourseRepository
     }
 
     async delete(courseId: string): Promise<boolean> {
-
         return await this.deleteByIdDocument(courseId);
     }
 
-    async incrementTotalStudents(courseId: string): Promise<boolean> {
-        const updatedCourse = await this.model.findByIdAndUpdate(
-            courseId,
-            { $inc: { totalStudents: 1 } },
-            { new: true, runValidators: true }
-        ).exec();
+    async incrementTotalStudents(
+        courseId: string
+    ): Promise<boolean> {
+        const updatedCourse = await this.model
+            .findByIdAndUpdate(
+                courseId,
+                { $inc: { totalStudents: 1 } },
+                { new: true, runValidators: true }
+            )
+            .exec();
 
         return updatedCourse !== null;
     }

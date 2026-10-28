@@ -11,6 +11,13 @@ import { SubmitCourseController } from "../../presentation/controllers/course/Su
 import { assignmentRepository } from "./assignmentDependencies";
 import { GetMyCoursesUseCase } from "../../application/use-cases/course/GetMyCoursesUseCase";
 import { GetMyCoursesController } from "../../presentation/controllers/course/GetMyCoursesController";
+import { GetPublishedCoursesUseCase } from "../../application/use-cases/course/GetPublishedCoursesUseCase";
+import { GetPublishedCoursesController } from "../../presentation/controllers/course/GetPublishedCoursesController";
+
+import { GetPublishedCourseByIdUseCase } from "../../application/use-cases/course/GetPublishedCourseByIdUseCase";
+import { GetPublishedCourseByIdController } from "../../presentation/controllers/course/GetPublishedCourseByIdController";
+
+
 
 export const getMyCoursesUseCase =
     new GetMyCoursesUseCase(courseRepository);
@@ -51,3 +58,18 @@ export const submitCourseController =
 export const getMyCoursesController =
     new GetMyCoursesController(getMyCoursesUseCase);
 
+
+export const getPublishedCoursesUseCase =
+    new GetPublishedCoursesUseCase(courseRepository);
+
+export const getPublishedCoursesController =
+    new GetPublishedCoursesController(getPublishedCoursesUseCase);
+
+
+export const getPublishedCourseByIdUseCase =
+    new GetPublishedCourseByIdUseCase(courseRepository);
+
+export const getPublishedCourseByIdController =
+    new GetPublishedCourseByIdController(
+        getPublishedCourseByIdUseCase
+    );

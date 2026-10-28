@@ -97,3 +97,11 @@ export interface CourseApiResponse<T> {
 
     data: T;
 }
+
+export interface CourseSearchFilters {
+    search?: string;
+    categoryId?: string;
+    level?: CourseLevel;
+    minPrice?: number;
+    maxPrice?: number;
+}
