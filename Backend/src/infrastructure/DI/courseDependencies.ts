@@ -16,6 +16,12 @@ import { GetPublishedCoursesController } from "../../presentation/controllers/co
 
 import { GetPublishedCourseByIdUseCase } from "../../application/use-cases/course/GetPublishedCourseByIdUseCase";
 import { GetPublishedCourseByIdController } from "../../presentation/controllers/course/GetPublishedCourseByIdController";
+import { GetPendingCoursesUseCase } from "../../application/use-cases/course/GetPendingCoursesUseCase";
+import { GetPendingCoursesController } from "../../presentation/controllers/course/GetPendingCoursesController";
+import { ApproveCourseUseCase } from "../../application/use-cases/course/ApproveCourseUseCase";
+import { ApproveCourseController } from "../../presentation/controllers/course/ApproveCourseController";
+import { RejectCourseUseCase } from "../../application/use-cases/course/RejectCourseUseCase";
+import { RejectCourseController } from "../../presentation/controllers/course/RejectCourseController";
 
 
 
@@ -73,3 +79,25 @@ export const getPublishedCourseByIdController =
     new GetPublishedCourseByIdController(
         getPublishedCourseByIdUseCase
     );
+
+
+export const getPendingCoursesUseCase =
+    new GetPendingCoursesUseCase(courseRepository);
+
+export const getPendingCoursesController =
+    new GetPendingCoursesController(getPendingCoursesUseCase);
+
+export const approveCourseUseCase =
+    new ApproveCourseUseCase(courseRepository);
+
+export const approveCourseController =
+    new ApproveCourseController(approveCourseUseCase);
+
+
+export const rejectCourseUseCase = new RejectCourseUseCase(
+    courseRepository
+);
+
+export const rejectCourseController = new RejectCourseController(
+    rejectCourseUseCase
+);

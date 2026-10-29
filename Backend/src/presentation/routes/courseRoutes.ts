@@ -19,6 +19,9 @@ import {
     getMyCoursesController,
     getPublishedCoursesController,
     getPublishedCourseByIdController,
+    getPendingCoursesController,
+    approveCourseController,
+    rejectCourseController
 } from "../../infrastructure/DI/courseDependencies";
 
 import { createCourseSchema } from "../../shared/schema/course/createCourseSchema";
@@ -43,6 +46,32 @@ router.get(
     getPublishedCoursesController.handle.bind(
         getPublishedCoursesController
     )
+);
+
+// Admin: retrieve courses awaiting approval.
+router.get(
+    "/pending",
+    authenticateUser,
+    roleMiddleware(UserRole.ADMIN),
+    getPendingCoursesController.handle.bind(
+        getPendingCoursesController
+    )
+);
+
+// Admin: approve a course awaiting review.
+router.patch(
+    "/:courseId/approve",
+    authenticateUser,
+    roleMiddleware(UserRole.ADMIN),
+    approveCourseController.handle.bind(approveCourseController)
+);
+
+// Admin: reject a course awaiting review.
+router.patch(
+    "/:courseId/reject",
+    authenticateUser, 
+    roleMiddleware(UserRole.ADMIN),
+    rejectCourseController.handle.bind(rejectCourseController)
 );
 
 // Public: retrieve one published course.
@@ -79,5 +108,9 @@ router.patch(
     roleMiddleware(UserRole.TEACHER),
     submitCourseController.handle.bind(submitCourseController)
 );
+
+
+
+
 
 export default router;

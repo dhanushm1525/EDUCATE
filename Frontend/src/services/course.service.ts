@@ -90,4 +90,38 @@ export const courseService = {
 
         return response.data.data;
     },
+
+    getPendingCourses: async (): Promise<Course[]> => {
+        const response = await apiClient.get<
+            CourseApiResponse<Course[]>
+        >(API_ROUTES.courses.pending);
+
+        return response.data.data;
+    },
+
+    approveCourse: async (
+        courseId: string
+    ): Promise<Course> => {
+        const response = await apiClient.patch<
+            CourseApiResponse<Course>
+        >(
+            API_ROUTES.courses.approve(courseId)
+        );
+
+        return response.data.data;
+    },
+
+    rejectCourse: async (
+        courseId: string,
+        rejectionReason: string
+    ): Promise<Course> => {
+        const response = await apiClient.patch<
+            CourseApiResponse<Course>
+        >(
+            API_ROUTES.courses.reject(courseId),
+            { rejectionReason }
+        );
+
+        return response.data.data;
+    },
 };

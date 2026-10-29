@@ -28,16 +28,25 @@ export const API_ROUTES = {
     base: "/categories",
   },
 
+
   courses: {
     base: "/courses",
     myCourses: "/courses/my-courses",
+    pending: "/courses/pending",
 
     byId: (courseId: string) =>
       `/courses/${courseId}`,
 
     submit: (courseId: string) =>
       `/courses/${courseId}/submit`,
+
+    approve: (courseId: string) =>
+      `/courses/${courseId}/approve`,
+
+    reject: (courseId: string) =>
+      `/courses/${courseId}/reject`,
   },
+
 
   chapters: {
     byCourse: (courseId: string) =>

@@ -28,6 +28,8 @@ import AssignmentManagementPage from "../../pages/teacher/AssignmentManagementPa
 // Admin pages
 import AdminDashboard from "../../pages/admin/AdminDashboard";
 import AdminProfilePage from "../../components/admin/AdminProfilePage";
+import CourseApprovalPage from "../../pages/admin/CourseApprovalPage";
+import CategoriesPage from "../../pages/admin/CategoriesPage";
 
 // Route guards
 import RoleRoute from "./RoleRoute";
@@ -83,6 +85,8 @@ export function AppRouter() {
       <Route element={<RoleRoute allowedRoles={["admin"]} />}>
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/profile" element={<AdminProfilePage />} />
+        <Route path="/admin/courses/pending" element={<CourseApprovalPage />} />
+        <Route path="/admin/categories" element={<CategoriesPage />} />
       </Route>
     </Routes>
   );

@@ -24,4 +24,8 @@ export interface ICourseRepository {
     delete(courseId: string): Promise<boolean>;
 
     incrementTotalStudents(courseId: string): Promise<boolean>;
+
+
+    findPending(): Promise<Course[]>;
+
 }

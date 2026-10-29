@@ -175,4 +175,17 @@ export class MongoCourseRepository
 
         return updatedCourse !== null;
     }
+
+
+    async findPending(): Promise<Course[]> {
+        const documents = await this.model
+            .find({ status: CourseStatus.PENDING })
+            .sort({ createdAt: 1 })
+            .exec();
+
+        return documents.map(
+            CoursePersistenceMapper.toDomain
+        );
+    }
+
 }
