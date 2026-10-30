@@ -29,23 +29,26 @@ export const API_ROUTES = {
   },
 
 
-  courses: {
+courses: {
     base: "/courses",
     myCourses: "/courses/my-courses",
     pending: "/courses/pending",
 
     byId: (courseId: string) =>
-      `/courses/${courseId}`,
+        `/courses/${courseId}`,
+
+    manage: (courseId: string) =>
+        `/courses/${courseId}/manage`,
 
     submit: (courseId: string) =>
-      `/courses/${courseId}/submit`,
+        `/courses/${courseId}/submit`,
 
     approve: (courseId: string) =>
-      `/courses/${courseId}/approve`,
+        `/courses/${courseId}/approve`,
 
     reject: (courseId: string) =>
-      `/courses/${courseId}/reject`,
-  },
+        `/courses/${courseId}/reject`,
+},
 
 
   chapters: {

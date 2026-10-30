@@ -21,7 +21,8 @@ import {
     getPublishedCourseByIdController,
     getPendingCoursesController,
     approveCourseController,
-    rejectCourseController
+    rejectCourseController,
+    getTeacherCourseByIdController
 } from "../../infrastructure/DI/courseDependencies";
 
 import { createCourseSchema } from "../../shared/schema/course/createCourseSchema";
@@ -30,6 +31,17 @@ import { getPublishedCoursesSchema } from "../../shared/schema/course/getPublish
 import { getPublishedCourseByIdSchema } from "../../shared/schema/course/getPublishedCourseByIdSchema";
 
 const router = Router();
+
+
+// Teacher: retrieve an owned course, including unpublished courses.
+router.get(
+    "/:courseId/manage",
+    authenticateUser,
+    roleMiddleware(UserRole.TEACHER),
+    getTeacherCourseByIdController.handle.bind(
+        getTeacherCourseByIdController
+    )
+);
 
 // Teacher: retrieve own courses.
 router.get(

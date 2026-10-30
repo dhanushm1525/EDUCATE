@@ -51,6 +51,18 @@ export const courseService = {
         return response.data.data;
     },
 
+    getTeacherCourseById: async (
+        courseId: string
+    ): Promise<Course> => {
+
+        const response =
+            await apiClient.get<CourseApiResponse<Course>>(
+                API_ROUTES.courses.manage(courseId)
+            );
+
+        return response.data.data;
+    },
+
 
     getMyCourses: async (): Promise<Course[]> => {
         const response = await apiClient.get<

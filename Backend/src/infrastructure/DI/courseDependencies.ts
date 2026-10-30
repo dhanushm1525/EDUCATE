@@ -22,6 +22,8 @@ import { ApproveCourseUseCase } from "../../application/use-cases/course/Approve
 import { ApproveCourseController } from "../../presentation/controllers/course/ApproveCourseController";
 import { RejectCourseUseCase } from "../../application/use-cases/course/RejectCourseUseCase";
 import { RejectCourseController } from "../../presentation/controllers/course/RejectCourseController";
+import { GetTeacherCourseByIdUseCase } from "../../application/use-cases/course/GetTeacherCourseByIdUseCase";
+import { GetTeacherCourseByIdController } from "../../presentation/controllers/course/GetTeacherCourseByIdController";
 
 
 
@@ -101,3 +103,11 @@ export const rejectCourseUseCase = new RejectCourseUseCase(
 export const rejectCourseController = new RejectCourseController(
     rejectCourseUseCase
 );
+
+export const getTeacherCourseByIdUseCase =
+    new GetTeacherCourseByIdUseCase(courseRepository);
+
+export const getTeacherCourseByIdController =
+    new GetTeacherCourseByIdController(
+        getTeacherCourseByIdUseCase
+    );
