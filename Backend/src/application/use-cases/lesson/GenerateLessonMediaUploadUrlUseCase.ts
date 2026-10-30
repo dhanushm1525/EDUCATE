@@ -1,5 +1,4 @@
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
-
 import { AppError } from "../../../shared/errors/AppError";
 
 import { ILessonRepository } from "../../../domain/repositories/courseRepositories/ILessonRepository";
@@ -29,7 +28,7 @@ export class GenerateLessonMediaUploadUrlUseCase
         private readonly _mediaTypePolicy: ILessonMediaTypePolicy,
         private readonly _mediaKeyPolicy: ILessonMediaKeyPolicy,
         private readonly _bucketName: string
-    ) {}
+    ) { }
 
     async execute(
         courseId: string,
@@ -42,6 +41,16 @@ export class GenerateLessonMediaUploadUrlUseCase
         if (!this._mediaTypePolicy.supports(dto.contentType)) {
             throw new AppError(
                 "Unsupported lesson media type",
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
+
+        if (
+            dto.mediaType !== "video" &&
+            dto.mediaType !== "thumbnail"
+        ) {
+            throw new AppError(
+                "Invalid lesson media type",
                 HttpStatusCode.BAD_REQUEST
             );
         }
@@ -109,7 +118,8 @@ export class GenerateLessonMediaUploadUrlUseCase
                 courseId,
                 chapterId,
                 lessonId,
-                dto.fileName
+                dto.fileName,
+                dto.mediaType
             );
 
         const uploadUrl =

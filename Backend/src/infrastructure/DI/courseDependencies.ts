@@ -24,6 +24,11 @@ import { RejectCourseUseCase } from "../../application/use-cases/course/RejectCo
 import { RejectCourseController } from "../../presentation/controllers/course/RejectCourseController";
 import { GetTeacherCourseByIdUseCase } from "../../application/use-cases/course/GetTeacherCourseByIdUseCase";
 import { GetTeacherCourseByIdController } from "../../presentation/controllers/course/GetTeacherCourseByIdController";
+import { GetCourseLearningContentUseCase } from "../../application/use-cases/course/GetCourseLearningContentUseCase";
+
+import { GetCourseLearningContentController } from "../../presentation/controllers/course/GetCourseLearningContentController";
+
+import { s3StorageService } from "./storageDependencies";
 
 
 
@@ -110,4 +115,18 @@ export const getTeacherCourseByIdUseCase =
 export const getTeacherCourseByIdController =
     new GetTeacherCourseByIdController(
         getTeacherCourseByIdUseCase
+    );
+
+
+export const getCourseLearningContentUseCase =
+    new GetCourseLearningContentUseCase(
+        courseRepository,
+        chapterRepository,
+        lessonRepository,
+        s3StorageService
+    );
+
+export const getCourseLearningContentController =
+    new GetCourseLearningContentController(
+        getCourseLearningContentUseCase
     );

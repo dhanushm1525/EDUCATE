@@ -48,6 +48,9 @@ courses: {
 
     reject: (courseId: string) =>
         `/courses/${courseId}/reject`,
+
+    learningContent: (courseId: string) =>
+  `/courses/${courseId}/learning-content`,
 },
 
 

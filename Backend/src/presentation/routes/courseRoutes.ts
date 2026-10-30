@@ -22,7 +22,8 @@ import {
     getPendingCoursesController,
     approveCourseController,
     rejectCourseController,
-    getTeacherCourseByIdController
+    getTeacherCourseByIdController,
+    getCourseLearningContentController
 } from "../../infrastructure/DI/courseDependencies";
 
 import { createCourseSchema } from "../../shared/schema/course/createCourseSchema";
@@ -102,6 +103,15 @@ router.post(
     roleMiddleware(UserRole.TEACHER),
     validate(createCourseSchema),
     createCourseController.handle.bind(createCourseController)
+);
+
+// Public: retrieve chapters, lessons and thumbnail previews.
+router.get(
+    "/:courseId/learning-content",
+    validate(getPublishedCourseByIdSchema),
+    getCourseLearningContentController.handle.bind(
+        getCourseLearningContentController
+    )
 );
 
 // Teacher: update a course.

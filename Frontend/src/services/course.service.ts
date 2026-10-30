@@ -10,6 +10,11 @@ import type {
     UpdateCourseRequest,
 } from "../types/course";
 
+import type {
+    CourseLearningContent,
+    CourseLearningContentApiResponse,
+} from "../types/courseLearningContent";
+
 export const courseService = {
 
     createCourse: async (
@@ -133,6 +138,18 @@ export const courseService = {
             API_ROUTES.courses.reject(courseId),
             { rejectionReason }
         );
+
+        return response.data.data;
+    },
+
+    getLearningContent: async (
+        courseId: string
+    ): Promise<CourseLearningContent> => {
+
+        const response =
+            await apiClient.get<CourseLearningContentApiResponse>(
+                API_ROUTES.courses.learningContent(courseId)
+            );
 
         return response.data.data;
     },

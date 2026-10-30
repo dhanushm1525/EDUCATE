@@ -1,5 +1,4 @@
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
-
 import { AppError } from "../../../shared/errors/AppError";
 
 import { Lesson } from "../../../domain/entities/Lesson";
@@ -91,18 +90,37 @@ export class UpdateLessonUseCase
             );
         }
 
-        if (dto.videoKey!==undefined) {
+        if (dto.videoKey !== undefined) {
             const isOwned =
                 this._lessonMediaKeyPolicy.isOwnedByLesson(
                     dto.videoKey,
                     courseId,
                     chapterId,
-                    lessonId
+                    lessonId,
+                    "video"
                 );
 
             if (!isOwned) {
                 throw new AppError(
-                    "Invalid lesson media key",
+                    "Invalid lesson video key",
+                    HttpStatusCode.BAD_REQUEST
+                );
+            }
+        }
+
+        if (dto.thumbnailKey !== undefined) {
+            const isOwned =
+                this._lessonMediaKeyPolicy.isOwnedByLesson(
+                    dto.thumbnailKey,
+                    courseId,
+                    chapterId,
+                    lessonId,
+                    "thumbnail"
+                );
+
+            if (!isOwned) {
+                throw new AppError(
+                    "Invalid lesson thumbnail key",
                     HttpStatusCode.BAD_REQUEST
                 );
             }

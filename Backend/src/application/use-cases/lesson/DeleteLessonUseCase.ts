@@ -13,6 +13,7 @@ import { IS3Client } from "../../interfaces/storage/IS3Client";
 import { IDeleteLessonUseCase } from "../../interfaces/lesson/IDeleteLessonUseCase";
 
 export class DeleteLessonUseCase implements IDeleteLessonUseCase {
+
     constructor(
         private readonly _lessonRepository: ILessonRepository,
         private readonly _chapterRepository: IChapterRepository,
@@ -21,7 +22,7 @@ export class DeleteLessonUseCase implements IDeleteLessonUseCase {
         private readonly _s3Client: IS3Client,
         private readonly _lessonMediaKeyPolicy: ILessonMediaKeyPolicy,
         private readonly _assignmentRepository: IAssignmentRepository,
-        private readonly _bucketName: string,
+        private readonly _bucketName: string
     ) {}
 
     async execute(
@@ -30,6 +31,7 @@ export class DeleteLessonUseCase implements IDeleteLessonUseCase {
         lessonId: string,
         teacherId: string
     ): Promise<void> {
+
         // 1. Find the lesson.
         const lesson = await this._lessonRepository.findById(lessonId);
 
@@ -40,7 +42,7 @@ export class DeleteLessonUseCase implements IDeleteLessonUseCase {
             );
         }
 
-        // 2. Validate that the lesson belongs to the chapter.
+        // 2. Validate lesson ownership by chapter.
         if (lesson.chapterId !== chapterId) {
             throw new AppError(
                 "Lesson does not belong to this chapter",
@@ -58,7 +60,7 @@ export class DeleteLessonUseCase implements IDeleteLessonUseCase {
             );
         }
 
-        // 4. Validate that the chapter belongs to the course.
+        // 4. Validate chapter ownership by course.
         if (chapter.courseId !== courseId) {
             throw new AppError(
                 "Chapter does not belong to this course",
@@ -84,7 +86,7 @@ export class DeleteLessonUseCase implements IDeleteLessonUseCase {
             );
         }
 
-        // 7. Validate the course status.
+        // 7. Validate course status.
         if (!this._courseStatusPolicy.canEdit(course.status)) {
             throw new AppError(
                 "This course cannot be modified",
@@ -92,8 +94,9 @@ export class DeleteLessonUseCase implements IDeleteLessonUseCase {
             );
         }
 
-        // 8. Validate the S3 video key.
+        // 8. Validate both S3 keys.
         const videoKey = lesson.videoKey;
+        const thumbnailKey = lesson.thumbnailKey;
 
         if (
             videoKey &&
@@ -101,35 +104,59 @@ export class DeleteLessonUseCase implements IDeleteLessonUseCase {
                 videoKey,
                 courseId,
                 chapterId,
-                lessonId
+                lessonId,
+                "video"
             )
         ) {
             throw new AppError(
-                "Lesson media key is invalid",
+                "Lesson video key is invalid",
                 HttpStatusCode.BAD_REQUEST
             );
         }
 
-        // 9. Find the assignment associated with this lesson.
+        if (
+            thumbnailKey &&
+            !this._lessonMediaKeyPolicy.isOwnedByLesson(
+                thumbnailKey,
+                courseId,
+                chapterId,
+                lessonId,
+                "thumbnail"
+            )
+        ) {
+            throw new AppError(
+                "Lesson thumbnail key is invalid",
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
+
+        // 9. Find the associated assignment.
         const assignment =
             await this._assignmentRepository.findByLessonId(lessonId);
 
-        // 10. Delete the S3 video before modifying database records.
-        if (videoKey) {
-            try {
+        // 10. Delete the associated S3 objects.
+        try {
+            if (videoKey) {
                 await this._s3Client.deleteFile(
                     this._bucketName,
                     videoKey
                 );
-            } catch {
-                throw new AppError(
-                    "Unable to delete the lesson video. The lesson and assignment were not deleted.",
-                    HttpStatusCode.INTERNAL_SERVER_ERROR
+            }
+
+            if (thumbnailKey) {
+                await this._s3Client.deleteFile(
+                    this._bucketName,
+                    thumbnailKey
                 );
             }
+        } catch {
+            throw new AppError(
+                "Unable to delete lesson media. The lesson and assignment were not deleted.",
+                HttpStatusCode.INTERNAL_SERVER_ERROR
+            );
         }
 
-        // 11. Delete the associated assignment, if present.
+        // 11. Delete the assignment, if present.
         if (assignment?.assignmentId) {
             const assignmentDeleted =
                 await this._assignmentRepository.delete(
@@ -138,21 +165,19 @@ export class DeleteLessonUseCase implements IDeleteLessonUseCase {
 
             if (!assignmentDeleted) {
                 throw new AppError(
-                    videoKey
-                        ? "The video was deleted, but the assignment and lesson could not be deleted."
-                        : "Failed to delete the lesson assignment",
+                    "Lesson media was deleted, but the assignment and lesson could not be deleted.",
                     HttpStatusCode.INTERNAL_SERVER_ERROR
                 );
             }
         }
 
-        // 12. Delete the lesson from MongoDB.
+        // 12. Delete the lesson.
         const lessonDeleted =
             await this._lessonRepository.delete(lessonId);
 
         if (!lessonDeleted) {
             throw new AppError(
-                "The lesson could not be deleted. Check the assignment and video cleanup status.",
+                "The lesson could not be deleted. Check the assignment and media cleanup status.",
                 HttpStatusCode.INTERNAL_SERVER_ERROR
             );
         }

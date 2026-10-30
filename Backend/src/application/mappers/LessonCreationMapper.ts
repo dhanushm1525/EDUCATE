@@ -4,43 +4,35 @@ import { UpdateLessonDTO } from "../dtos/lesson/UpdateLessonDTO";
 import { GenerateLessonMediaUploadUrlDTO } from "../dtos/lesson/GenerateLessonMediaUploadUrlDTO";
 
 type LessonRequestBody =
-    Omit<CreateLessonDTO, "videoKey"> & {
-        videoUrl?: string;
-    };
+    Omit<CreateLessonDTO, "videoKey"> & { videoUrl?: string };
 
 type UpdateLessonRequestBody =
-    Omit<UpdateLessonDTO, "videoKey"> & {
-        videoUrl?: string;
-    };
+    Omit<UpdateLessonDTO, "videoKey"> & { videoUrl?: string };
 
 export class LessonCreationMapper {
 
-    static toCreateLessonDTO(
-        body: LessonRequestBody
-    ): CreateLessonDTO {
-
+    static toCreateLessonDTO(body: LessonRequestBody): CreateLessonDTO {
         return {
             title: body.title,
             description: body.description,
             order: body.order,
             type: body.type,
             videoKey: body.videoUrl,
+            thumbnailKey: body.thumbnailKey,
             content: body.content,
             attachments: body.attachments,
             duration: body.duration,
         };
     }
 
-    static toUpdateLessonDTO(
-        body: UpdateLessonRequestBody
-    ): UpdateLessonDTO {
-
+    static toUpdateLessonDTO(body: UpdateLessonRequestBody): UpdateLessonDTO {
         return {
             title: body.title,
             description: body.description,
             order: body.order,
             type: body.type,
             videoKey: body.videoUrl,
+            thumbnailKey: body.thumbnailKey,
             content: body.content,
             attachments: body.attachments,
             duration: body.duration,
@@ -50,18 +42,14 @@ export class LessonCreationMapper {
     static toGenerateMediaUploadUrlDTO(
         body: GenerateLessonMediaUploadUrlDTO
     ): GenerateLessonMediaUploadUrlDTO {
-
         return {
             fileName: body.fileName,
             contentType: body.contentType,
+            mediaType: body.mediaType,
         };
     }
 
-    static toEntity(
-        chapterId: string,
-        dto: CreateLessonDTO
-    ): Lesson {
-
+    static toEntity(chapterId: string, dto: CreateLessonDTO): Lesson {
         return {
             chapterId,
             title: dto.title,
@@ -69,6 +57,7 @@ export class LessonCreationMapper {
             order: dto.order,
             type: dto.type,
             videoKey: dto.videoKey,
+            thumbnailKey: dto.thumbnailKey,
             content: dto.content,
             attachments: dto.attachments,
             duration: dto.duration,

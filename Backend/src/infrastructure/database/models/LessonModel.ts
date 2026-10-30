@@ -8,6 +8,7 @@ export interface LessonDocument extends Document {
     order: number;
     type: LessonType;
     videoUrl?: string;
+    thumbnailUrl?: string;
     content?: string;
     attachments: string[];
     duration?: number;
@@ -22,44 +23,40 @@ const lessonSchema = new Schema<LessonDocument>(
             ref: "Chapter",
             required: true,
         },
-
         title: {
             type: String,
             required: true,
             trim: true,
         },
-
         description: {
             type: String,
             trim: true,
         },
-
         order: {
             type: Number,
             required: true,
             min: 1,
         },
-
         type: {
             type: String,
             enum: Object.values(LessonType),
             required: true,
         },
-
         videoUrl: {
             type: String,
             trim: true,
         },
-
+        thumbnailUrl: {
+            type: String,
+            trim: true,
+        },
         content: {
             type: String,
         },
-
         attachments: {
             type: [String],
             default: [],
         },
-
         duration: {
             type: Number,
             min: 0,

@@ -23,7 +23,7 @@ export class CleanupLessonMediaUseCase
         private readonly _lessonMediaKeyPolicy: ILessonMediaKeyPolicy,
         private readonly _s3Client: IS3Client,
         private readonly _bucketName: string
-    ) { }
+    ) {}
 
     async execute(
         courseId: string,
@@ -32,10 +32,14 @@ export class CleanupLessonMediaUseCase
         teacherId: string,
         dto: CleanupLessonMediaDTO
     ): Promise<void> {
+
         const lesson = await this._lessonRepository.findById(lessonId);
 
         if (!lesson) {
-            throw new AppError("Lesson not found", HttpStatusCode.NOT_FOUND);
+            throw new AppError(
+                "Lesson not found",
+                HttpStatusCode.NOT_FOUND
+            );
         }
 
         if (lesson.chapterId !== chapterId) {
@@ -57,7 +61,10 @@ export class CleanupLessonMediaUseCase
         const course = await this._courseRepository.findById(courseId);
 
         if (!course) {
-            throw new AppError("Course not found", HttpStatusCode.NOT_FOUND);
+            throw new AppError(
+                "Course not found",
+                HttpStatusCode.NOT_FOUND
+            );
         }
 
         if (course.teacherId !== teacherId) {
@@ -91,8 +98,11 @@ export class CleanupLessonMediaUseCase
             );
         }
 
-        // Don't delete the currently saved video.
-        if (lesson.videoKey === key) {
+        // Never delete media currently attached to the lesson.
+        if (
+            lesson.videoKey === key ||
+            lesson.thumbnailKey === key
+        ) {
             throw new AppError(
                 "Cannot clean up media currently attached to the lesson",
                 HttpStatusCode.BAD_REQUEST

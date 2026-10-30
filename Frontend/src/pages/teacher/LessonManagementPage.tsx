@@ -4,7 +4,7 @@ import { ArrowLeft, Plus, RefreshCw } from "lucide-react";
 
 import { Button } from "../../components/common/ui/Button";
 import { Modal } from "../../components/common/ui/Modal";
-import { LessonForm } from "../../components/teacher/lessons/LessonForm";
+import LessonForm from "../../components/teacher/lessons/LessonForm";
 import { LessonList } from "../../components/teacher/lessons/LessonList";
 
 import { lessonService } from "../../services/lesson.service";
@@ -12,6 +12,101 @@ import { getApiErrorMessage } from "../../utils/apiError";
 import { useToastStore } from "../../store/toastStore";
 
 import type { Lesson, CreateLessonRequest } from "../../types/lesson";
+
+type LessonMediaType = "video" | "thumbnail";
+
+/**
+ * Captures a frame from a video file and converts it into a JPEG File.
+ */
+const captureVideoThumbnail = async (videoFile: File): Promise<File> => {
+  const video = document.createElement("video");
+  const objectUrl = URL.createObjectURL(videoFile);
+
+  video.preload = "metadata";
+  video.muted = true;
+  video.playsInline = true;
+
+  try {
+    const metadataLoaded = new Promise<void>((resolve, reject) => {
+      video.addEventListener("loadedmetadata", () => resolve(), {
+        once: true,
+      });
+
+      video.addEventListener(
+        "error",
+        () => reject(new Error("Unable to read the selected video.")),
+        { once: true },
+      );
+    });
+
+    video.src = objectUrl;
+    video.load();
+
+    await metadataLoaded;
+
+    if (
+      !Number.isFinite(video.duration) ||
+      video.duration <= 0 ||
+      !video.videoWidth ||
+      !video.videoHeight
+    ) {
+      throw new Error("Unable to extract a thumbnail from this video.");
+    }
+
+    const captureTime = Math.min(2, video.duration / 2);
+
+    const frameReady = new Promise<void>((resolve, reject) => {
+      video.addEventListener("seeked", () => resolve(), {
+        once: true,
+      });
+
+      video.addEventListener(
+        "error",
+        () => reject(new Error("Unable to seek through the video.")),
+        { once: true },
+      );
+    });
+
+    video.currentTime = captureTime;
+
+    await frameReady;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      throw new Error("Unable to create the thumbnail image.");
+    }
+
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        (result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(new Error("Unable to generate the thumbnail image."));
+          }
+        },
+        "image/jpeg",
+        0.85,
+      );
+    });
+
+    return new File([blob], "lesson-thumbnail.jpg", {
+      type: "image/jpeg",
+    });
+  } finally {
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+    URL.revokeObjectURL(objectUrl);
+  }
+};
 
 export default function LessonManagementPage() {
   const { courseId, chapterId } = useParams<{
@@ -33,6 +128,7 @@ export default function LessonManagementPage() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
+  // Load lessons
   useEffect(() => {
     let cancelled = false;
 
@@ -72,14 +168,74 @@ export default function LessonManagementPage() {
     };
   }, [courseId, chapterId, addToast, refreshKey]);
 
-  const handleSave = async (data: CreateLessonRequest, videoFile?: File) => {
+  /**
+   * Generates a signed upload URL and uploads lesson media.
+   * Returns the S3 object key.
+   */
+  const uploadLessonMedia = async (
+    lessonId: string,
+    file: File,
+    mediaType: LessonMediaType,
+  ): Promise<string> => {
+    if (!courseId || !chapterId) {
+      throw new Error("Course ID or chapter ID is missing.");
+    }
+
+    setUploadProgress(0);
+
+    const upload = await lessonService.generateMediaUploadUrl(
+      courseId,
+      chapterId,
+      lessonId,
+      {
+        fileName: file.name,
+        contentType: file.type,
+        mediaType,
+      },
+    );
+
+    await lessonService.uploadMedia(upload.uploadUrl, file, (percentage) =>
+      setUploadProgress(percentage),
+    );
+
+    return upload.key;
+  };
+
+  /**
+   * Removes uploaded media and returns keys that failed cleanup.
+   */
+  const cleanupUploadedMedia = async (
+    lessonId: string,
+    uploadedMediaKeys: string[],
+  ): Promise<string[]> => {
+    if (!courseId || !chapterId) return uploadedMediaKeys;
+
+    const failures: string[] = [];
+
+    for (const key of uploadedMediaKeys) {
+      try {
+        await lessonService.cleanupMedia(courseId, chapterId, lessonId, key);
+      } catch {
+        failures.push(key);
+      }
+    }
+
+    return failures;
+  };
+
+  // Create or update lesson
+  const handleSave = async (
+    data: CreateLessonRequest,
+    videoFile?: File,
+    thumbnailFile?: File,
+  ) => {
     if (!courseId || !chapterId) {
       addToast("Course ID or chapter ID is missing.", "error");
       return;
     }
 
     let createdLessonId: string | null = null;
-    let uploadedMediaKey: string | null = null;
+    const uploadedMediaKeys: string[] = [];
     const isCreating = !editingLesson;
 
     try {
@@ -87,6 +243,7 @@ export default function LessonManagementPage() {
       setUploadProgress(null);
 
       if (!editingLesson) {
+        // 1. Create lesson first to obtain lesson ID.
         const created = await lessonService.createLesson(
           courseId,
           chapterId,
@@ -97,39 +254,41 @@ export default function LessonManagementPage() {
 
         let savedLesson = created;
 
-        if (videoFile) {
-          setUploadProgress(0);
-
-          const upload = await lessonService.generateMediaUploadUrl(
-            courseId,
-            chapterId,
+        if (created.type === "video" && videoFile) {
+          // 2. Upload video.
+          const videoKey = await uploadLessonMedia(
             created.lessonId,
-            {
-              fileName: videoFile.name,
-              contentType: videoFile.type,
-            },
-          );
-
-          // Keep the key for cleanup if upload or saving fails.
-          uploadedMediaKey = upload.key;
-
-          await lessonService.uploadMedia(
-            upload.uploadUrl,
             videoFile,
-            (percentage) => setUploadProgress(percentage),
+            "video",
           );
 
+          uploadedMediaKeys.push(videoKey);
+
+          // 3. Prefer custom thumbnail; otherwise generate from video.
+          const thumbnailToUpload =
+            thumbnailFile ?? (await captureVideoThumbnail(videoFile));
+
+          // 4. Upload thumbnail.
+          const thumbnailKey = await uploadLessonMedia(
+            created.lessonId,
+            thumbnailToUpload,
+            "thumbnail",
+          );
+
+          uploadedMediaKeys.push(thumbnailKey);
+
+          // 5. Attach video and thumbnail keys to lesson.
           savedLesson = await lessonService.updateLesson(
             courseId,
             chapterId,
             created.lessonId,
             {
-              videoUrl: upload.key,
+              videoUrl: videoKey,
+              thumbnailKey,
             },
           );
 
-          // The uploaded video is now attached to the lesson.
-          uploadedMediaKey = null;
+          uploadedMediaKeys.length = 0;
         }
 
         setLessons((current) =>
@@ -144,35 +303,46 @@ export default function LessonManagementPage() {
         addToast("Lesson created successfully", "success");
       } else {
         const oldVideoKey = editingLesson.videoKey;
-        let updatedData = data;
+        const oldThumbnailKey = editingLesson.thumbnailKey;
 
+        const updatedData: CreateLessonRequest = {
+          ...data,
+        };
+
+        // 1. Upload replacement video if selected.
         if (videoFile) {
-          setUploadProgress(0);
-
-          const upload = await lessonService.generateMediaUploadUrl(
-            courseId,
-            chapterId,
+          const videoKey = await uploadLessonMedia(
             editingLesson.lessonId,
-            {
-              fileName: videoFile.name,
-              contentType: videoFile.type,
-            },
-          );
-
-          uploadedMediaKey = upload.key;
-
-          await lessonService.uploadMedia(
-            upload.uploadUrl,
             videoFile,
-            (percentage) => setUploadProgress(percentage),
+            "video",
           );
 
-          updatedData = {
-            ...data,
-            videoUrl: upload.key,
-          };
+          uploadedMediaKeys.push(videoKey);
+          updatedData.videoUrl = videoKey;
         }
 
+        // 2. Determine replacement thumbnail.
+        let thumbnailToUpload: File | undefined;
+
+        if (thumbnailFile) {
+          thumbnailToUpload = thumbnailFile;
+        } else if (videoFile) {
+          thumbnailToUpload = await captureVideoThumbnail(videoFile);
+        }
+
+        // 3. Upload replacement thumbnail.
+        if (thumbnailToUpload) {
+          const thumbnailKey = await uploadLessonMedia(
+            editingLesson.lessonId,
+            thumbnailToUpload,
+            "thumbnail",
+          );
+
+          uploadedMediaKeys.push(thumbnailKey);
+          updatedData.thumbnailKey = thumbnailKey;
+        }
+
+        // 4. Save lesson and media keys.
         const updated = await lessonService.updateLesson(
           courseId,
           chapterId,
@@ -180,8 +350,7 @@ export default function LessonManagementPage() {
           updatedData,
         );
 
-        // The new video is now attached to the lesson.
-        uploadedMediaKey = null;
+        uploadedMediaKeys.length = 0;
 
         setLessons((current) =>
           current
@@ -191,18 +360,30 @@ export default function LessonManagementPage() {
             .sort((a, b) => a.order - b.order),
         );
 
-        // Remove the previous video only after the replacement is saved.
+        // 5. Remove old media after successful update.
+        const oldMediaToRemove: string[] = [];
+
         if (videoFile && oldVideoKey && oldVideoKey !== updated.videoKey) {
-          try {
-            await lessonService.cleanupMedia(
-              courseId,
-              chapterId,
-              editingLesson.lessonId,
-              oldVideoKey,
-            );
-          } catch {
+          oldMediaToRemove.push(oldVideoKey);
+        }
+
+        if (
+          thumbnailToUpload &&
+          oldThumbnailKey &&
+          oldThumbnailKey !== updated.thumbnailKey
+        ) {
+          oldMediaToRemove.push(oldThumbnailKey);
+        }
+
+        if (oldMediaToRemove.length > 0) {
+          const cleanupFailures = await cleanupUploadedMedia(
+            editingLesson.lessonId,
+            oldMediaToRemove,
+          );
+
+          if (cleanupFailures.length > 0) {
             addToast(
-              "Lesson updated, but the previous video could not be removed.",
+              "Lesson updated, but some previous media files could not be removed.",
               "error",
             );
           }
@@ -215,26 +396,21 @@ export default function LessonManagementPage() {
       setEditingLesson(null);
     } catch (error) {
       const cleanupFailures: string[] = [];
+      const targetLessonId = createdLessonId ?? editingLesson?.lessonId;
 
-      // Attempt to remove an uploaded video that was not attached successfully.
-      if (uploadedMediaKey) {
-        const targetLessonId = createdLessonId ?? editingLesson?.lessonId;
+      // Clean up uploaded files that were not attached.
+      if (targetLessonId && uploadedMediaKeys.length > 0) {
+        const failures = await cleanupUploadedMedia(
+          targetLessonId,
+          uploadedMediaKeys,
+        );
 
-        if (targetLessonId) {
-          try {
-            await lessonService.cleanupMedia(
-              courseId,
-              chapterId,
-              targetLessonId,
-              uploadedMediaKey,
-            );
-          } catch {
-            cleanupFailures.push("the uploaded video");
-          }
+        if (failures.length > 0) {
+          cleanupFailures.push("uploaded lesson media");
         }
       }
 
-      // Roll back a newly created lesson if its save flow fails.
+      // Roll back newly created lesson if saving fails.
       if (isCreating && createdLessonId) {
         try {
           await lessonService.deleteLesson(
@@ -247,8 +423,6 @@ export default function LessonManagementPage() {
         }
       }
 
-      // Reload the server state in case a request succeeded but its response
-      // was lost.
       setRefreshKey((current) => current + 1);
 
       const message = getApiErrorMessage(error);
@@ -267,34 +441,31 @@ export default function LessonManagementPage() {
     }
   };
 
-const handleDelete = async () => {
-  if (!courseId || !chapterId || !lessonToDelete || deletingLessonId) {
-    return;
-  }
+  // Delete lesson
+  const handleDelete = async () => {
+    if (!courseId || !chapterId || !lessonToDelete || deletingLessonId) {
+      return;
+    }
 
-  const lesson = lessonToDelete;
+    const lesson = lessonToDelete;
 
-  try {
-    setDeletingLessonId(lesson.lessonId);
+    try {
+      setDeletingLessonId(lesson.lessonId);
 
-    await lessonService.deleteLesson(
-      courseId,
-      chapterId,
-      lesson.lessonId,
-    );
+      await lessonService.deleteLesson(courseId, chapterId, lesson.lessonId);
 
-    setLessons((current) =>
-      current.filter((item) => item.lessonId !== lesson.lessonId),
-    );
+      setLessons((current) =>
+        current.filter((item) => item.lessonId !== lesson.lessonId),
+      );
 
-    addToast("Lesson deleted successfully", "success");
-    setLessonToDelete(null);
-  } catch (error) {
-    addToast(getApiErrorMessage(error), "error");
-  } finally {
-    setDeletingLessonId(null);
-  }
-};
+      addToast("Lesson deleted successfully", "success");
+      setLessonToDelete(null);
+    } catch (error) {
+      addToast(getApiErrorMessage(error), "error");
+    } finally {
+      setDeletingLessonId(null);
+    }
+  };
 
   const openCreate = () => {
     if (saving) return;
@@ -394,6 +565,7 @@ const handleDelete = async () => {
         )}
       </div>
 
+      {/* Add / Edit Lesson Modal */}
       <Modal
         open={showModal}
         onClose={closeModal}
@@ -405,93 +577,86 @@ const handleDelete = async () => {
         }
         width="lg"
       >
-        {uploadProgress !== null && (
-          <div className="mb-5 space-y-2" role="status" aria-live="polite">
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-300">Uploading video...</span>
-              <span className="font-medium text-blue-400">
-                {uploadProgress}%
-              </span>
-            </div>
+       <div className="space-y-3">
+  {uploadProgress !== null && (
+    <div className="space-y-2">
+      <div className="flex justify-between text-sm">
+        <span className="text-slate-300">
+          Uploading lesson media...
+        </span>
+        <span className="text-blue-400">{uploadProgress}%</span>
+      </div>
 
-            <div
-              className="h-2 w-full overflow-hidden rounded-full bg-slate-700"
-              role="progressbar"
-              aria-label="Video upload progress"
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={uploadProgress}
-            >
-              <div
-                className="h-full rounded-full bg-blue-500 transition-all duration-200"
-                style={{ width: `${uploadProgress}%` }}
-              />
-            </div>
-          </div>
-        )}
-
-        <LessonForm
-          initialValues={
-            editingLesson
-              ? {
-                  title: editingLesson.title,
-                  description: editingLesson.description,
-                  order: editingLesson.order,
-                  type: editingLesson.type,
-                  videoUrl: editingLesson.videoKey,
-                  content: editingLesson.content,
-                  attachments: editingLesson.attachments,
-                  duration: editingLesson.duration,
-                }
-              : undefined
-          }
-          submitLabel={editingLesson ? "Save Changes" : "Create Lesson"}
-          onSubmit={handleSave}
-          onCancel={closeModal}
-          loading={saving}
+      <div className="h-2 overflow-hidden rounded-full bg-slate-700">
+        <div
+          className="h-full rounded-full bg-blue-500 transition-all"
+          style={{ width: `${uploadProgress}%` }}
         />
+      </div>
+    </div>
+  )}
 
-
+  <LessonForm
+    key={editingLesson?.lessonId ?? "new-lesson"}
+    initialValues={
+      editingLesson
+        ? {
+            title: editingLesson.title,
+            description: editingLesson.description,
+            order: editingLesson.order,
+            type: editingLesson.type,
+            videoUrl: editingLesson.videoKey,
+            thumbnailKey: editingLesson.thumbnailKey,
+            content: editingLesson.content,
+            attachments: editingLesson.attachments,
+            duration: editingLesson.duration,
+          }
+        : undefined
+    }
+    submitLabel={editingLesson ? "Save Changes" : "Create Lesson"}
+    onSubmit={handleSave}
+    onCancel={closeModal}
+    loading={saving}
+  />
+</div>
       </Modal>
 
+      {/* Delete Lesson Confirmation Modal */}
       <Modal
-  open={lessonToDelete !== null}
-  onClose={() => {
-    if (!deletingLessonId) {
-      setLessonToDelete(null);
-    }
-  }}
-  title="Delete lesson?"
-  description="This action cannot be undone."
-  width="sm"
->
-  <div className="space-y-5">
-    <p className="text-sm text-slate-300">
-      Are you sure you want to delete{" "}
-      <span className="font-semibold text-white">
-        {lessonToDelete?.title}
-      </span>
-      ? The lesson and its associated content may be permanently removed.
-    </p>
-
-    <div className="flex justify-end gap-3">
-      <Button
-        variant="secondary"
-        onClick={() => setLessonToDelete(null)}
-        disabled={deletingLessonId !== null}
+        open={lessonToDelete !== null}
+        onClose={() => {
+          if (!deletingLessonId) {
+            setLessonToDelete(null);
+          }
+        }}
+        title="Delete lesson?"
+        description="This action cannot be undone."
+        width="sm"
       >
-        Cancel
-      </Button>
+        <div className="space-y-5">
+          <p className="text-sm text-slate-300">
+            Are you sure you want to delete{" "}
+            <span className="font-semibold text-white">
+              {lessonToDelete?.title}
+            </span>
+            ? The lesson and its associated content may be permanently removed.
+          </p>
 
-      <Button
-        onClick={handleDelete}
-        disabled={deletingLessonId !== null}
-      >
-        {deletingLessonId ? "Deleting..." : "Delete Lesson"}
-      </Button>
-    </div>
-  </div>
-</Modal>
+          <div className="flex justify-end gap-3">
+            <Button
+              variant="secondary"
+              onClick={() => setLessonToDelete(null)}
+              disabled={deletingLessonId !== null}
+            >
+              Cancel
+            </Button>
+
+            <Button onClick={handleDelete} disabled={deletingLessonId !== null}>
+              {deletingLessonId ? "Deleting..." : "Delete Lesson"}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

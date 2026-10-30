@@ -1,17 +1,15 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-
-import { Button } from "../../common/ui/Button";
-import { Input } from "../../common/ui/Input";
-import { Textarea } from "../../common/ui/Textarea";
-
-import { LessonType } from "../../../constants/lesson";
-
 import type { CreateLessonRequest } from "../../../types/lesson";
 
 interface LessonFormProps {
   initialValues?: Partial<CreateLessonRequest>;
+  initialThumbnailUrl?: string;
   submitLabel?: string;
-  onSubmit: (data: CreateLessonRequest, videoFile?: File) => Promise<void>;
+  onSubmit: (
+    data: CreateLessonRequest,
+    videoFile?: File,
+    thumbnailFile?: File,
+  ) => Promise<void>;
   onCancel: () => void;
   loading?: boolean;
 }
@@ -19,242 +17,297 @@ interface LessonFormProps {
 const defaultValues: CreateLessonRequest = {
   title: "",
   description: "",
-  order: 1,
-  type: LessonType.VIDEO,
+  type: "video",
   videoUrl: "",
-  content: "",
-  attachments: [],
-  duration: undefined,
+  thumbnailKey: "",
+  duration: 0,
+  order: 1,
 };
 
-export function LessonForm({
+export default function LessonForm({
   initialValues,
-  submitLabel = "Create Lesson",
+  initialThumbnailUrl,
+  submitLabel = "Save Lesson",
   onSubmit,
   onCancel,
   loading = false,
 }: LessonFormProps) {
-  const [form, setForm] = useState<CreateLessonRequest>({
+  const [formData, setFormData] = useState<CreateLessonRequest>({
     ...defaultValues,
     ...initialValues,
   });
 
   const [videoFile, setVideoFile] = useState<File>();
-  const [error, setError] = useState<string>();
+  const [thumbnailFile, setThumbnailFile] = useState<File>();
+  const [thumbnailPreview, setThumbnailPreview] = useState(
+    initialThumbnailUrl ?? "",
+  );
+  const [error, setError] = useState("");
 
-  const updateField = <K extends keyof CreateLessonRequest>(
-    field: K,
-    value: CreateLessonRequest[K],
+  const handleChange = (
+    event: ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
-    setForm((current) => ({
-      ...current,
-      [field]: value,
+    const { name, value } = event.target;
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: name === "duration" || name === "order" ? Number(value) : value,
     }));
   };
 
   const handleVideoChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
-    if (!file) {
+    if (!file) return;
+
+    if (!file.type.startsWith("video/")) {
+      setError("Please select a valid video file.");
+      event.target.value = "";
       return;
     }
 
+    setError("");
     setVideoFile(file);
   };
 
-  const handleTypeChange = (type: LessonType) => {
-    updateField("type", type);
-    setError(undefined);
+  const handleThumbnailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
 
-    if (type === LessonType.VIDEO) {
-      updateField("content", undefined);
-    } else {
-      updateField("videoUrl", undefined);
-      setVideoFile(undefined);
+    if (!file) return;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    if (!allowedTypes.includes(file.type)) {
+      setError("Thumbnail must be JPEG, PNG, or WebP.");
+      event.target.value = "";
+      return;
     }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Thumbnail size must not exceed 5 MB.");
+      event.target.value = "";
+      return;
+    }
+
+    setError("");
+    setThumbnailFile(file);
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setThumbnailPreview(reader.result);
+      }
+    };
+
+    reader.onerror = () => {
+      setError("Unable to preview the selected thumbnail.");
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const type = event.target.value as CreateLessonRequest["type"];
+
+    setFormData((previous) => ({
+      ...previous,
+      type,
+      ...(type === "reading"
+        ? {
+            videoUrl: "",
+            thumbnailKey: "",
+          }
+        : {}),
+    }));
+
+    if (type === "reading") {
+      setVideoFile(undefined);
+      setThumbnailFile(undefined);
+      setThumbnailPreview("");
+    }
+  };
+
+  const handleRemoveThumbnail = () => {
+    setThumbnailFile(undefined);
+    setThumbnailPreview(initialThumbnailUrl ?? "");
+
+    setFormData((previous) => ({
+      ...previous,
+      thumbnailKey: "",
+    }));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError("");
 
-    const errors: string[] = [];
-
-    if (!form.title.trim()) {
-      errors.push("Lesson title is required");
-    }
-
-    if (form.order < 1) {
-      errors.push("Lesson order must be at least 1");
-    }
-
-    if (form.type === LessonType.VIDEO && !form.videoUrl && !videoFile) {
-      errors.push("Video lesson requires a video");
-    }
-
-    if (form.type === LessonType.READING && !form.content?.trim()) {
-      errors.push("Reading lesson requires content");
-    }
-
-    if (errors.length) {
-      setError(errors.join("\n"));
+    if (!formData.title.trim()) {
+      setError("Lesson title is required.");
       return;
     }
 
-    setError(undefined);
+    if (formData.type === "video" && !videoFile && !formData.videoUrl) {
+      setError("Please select a video file.");
+      return;
+    }
 
-    await onSubmit(
-      {
-        title: form.title.trim(),
-        description: form.description?.trim() || undefined,
-        order: form.order,
-        type: form.type,
-        videoUrl: form.videoUrl,
-        content: form.content,
-        attachments: form.attachments,
-        duration: form.duration,
-      },
-      videoFile,
-    );
+    try {
+      await onSubmit(formData, videoFile, thumbnailFile);
+    } catch {
+      setError("Unable to save lesson. Please try again.");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       {error && (
-        <div className="whitespace-pre-line rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
           {error}
         </div>
       )}
 
-      <Input
-        id="lesson-title"
-        label="Lesson Title"
-        placeholder="Enter lesson title"
-        value={form.title}
-        onChange={(event) => updateField("title", event.target.value)}
-      />
-
-      <Textarea
-        id="lesson-description"
-        label="Description"
-        placeholder="Describe this lesson..."
-        value={form.description ?? ""}
-        onChange={(event) => updateField("description", event.target.value)}
-      />
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Input
-          id="lesson-order"
-          label="Order"
-          type="number"
-          min={1}
-          value={form.order}
-          onChange={(event) => updateField("order", Number(event.target.value))}
-        />
-
-        <Input
-          id="lesson-duration"
-          label="Duration (minutes)"
-          type="number"
-          min={1}
-          value={form.duration ?? ""}
-          onChange={(event) =>
-            updateField(
-              "duration",
-              event.target.value ? Number(event.target.value) : undefined,
-            )
-          }
+      <div>
+        <label className="mb-1 block text-sm font-medium">Lesson Title</label>
+        <input
+          type="text"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+          className="w-full rounded-lg border p-3"
+          placeholder="Enter lesson title"
         />
       </div>
 
-      {/* Lesson type */}
-      <div className="space-y-2">
-        <label className="block text-[11px] font-medium uppercase tracking-wide text-slate-300">
-          Lesson Type
+      <div>
+        <label className="mb-1 block text-sm font-medium">Description</label>
+        <textarea
+          name="description"
+          value={formData.description ?? ""}
+          onChange={handleChange}
+          rows={3}
+          className="w-full rounded-lg border p-3"
+          placeholder="Enter lesson description"
+        />
+      </div>
+
+      <div>
+        <label className="mb-1 block text-sm font-medium">Lesson Type</label>
+        <select
+          name="type"
+          value={formData.type}
+          onChange={handleTypeChange}
+          className="w-full rounded-lg border p-3"
+        >
+          <option value="video">Video</option>
+          <option value="reading">Reading</option>
+        </select>
+      </div>
+
+      {formData.type === "video" && (
+        <>
+          <div>
+            <label className="mb-1 block text-sm font-medium">Video File</label>
+            <input
+              type="file"
+              accept="video/*"
+              onChange={handleVideoChange}
+              className="w-full rounded-lg border p-3"
+            />
+
+            {videoFile && (
+              <p className="mt-1 text-xs text-gray-500">
+                Selected: {videoFile.name}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">
+              Custom Thumbnail (Optional)
+            </label>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handleThumbnailChange}
+              className="w-full rounded-lg border p-3"
+            />
+            <p className="mt-1 text-xs text-gray-500">
+              If you don't upload a thumbnail, one will be generated
+              automatically from the video.
+            </p>
+          </div>
+
+          {thumbnailPreview && (
+            <div className="space-y-2">
+              <p className="text-sm font-medium">Thumbnail Preview</p>
+
+              <img
+                src={thumbnailPreview}
+                alt="Lesson thumbnail preview"
+                className="h-40 w-full rounded-lg border object-cover"
+              />
+
+              {thumbnailFile && (
+                <button
+                  type="button"
+                  onClick={handleRemoveThumbnail}
+                  className="text-sm text-red-600 hover:underline"
+                >
+                  Remove selected thumbnail
+                </button>
+              )}
+            </div>
+          )}
+        </>
+      )}
+
+      <div>
+        <label className="mb-1 block text-sm font-medium">
+          Duration (minutes)
         </label>
-
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            type="button"
-            onClick={() => handleTypeChange(LessonType.VIDEO)}
-            className={`rounded-lg border px-4 py-3 text-left transition ${
-              form.type === LessonType.VIDEO
-                ? "border-blue-500 bg-blue-500/10"
-                : "border-slate-700 bg-slate-800"
-            }`}
-          >
-            <p className="text-sm font-medium text-white">Video</p>
-            <p className="mt-1 text-xs text-slate-500">
-              Teach through a video lesson.
-            </p>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleTypeChange(LessonType.READING)}
-            className={`rounded-lg border px-4 py-3 text-left transition ${
-              form.type === LessonType.READING
-                ? "border-blue-500 bg-blue-500/10"
-                : "border-slate-700 bg-slate-800"
-            }`}
-          >
-            <p className="text-sm font-medium text-white">Reading</p>
-            <p className="mt-1 text-xs text-slate-500">
-              Teach through written content.
-            </p>
-          </button>
-        </div>
+        <input
+          type="number"
+          name="duration"
+          min={0}
+          value={formData.duration ?? 0}
+          onChange={handleChange}
+          className="w-full rounded-lg border p-3"
+        />
       </div>
 
-      {/* Video */}
-      {form.type === LessonType.VIDEO && (
-        <div className="space-y-2">
-          <label
-            htmlFor="lesson-video"
-            className="block text-[11px] font-medium uppercase tracking-wide text-slate-300"
-          >
-            Video
-          </label>
-
-          <input
-            id="lesson-video"
-            type="file"
-            accept="video/*"
-            onChange={handleVideoChange}
-            className="block w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-300"
-          />
-
-          {videoFile && (
-            <p className="text-xs text-slate-500">
-              Selected: {videoFile.name}
-            </p>
-          )}
-
-          {form.videoUrl && !videoFile && (
-            <p className="text-xs text-emerald-400">Existing video attached</p>
-          )}
-        </div>
-      )}
-
-      {/* Reading content */}
-      {form.type === LessonType.READING && (
-        <Textarea
-          id="lesson-content"
-          label="Lesson Content"
-          placeholder="Write the lesson content..."
-          rows={12}
-          value={form.content ?? ""}
-          onChange={(event) => updateField("content", event.target.value)}
+      <div>
+        <label className="mb-1 block text-sm font-medium">Lesson Order</label>
+        <input
+          type="number"
+          name="order"
+          min={1}
+          value={formData.order ?? 1}
+          onChange={handleChange}
+          className="w-full rounded-lg border p-3"
         />
-      )}
+      </div>
 
-      <div className="flex justify-end gap-3 border-t border-slate-800 pt-4">
-        <Button type="button" variant="secondary" onClick={onCancel}>
+     <div className="sticky bottom-0 flex justify-end gap-3 border-t border-slate-700 bg-slate-900 py-4">
+        <button
+          type="button"
+          onClick={onCancel}
+          disabled={loading}
+          className="rounded-lg border px-5 py-2"
+        >
           Cancel
-        </Button>
+        </button>
 
-        <Button type="submit" loading={loading}>
-          {submitLabel}
-        </Button>
+        <button
+          type="submit"
+          disabled={loading}
+          className="rounded-lg bg-blue-600 px-5 py-2 text-white disabled:opacity-50"
+        >
+          {loading ? "Saving..." : submitLabel}
+        </button>
       </div>
     </form>
   );
