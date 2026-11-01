@@ -4,11 +4,12 @@ import { Request, Response, NextFunction } from "express";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { AppError } from "../../../shared/errors/AppError";
 import { IGetPublishedCourseByIdUseCase } from "../../../application/interfaces/course/IGetPublishedCourseByIdUseCase";
-import { CourseResponseMapper } from "../../../application/mappers/CourseResponseMapper";
+import { CourseResponseService } from "../../../application/services/CourseResponseService";
 
 export class GetPublishedCourseByIdController {
     constructor(
-        private readonly _getPublishedCourseByIdUseCase: IGetPublishedCourseByIdUseCase
+        private readonly _getPublishedCourseByIdUseCase: IGetPublishedCourseByIdUseCase,
+        private readonly _courseResponseService: CourseResponseService
     ) {}
 
     async handle(
@@ -39,10 +40,13 @@ export class GetPublishedCourseByIdController {
                 );
             }
 
+            const responseData =
+                await this._courseResponseService.toDTO(course);
+
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Course fetched successfully",
-                data: CourseResponseMapper.toDTO(course),
+                data: responseData,
             });
         } catch (error) {
             next(error);

@@ -105,3 +105,8 @@ export interface CourseSearchFilters {
     minPrice?: number;
     maxPrice?: number;
 }
+
+export interface GenerateCourseThumbnailUploadUrlResponse {
+    uploadUrl: string;
+    key: string;
+}

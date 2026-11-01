@@ -5,11 +5,12 @@ import { IApproveCourseUseCase } from "../../../application/interfaces/course/IA
 import { ApproveCourseMapper } from "../../../application/mappers/ApproveCourseMapper";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { AppError } from "../../../shared/errors/AppError";
-import { CourseResponseMapper } from "../../../application/mappers/CourseResponseMapper";
+import { CourseResponseService } from "../../../application/services/CourseResponseService";
 
 export class ApproveCourseController {
     constructor(
         private readonly _approveCourseUseCase: IApproveCourseUseCase,
+        private readonly _courseResponseService: CourseResponseService
     ) { }
 
     async handle(
@@ -30,22 +31,16 @@ export class ApproveCourseController {
                 );
             }
 
-            if (!courseId) {
-                res.status(HttpStatusCode.BAD_REQUEST).json({
-                    success: false,
-                    message: "Course ID is required",
-                    data: null,
-                });
-                return;
-            }
-
             const dto = ApproveCourseMapper.toDTO(courseId);
             const course = await this._approveCourseUseCase.execute(dto);
+
+            const responseData =
+                await this._courseResponseService.toDTO(course);
 
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Course approved successfully",
-                data: CourseResponseMapper.toDTO(course),
+                data: responseData,
             });
         } catch (error: unknown) {
             next(error);

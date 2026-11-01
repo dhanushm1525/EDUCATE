@@ -1,4 +1,5 @@
 import { apiClient } from "./apiClient";
+import axios from "axios";
 
 import { API_ROUTES } from "../constants/apiRoutes";
 
@@ -8,6 +9,7 @@ import type {
     CourseSearchFilters,
     CreateCourseRequest,
     UpdateCourseRequest,
+    GenerateCourseThumbnailUploadUrlResponse,
 } from "../types/course";
 
 import type {
@@ -152,5 +154,40 @@ export const courseService = {
             );
 
         return response.data.data;
+    },
+
+    generateThumbnailUploadUrl: async (
+        courseId: string,
+        contentType: string
+    ): Promise<GenerateCourseThumbnailUploadUrlResponse> => {
+        const response = await apiClient.post<{
+            success: boolean;
+            message: string;
+            data: GenerateCourseThumbnailUploadUrlResponse;
+        }>(
+            API_ROUTES.courses.thumbnailUploadUrl(courseId),
+            { contentType }
+        );
+
+        return response.data.data;
+    },
+
+    uploadThumbnail: async (
+        uploadUrl: string,
+        file: File,
+        onProgress?: (percentage: number) => void
+    ): Promise<void> => {
+        await axios.put(uploadUrl, file, {
+            headers: {
+                "Content-Type": file.type,
+            },
+            onUploadProgress: (event) => {
+                if (event.total) {
+                    onProgress?.(
+                        Math.round((event.loaded / event.total) * 100)
+                    );
+                }
+            },
+        });
     },
 };

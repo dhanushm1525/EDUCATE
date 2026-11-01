@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { Button } from "../../common/ui/Button";
 import { Input } from "../../common/ui/Input";
@@ -10,54 +10,35 @@ import type { CourseLevel, CreateCourseRequest } from "../../../types/course";
 
 interface CourseFormProps {
   categories: Category[];
-
   initialValues?: Partial<CreateCourseRequest>;
-
   submitLabel?: string;
-
-  onSubmit: (data: CreateCourseRequest) => Promise<void>;
-
+  onSubmit: (data: CreateCourseRequest, thumbnailFile?: File) => Promise<void>;
   onCancel: () => void;
-
   loading?: boolean;
+  uploadProgress?: number | null;
 }
 
 const defaultValues: CreateCourseRequest = {
   categoryId: "",
-
   title: "",
-
   subtitle: "",
-
   description: "",
-
   language: "English",
-
   level: "Beginner",
-
   duration: 0,
-
   price: 0,
-
   discount: 0,
 };
 
 const levelOptions = [
-  {
-    label: "Beginner",
-    value: "Beginner",
-  },
-
-  {
-    label: "Intermediate",
-    value: "Intermediate",
-  },
-
-  {
-    label: "Advanced",
-    value: "Advanced",
-  },
+  { label: "Beginner", value: "Beginner" },
+  { label: "Intermediate", value: "Intermediate" },
+  { label: "Advanced", value: "Advanced" },
 ];
+
+const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024;
+
+const ALLOWED_THUMBNAIL_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export function CourseForm({
   categories,
@@ -66,6 +47,7 @@ export function CourseForm({
   onSubmit,
   onCancel,
   loading = false,
+  uploadProgress = null,
 }: CourseFormProps) {
   const [form, setForm] = useState<CreateCourseRequest>({
     ...defaultValues,
@@ -73,6 +55,21 @@ export function CourseForm({
   });
 
   const [error, setError] = useState<string>();
+
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>();
+
+  const previewUrlRef = useRef<string | null>(null);
+
+  // Revoke the preview URL when the component unmounts.
+  useEffect(() => {
+    return () => {
+      if (previewUrlRef.current) {
+        URL.revokeObjectURL(previewUrlRef.current);
+      }
+    };
+  }, []);
 
   const updateField = <K extends keyof CreateCourseRequest>(
     field: K,
@@ -82,6 +79,59 @@ export function CourseForm({
       ...current,
       [field]: value,
     }));
+  };
+
+  const handleThumbnailChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!ALLOWED_THUMBNAIL_TYPES.includes(file.type)) {
+      setError("Only JPEG, PNG and WebP images are allowed.");
+      event.target.value = "";
+      return;
+    }
+
+    if (file.size > MAX_THUMBNAIL_SIZE) {
+      setError("Thumbnail image must not exceed 5 MB.");
+      event.target.value = "";
+      return;
+    }
+
+    // Revoke the previous preview URL before creating a new one.
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+    }
+
+    const previewUrl = URL.createObjectURL(file);
+
+    previewUrlRef.current = previewUrl;
+
+    setThumbnailPreview(previewUrl);
+    setThumbnailFile(file);
+    setError(undefined);
+  };
+
+  const handleRemoveThumbnail = () => {
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+      previewUrlRef.current = null;
+    }
+
+    setThumbnailPreview(undefined);
+    setThumbnailFile(null);
+
+    const input = document.getElementById(
+      "course-thumbnail",
+    ) as HTMLInputElement | null;
+
+    if (input) {
+      input.value = "";
+    }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -124,15 +174,15 @@ export function CourseForm({
 
     setError(undefined);
 
-    await onSubmit({
-      ...form,
-
-      title: form.title.trim(),
-
-      subtitle: form.subtitle.trim(),
-
-      description: form.description.trim(),
-    });
+    await onSubmit(
+      {
+        ...form,
+        title: form.title.trim(),
+        subtitle: form.subtitle.trim(),
+        description: form.description.trim(),
+      },
+      thumbnailFile ?? undefined,
+    );
   };
 
   return (
@@ -160,17 +210,7 @@ export function CourseForm({
       {/* Basic Information */}
 
       <section className="space-y-4">
-        <h3
-          className="
-            text-sm
-            font-semibold
-            text-white
-          "
-        >
-          Basic Information
-        </h3>
-
-        {/* Category */}
+        <h3 className="text-sm font-semibold text-white">Basic Information</h3>
 
         <Select
           id="course-category"
@@ -182,15 +222,12 @@ export function CourseForm({
               label: "Select category",
               value: "",
             },
-
             ...categories.map((category) => ({
               label: category.name,
               value: category.categoryId,
             })),
           ]}
         />
-
-        {/* Title */}
 
         <Input
           id="course-title"
@@ -200,8 +237,6 @@ export function CourseForm({
           onChange={(event) => updateField("title", event.target.value)}
         />
 
-        {/* Subtitle */}
-
         <Input
           id="course-subtitle"
           label="Subtitle"
@@ -209,8 +244,6 @@ export function CourseForm({
           value={form.subtitle}
           onChange={(event) => updateField("subtitle", event.target.value)}
         />
-
-        {/* Description */}
 
         <Textarea
           id="course-description"
@@ -221,36 +254,115 @@ export function CourseForm({
         />
       </section>
 
+      {/* Course Thumbnail */}
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-sm font-semibold text-white">Course Thumbnail</h3>
+
+          <p className="mt-1 text-xs text-slate-400">
+            Upload a JPEG, PNG or WebP image. Maximum size: 5 MB.
+          </p>
+        </div>
+
+        <label
+          htmlFor="course-thumbnail"
+          className="
+            flex
+            cursor-pointer
+            flex-col
+            items-center
+            justify-center
+            overflow-hidden
+            rounded-xl
+            border
+            border-dashed
+            border-slate-600
+            bg-slate-950
+            transition
+            hover:border-indigo-500
+          "
+        >
+          {thumbnailPreview ? (
+            <img
+              src={thumbnailPreview}
+              alt="Course thumbnail preview"
+              className="h-56 w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-56 w-full flex-col items-center justify-center gap-2">
+              <span className="text-3xl text-slate-500">+</span>
+
+              <span className="text-sm font-medium text-slate-300">
+                Choose course thumbnail
+              </span>
+
+              <span className="text-xs text-slate-500">JPEG, PNG or WebP</span>
+            </div>
+          )}
+        </label>
+
+        <input
+          id="course-thumbnail"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          className="hidden"
+          disabled={loading}
+          onChange={handleThumbnailChange}
+        />
+
+        {thumbnailFile && (
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="truncate text-sm text-slate-300">
+                {thumbnailFile.name}
+              </p>
+
+              <p className="text-xs text-slate-500">
+                {(thumbnailFile.size / (1024 * 1024)).toFixed(2)} MB
+              </p>
+            </div>
+
+            <button
+              type="button"
+              disabled={loading}
+              onClick={handleRemoveThumbnail}
+              className="text-xs text-red-400 hover:text-red-300 disabled:opacity-50"
+            >
+              Remove
+            </button>
+          </div>
+        )}
+
+        {uploadProgress !== null && (
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs text-slate-400">
+              <span>Uploading thumbnail...</span>
+              <span>{uploadProgress}%</span>
+            </div>
+
+            <div className="h-2 overflow-hidden rounded-full bg-slate-700">
+              <div
+                className="h-full rounded-full bg-indigo-500 transition-all"
+                style={{ width: `${uploadProgress}%` }}
+              />
+            </div>
+          </div>
+        )}
+      </section>
+
       {/* Course Settings */}
 
       <section className="space-y-4">
-        <h3
-          className="
-            text-sm
-            font-semibold
-            text-white
-          "
-        >
-          Course Settings
-        </h3>
+        <h3 className="text-sm font-semibold text-white">Course Settings</h3>
 
-        <div
-          className="
-            grid
-            gap-4
-            md:grid-cols-3
-          "
-        >
-          {/* Language */}
-
+        <div className="grid gap-4 md:grid-cols-3">
           <Input
             id="course-language"
             label="Language"
             value={form.language}
             onChange={(event) => updateField("language", event.target.value)}
           />
-
-          {/* Level */}
 
           <Select
             id="course-level"
@@ -261,8 +373,6 @@ export function CourseForm({
             }
             options={levelOptions}
           />
-
-          {/* Duration */}
 
           <Input
             id="course-duration"
@@ -280,25 +390,9 @@ export function CourseForm({
       {/* Pricing */}
 
       <section className="space-y-4">
-        <h3
-          className="
-            text-sm
-            font-semibold
-            text-white
-          "
-        >
-          Pricing
-        </h3>
+        <h3 className="text-sm font-semibold text-white">Pricing</h3>
 
-        <div
-          className="
-            grid
-            gap-4
-            md:grid-cols-2
-          "
-        >
-          {/* Price */}
-
+        <div className="grid gap-4 md:grid-cols-2">
           <Input
             id="course-price"
             label="Price"
@@ -309,8 +403,6 @@ export function CourseForm({
               updateField("price", Number(event.target.value))
             }
           />
-
-          {/* Discount */}
 
           <Input
             id="course-discount"
@@ -338,12 +430,17 @@ export function CourseForm({
           pt-5
         "
       >
-        <Button type="button" variant="secondary" onClick={onCancel}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={onCancel}
+          disabled={loading}
+        >
           Cancel
         </Button>
 
         <Button type="submit" loading={loading}>
-          {submitLabel}
+          {uploadProgress !== null ? "Uploading..." : submitLabel}
         </Button>
       </div>
     </form>

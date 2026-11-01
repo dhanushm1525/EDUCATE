@@ -1,16 +1,19 @@
+
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 import { Request, Response, NextFunction } from "express";
 
 import { ICreateCourseUseCase } from "../../../application/interfaces/course/ICreateCourseUseCase";
 import { CourseMapper } from "../../../application/mappers/CourseCreationMapper";
+import { CourseResponseService } from "../../../application/services/CourseResponseService";
 
 import { AppError } from "../../../shared/errors/AppError";
 
 export class CreateCourseController {
 
     constructor(
-        private readonly _createCourseUseCase: ICreateCourseUseCase
+        private readonly _createCourseUseCase: ICreateCourseUseCase,
+        private readonly _courseResponseService: CourseResponseService
     ) { }
 
     async handle(
@@ -22,7 +25,10 @@ export class CreateCourseController {
         try {
 
             if (!req.user) {
-                throw new AppError("Unauthorized", HttpStatusCode.UNAUTHORIZED);
+                throw new AppError(
+                    "Unauthorized",
+                    HttpStatusCode.UNAUTHORIZED
+                );
             }
 
             const dto =
@@ -31,10 +37,13 @@ export class CreateCourseController {
             const course =
                 await this._createCourseUseCase.execute(dto);
 
+            const responseData =
+                await this._courseResponseService.toDTO(course);
+
             res.status(HttpStatusCode.CREATED).json({
                 success: true,
                 message: "Course created successfully",
-                data: course
+                data: responseData
             });
 
         } catch (error) {

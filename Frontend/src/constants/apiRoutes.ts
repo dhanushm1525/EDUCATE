@@ -51,6 +51,9 @@ courses: {
 
     learningContent: (courseId: string) =>
   `/courses/${courseId}/learning-content`,
+
+    thumbnailUploadUrl: (courseId: string) =>
+    `/courses/${courseId}/thumbnail/upload-url`,
 },
 
 

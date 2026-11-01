@@ -1,8 +1,9 @@
+
 import { Request, Response, NextFunction } from "express";
 
 import { ISubmitCourseUseCase } from "../../../application/interfaces/course/ISubmitCourseUseCase";
-
 import { CourseSubmissionMapper } from "../../../application/mappers/CourseSubmissionMapper";
+import { CourseResponseService } from "../../../application/services/CourseResponseService";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
@@ -13,7 +14,8 @@ import { COURSE_MESSAGES } from "../../../shared/messages/courseMessages";
 export class SubmitCourseController {
 
     constructor(
-        private readonly _submitCourseUseCase: ISubmitCourseUseCase
+        private readonly _submitCourseUseCase: ISubmitCourseUseCase,
+        private readonly _courseResponseService: CourseResponseService
     ) {}
 
     async handle(
@@ -33,8 +35,11 @@ export class SubmitCourseController {
 
             const { courseId } = req.params;
 
-            if(Array.isArray(courseId)){
-                throw new AppError(COURSE_MESSAGES.COURSE_NOT_FOUND,HttpStatusCode.NOT_FOUND)
+            if (Array.isArray(courseId)) {
+                throw new AppError(
+                    COURSE_MESSAGES.COURSE_NOT_FOUND,
+                    HttpStatusCode.NOT_FOUND
+                );
             }
 
             if (!courseId) {
@@ -53,10 +58,13 @@ export class SubmitCourseController {
             const course =
                 await this._submitCourseUseCase.execute(dto);
 
+            const responseData =
+                await this._courseResponseService.toDTO(course);
+
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: COURSE_MESSAGES.COURSE_SUBMITTED,
-                data: course,
+                data: responseData,
             });
 
         } catch (error) {

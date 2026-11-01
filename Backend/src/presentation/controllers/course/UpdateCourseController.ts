@@ -1,15 +1,19 @@
+
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 import { Request, Response, NextFunction } from "express";
 
 import { IUpdateCourseUseCase } from "../../../application/interfaces/course/IUpdateCourseUseCase";
 import { CourseUpdateMapper } from "../../../application/mappers/CourseUpdateMapper";
+import { CourseResponseService } from "../../../application/services/CourseResponseService";
+
 import { AppError } from "../../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 export class UpdateCourseController {
     constructor(
-        private readonly _updateCourseUseCase: IUpdateCourseUseCase
+        private readonly _updateCourseUseCase: IUpdateCourseUseCase,
+        private readonly _courseResponseService: CourseResponseService
     ) { }
 
     async handle(
@@ -28,7 +32,10 @@ export class UpdateCourseController {
             const { courseId } = req.params;
 
             if (Array.isArray(courseId)) {
-                throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
+                throw new AppError(
+                    "Invalid course ID",
+                    HttpStatusCode.BAD_REQUEST
+                );
             }
 
             const dto =
@@ -41,10 +48,13 @@ export class UpdateCourseController {
                     dto
                 );
 
+            const responseData =
+                await this._courseResponseService.toDTO(course);
+
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Course updated successfully",
-                data: course
+                data: responseData
             });
         } catch (error) {
             next(error);

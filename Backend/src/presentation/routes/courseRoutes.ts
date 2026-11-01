@@ -23,16 +23,22 @@ import {
     approveCourseController,
     rejectCourseController,
     getTeacherCourseByIdController,
-    getCourseLearningContentController
+    getCourseLearningContentController,
+    generateCourseThumbnailUploadUrlController
 } from "../../infrastructure/DI/courseDependencies";
 
 import { createCourseSchema } from "../../shared/schema/course/createCourseSchema";
 import { updateCourseSchema } from "../../shared/schema/course/updateCourseSchema";
 import { getPublishedCoursesSchema } from "../../shared/schema/course/getPublishedCoursesSchema";
 import { getPublishedCourseByIdSchema } from "../../shared/schema/course/getPublishedCourseByIdSchema";
+import { generateCourseThumbnailUploadUrlSchema } from "../../shared/schema/course/generateCourseThumbnailUploadUrlSchema";
 
 const router = Router();
 
+
+// ============================================
+// TEACHER: COURSE MANAGEMENT
+// ============================================
 
 // Teacher: retrieve an owned course, including unpublished courses.
 router.get(
@@ -52,14 +58,47 @@ router.get(
     getMyCoursesController.handle.bind(getMyCoursesController)
 );
 
-// Public: browse and filter published courses.
-router.get(
+// Teacher: create a course.
+router.post(
     "/",
-    validate(getPublishedCoursesSchema),
-    getPublishedCoursesController.handle.bind(
-        getPublishedCoursesController
+    authenticateUser,
+    roleMiddleware(UserRole.TEACHER),
+    validate(createCourseSchema),
+    createCourseController.handle.bind(createCourseController)
+);
+
+// Teacher: generate a signed upload URL for a course thumbnail.
+router.post(
+    "/:courseId/thumbnail/upload-url",
+    authenticateUser,
+    roleMiddleware(UserRole.TEACHER),
+    validate(generateCourseThumbnailUploadUrlSchema),
+    generateCourseThumbnailUploadUrlController.handle.bind(
+        generateCourseThumbnailUploadUrlController
     )
 );
+
+// Teacher: update a course.
+router.patch(
+    "/:courseId",
+    authenticateUser,
+    roleMiddleware(UserRole.TEACHER),
+    validate(updateCourseSchema),
+    updateCourseController.handle.bind(updateCourseController)
+);
+
+// Teacher: submit a course for approval.
+router.patch(
+    "/:courseId/submit",
+    authMiddleware(jwtService),
+    roleMiddleware(UserRole.TEACHER),
+    submitCourseController.handle.bind(submitCourseController)
+);
+
+
+// ============================================
+// ADMIN: COURSE MANAGEMENT
+// ============================================
 
 // Admin: retrieve courses awaiting approval.
 router.get(
@@ -82,27 +121,23 @@ router.patch(
 // Admin: reject a course awaiting review.
 router.patch(
     "/:courseId/reject",
-    authenticateUser, 
+    authenticateUser,
     roleMiddleware(UserRole.ADMIN),
     rejectCourseController.handle.bind(rejectCourseController)
 );
 
-// Public: retrieve one published course.
-router.get(
-    "/:courseId",
-    validate(getPublishedCourseByIdSchema),
-    getPublishedCourseByIdController.handle.bind(
-        getPublishedCourseByIdController
-    )
-);
 
-// Teacher: create a course.
-router.post(
+// ============================================
+// PUBLIC: COURSE DISCOVERY
+// ============================================
+
+// Public: browse and filter published courses.
+router.get(
     "/",
-    authenticateUser,
-    roleMiddleware(UserRole.TEACHER),
-    validate(createCourseSchema),
-    createCourseController.handle.bind(createCourseController)
+    validate(getPublishedCoursesSchema),
+    getPublishedCoursesController.handle.bind(
+        getPublishedCoursesController
+    )
 );
 
 // Public: retrieve chapters, lessons and thumbnail previews.
@@ -114,25 +149,13 @@ router.get(
     )
 );
 
-// Teacher: update a course.
-router.patch(
+// Public: retrieve one published course.
+router.get(
     "/:courseId",
-    authenticateUser,
-    roleMiddleware(UserRole.TEACHER),
-    validate(updateCourseSchema),
-    updateCourseController.handle.bind(updateCourseController)
+    validate(getPublishedCourseByIdSchema),
+    getPublishedCourseByIdController.handle.bind(
+        getPublishedCourseByIdController
+    )
 );
-
-// Teacher: submit a course for approval.
-router.patch(
-    "/:courseId/submit",
-    authMiddleware(jwtService),
-    roleMiddleware(UserRole.TEACHER),
-    submitCourseController.handle.bind(submitCourseController)
-);
-
-
-
-
 
 export default router;

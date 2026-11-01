@@ -1,13 +1,15 @@
+
 import { Request, Response, NextFunction } from "express";
 
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { IGetPublishedCoursesUseCase } from "../../../application/interfaces/course/IGetPublishedCoursesUseCase";
 import { GetPublishedCoursesQueryMapper } from "../../../application/mappers/GetPublishedCoursesQueryMapper";
-import { CourseResponseMapper } from "../../../application/mappers/CourseResponseMapper";
+import { CourseResponseService } from "../../../application/services/CourseResponseService";
 
 export class GetPublishedCoursesController {
     constructor(
-        private readonly _getPublishedCoursesUseCase: IGetPublishedCoursesUseCase
+        private readonly _getPublishedCoursesUseCase: IGetPublishedCoursesUseCase,
+        private readonly _courseResponseService: CourseResponseService
     ) {}
 
     async handle(
@@ -24,7 +26,7 @@ export class GetPublishedCoursesController {
                 await this._getPublishedCoursesUseCase.execute(dto);
 
             const responseData =
-                CourseResponseMapper.toDTOList(courses);
+                await this._courseResponseService.toDTOList(courses);
 
             res.status(HttpStatusCode.OK).json({
                 success: true,
