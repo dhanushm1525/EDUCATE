@@ -21,6 +21,8 @@ export interface Assignment {
     timeLimit?: number;
     attemptsAllowed?: number;
 
+    dueDate?: string | null;
+
     createdAt: string;
     updatedAt: string;
 }
@@ -32,6 +34,7 @@ export interface CreateAssignmentRequest {
     passingMarks: number;
     timeLimit?: number;
     attemptsAllowed?: number;
+    dueDate?: string | null;
 }
 
 export interface AssignmentResponse {

@@ -14,18 +14,16 @@ export interface Assignment {
     timeLimit?: number;
     attemptsAllowed?: number;
 
+    dueDate?: Date | null;
+
     createdAt: Date;
     updatedAt: Date;
 }
 
 export interface AssignmentQuestion {
     questionId: string;
-
     question: string;
-
     options: string[];
-
     correctAnswer: string;
-
     marks: number;
 }

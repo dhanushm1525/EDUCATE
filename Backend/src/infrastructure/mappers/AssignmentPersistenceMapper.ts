@@ -1,3 +1,4 @@
+
 import {
     Assignment,
     AssignmentQuestion,
@@ -8,11 +9,11 @@ import {
     AssignmentQuestionDocument,
 } from "../database/models/AssignmentModel";
 
+import { randomUUID } from "crypto";
+
 export class AssignmentPersistenceMapper {
 
-    static toPersistence(
-        assignment: Assignment
-    ) {
+    static toPersistence(assignment: Assignment) {
 
         return {
             lessonId: assignment.lessonId,
@@ -22,7 +23,7 @@ export class AssignmentPersistenceMapper {
 
             questions: assignment.questions.map(
                 (question) => ({
-                    questionId: question.questionId,
+                    questionId: question.questionId ?? randomUUID(),
                     question: question.question,
                     options: question.options,
                     correctAnswer: question.correctAnswer,
@@ -35,6 +36,8 @@ export class AssignmentPersistenceMapper {
 
             timeLimit: assignment.timeLimit,
             attemptsAllowed: assignment.attemptsAllowed,
+
+            dueDate: assignment.dueDate ?? null,
         };
     }
 
@@ -65,6 +68,8 @@ export class AssignmentPersistenceMapper {
 
             timeLimit: document.timeLimit,
             attemptsAllowed: document.attemptsAllowed,
+
+            dueDate: document.dueDate ?? null,
 
             createdAt: document.createdAt,
             updatedAt: document.updatedAt,
@@ -106,6 +111,10 @@ export class AssignmentPersistenceMapper {
 
             ...(assignment.attemptsAllowed !== undefined && {
                 attemptsAllowed: assignment.attemptsAllowed,
+            }),
+
+            ...(assignment.dueDate !== undefined && {
+                dueDate: assignment.dueDate,
             }),
         };
     }

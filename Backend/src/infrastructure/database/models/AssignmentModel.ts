@@ -10,7 +10,6 @@ export interface AssignmentQuestionDocument {
 
 export interface AssignmentDocument extends Document {
     _id: Types.ObjectId;
-
     lessonId: Types.ObjectId;
 
     title: string;
@@ -23,6 +22,8 @@ export interface AssignmentDocument extends Document {
 
     timeLimit?: number;
     attemptsAllowed?: number;
+
+    dueDate?: Date | null;
 
     createdAt: Date;
     updatedAt: Date;
@@ -111,6 +112,11 @@ const assignmentSchema =
             attemptsAllowed: {
                 type: Number,
                 min: 1,
+            },
+
+            dueDate: {
+                type: Date,
+                default: null,
             },
         },
         {

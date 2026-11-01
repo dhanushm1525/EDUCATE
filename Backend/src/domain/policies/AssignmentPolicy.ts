@@ -40,11 +40,7 @@ export class AssignmentPolicy {
                 );
             }
 
-            if (
-                !question.options.includes(
-                    question.correctAnswer
-                )
-            ) {
+            if (!question.options.includes(question.correctAnswer)) {
                 throw new AppError(
                     "Correct answer must be one of the available options",
                     HttpStatusCode.BAD_REQUEST
@@ -65,8 +61,7 @@ export class AssignmentPolicy {
     ): number {
 
         return questions.reduce(
-            (total, question) =>
-                total + question.marks,
+            (total, question) => total + question.marks,
             0
         );
     }
@@ -87,9 +82,7 @@ export class AssignmentPolicy {
         }
     }
 
-    static validateTimeLimit(
-        timeLimit?: number
-    ): void {
+    static validateTimeLimit(timeLimit?: number): void {
 
         if (
             timeLimit !== undefined &&
@@ -117,12 +110,39 @@ export class AssignmentPolicy {
         }
     }
 
+    static validateDueDate(
+        dueDate?: Date | null
+    ): void {
+
+        if (dueDate === undefined || dueDate === null) {
+            return;
+        }
+
+        if (
+            !(dueDate instanceof Date) ||
+            Number.isNaN(dueDate.getTime())
+        ) {
+            throw new AppError(
+                "Invalid assignment deadline",
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
+
+        if (dueDate.getTime() <= Date.now()) {
+            throw new AppError(
+                "Assignment deadline must be in the future",
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
+    }
+
     static validate(
         title: string,
         questions: AssignmentQuestion[],
         passingMarks: number,
         timeLimit?: number,
-        attemptsAllowed?: number
+        attemptsAllowed?: number,
+        dueDate?: Date | null
     ): number {
 
         this.validateTitle(title);
@@ -139,9 +159,9 @@ export class AssignmentPolicy {
 
         this.validateTimeLimit(timeLimit);
 
-        this.validateAttemptsAllowed(
-            attemptsAllowed
-        );
+        this.validateAttemptsAllowed(attemptsAllowed);
+
+        this.validateDueDate(dueDate);
 
         return totalMarks;
     }

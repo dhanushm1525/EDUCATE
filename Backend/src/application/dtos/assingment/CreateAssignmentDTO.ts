@@ -8,4 +8,5 @@ export interface CreateAssignmentDTO {
     passingMarks: number;
     timeLimit?: number;
     attemptsAllowed?: number;
+    dueDate?: string | null;
 }

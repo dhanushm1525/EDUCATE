@@ -28,9 +28,7 @@ export class CreateAssignmentUseCase
     ): Promise<Assignment> {
 
         const lesson =
-            await this._lessonRepository.findById(
-                dto.lessonId
-            );
+            await this._lessonRepository.findById(dto.lessonId);
 
         if (!lesson) {
             throw new AppError(
@@ -40,9 +38,7 @@ export class CreateAssignmentUseCase
         }
 
         const chapter =
-            await this._chapterRepository.findById(
-                lesson.chapterId
-            );
+            await this._chapterRepository.findById(lesson.chapterId);
 
         if (!chapter) {
             throw new AppError(
@@ -52,9 +48,7 @@ export class CreateAssignmentUseCase
         }
 
         const course =
-            await this._courseRepository.findById(
-                chapter.courseId
-            );
+            await this._courseRepository.findById(chapter.courseId);
 
         if (!course) {
             throw new AppError(
@@ -71,9 +65,7 @@ export class CreateAssignmentUseCase
         }
 
         const existingAssignment =
-            await this._assignmentRepository.findByLessonId(
-                dto.lessonId
-            );
+            await this._assignmentRepository.findByLessonId(dto.lessonId);
 
         if (existingAssignment) {
             throw new AppError(
@@ -82,13 +74,18 @@ export class CreateAssignmentUseCase
             );
         }
 
+        const dueDate = dto.dueDate
+            ? new Date(dto.dueDate)
+            : null;
+
         const totalMarks =
             AssignmentPolicy.validate(
                 dto.title,
                 dto.questions,
                 dto.passingMarks,
                 dto.timeLimit,
-                dto.attemptsAllowed
+                dto.attemptsAllowed,
+                dueDate
             );
 
         const now = new Date();
@@ -102,12 +99,11 @@ export class CreateAssignmentUseCase
             passingMarks: dto.passingMarks,
             timeLimit: dto.timeLimit,
             attemptsAllowed: dto.attemptsAllowed,
+            dueDate,
             createdAt: now,
             updatedAt: now,
         };
 
-        return await this._assignmentRepository.create(
-            assignment
-        );
+        return await this._assignmentRepository.create(assignment);
     }
 }

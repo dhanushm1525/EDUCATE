@@ -7,4 +7,5 @@ export interface UpdateAssignmentDTO {
     passingMarks?: number;
     timeLimit?: number;
     attemptsAllowed?: number;
+    dueDate?: string | null;
 }

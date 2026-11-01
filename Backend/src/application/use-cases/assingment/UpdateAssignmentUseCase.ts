@@ -29,9 +29,7 @@ export class UpdateAssignmentUseCase
     ): Promise<Assignment> {
 
         const existingAssignment =
-            await this._assignmentRepository.findById(
-                assignmentId
-            );
+            await this._assignmentRepository.findById(assignmentId);
 
         if (!existingAssignment) {
             throw new AppError(
@@ -41,9 +39,7 @@ export class UpdateAssignmentUseCase
         }
 
         const lesson =
-            await this._lessonRepository.findById(
-                existingAssignment.lessonId
-            );
+            await this._lessonRepository.findById(existingAssignment.lessonId);
 
         if (!lesson) {
             throw new AppError(
@@ -53,9 +49,7 @@ export class UpdateAssignmentUseCase
         }
 
         const chapter =
-            await this._chapterRepository.findById(
-                lesson.chapterId
-            );
+            await this._chapterRepository.findById(lesson.chapterId);
 
         if (!chapter) {
             throw new AppError(
@@ -65,9 +59,7 @@ export class UpdateAssignmentUseCase
         }
 
         const course =
-            await this._courseRepository.findById(
-                chapter.courseId
-            );
+            await this._courseRepository.findById(chapter.courseId);
 
         if (!course) {
             throw new AppError(
@@ -89,12 +81,10 @@ export class UpdateAssignmentUseCase
                 : existingAssignment.title;
 
         const questions =
-            dto.questions ??
-            existingAssignment.questions;
+            dto.questions ?? existingAssignment.questions;
 
         const passingMarks =
-            dto.passingMarks ??
-            existingAssignment.passingMarks;
+            dto.passingMarks ?? existingAssignment.passingMarks;
 
         const timeLimit =
             dto.timeLimit !== undefined
@@ -106,6 +96,13 @@ export class UpdateAssignmentUseCase
                 ? dto.attemptsAllowed
                 : existingAssignment.attemptsAllowed;
 
+        const dueDate =
+            dto.dueDate === undefined
+                ? existingAssignment.dueDate ?? null
+                : dto.dueDate === null
+                    ? null
+                    : new Date(dto.dueDate);
+
         const totalMarks =
             AssignmentPolicy.validate(
                 title,
@@ -114,6 +111,11 @@ export class UpdateAssignmentUseCase
                 timeLimit,
                 attemptsAllowed
             );
+
+        // Validate only when the teacher supplies a new deadline.
+        if (dto.dueDate !== undefined) {
+            AssignmentPolicy.validateDueDate(dueDate);
+        }
 
         const updateData: Partial<Assignment> = {
             title,
@@ -124,15 +126,11 @@ export class UpdateAssignmentUseCase
                     : existingAssignment.description,
 
             questions,
-
             totalMarks,
-
             passingMarks,
-
             timeLimit,
-
             attemptsAllowed,
-
+            dueDate,
             updatedAt: new Date(),
         };
 
