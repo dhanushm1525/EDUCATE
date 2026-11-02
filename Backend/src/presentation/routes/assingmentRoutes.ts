@@ -9,6 +9,9 @@ import {
     getStudentAssignmentController,
     submitAssignmentController,
     getAssignmentResultsController,
+    getTeacherAssignmentSubmissionsController,
+    getTeacherSubmissionDetailController,
+    gradeAssignmentSubmissionController,
 } from "../../infrastructure/DI/assignmentDependencies";
 
 import { jwtService } from "../../infrastructure/DI/authDependencies";
@@ -101,6 +104,37 @@ router.delete(
     roleMiddleware(UserRole.TEACHER),
     deleteAssignmentController.handle.bind(
         deleteAssignmentController
+    )
+);
+
+
+// Get Teacher Assignment Submissions
+router.get(
+    "/teacher/assignments/:assignmentId/submissions",
+    authMiddleware(jwtService),
+    roleMiddleware(UserRole.TEACHER),
+    getTeacherAssignmentSubmissionsController.handle.bind(
+        getTeacherAssignmentSubmissionsController
+    )
+);
+
+// Get Individual Teacher Submission Details
+router.get(
+    "/teacher/assignments/:assignmentId/submissions/:submissionId",
+    authMiddleware(jwtService),
+    roleMiddleware(UserRole.TEACHER),
+    getTeacherSubmissionDetailController.handle.bind(
+        getTeacherSubmissionDetailController
+    )
+);
+
+// Grade Assignment Submission
+router.patch(
+    "/teacher/assignments/:assignmentId/submissions/:submissionId/grade",
+    authMiddleware(jwtService),
+    roleMiddleware(UserRole.TEACHER),
+    gradeAssignmentSubmissionController.handle.bind(
+        gradeAssignmentSubmissionController
     )
 );
 

@@ -1,14 +1,17 @@
+
 import { User } from "../../entities/User";
 
+export interface IUserRepository {
 
-export interface IUserRepository{
-    create(user:User):Promise<User>;
+    create(user: User): Promise<User>;
 
-    findById(id:string):Promise<User|null>;
+    findById(id: string): Promise<User | null>;
 
-    findByEmail(email:string):Promise<User|null>;
+    findByIds(ids: string[]): Promise<User[]>;
 
-    update(user:User):Promise<User>;
+    findByEmail(email: string): Promise<User | null>;
 
-    existsByEmail(email:string):Promise<boolean>;
-} 
+    update(user: User): Promise<User>;
+
+    existsByEmail(email: string): Promise<boolean>;
+}

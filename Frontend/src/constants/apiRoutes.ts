@@ -99,5 +99,25 @@ courses: {
 
     byId: (assignmentId: string) =>
       `/assignments/${assignmentId}`,
+
+    student: {
+    byLesson: (lessonId: string) =>
+        `/assignments/student/lessons/${lessonId}/assignment`,
+
+    submit: (assignmentId: string) =>
+        `/assignments/student/assignments/${assignmentId}/submit`,
+
+    results: (assignmentId: string) =>
+        `/assignments/student/assignments/${assignmentId}/results`,
+},
   },
+
+  enrollments: {
+    base: "/enrollments",
+
+    enroll: (courseId: string) =>
+        `/enrollments/${courseId}`,
+
+    myCourses: "/enrollments/my-courses",
+},
 } as const;

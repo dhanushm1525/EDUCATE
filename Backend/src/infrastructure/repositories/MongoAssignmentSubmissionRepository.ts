@@ -20,6 +20,7 @@ import {
     AssignmentSubmissionPersistenceMapper,
 } from "../mappers/AssignmentSubmissionPersistenceMapper";
 
+
 export class MongoAssignmentSubmissionRepository
     extends BaseRepository<AssignmentSubmissionDocument>
     implements IAssignmentSubmissionRepository {
@@ -99,6 +100,31 @@ export class MongoAssignmentSubmissionRepository
 
         return documents.map(
             AssignmentSubmissionPersistenceMapper.toDomain
+        );
+    }
+
+    async update(
+        submissionId: string,
+        submission: AssignmentSubmission
+    ): Promise<AssignmentSubmission | null> {
+
+        const documentData =
+            AssignmentSubmissionPersistenceMapper.toPersistence(
+                submission
+            );
+
+        const document =
+            await this.updateByIdDocument(
+                submissionId,
+                documentData
+            );
+
+        if (!document) {
+            return null;
+        }
+
+        return AssignmentSubmissionPersistenceMapper.toDomain(
+            document
         );
     }
 }

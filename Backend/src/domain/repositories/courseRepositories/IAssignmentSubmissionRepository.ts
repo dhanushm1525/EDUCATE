@@ -23,4 +23,9 @@ export interface IAssignmentSubmissionRepository {
     findByAssignmentId(
         assignmentId: string
     ): Promise<AssignmentSubmission[]>;
+
+    update(
+        submissionId: string,
+        submission: AssignmentSubmission
+    ): Promise<AssignmentSubmission | null>;
 }

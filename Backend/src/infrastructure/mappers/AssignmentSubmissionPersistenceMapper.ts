@@ -7,9 +7,11 @@ import {
     AssignmentSubmissionDocument,
 } from "../database/models/AssignmentSubmissionModel";
 
+
 export class AssignmentSubmissionPersistenceMapper {
 
     static toPersistence(submission: AssignmentSubmission) {
+
         return {
             assignmentId: submission.assignmentId,
             userId: submission.userId,
@@ -28,9 +30,15 @@ export class AssignmentSubmissionPersistenceMapper {
 
             status: submission.status,
 
+            // Teacher grading information
+            teacherFeedback: submission.teacherFeedback,
+            gradedBy: submission.gradedBy,
+            gradedAt: submission.gradedAt,
+
             submittedAt: submission.submittedAt,
         };
     }
+
 
     static toDomain(
         document: AssignmentSubmissionDocument
@@ -55,6 +63,11 @@ export class AssignmentSubmissionPersistenceMapper {
             isPassed: document.isPassed,
 
             status: document.status,
+
+            // Teacher grading information
+            teacherFeedback: document.teacherFeedback,
+            gradedBy: document.gradedBy?.toString(),
+            gradedAt: document.gradedAt,
 
             submittedAt: document.submittedAt,
 

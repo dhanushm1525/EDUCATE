@@ -1,3 +1,6 @@
+
+import { Types } from "mongoose";
+
 import { IUserRepository } from "../../domain/repositories/userRepositories/IUserRepository";
 
 import { User } from "../../domain/entities/User";
@@ -5,15 +8,20 @@ import { User } from "../../domain/entities/User";
 import { IUserDocument, UserModel } from "../database/models/UserModel";
 
 import { UserMapper } from "../mappers/UserMapper";
+
 import { BaseRepository } from "./BaseRepository";
 
 
-export class MongoUserRepository extends BaseRepository<IUserDocument> implements IUserRepository {
+export class MongoUserRepository
+    extends BaseRepository<IUserDocument>
+    implements IUserRepository {
+
     constructor() {
         super(UserModel);
     }
 
     async create(user: User): Promise<User> {
+
         const document = await this.createDocument(
             UserMapper.toPersistence(user)
         );
@@ -22,6 +30,7 @@ export class MongoUserRepository extends BaseRepository<IUserDocument> implement
     }
 
     async findById(id: string): Promise<User | null> {
+
         const document = await this.findByIdDocument(id);
 
         if (!document) {
@@ -31,8 +40,27 @@ export class MongoUserRepository extends BaseRepository<IUserDocument> implement
         return UserMapper.toDomain(document);
     }
 
+    async findByIds(ids: string[]): Promise<User[]> {
+
+        if (ids.length === 0) {
+            return [];
+        }
+
+        const objectIds = ids.map(
+            id => new Types.ObjectId(id)
+        );
+
+        const documents = await this.findManyDocuments({
+            _id: { $in: objectIds }
+        });
+
+        return documents.map(
+            UserMapper.toDomain
+        );
+    }
 
     async findByEmail(email: string): Promise<User | null> {
+
         const document = await this.findOneDocument({
             email: email.toLowerCase()
         });
@@ -45,6 +73,7 @@ export class MongoUserRepository extends BaseRepository<IUserDocument> implement
     }
 
     async update(user: User): Promise<User> {
+
         if (!user.id) {
             throw new Error("User id is required to update");
         }
@@ -55,18 +84,16 @@ export class MongoUserRepository extends BaseRepository<IUserDocument> implement
         );
 
         if (!document) {
-            throw new Error(
-                "User could not be updated"
-            );
+            throw new Error("User could not be updated");
         }
 
         return UserMapper.toDomain(document);
     }
 
     async existsByEmail(email: string): Promise<boolean> {
+
         return this.existsDocument({
             email: email.toLowerCase()
         });
     }
-
 }

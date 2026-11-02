@@ -15,6 +15,7 @@ import CoursesPage from "../../pages/course/CoursesPage";
 // Student pages
 import StudentDashboardPage from "../../pages/student/StudentDashboardPage";
 import StudentProfilePage from "../../pages/student/StudentProfilePage";
+import MyLearningPage from "../../pages/student/MyLearningPage";
 
 // Teacher pages
 import TeacherDashboard from "../../pages/teacher/TeacherDashboard";
@@ -56,6 +57,7 @@ export function AppRouter() {
       <Route element={<RoleRoute allowedRoles={["student"]} />}>
         <Route path="/student" element={<StudentDashboardPage />} />
         <Route path="/student/profile" element={<StudentProfilePage />} />
+        <Route path="/student/my-learning" element={<MyLearningPage />} />
       </Route>
 
       {/* Teacher routes */}

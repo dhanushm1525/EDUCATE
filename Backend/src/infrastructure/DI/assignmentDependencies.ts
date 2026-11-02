@@ -21,12 +21,25 @@ import { GetAssignmentResultsUseCase } from "../../application/use-cases/assingm
 
 import { GetAssignmentResultsController } from "../../presentation/controllers/assingment/GetAssignmentResultsController";
 
+import { GetTeacherAssignmentSubmissionsUseCase } from "../../application/use-cases/assingment/GetTeacherAssignmentSubmissionsUseCase";
+
+import { GetTeacherAssignmentSubmissionsController } from "../../presentation/controllers/assingment/GetTeacherAssignmentSubmissionsController";
+
+import { GetTeacherSubmissionDetailUseCase } from "../../application/use-cases/assingment/GetTeacherSubmissionDetailUseCase";
+
+import { GetTeacherSubmissionDetailController } from "../../presentation/controllers/assingment/GetTeacherSubmissionDetailController";
+
+import { GradeAssignmentSubmissionUseCase } from "../../application/use-cases/assingment/GradeAssignmentSubmissionUseCase";
+
+import { GradeAssignmentSubmissionController } from "../../presentation/controllers/assingment/GradeAssignmentSubmissionController";
+
 import {
     enrollmentRepository,
     assignmentSubmissionRepository,
     lessonRepository,
     courseRepository,
-    chapterRepository
+    chapterRepository,
+    userRepository
 } from "./repositoryDependencies";
 
 
@@ -105,6 +118,35 @@ const getAssignmentResultsUseCase =
         assignmentSubmissionRepository
     );
 
+const getTeacherAssignmentSubmissionsUseCase =
+    new GetTeacherAssignmentSubmissionsUseCase(
+        assignmentRepository,
+        assignmentSubmissionRepository,
+        lessonRepository,
+        chapterRepository,
+        courseRepository,
+        userRepository
+    );
+
+const getTeacherSubmissionDetailUseCase =
+    new GetTeacherSubmissionDetailUseCase(
+        assignmentRepository,
+        assignmentSubmissionRepository,
+        lessonRepository,
+        chapterRepository,
+        courseRepository,
+        userRepository
+    );
+
+const gradeAssignmentSubmissionUseCase =
+    new GradeAssignmentSubmissionUseCase(
+        assignmentRepository,
+        assignmentSubmissionRepository,
+        lessonRepository,
+        chapterRepository,
+        courseRepository
+    );
+
 // ==============================
 // CONTROLLERS
 // ==============================
@@ -154,5 +196,25 @@ export const submitAssignmentController =
 export const getAssignmentResultsController =
     new GetAssignmentResultsController(
         getAssignmentResultsUseCase,
+        identifierValidator
+    );
+
+export const getTeacherAssignmentSubmissionsController =
+    new GetTeacherAssignmentSubmissionsController(
+        getTeacherAssignmentSubmissionsUseCase,
+        identifierValidator
+    );
+
+export const getTeacherSubmissionDetailController =
+    new GetTeacherSubmissionDetailController(
+        getTeacherSubmissionDetailUseCase,
+        identifierValidator
+    );
+
+
+
+export const gradeAssignmentSubmissionController =
+    new GradeAssignmentSubmissionController(
+        gradeAssignmentSubmissionUseCase,
         identifierValidator
     );

@@ -26,6 +26,11 @@ export interface AssignmentSubmission {
 
     status: SubmissionStatus;
 
+    // Teacher grading information
+    teacherFeedback?: string;
+    gradedBy?: string;
+    gradedAt?: Date;
+
     submittedAt: Date;
     createdAt: Date;
     updatedAt: Date;
