@@ -31,7 +31,7 @@ export class User {
     private _password?: string;
     private _googleId?: string;
     private readonly _authProvider: AuthProvider;
-    private  _avatar?: string;
+    private _avatar?: string;
     private _role: UserRole;
     private _status: UserStatus;
     private _isVerified: boolean;
@@ -82,6 +82,13 @@ export class User {
         this._avatar = avatarKey;
         this._updatedAt = new Date();
     }
+
+
+    changeStatus(status: UserStatus): void {
+        this._status = status;
+        this._updatedAt = new Date();
+    }
+
 
     get id(): string | undefined {
         return this._id;

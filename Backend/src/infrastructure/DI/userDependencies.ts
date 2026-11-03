@@ -10,6 +10,12 @@ import {
     s3StorageService
 } from "./storageDependencies";
 
+import { GetUsers } from "../../application/use-cases/user/GetUsers";
+import { UpdateUserStatus } from "../../application/use-cases/user/UpdateUserStatus";
+
+import { GetUsersController } from "../../presentation/controllers/user/GetUsersController";
+import { UpdateUserStatusController } from "../../presentation/controllers/user/UpdateUserStatusController";
+
 const getMyProfile = new GetMyProfile(
     userRepository,
     s3StorageService,
@@ -28,3 +34,17 @@ export const updateProfileImageController =
     new UpdateProfileImageController(
         updateProfileImage
     );
+
+
+// Admin: User management
+
+const getUsers = new GetUsers(userRepository);
+
+export const getUsersController =
+    new GetUsersController(getUsers);
+
+const updateUserStatus =
+    new UpdateUserStatus(userRepository);
+
+export const updateUserStatusController =
+    new UpdateUserStatusController(updateUserStatus);

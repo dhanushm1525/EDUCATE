@@ -15,9 +15,9 @@ import {
     getTeacherAssignmentsController,
 } from "../../infrastructure/DI/assignmentDependencies";
 
-import { jwtService } from "../../infrastructure/DI/authDependencies";
+import { authenticateUser } from "../../infrastructure/DI/authDependencies";
 
-import { authMiddleware } from "../middlewares/authMiddleware";
+
 import { roleMiddleware } from "../middlewares/roleMiddleware";
 
 
@@ -32,7 +32,7 @@ const router = Router();
 // Get Assignment for Student
 router.get(
     "/assignments/student/lessons/:lessonId/assignment",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
     getStudentAssignmentController.handle.bind(
         getStudentAssignmentController
@@ -42,7 +42,7 @@ router.get(
 // Submit Assignment
 router.post(
     "/assignments/student/assignments/:assignmentId/submit",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
     submitAssignmentController.handle.bind(
         submitAssignmentController
@@ -52,7 +52,7 @@ router.post(
 // Get Assignment Results
 router.get(
     "/assignments/student/assignments/:assignmentId/results",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
     getAssignmentResultsController.handle.bind(
         getAssignmentResultsController
@@ -66,7 +66,7 @@ router.get(
 // Create Assignment
 router.post(
     "/lessons/:lessonId/assignment",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     createAssignmentController.handle.bind(
         createAssignmentController
@@ -76,7 +76,7 @@ router.post(
 // Get Assignment
 router.get(
     "/lessons/:lessonId/assignment",
-    authMiddleware(jwtService),
+    authenticateUser,
     getAssignmentController.handle.bind(
         getAssignmentController
     )
@@ -85,7 +85,7 @@ router.get(
 // Update Assignment
 router.patch(
     "/assignments/:assignmentId",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     updateAssignmentController.handle.bind(
         updateAssignmentController
@@ -95,7 +95,7 @@ router.patch(
 // Delete Assignment
 router.delete(
     "/assignments/:assignmentId",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     deleteAssignmentController.handle.bind(
         deleteAssignmentController
@@ -105,7 +105,7 @@ router.delete(
 // Get Teacher Assignment Submissions
 router.get(
     "/teacher/assignments/:assignmentId/submissions",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     getTeacherAssignmentSubmissionsController.handle.bind(
         getTeacherAssignmentSubmissionsController
@@ -115,7 +115,7 @@ router.get(
 // Get Individual Teacher Submission Details
 router.get(
     "/teacher/assignments/:assignmentId/submissions/:submissionId",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     getTeacherSubmissionDetailController.handle.bind(
         getTeacherSubmissionDetailController
@@ -125,7 +125,7 @@ router.get(
 // Grade Assignment Submission
 router.patch(
     "/teacher/assignments/:assignmentId/submissions/:submissionId/grade",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     gradeAssignmentSubmissionController.handle.bind(
         gradeAssignmentSubmissionController
@@ -135,7 +135,7 @@ router.patch(
 
 router.get(
     "/teacher/assignments",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     (req, res, next) =>
         getTeacherAssignmentsController.handle(req, res, next)

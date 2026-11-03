@@ -1,4 +1,3 @@
-
 import { Routes, Route } from "react-router-dom";
 
 // Public pages
@@ -35,6 +34,8 @@ import AdminDashboard from "../../pages/admin/AdminDashboard";
 import AdminProfilePage from "../../components/admin/AdminProfilePage";
 import CourseApprovalPage from "../../pages/admin/CourseApprovalPage";
 import CategoriesPage from "../../pages/admin/CategoriesPage";
+import AdminStudentsPage from "../../pages/admin/AdminStudentsPage";
+import AdminTeachersPage from "../../pages/admin/AdminTeachersPage";
 
 // Route guards
 import RoleRoute from "./RoleRoute";
@@ -63,15 +64,9 @@ export function AppRouter() {
 
         <Route path="/student/profile" element={<StudentProfilePage />} />
 
-        <Route
-          path="/student/courses"
-          element={<StudentCoursesPage />}
-        />
+        <Route path="/student/courses" element={<StudentCoursesPage />} />
 
-        <Route
-          path="/student/my-courses"
-          element={<MyLearningPage />}
-        />
+        <Route path="/student/my-courses" element={<MyLearningPage />} />
 
         <Route
           path="/student/courses/:courseId/learn"
@@ -124,12 +119,12 @@ export function AppRouter() {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/profile" element={<AdminProfilePage />} />
 
-        <Route
-          path="/admin/courses/pending"
-          element={<CourseApprovalPage />}
-        />
+        <Route path="/admin/courses/pending" element={<CourseApprovalPage />} />
 
         <Route path="/admin/categories" element={<CategoriesPage />} />
+        <Route path="/admin/students" element={<AdminStudentsPage />} />
+
+        <Route path="/admin/teachers" element={<AdminTeachersPage />} />
       </Route>
     </Routes>
   );

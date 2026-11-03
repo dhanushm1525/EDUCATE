@@ -2,8 +2,8 @@ import {Router} from "express";
 
 import {getMyProfileController} from "../../infrastructure/DI/userDependencies";
 
-import {authMiddleware} from "../middlewares/authMiddleware"
-import { jwtService } from "../../infrastructure/DI/authDependencies";
+
+import { authenticateUser } from "../../infrastructure/DI/authDependencies";
 
 
 
@@ -13,7 +13,7 @@ const router = Router();
 router.get(
     "/profile",
 
-    authMiddleware(jwtService),
+    authenticateUser,
 
     getMyProfileController.handle.bind(
         getMyProfileController

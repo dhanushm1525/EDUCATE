@@ -156,7 +156,10 @@ const getCurrentUser =new GetCurrentUser(userRepository);
 
 export const getCurrentUserController = new GetCurrentUserController(getCurrentUser)
 
-export const authenticateUser = authMiddleware(jwtService)
+export const authenticateUser = authMiddleware(
+    jwtService,
+    userRepository
+);
 
 
 

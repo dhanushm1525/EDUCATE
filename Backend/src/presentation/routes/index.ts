@@ -12,6 +12,7 @@ import lessonRoutes from "./lessonRoutes"
 import teacherApplicationRoutes from "./teacherApplicationRoutes"
 import assingmentRoutes from "./assingmentRoutes"
 import enrollmentRoutes from "./enrollmentRoutes";
+import adminUserRoutes from "./adminUserRoutes";
 
 const router = Router();
 
@@ -46,4 +47,7 @@ router.use("/teacher-applications",teacherApplicationRoutes)
 router.use("/",assingmentRoutes);
 
 router.use("/enrollments", enrollmentRoutes);
+
+router.use("/admin/users", adminUserRoutes);
+
 export default router;

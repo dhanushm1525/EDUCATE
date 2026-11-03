@@ -167,4 +167,11 @@ export const API_ROUTES = {
     ) =>
       `/teacher/assignments/${assignmentId}/submissions/${submissionId}/grade`,
   },
+
+  adminUsers: {
+    base: "/admin/users",
+
+    updateStatus: (userId: string) =>
+        `/admin/users/${userId}/status`,
+},
 } as const;

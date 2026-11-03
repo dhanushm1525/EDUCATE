@@ -4,11 +4,9 @@ import {
     createTeacherApplicationController
 } from "../../infrastructure/DI/teacherApplicationDependencies";
 
-import { jwtService }
+import { authenticateUser }
     from "../../infrastructure/DI/authDependencies";
 
-import { authMiddleware }
-    from "../middlewares/authMiddleware";
 
 import { roleMiddleware }
     from "../middlewares/roleMiddleware";
@@ -26,7 +24,7 @@ import { createTeacherApplicationSchema }
 const router = Router();
 
 
-router.post("/", authMiddleware(jwtService),
+router.post("/", authenticateUser,
     roleMiddleware(UserRole.STUDENT),
     validate(createTeacherApplicationSchema),
     createTeacherApplicationController.handle.bind(

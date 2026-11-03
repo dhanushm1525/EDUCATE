@@ -2,14 +2,14 @@
 import { Router } from "express";
 
 import { validate } from "../middlewares/validationMiddleware";
-import { authMiddleware } from "../middlewares/authMiddleware";
+
 import { roleMiddleware } from "../middlewares/roleMiddleware";
 
 import { UserRole } from "../../shared/enums/UserRole";
 
 import {
     authenticateUser,
-    jwtService,
+    
 } from "../../infrastructure/DI/authDependencies";
 
 import {
@@ -90,7 +90,7 @@ router.patch(
 // Teacher: submit a course for approval.
 router.patch(
     "/:courseId/submit",
-    authMiddleware(jwtService),
+    authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     submitCourseController.handle.bind(submitCourseController)
 );

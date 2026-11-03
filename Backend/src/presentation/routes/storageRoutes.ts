@@ -8,14 +8,14 @@ import {
     updateProfileImageController
 } from "../../infrastructure/DI/userDependencies";
 
-import { jwtService } from "../../infrastructure/DI/authDependencies";
-import { authMiddleware } from "../middlewares/authMiddleware";
+import { authenticateUser } from "../../infrastructure/DI/authDependencies";
+
 
 const router = Router();
 
 router.post(
     "/profile-image/upload-url",
-    authMiddleware(jwtService),
+    authenticateUser,
     generateProfileImageUploadUrlController.handle.bind(
         generateProfileImageUploadUrlController
     )
@@ -23,7 +23,7 @@ router.post(
 
 router.patch(
     "/profile-image",
-    authMiddleware(jwtService),
+    authenticateUser,
     updateProfileImageController.handle.bind(
         updateProfileImageController
     )

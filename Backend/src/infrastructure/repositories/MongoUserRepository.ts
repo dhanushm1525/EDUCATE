@@ -11,6 +11,11 @@ import { UserMapper } from "../mappers/UserMapper";
 
 import { BaseRepository } from "./BaseRepository";
 
+import {
+    UserFilters,
+    PaginatedUsers
+} from "../../domain/repositories/userRepositories/IUserRepository";
+
 
 export class MongoUserRepository
     extends BaseRepository<IUserDocument>
@@ -96,4 +101,51 @@ export class MongoUserRepository
             email: email.toLowerCase()
         });
     }
+
+    async findAll(filters: UserFilters): Promise<PaginatedUsers> {
+
+    const { role, status, search, page, limit } = filters;
+
+    const query: Record<string, unknown> = {};
+
+    if (role) {
+        query.role = role;
+    }
+
+    if (status) {
+        query.status = status;
+    }
+
+    if (search?.trim()) {
+        const searchRegex = new RegExp(
+            search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+            "i"
+        );
+
+        query.$or = [
+            { firstName: searchRegex },
+            { lastName: searchRegex },
+            { email: searchRegex }
+        ];
+    }
+
+    const skip = (page - 1) * limit;
+
+    const [documents, total] = await Promise.all([
+        this.model
+            .find(query)
+            .select("-password -googleId")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .exec(),
+
+        this.countDocuments(query)
+    ]);
+
+    return {
+        users: documents.map(UserMapper.toDomain),
+        total
+    };
+}
 }
