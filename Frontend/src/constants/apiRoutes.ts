@@ -174,4 +174,20 @@ export const API_ROUTES = {
     updateStatus: (userId: string) =>
         `/admin/users/${userId}/status`,
 },
+
+teacherApplications: {
+    base: "/teacher-applications",
+
+    pending: "/teacher-applications/pending",
+
+    myApplication: "/teacher-applications/my-application",
+
+    uploadUrl: "/teacher-applications/upload-url",
+
+    approve: (applicationId: string) =>
+        `/teacher-applications/${applicationId}/approve`,
+
+    reject: (applicationId: string) =>
+        `/teacher-applications/${applicationId}/reject`,
+},
 } as const;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { LogOut, GraduationCap } from "lucide-react";
 
 import { useLogout } from "../../hooks/useLogout";
 import { useAuthStore } from "../../store/authStore";
@@ -73,6 +73,13 @@ export function StudentNavbar() {
 
               <NavLink to="/student/my-courses" className={navLinkClass}>
                 My Courses
+              </NavLink>
+
+              <NavLink to="/student/become-teacher" className={navLinkClass}>
+                <span className="inline-flex items-center gap-1.5">
+                  <GraduationCap size={16} />
+                  Become a Teacher
+                </span>
               </NavLink>
             </nav>
           )}

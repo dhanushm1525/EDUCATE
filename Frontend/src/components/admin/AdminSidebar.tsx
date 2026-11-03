@@ -7,6 +7,7 @@ import {
   User,
   GraduationCap,
   Users,
+  ClipboardList,
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
@@ -28,6 +29,13 @@ const menuItems = [
     icon: Users,
     path: "/admin/teachers",
   },
+
+  {
+    name: "Teacher Applications",
+    icon: ClipboardList,
+    path: "/admin/teacher-applications",
+  },
+  
   {
     name: "Course Approval",
     icon: BookOpen,

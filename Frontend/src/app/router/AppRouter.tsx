@@ -16,6 +16,7 @@ import StudentProfilePage from "../../pages/student/StudentProfilePage";
 import MyLearningPage from "../../pages/student/MyLearningPage";
 import StudentCoursesPage from "../../pages/student/StudentCoursesPage";
 import StudentLearningPage from "../../pages/student/StudentLearningPage";
+import BecomeTeacherPage from "../../pages/student/BecomeTeacherPage";
 
 // Teacher pages
 import TeacherDashboard from "../../pages/teacher/TeacherDashboard";
@@ -36,6 +37,7 @@ import CourseApprovalPage from "../../pages/admin/CourseApprovalPage";
 import CategoriesPage from "../../pages/admin/CategoriesPage";
 import AdminStudentsPage from "../../pages/admin/AdminStudentsPage";
 import AdminTeachersPage from "../../pages/admin/AdminTeachersPage";
+import TeacherApplicationsPage from "../../pages/admin/TeacherApplicationsPage";
 
 // Route guards
 import RoleRoute from "./RoleRoute";
@@ -72,6 +74,7 @@ export function AppRouter() {
           path="/student/courses/:courseId/learn"
           element={<StudentLearningPage />}
         />
+        <Route path="/student/become-teacher" element={<BecomeTeacherPage />} />
       </Route>
 
       {/* Teacher routes */}
@@ -125,6 +128,10 @@ export function AppRouter() {
         <Route path="/admin/students" element={<AdminStudentsPage />} />
 
         <Route path="/admin/teachers" element={<AdminTeachersPage />} />
+        <Route
+          path="/admin/teacher-applications"
+          element={<TeacherApplicationsPage />}
+        />
       </Route>
     </Routes>
   );

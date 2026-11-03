@@ -89,6 +89,11 @@ export class User {
         this._updatedAt = new Date();
     }
 
+    changeRole(role: UserRole): void {
+        this._role = role;
+        this._updatedAt = new Date();
+    }
+
 
     get id(): string | undefined {
         return this._id;
