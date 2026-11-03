@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import TeacherSidebar from "../../components/teacher/TeacherSidebar";
+import TeacherLayout from "../../components/teacher/layout/TeacherLayout";
 
 import MyCoursesHeader from "../../components/teacher/courses/MyCoursesHeader";
 import CourseStats from "../../components/teacher/courses/CourseStats";
 import CourseGrid from "../../components/teacher/courses/CourseGrid";
 import MyCoursesEmptyState from "../../components/teacher/courses/MyCoursesEmptyState";
 
-import { Button } from "../../components/common/ui/Button";
+import { LoadingState } from "../../components/common/ui/LoadingState";
+import { ErrorState } from "../../components/common/ui/ErrorState";
 
 import { courseService } from "../../services/course.service";
 import { getApiErrorMessage } from "../../utils/apiError";
@@ -30,6 +31,8 @@ export default function MyCoursesPage() {
 
     const fetchCourses = async () => {
       try {
+        setLoading(true);
+
         const result = await courseService.getMyCourses();
 
         if (!cancelled) {
@@ -68,60 +71,35 @@ export default function MyCoursesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B1120] text-white">
-      <TeacherSidebar />
+    <TeacherLayout>
+      <div className="space-y-8">
+        <MyCoursesHeader onCreateCourse={handleCreateCourse} />
 
-      <main className="ml-64 min-h-screen p-8">
-        <div className="mx-auto max-w-7xl space-y-8">
-          <MyCoursesHeader onCreateCourse={handleCreateCourse} />
+        {loading ? (
+          <LoadingState message="Loading your courses..." />
+        ) : error ? (
+          <ErrorState message={error} onRetry={handleRetry} />
+        ) : courses.length === 0 ? (
+          <MyCoursesEmptyState onCreateCourse={handleCreateCourse} />
+        ) : (
+          <>
+            <CourseStats courses={courses} />
 
-          {loading ? (
-            <div
-              className="flex min-h-64 items-center justify-center"
-              role="status"
-              aria-live="polite"
-            >
-              <div className="text-center">
-                <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-700 border-t-blue-500" />
-                <p className="mt-4 text-sm text-slate-400">
-                  Loading your courses...
+            <section className="space-y-5">
+              <div>
+                <h2 className="text-lg font-semibold">All Courses</h2>
+
+                <p className="mt-1 text-sm text-slate-400">
+                  Manage your existing courses and continue building your
+                  content.
                 </p>
               </div>
-            </div>
-          ) : error ? (
-            <section className="rounded-xl border border-red-500/20 bg-red-500/5 p-8 text-center">
-              <h2 className="text-lg font-semibold text-red-400">
-                Unable to load courses
-              </h2>
 
-              <p className="mt-2 text-sm text-slate-400">{error}</p>
-
-              <div className="mt-5 flex justify-center">
-                <Button onClick={handleRetry}>Try Again</Button>
-              </div>
+              <CourseGrid courses={courses} />
             </section>
-          ) : courses.length === 0 ? (
-            <MyCoursesEmptyState onCreateCourse={handleCreateCourse} />
-          ) : (
-            <>
-              <CourseStats courses={courses} />
-
-              <section className="space-y-5">
-                <div>
-                  <h2 className="text-lg font-semibold">All Courses</h2>
-
-                  <p className="mt-1 text-sm text-slate-400">
-                    Manage your existing courses and continue building your
-                    content.
-                  </p>
-                </div>
-
-                <CourseGrid courses={courses} />
-              </section>
-            </>
-          )}
-        </div>
-      </main>
-    </div>
+          </>
+        )}
+      </div>
+    </TeacherLayout>
   );
 }

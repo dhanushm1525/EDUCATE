@@ -100,6 +100,7 @@ export const API_ROUTES = {
       `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/student`,
   },
 
+
   assignments: {
     byLesson: (lessonId: string) =>
       `/lessons/${lessonId}/assignment`,
@@ -107,6 +108,27 @@ export const API_ROUTES = {
     byId: (assignmentId: string) =>
       `/assignments/${assignmentId}`,
 
+    // Teacher APIs
+    teacher: {
+      submissions: (assignmentId: string) =>
+        `/teacher/assignments/${assignmentId}/submissions`,
+
+      submissionDetail: (
+        assignmentId: string,
+        submissionId: string
+      ) =>
+        `/teacher/assignments/${assignmentId}/submissions/${submissionId}`,
+
+      gradeSubmission: (
+        assignmentId: string,
+        submissionId: string
+      ) =>
+        `/teacher/assignments/${assignmentId}/submissions/${submissionId}/grade`,
+
+      myAssignments: "/teacher/assignments",
+    },
+
+    // Student APIs
     student: {
       byLesson: (lessonId: string) =>
         `/assignments/student/lessons/${lessonId}/assignment`,
@@ -119,6 +141,7 @@ export const API_ROUTES = {
     },
   },
 
+
   enrollments: {
     base: "/enrollments",
 
@@ -126,5 +149,22 @@ export const API_ROUTES = {
       `/enrollments/${courseId}`,
 
     myCourses: "/enrollments/my-courses",
+  },
+
+  teacher: {
+    submissions: (assignmentId: string) =>
+      `/teacher/assignments/${assignmentId}/submissions`,
+
+    submissionDetail: (
+      assignmentId: string,
+      submissionId: string
+    ) =>
+      `/teacher/assignments/${assignmentId}/submissions/${submissionId}`,
+
+    gradeSubmission: (
+      assignmentId: string,
+      submissionId: string
+    ) =>
+      `/teacher/assignments/${assignmentId}/submissions/${submissionId}/grade`,
   },
 } as const;

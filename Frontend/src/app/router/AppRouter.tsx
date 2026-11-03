@@ -1,3 +1,4 @@
+
 import { Routes, Route } from "react-router-dom";
 
 // Public pages
@@ -8,14 +9,13 @@ import VerifyEmailPage from "../../pages/auth/VerifyEmailPage";
 import ForgotPasswordPage from "../../pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "../../pages/auth/ResetPasswordPage";
 import CourseDetailsPage from "../../pages/course/CourseDetailsPage";
-
-// Course discovery
 import CoursesPage from "../../pages/course/CoursesPage";
 
 // Student pages
 import StudentDashboardPage from "../../pages/student/StudentDashboardPage";
 import StudentProfilePage from "../../pages/student/StudentProfilePage";
 import MyLearningPage from "../../pages/student/MyLearningPage";
+import StudentCoursesPage from "../../pages/student/StudentCoursesPage";
 import StudentLearningPage from "../../pages/student/StudentLearningPage";
 
 // Teacher pages
@@ -26,6 +26,9 @@ import MyCoursesPage from "../../pages/teacher/MyCoursesPage";
 import CourseBuilderPage from "../../pages/teacher/CourseBuilderPage";
 import LessonManagementPage from "../../pages/teacher/LessonManagementPage";
 import AssignmentManagementPage from "../../pages/teacher/AssignmentManagementPage";
+import TeacherAssignmentSubmissionsPage from "../../pages/teacher/TeacherAssignmentSubmissionsPage";
+import TeacherSubmissionDetailPage from "../../pages/teacher/TeacherSubmissionDetailPage";
+import TeacherAssignmentOverviewPage from "../../pages/teacher/TeacherAssignmentOverviewPage";
 
 // Admin pages
 import AdminDashboard from "../../pages/admin/AdminDashboard";
@@ -57,8 +60,19 @@ export function AppRouter() {
       {/* Student routes */}
       <Route element={<RoleRoute allowedRoles={["student"]} />}>
         <Route path="/student" element={<StudentDashboardPage />} />
+
         <Route path="/student/profile" element={<StudentProfilePage />} />
-        <Route path="/student/my-learning" element={<MyLearningPage />} />
+
+        <Route
+          path="/student/courses"
+          element={<StudentCoursesPage />}
+        />
+
+        <Route
+          path="/student/my-courses"
+          element={<MyLearningPage />}
+        />
+
         <Route
           path="/student/courses/:courseId/learn"
           element={<StudentLearningPage />}
@@ -71,7 +85,9 @@ export function AppRouter() {
         <Route path="/teacher/profile" element={<TeacherProfilePage />} />
 
         <Route path="/teacher/courses" element={<MyCoursesPage />} />
+
         <Route path="/teacher/courses/create" element={<CreateCoursePage />} />
+
         <Route
           path="/teacher/courses/:courseId"
           element={<CourseBuilderPage />}
@@ -86,13 +102,33 @@ export function AppRouter() {
           path="/teacher/courses/:courseId/chapters/:chapterId/lessons/:lessonId/assignment"
           element={<AssignmentManagementPage />}
         />
+
+        <Route
+          path="/teacher/assignments/:assignmentId/submissions"
+          element={<TeacherAssignmentSubmissionsPage />}
+        />
+
+        <Route
+          path="/teacher/assignments/:assignmentId/submissions/:submissionId"
+          element={<TeacherSubmissionDetailPage />}
+        />
+
+        <Route
+          path="/teacher/assignments"
+          element={<TeacherAssignmentOverviewPage />}
+        />
       </Route>
 
       {/* Admin routes */}
       <Route element={<RoleRoute allowedRoles={["admin"]} />}>
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/profile" element={<AdminProfilePage />} />
-        <Route path="/admin/courses/pending" element={<CourseApprovalPage />} />
+
+        <Route
+          path="/admin/courses/pending"
+          element={<CourseApprovalPage />}
+        />
+
         <Route path="/admin/categories" element={<CategoriesPage />} />
       </Route>
     </Routes>

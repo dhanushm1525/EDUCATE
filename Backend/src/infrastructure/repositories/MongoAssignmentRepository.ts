@@ -98,4 +98,32 @@ export class MongoAssignmentRepository
             assignmentId
         );
     }
+
+
+    async findByLessonIds(
+        lessonIds: string[]
+    ): Promise<Assignment[]> {
+
+        if (lessonIds.length === 0) {
+            return [];
+        }
+
+        const lessonObjectIds = lessonIds.map(
+            lessonId => new Types.ObjectId(lessonId)
+        );
+
+        const documents = await this.findManyDocuments({
+            lessonId: {
+                $in: lessonObjectIds
+            }
+        });
+
+        return documents
+            .sort(
+                (a, b) =>
+                    b.createdAt.getTime() - a.createdAt.getTime()
+            )
+            .map(AssignmentPersistenceMapper.toDomain);
+    }
+
 }

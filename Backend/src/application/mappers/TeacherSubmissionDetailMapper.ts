@@ -86,6 +86,10 @@ export class TeacherSubmissionDetailMapper {
 
             status: submission.status,
 
+            teacherFeedback: submission.teacherFeedback,
+            gradedBy: submission.gradedBy,
+            gradedAt: submission.gradedAt,
+
             submittedAt: submission.submittedAt,
             createdAt: submission.createdAt,
             updatedAt: submission.updatedAt

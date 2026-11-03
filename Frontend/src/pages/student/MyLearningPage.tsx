@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { BookOpen, GraduationCap, RefreshCw } from "lucide-react";
 
 import { StudentNavbar } from "../../components/student/StudentNavbar";
@@ -14,7 +15,6 @@ export default function MyLearningPage() {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Initial fetch: loading is already true.
   useEffect(() => {
     let isMounted = true;
 
@@ -44,7 +44,6 @@ export default function MyLearningPage() {
     };
   }, []);
 
-  // Retry fetch: explicitly show loading.
   const handleRetry = async () => {
     try {
       setLoading(true);
@@ -71,9 +70,9 @@ export default function MyLearningPage() {
             </div>
 
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">My Learning</h1>
+              <h1 className="text-2xl font-bold text-slate-900">My Courses</h1>
               <p className="mt-1 text-sm text-slate-500">
-                Continue your learning journey.
+                Access your enrolled courses and continue learning.
               </p>
             </div>
           </div>
@@ -129,12 +128,12 @@ export default function MyLearningPage() {
               start learning today.
             </p>
 
-            <a
-              href="/courses"
+            <Link
+              to="/student/courses"
               className="mt-6 inline-flex rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-700"
             >
               Explore Courses
-            </a>
+            </Link>
           </div>
         )}
 

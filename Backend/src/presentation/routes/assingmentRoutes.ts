@@ -12,12 +12,14 @@ import {
     getTeacherAssignmentSubmissionsController,
     getTeacherSubmissionDetailController,
     gradeAssignmentSubmissionController,
+    getTeacherAssignmentsController,
 } from "../../infrastructure/DI/assignmentDependencies";
 
 import { jwtService } from "../../infrastructure/DI/authDependencies";
 
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { roleMiddleware } from "../middlewares/roleMiddleware";
+
 
 import { UserRole } from "../../shared/enums/UserRole";
 
@@ -129,5 +131,15 @@ router.patch(
         gradeAssignmentSubmissionController
     )
 );
+
+
+router.get(
+    "/teacher/assignments",
+    authMiddleware(jwtService),
+    roleMiddleware(UserRole.TEACHER),
+    (req, res, next) =>
+        getTeacherAssignmentsController.handle(req, res, next)
+);
+
 
 export default router;

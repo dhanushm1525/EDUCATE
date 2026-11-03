@@ -5,23 +5,16 @@ import {
 } from "../../../domain/entities/AssignmentSubmission";
 
 import { IAssignmentRepository } from "../../../domain/repositories/courseRepositories/IAssingmentRepository";
-
 import { IAssignmentSubmissionRepository } from "../../../domain/repositories/courseRepositories/IAssignmentSubmissionRepository";
-
 import { ILessonRepository } from "../../../domain/repositories/courseRepositories/ILessonRepository";
-
 import { IChapterRepository } from "../../../domain/repositories/courseRepositories/IChapterRepository";
-
 import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
 
 import { GradeAssignmentSubmissionDTO } from "../../dtos/assingment/GradeAssignmentSubmissionDTO";
-
 import { IGradeAssignmentSubmissionUseCase } from "../../interfaces/assingment/IGradeAssignmentSubmissionUseCase";
 
 import { AppError } from "../../../shared/errors/AppError";
-
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
-
 
 export class GradeAssignmentSubmissionUseCase
     implements IGradeAssignmentSubmissionUseCase {
@@ -42,7 +35,6 @@ export class GradeAssignmentSubmissionUseCase
             assignmentId,
             submissionId,
             teacherId,
-            score,
             teacherFeedback
         } = dto;
 
@@ -60,19 +52,7 @@ export class GradeAssignmentSubmissionUseCase
             );
         }
 
-        // 2. Validate score.
-        if (
-            typeof score !== "number" ||
-            !Number.isFinite(score) ||
-            score < 0
-        ) {
-            throw new AppError(
-                "Score must be a valid non-negative number",
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
-
-        // 3. Validate feedback.
+        // 2. Validate feedback.
         if (
             teacherFeedback !== undefined &&
             (
@@ -86,7 +66,7 @@ export class GradeAssignmentSubmissionUseCase
             );
         }
 
-        // 4. Find assignment.
+        // 3. Find assignment.
         const assignment =
             await this._assignmentRepository.findById(assignmentId);
 
@@ -97,7 +77,7 @@ export class GradeAssignmentSubmissionUseCase
             );
         }
 
-        // 5. Find submission.
+        // 4. Find submission.
         const submission =
             await this._submissionRepository.findById(submissionId);
 
@@ -108,7 +88,7 @@ export class GradeAssignmentSubmissionUseCase
             );
         }
 
-        // 6. Verify submission belongs to assignment.
+        // 5. Verify submission belongs to assignment.
         if (submission.assignmentId !== assignmentId) {
             throw new AppError(
                 "Submission does not belong to this assignment",
@@ -116,23 +96,15 @@ export class GradeAssignmentSubmissionUseCase
             );
         }
 
-        // 7. Prevent grading an already graded submission.
+        // 6. Prevent duplicate review.
         if (submission.status === SubmissionStatus.GRADED) {
             throw new AppError(
-                "This submission has already been graded",
+                "This submission has already been reviewed",
                 HttpStatusCode.CONFLICT
             );
         }
 
-        // 8. Validate score against assignment marks.
-        if (score > assignment.totalMarks) {
-            throw new AppError(
-                "Score cannot exceed the assignment's total marks",
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
-
-        // 9. Find lesson.
+        // 7. Find lesson.
         const lesson =
             await this._lessonRepository.findById(assignment.lessonId);
 
@@ -143,7 +115,7 @@ export class GradeAssignmentSubmissionUseCase
             );
         }
 
-        // 10. Find chapter.
+        // 8. Find chapter.
         const chapter =
             await this._chapterRepository.findById(lesson.chapterId);
 
@@ -154,7 +126,7 @@ export class GradeAssignmentSubmissionUseCase
             );
         }
 
-        // 11. Find course.
+        // 9. Find course.
         const course =
             await this._courseRepository.findById(chapter.courseId);
 
@@ -165,18 +137,16 @@ export class GradeAssignmentSubmissionUseCase
             );
         }
 
-        // 12. Verify teacher ownership.
+        // 10. Verify teacher ownership.
         if (course.teacherId !== teacherId) {
             throw new AppError(
-                "You are not authorized to grade this submission",
+                "You are not authorized to review this submission",
                 HttpStatusCode.FORBIDDEN
             );
         }
 
-        // 13. Update grading information.
-        submission.score = score;
-        submission.isPassed = score >= assignment.passingMarks;
-
+        // 11. Update feedback and review information.
+        // The automatically calculated score is never modified.
         submission.teacherFeedback = teacherFeedback?.trim();
 
         submission.gradedBy = teacherId;
@@ -184,7 +154,7 @@ export class GradeAssignmentSubmissionUseCase
 
         submission.status = SubmissionStatus.GRADED;
 
-        // 14. Persist updated submission.
+        // 12. Persist reviewed submission.
         const updatedSubmission =
             await this._submissionRepository.update(
                 submissionId,
@@ -193,7 +163,7 @@ export class GradeAssignmentSubmissionUseCase
 
         if (!updatedSubmission) {
             throw new AppError(
-                "Failed to update assignment submission",
+                "Failed to update assignment feedback",
                 HttpStatusCode.INTERNAL_SERVER_ERROR
             );
         }

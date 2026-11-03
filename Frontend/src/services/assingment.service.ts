@@ -14,11 +14,19 @@ import type {
     AssignmentResultsResponse,
 } from "../types/studentAssignment";
 
+import type {
+    TeacherAssignmentsResponse,
+    TeacherAssignmentSubmissionsResponse,
+    TeacherSubmissionDetailResponse,
+    GradeAssignmentRequest,
+    GradeAssignmentResponse,
+} from "../types/teacherAssignment";
+
 export const assignmentService = {
 
-    // -------------------------------
+    // ========================================
     // TEACHER APIs
-    // -------------------------------
+    // ========================================
 
     create: async (
         lessonId: string,
@@ -42,9 +50,63 @@ export const assignmentService = {
         return response.data;
     },
 
-    // -------------------------------
+    getTeacherSubmissions: async (
+        assignmentId: string
+    ): Promise<TeacherAssignmentSubmissionsResponse> => {
+        const response =
+            await apiClient.get<TeacherAssignmentSubmissionsResponse>(
+                API_ROUTES.assignments.teacher.submissions(assignmentId)
+            );
+
+        return response.data;
+    },
+
+    getTeacherSubmissionDetail: async (
+        assignmentId: string,
+        submissionId: string
+    ): Promise<TeacherSubmissionDetailResponse> => {
+        const response =
+            await apiClient.get<TeacherSubmissionDetailResponse>(
+                API_ROUTES.assignments.teacher.submissionDetail(
+                    assignmentId,
+                    submissionId
+                )
+            );
+
+        return response.data;
+    },
+
+    gradeSubmission: async (
+        assignmentId: string,
+        submissionId: string,
+        data: GradeAssignmentRequest
+    ): Promise<GradeAssignmentResponse> => {
+        const response =
+            await apiClient.patch<GradeAssignmentResponse>(
+                API_ROUTES.assignments.teacher.gradeSubmission(
+                    assignmentId,
+                    submissionId
+                ),
+                data
+            );
+
+        return response.data;
+    },
+
+
+    getTeacherAssignments: async (): Promise<TeacherAssignmentsResponse> => {
+        const response =
+            await apiClient.get<TeacherAssignmentsResponse>(
+                API_ROUTES.assignments.teacher.myAssignments
+            );
+
+        return response.data;
+    },
+
+
+    // ========================================
     // STUDENT APIs
-    // -------------------------------
+    // ========================================
 
     getStudentAssignment: async (
         lessonId: string

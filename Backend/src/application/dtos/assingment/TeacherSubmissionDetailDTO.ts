@@ -2,7 +2,6 @@
 import { SubmissionStatus } from "../../../domain/entities/AssignmentSubmission";
 
 export interface TeacherSubmissionDetailDTO {
-
     submissionId: string;
 
     student: {
@@ -39,6 +38,10 @@ export interface TeacherSubmissionDetailDTO {
     isPassed: boolean;
 
     status: SubmissionStatus;
+
+    teacherFeedback?: string;
+    gradedBy?: string;
+    gradedAt?: Date;
 
     submittedAt: Date;
     createdAt: Date;

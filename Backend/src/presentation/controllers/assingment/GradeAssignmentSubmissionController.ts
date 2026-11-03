@@ -2,14 +2,12 @@
 import { Request, Response, NextFunction } from "express";
 
 import { IGradeAssignmentSubmissionUseCase } from "../../../application/interfaces/assingment/IGradeAssignmentSubmissionUseCase";
-
 import { IIdentifierValidator } from "../../../application/interfaces/services/IIdentifierValidator";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
-
 
 export class GradeAssignmentSubmissionController {
 
@@ -61,23 +59,22 @@ export class GradeAssignmentSubmissionController {
                 );
             }
 
-            // 5. Extract grading information.
-            const { score, teacherFeedback } = req.body;
+            // 5. Extract teacher feedback.
+            const { teacherFeedback } = req.body;
 
-            // 6. Execute use case.
+            // 6. Execute feedback review.
             const submission =
                 await this._gradeAssignmentSubmissionUseCase.execute({
                     assignmentId,
                     submissionId,
                     teacherId: req.user.userId,
-                    score,
                     teacherFeedback
                 });
 
             // 7. Return response.
             res.status(HttpStatusCode.OK).json({
                 success: true,
-                message: "Assignment graded successfully",
+                message: "Assignment feedback submitted successfully",
                 data: submission
             });
 
