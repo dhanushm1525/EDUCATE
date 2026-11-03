@@ -42,6 +42,12 @@ import { CleanupLessonMediaUseCase } from "../../application/use-cases/lesson/Cl
 import { CleanupLessonMediaController } from "../../presentation/controllers/lesson/CleanupLessonMediaController";
 import { assignmentRepository } from "./assignmentDependencies";
 
+import { GetStudentLessonUseCase } from "../../application/use-cases/lesson/GetStudentLessonUseCase";
+import { GetStudentLessonController } from "../../presentation/controllers/lesson/GetStudentLessonController";
+
+import { enrollmentRepository } from "./repositoryDependencies";
+import { s3StorageService } from "./storageDependencies";
+
 const courseStatusPolicy =
     new DefaultCourseStatusPolicy();
 
@@ -154,3 +160,18 @@ export const cleanupLessonMediaUseCase =
 
 export const cleanupLessonMediaController =
     new CleanupLessonMediaController(cleanupLessonMediaUseCase);
+
+
+export const getStudentLessonUseCase =
+    new GetStudentLessonUseCase(
+        lessonRepository,
+        chapterRepository,
+        courseRepository,
+        enrollmentRepository,
+        s3StorageService
+    );
+
+export const getStudentLessonController =
+    new GetStudentLessonController(
+        getStudentLessonUseCase
+    );

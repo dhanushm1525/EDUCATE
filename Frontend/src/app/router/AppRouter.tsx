@@ -16,6 +16,7 @@ import CoursesPage from "../../pages/course/CoursesPage";
 import StudentDashboardPage from "../../pages/student/StudentDashboardPage";
 import StudentProfilePage from "../../pages/student/StudentProfilePage";
 import MyLearningPage from "../../pages/student/MyLearningPage";
+import StudentLearningPage from "../../pages/student/StudentLearningPage";
 
 // Teacher pages
 import TeacherDashboard from "../../pages/teacher/TeacherDashboard";
@@ -58,6 +59,10 @@ export function AppRouter() {
         <Route path="/student" element={<StudentDashboardPage />} />
         <Route path="/student/profile" element={<StudentProfilePage />} />
         <Route path="/student/my-learning" element={<MyLearningPage />} />
+        <Route
+          path="/student/courses/:courseId/learn"
+          element={<StudentLearningPage />}
+        />
       </Route>
 
       {/* Teacher routes */}

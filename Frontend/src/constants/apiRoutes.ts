@@ -29,32 +29,32 @@ export const API_ROUTES = {
   },
 
 
-courses: {
+  courses: {
     base: "/courses",
     myCourses: "/courses/my-courses",
     pending: "/courses/pending",
 
     byId: (courseId: string) =>
-        `/courses/${courseId}`,
+      `/courses/${courseId}`,
 
     manage: (courseId: string) =>
-        `/courses/${courseId}/manage`,
+      `/courses/${courseId}/manage`,
 
     submit: (courseId: string) =>
-        `/courses/${courseId}/submit`,
+      `/courses/${courseId}/submit`,
 
     approve: (courseId: string) =>
-        `/courses/${courseId}/approve`,
+      `/courses/${courseId}/approve`,
 
     reject: (courseId: string) =>
-        `/courses/${courseId}/reject`,
+      `/courses/${courseId}/reject`,
 
     learningContent: (courseId: string) =>
-  `/courses/${courseId}/learning-content`,
+      `/courses/${courseId}/learning-content`,
 
     thumbnailUploadUrl: (courseId: string) =>
-    `/courses/${courseId}/thumbnail/upload-url`,
-},
+      `/courses/${courseId}/thumbnail/upload-url`,
+  },
 
 
   chapters: {
@@ -91,6 +91,13 @@ courses: {
 
     media: (courseId: string, chapterId: string, lessonId: string) =>
       `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/media`,
+
+    studentById: (
+      courseId: string,
+      chapterId: string,
+      lessonId: string
+    ) =>
+      `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/student`,
   },
 
   assignments: {
@@ -101,23 +108,23 @@ courses: {
       `/assignments/${assignmentId}`,
 
     student: {
-    byLesson: (lessonId: string) =>
+      byLesson: (lessonId: string) =>
         `/assignments/student/lessons/${lessonId}/assignment`,
 
-    submit: (assignmentId: string) =>
+      submit: (assignmentId: string) =>
         `/assignments/student/assignments/${assignmentId}/submit`,
 
-    results: (assignmentId: string) =>
+      results: (assignmentId: string) =>
         `/assignments/student/assignments/${assignmentId}/results`,
-},
+    },
   },
 
   enrollments: {
     base: "/enrollments",
 
     enroll: (courseId: string) =>
-        `/enrollments/${courseId}`,
+      `/enrollments/${courseId}`,
 
     myCourses: "/enrollments/my-courses",
-},
+  },
 } as const;

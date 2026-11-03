@@ -13,6 +13,11 @@ import type {
     GenerateLessonMediaUploadUrlResponse,
 } from "../types/lesson";
 
+import type {
+    StudentLesson,
+    StudentLessonApiResponse,
+} from "../types/studentLesson";
+
 export const lessonService = {
 
     createLesson: async (
@@ -169,5 +174,22 @@ export const lessonService = {
                 data: { key },
             }
         );
+    },
+
+    getStudentLesson: async (
+        courseId: string,
+        chapterId: string,
+        lessonId: string
+    ): Promise<StudentLesson> => {
+        const response =
+            await apiClient.get<StudentLessonApiResponse>(
+                API_ROUTES.lessons.studentById(
+                    courseId,
+                    chapterId,
+                    lessonId
+                )
+            );
+
+        return response.data.data;
     },
 };

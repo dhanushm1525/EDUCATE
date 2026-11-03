@@ -21,9 +21,7 @@ import { roleMiddleware } from "../middlewares/roleMiddleware";
 
 import { UserRole } from "../../shared/enums/UserRole";
 
-
 const router = Router();
-
 
 // ========================================
 // STUDENT ASSIGNMENT ROUTES
@@ -31,7 +29,7 @@ const router = Router();
 
 // Get Assignment for Student
 router.get(
-    "/student/lessons/:lessonId/assignment",
+    "/assignments/student/lessons/:lessonId/assignment",
     authMiddleware(jwtService),
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
     getStudentAssignmentController.handle.bind(
@@ -39,10 +37,9 @@ router.get(
     )
 );
 
-
 // Submit Assignment
 router.post(
-    "/student/assignments/:assignmentId/submit",
+    "/assignments/student/assignments/:assignmentId/submit",
     authMiddleware(jwtService),
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
     submitAssignmentController.handle.bind(
@@ -52,14 +49,13 @@ router.post(
 
 // Get Assignment Results
 router.get(
-    "/student/assignments/:assignmentId/results",
+    "/assignments/student/assignments/:assignmentId/results",
     authMiddleware(jwtService),
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
     getAssignmentResultsController.handle.bind(
         getAssignmentResultsController
     )
 );
-
 
 // ========================================
 // TEACHER ASSIGNMENT ROUTES
@@ -75,7 +71,6 @@ router.post(
     )
 );
 
-
 // Get Assignment
 router.get(
     "/lessons/:lessonId/assignment",
@@ -84,7 +79,6 @@ router.get(
         getAssignmentController
     )
 );
-
 
 // Update Assignment
 router.patch(
@@ -96,7 +90,6 @@ router.patch(
     )
 );
 
-
 // Delete Assignment
 router.delete(
     "/assignments/:assignmentId",
@@ -106,7 +99,6 @@ router.delete(
         deleteAssignmentController
     )
 );
-
 
 // Get Teacher Assignment Submissions
 router.get(

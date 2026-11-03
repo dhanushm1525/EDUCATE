@@ -8,7 +8,14 @@ import { UserRole } from "../../shared/enums/UserRole";
 import { authenticateUser } from "../../infrastructure/DI/authDependencies";
 
 import {
-    createLessonController, getLessonsByChapterController, getLessonByIdController, updateLessonController, deleteLessonController, generateLessonMediaUploadUrlController
+    createLessonController,
+    getLessonsByChapterController,
+    getLessonByIdController,
+    updateLessonController,
+    deleteLessonController,
+    generateLessonMediaUploadUrlController,
+    cleanupLessonMediaController,
+    getStudentLessonController
 } from "../../infrastructure/DI/lessonDependencies";
 
 import { createLessonSchema } from "../../shared/schema/lesson/createLessonSchema";
@@ -24,7 +31,7 @@ import { deleteLessonSchema } from "../../shared/schema/lesson/deleteLessonSchem
 
 import { generateLessonMediaUploadUrlSchema } from "../../shared/schema/lesson/generateLessonMediaUploadUrlSchema";
 
-import { cleanupLessonMediaController } from "../../infrastructure/DI/lessonDependencies";
+
 import { cleanupLessonMediaSchema } from "../../shared/schema/lesson/cleanupLessonMediaSchema";
 
 const router = Router();
@@ -55,6 +62,16 @@ router.get(
     validate(getLessonByIdSchema),
     getLessonByIdController.handle.bind(
         getLessonByIdController
+    )
+);
+
+// Student and enrolled teacher: retrieve lesson content.
+router.get(
+    "/:courseId/chapters/:chapterId/lessons/:lessonId/student",
+    authenticateUser,
+    roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
+    getStudentLessonController.handle.bind(
+        getStudentLessonController
     )
 );
 
