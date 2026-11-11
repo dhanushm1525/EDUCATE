@@ -33,7 +33,8 @@ export class CleanupLessonMediaUseCase
         dto: CleanupLessonMediaDTO
     ): Promise<void> {
 
-        const lesson = await this._lessonRepository.findById(lessonId);
+        const lesson =
+            await this._lessonRepository.findById(lessonId);
 
         if (!lesson) {
             throw new AppError(
@@ -49,16 +50,25 @@ export class CleanupLessonMediaUseCase
             );
         }
 
-        const chapter = await this._chapterRepository.findById(chapterId);
+        const chapter =
+            await this._chapterRepository.findById(chapterId);
 
-        if (!chapter || chapter.courseId !== courseId) {
+        if (!chapter) {
+            throw new AppError(
+                "Chapter not found",
+                HttpStatusCode.NOT_FOUND
+            );
+        }
+
+        if (chapter.courseId !== courseId) {
             throw new AppError(
                 "Chapter does not belong to this course",
                 HttpStatusCode.BAD_REQUEST
             );
         }
 
-        const course = await this._courseRepository.findById(courseId);
+        const course =
+            await this._courseRepository.findById(courseId);
 
         if (!course) {
             throw new AppError(
@@ -98,17 +108,21 @@ export class CleanupLessonMediaUseCase
             );
         }
 
-        // Never delete media currently attached to the lesson.
-        if (
+        const isAttached =
             lesson.videoKey === key ||
-            lesson.thumbnailKey === key
-        ) {
+            lesson.thumbnailKey === key ||
+            lesson.attachments?.includes(key) === true;
+
+        if (isAttached) {
             throw new AppError(
                 "Cannot clean up media currently attached to the lesson",
                 HttpStatusCode.BAD_REQUEST
             );
         }
 
-        await this._s3Client.deleteFile(this._bucketName, key);
+        await this._s3Client.deleteFile(
+            this._bucketName,
+            key
+        );
     }
 }

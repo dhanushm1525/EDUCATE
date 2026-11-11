@@ -9,10 +9,14 @@ interface LessonFormProps {
     data: CreateLessonRequest,
     videoFile?: File,
     thumbnailFile?: File,
+    pdfFile?: File,
   ) => Promise<void>;
   onCancel: () => void;
   loading?: boolean;
 }
+
+const MAX_PDF_SIZE = 20 * 1024 * 1024;
+const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024;
 
 const defaultValues: CreateLessonRequest = {
   title: "",
@@ -20,6 +24,8 @@ const defaultValues: CreateLessonRequest = {
   type: "video",
   videoUrl: "",
   thumbnailKey: "",
+  content: "",
+  attachments: [],
   duration: 0,
   order: 1,
 };
@@ -39,10 +45,15 @@ export default function LessonForm({
 
   const [videoFile, setVideoFile] = useState<File>();
   const [thumbnailFile, setThumbnailFile] = useState<File>();
+  const [pdfFile, setPdfFile] = useState<File>();
+
   const [thumbnailPreview, setThumbnailPreview] = useState(
     initialThumbnailUrl ?? "",
   );
+
   const [error, setError] = useState("");
+
+  const hasExistingPdf = Boolean(formData.attachments?.length);
 
   const handleChange = (
     event: ChangeEvent<
@@ -85,7 +96,7 @@ export default function LessonForm({
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    if (file.size > MAX_THUMBNAIL_SIZE) {
       setError("Thumbnail size must not exceed 5 MB.");
       event.target.value = "";
       return;
@@ -109,6 +120,30 @@ export default function LessonForm({
     reader.readAsDataURL(file);
   };
 
+  const handlePdfChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    if (
+      file.type !== "application/pdf" &&
+      !file.name.toLowerCase().endsWith(".pdf")
+    ) {
+      setError("Please select a valid PDF file.");
+      event.target.value = "";
+      return;
+    }
+
+    if (file.size > MAX_PDF_SIZE) {
+      setError("PDF size must not exceed 20 MB.");
+      event.target.value = "";
+      return;
+    }
+
+    setError("");
+    setPdfFile(file);
+  };
+
   const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const type = event.target.value as CreateLessonRequest["type"];
 
@@ -120,14 +155,16 @@ export default function LessonForm({
             videoUrl: "",
             thumbnailKey: "",
           }
-        : {}),
+        : {
+            content: "",
+            attachments: [],
+          }),
     }));
 
-    if (type === "reading") {
-      setVideoFile(undefined);
-      setThumbnailFile(undefined);
-      setThumbnailPreview("");
-    }
+    setVideoFile(undefined);
+    setThumbnailFile(undefined);
+    setPdfFile(undefined);
+    setThumbnailPreview("");
   };
 
   const handleRemoveThumbnail = () => {
@@ -137,6 +174,15 @@ export default function LessonForm({
     setFormData((previous) => ({
       ...previous,
       thumbnailKey: "",
+    }));
+  };
+
+  const handleRemovePdf = () => {
+    setPdfFile(undefined);
+
+    setFormData((previous) => ({
+      ...previous,
+      attachments: [],
     }));
   };
 
@@ -154,8 +200,18 @@ export default function LessonForm({
       return;
     }
 
+    if (
+      formData.type === "reading" &&
+      !formData.content?.trim() &&
+      !pdfFile &&
+      !hasExistingPdf
+    ) {
+      setError("Please provide reading content or upload a PDF.");
+      return;
+    }
+
     try {
-      await onSubmit(formData, videoFile, thumbnailFile);
+      await onSubmit(formData, videoFile, thumbnailFile, pdfFile);
     } catch {
       setError("Unable to save lesson. Please try again.");
     }
@@ -171,6 +227,7 @@ export default function LessonForm({
 
       <div>
         <label className="mb-1 block text-sm font-medium">Lesson Title</label>
+
         <input
           type="text"
           name="title"
@@ -184,6 +241,7 @@ export default function LessonForm({
 
       <div>
         <label className="mb-1 block text-sm font-medium">Description</label>
+
         <textarea
           name="description"
           value={formData.description ?? ""}
@@ -196,6 +254,7 @@ export default function LessonForm({
 
       <div>
         <label className="mb-1 block text-sm font-medium">Lesson Type</label>
+
         <select
           name="type"
           value={formData.type}
@@ -211,9 +270,10 @@ export default function LessonForm({
         <>
           <div>
             <label className="mb-1 block text-sm font-medium">Video File</label>
+
             <input
               type="file"
-              accept="video/*"
+              accept="video/mp4,video/webm"
               onChange={handleVideoChange}
               className="w-full rounded-lg border p-3"
             />
@@ -229,14 +289,16 @@ export default function LessonForm({
             <label className="mb-1 block text-sm font-medium">
               Custom Thumbnail (Optional)
             </label>
+
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp"
               onChange={handleThumbnailChange}
               className="w-full rounded-lg border p-3"
             />
+
             <p className="mt-1 text-xs text-gray-500">
-              If you don't upload a thumbnail, one will be generated
+              If you do not upload a thumbnail, one will be generated
               automatically from the video.
             </p>
           </div>
@@ -265,10 +327,81 @@ export default function LessonForm({
         </>
       )}
 
+      {formData.type === "reading" && (
+        <>
+          <div>
+            <label className="mb-1 block text-sm font-medium">
+              Reading Content
+            </label>
+
+            <textarea
+              name="content"
+              value={formData.content ?? ""}
+              onChange={handleChange}
+              rows={6}
+              className="w-full rounded-lg border p-3"
+              placeholder="Write the reading material here..."
+            />
+
+            <p className="mt-1 text-xs text-gray-500">
+              You can provide text content, upload a PDF, or do both.
+            </p>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">
+              PDF Attachment (Optional)
+            </label>
+
+            <input
+              type="file"
+              accept="application/pdf,.pdf"
+              onChange={handlePdfChange}
+              className="w-full rounded-lg border p-3"
+            />
+
+            <p className="mt-1 text-xs text-gray-500">
+              Maximum file size: 20 MB.
+            </p>
+
+            {pdfFile && (
+              <div className="mt-2 flex items-center justify-between rounded-lg border p-3">
+                <span className="text-sm">{pdfFile.name}</span>
+
+                <button
+                  type="button"
+                  onClick={handleRemovePdf}
+                  className="text-sm text-red-600 hover:underline"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+
+            {!pdfFile && hasExistingPdf && (
+              <div className="mt-2 flex items-center justify-between rounded-lg border p-3">
+                <span className="text-sm text-gray-500">
+                  A PDF is already attached
+                </span>
+
+                <button
+                  type="button"
+                  onClick={handleRemovePdf}
+                  className="text-sm text-red-600 hover:underline"
+                >
+                  Remove existing PDF
+                </button>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
       <div>
         <label className="mb-1 block text-sm font-medium">
           Duration (minutes)
         </label>
+
         <input
           type="number"
           name="duration"
@@ -281,6 +414,7 @@ export default function LessonForm({
 
       <div>
         <label className="mb-1 block text-sm font-medium">Lesson Order</label>
+
         <input
           type="number"
           name="order"
@@ -291,7 +425,7 @@ export default function LessonForm({
         />
       </div>
 
-     <div className="sticky bottom-0 flex justify-end gap-3 border-t border-slate-700 bg-slate-900 py-4">
+      <div className="sticky bottom-0 flex justify-end gap-3 border-t border-slate-700 bg-slate-900 py-4">
         <button
           type="button"
           onClick={onCancel}

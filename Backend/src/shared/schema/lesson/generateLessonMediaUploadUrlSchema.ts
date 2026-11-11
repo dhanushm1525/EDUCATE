@@ -1,21 +1,14 @@
-import { z } from "zod";
 
+import { z } from "zod";
 import { mongoIdSchema } from "../common/mongoIdSchema";
 
 export const generateLessonMediaUploadUrlSchema = z.object({
-
     body: z.object({
-        fileName: z
-            .string()
-            .min(1)
-            .max(255)
-            .trim(),
+        fileName: z.string().min(1).max(255).trim(),
 
-        contentType: z
-            .string()
-            .min(1)
-            .max(150)
-            .trim(),
+        contentType: z.string().min(1).max(150).trim(),
+
+        mediaType: z.enum(["video", "thumbnail", "attachment"]),
     }),
 
     params: z.object({
@@ -26,3 +19,4 @@ export const generateLessonMediaUploadUrlSchema = z.object({
 
     query: z.object({}),
 });
+ 

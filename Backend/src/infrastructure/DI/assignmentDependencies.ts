@@ -37,6 +37,12 @@ import { GradeAssignmentSubmissionController } from "../../presentation/controll
 import { GetTeacherAssignmentsUseCase } from "../../application/use-cases/assingment/GetTeacherAssignmentsUseCase";
 import { GetTeacherAssignmentsController } from "../../presentation/controllers/assingment/GetTeacherAssignmentsController";
 
+import { GetAssignmentByLessonUseCase }
+    from "../../application/use-cases/assingment/GetAssignmentByLessonUseCase";
+
+import { GetAssignmentByLessonController }
+    from "../../presentation/controllers/assingment/GetAssignmentByLessonController";
+
 
 import {
     enrollmentRepository,
@@ -161,6 +167,14 @@ const getTeacherAssignmentsUseCase =
         lessonRepository
     );
 
+const getAssignmentByLessonUseCase =
+    new GetAssignmentByLessonUseCase(
+        assignmentRepository,
+        lessonRepository,
+        chapterRepository,
+        courseRepository
+    );
+
 // ==============================
 // CONTROLLERS
 // ==============================
@@ -236,4 +250,11 @@ export const gradeAssignmentSubmissionController =
 export const getTeacherAssignmentsController =
     new GetTeacherAssignmentsController(
         getTeacherAssignmentsUseCase
+    );
+
+
+export const getAssignmentByLessonController =
+    new GetAssignmentByLessonController(
+        getAssignmentByLessonUseCase,
+        identifierValidator
     );

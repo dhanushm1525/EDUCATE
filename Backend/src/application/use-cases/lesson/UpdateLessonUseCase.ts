@@ -8,10 +8,10 @@ import { IChapterRepository } from "../../../domain/repositories/courseRepositor
 import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
 
 import { ICourseStatusPolicy } from "../../../domain/policies/CourseStatusPolicy";
+import { ILessonMediaKeyPolicy } from "../../../domain/policies/LessonMediaKeyPolicy";
 
 import { UpdateLessonDTO } from "../../dtos/lesson/UpdateLessonDTO";
 import { IUpdateLessonUseCase } from "../../interfaces/lesson/IUpdateLessonUseCase";
-import { ILessonMediaKeyPolicy } from "../../../domain/policies/LessonMediaKeyPolicy";
 
 export class UpdateLessonUseCase
     implements IUpdateLessonUseCase {
@@ -22,7 +22,7 @@ export class UpdateLessonUseCase
         private readonly _courseRepository: ICourseRepository,
         private readonly _courseStatusPolicy: ICourseStatusPolicy,
         private readonly _lessonMediaKeyPolicy: ILessonMediaKeyPolicy
-    ) { }
+    ) {}
 
     async execute(
         courseId: string,
@@ -121,6 +121,26 @@ export class UpdateLessonUseCase
             if (!isOwned) {
                 throw new AppError(
                     "Invalid lesson thumbnail key",
+                    HttpStatusCode.BAD_REQUEST
+                );
+            }
+        }
+
+        if (dto.attachments !== undefined) {
+            const hasInvalidAttachment = dto.attachments.some(
+                (key) =>
+                    !this._lessonMediaKeyPolicy.isOwnedByLesson(
+                        key,
+                        courseId,
+                        chapterId,
+                        lessonId,
+                        "attachment"
+                    )
+            );
+
+            if (hasInvalidAttachment) {
+                throw new AppError(
+                    "Invalid lesson attachment key",
                     HttpStatusCode.BAD_REQUEST
                 );
             }

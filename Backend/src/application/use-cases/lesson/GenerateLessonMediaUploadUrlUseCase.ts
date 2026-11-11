@@ -7,7 +7,10 @@ import { ICourseRepository } from "../../../domain/repositories/courseRepositori
 
 import { ICourseStatusPolicy } from "../../../domain/policies/CourseStatusPolicy";
 import { ILessonMediaTypePolicy } from "../../../domain/policies/LessonMediaPolicy";
-import { ILessonMediaKeyPolicy } from "../../../domain/policies/LessonMediaKeyPolicy";
+import {
+    ILessonMediaKeyPolicy,
+    LessonMediaType,
+} from "../../../domain/policies/LessonMediaKeyPolicy";
 
 import { IS3Client } from "../../interfaces/storage/IS3Client";
 
@@ -38,22 +41,7 @@ export class GenerateLessonMediaUploadUrlUseCase
         dto: GenerateLessonMediaUploadUrlDTO
     ): Promise<GenerateLessonMediaUploadUrlResponseDTO> {
 
-        if (!this._mediaTypePolicy.supports(dto.contentType)) {
-            throw new AppError(
-                "Unsupported lesson media type",
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
-
-        if (
-            dto.mediaType !== "video" &&
-            dto.mediaType !== "thumbnail"
-        ) {
-            throw new AppError(
-                "Invalid lesson media type",
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
+        this.validateMedia(dto.mediaType, dto.contentType);
 
         const lesson =
             await this._lessonRepository.findById(lessonId);
@@ -113,14 +101,13 @@ export class GenerateLessonMediaUploadUrlUseCase
             );
         }
 
-        const key =
-            this._mediaKeyPolicy.createKey(
-                courseId,
-                chapterId,
-                lessonId,
-                dto.fileName,
-                dto.mediaType
-            );
+        const key = this._mediaKeyPolicy.createKey(
+            courseId,
+            chapterId,
+            lessonId,
+            dto.fileName,
+            dto.mediaType
+        );
 
         const uploadUrl =
             await this._s3Client.generateUploadUrl(
@@ -134,5 +121,39 @@ export class GenerateLessonMediaUploadUrlUseCase
             uploadUrl,
             key,
         };
+    }
+
+    private validateMedia(
+        mediaType: LessonMediaType,
+        contentType: string
+    ): void {
+        if (!this._mediaTypePolicy.supports(contentType)) {
+            throw new AppError(
+                "Unsupported lesson media type",
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
+
+        const allowedContentTypes: Record<LessonMediaType, string[]> = {
+            video: [
+                "video/mp4",
+                "video/webm",
+            ],
+            thumbnail: [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ],
+            attachment: [
+                "application/pdf",
+            ],
+        };
+
+        if (!allowedContentTypes[mediaType].includes(contentType)) {
+            throw new AppError(
+                `Invalid content type for lesson ${mediaType}`,
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
     }
 }

@@ -3,7 +3,7 @@ import { Router } from "express";
 
 import {
     createAssignmentController,
-    getAssignmentController,
+    getAssignmentByLessonController,
     updateAssignmentController,
     deleteAssignmentController,
     getStudentAssignmentController,
@@ -77,8 +77,9 @@ router.post(
 router.get(
     "/lessons/:lessonId/assignment",
     authenticateUser,
-    getAssignmentController.handle.bind(
-        getAssignmentController
+    roleMiddleware(UserRole.TEACHER),
+    getAssignmentByLessonController.handle.bind(
+        getAssignmentByLessonController
     )
 );
 

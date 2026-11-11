@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, ClipboardList, Eye, FileText } from "lucide-react";
+import {
+  ArrowLeft,
+  ClipboardList,
+  Eye,
+  FileText,
+  CheckCircle2,
+  CalendarClock,
+  Clock3,
+  Award,
+  FileQuestion,
+} from "lucide-react";
 
 import TeacherLayout from "../../components/teacher/layout/TeacherLayout";
 import { AssignmentForm } from "../../components/teacher/assingment/AssignmentForm";
@@ -105,105 +115,156 @@ export default function AssignmentManagementPage() {
 
   return (
     <TeacherLayout>
-      <div className="space-y-8">
-        {/* Page header */}
-        <header>
+      <div className="mx-auto w-full space-y-7 pb-10">
+        {/* Page Header */}
+        <header className="space-y-5">
           <button
             type="button"
             onClick={handleBack}
-            className="mb-5 flex items-center gap-2 text-sm text-slate-400 transition hover:text-white"
+            className="group inline-flex items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-violet-400"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft
+              size={17}
+              className="transition-transform group-hover:-translate-x-1"
+            />
             Back to lessons
           </button>
 
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-indigo-500/10 p-3 text-indigo-400">
-              <ClipboardList size={24} />
-            </div>
+          <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-violet-950/50 p-6 shadow-lg sm:p-7">
+            <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-violet-600/10 blur-3xl" />
 
-            <div>
-              <h1 className="text-2xl font-bold">Assignment Management</h1>
+            <div className="relative flex items-center gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-lg shadow-violet-950/40">
+                <ClipboardList size={27} />
+              </div>
 
-              <p className="mt-1 text-sm text-slate-400">
-                Manage the assignment associated with this lesson.
-              </p>
+              <div>
+                <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-violet-400">
+                  Teacher Workspace
+                </p>
+
+                <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                  Assignment Management
+                </h1>
+
+                <p className="mt-1 text-sm text-slate-400">
+                  Create and manage assessments for your lessons.
+                </p>
+              </div>
             </div>
           </div>
         </header>
 
         {/* Loading */}
-        {loading && <LoadingState message="Loading assignment..." />}
-
-        {/* Loading error */}
-        {!loading && error && (
-          <ErrorState message={error} onRetry={handleRetry} />
+        {loading && (
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-8">
+            <LoadingState message="Loading assignment..." />
+          </div>
         )}
 
-        {/* Existing assignment */}
+        {/* Loading Error */}
+        {!loading && error && (
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+            <ErrorState message={error} onRetry={handleRetry} />
+          </div>
+        )}
+
+        {/* Existing Assignment */}
         {!loading && !error && assignment && (
-          <section className="rounded-xl border border-slate-800 bg-slate-900 p-6">
-            <div className="flex items-start gap-3">
-              <div className="rounded-lg bg-indigo-500/10 p-3 text-indigo-400">
-                <FileText size={22} />
-              </div>
+          <section className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 shadow-lg">
+            <div className="flex flex-col gap-4 border-b border-slate-800 p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-4">
+                <div className="rounded-xl bg-emerald-500/10 p-3 text-emerald-400">
+                  <FileText size={24} />
+                </div>
 
-              <div>
-                <h2 className="text-xl font-semibold">{assignment.title}</h2>
+                <div>
+                  <div className="mb-2 flex flex-wrap items-center gap-2">
+                    <h2 className="text-xl font-bold text-white">
+                      {assignment.title}
+                    </h2>
 
-                <p className="mt-1 text-sm text-slate-400">
-                  An assignment is already configured for this lesson.
-                </p>
+                    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-400">
+                      <CheckCircle2 size={13} />
+                      Created
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-slate-400">
+                    An assignment is already configured for this lesson.
+                  </p>
+                </div>
               </div>
             </div>
 
             {assignment.description && (
-              <p className="mt-5 text-sm leading-6 text-slate-400">
-                {assignment.description}
-              </p>
+              <div className="border-b border-slate-800 px-6 py-5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Description
+                </p>
+
+                <p className="mt-2 text-sm leading-7 text-slate-300">
+                  {assignment.description}
+                </p>
+              </div>
             )}
 
-            <div className="mt-6 grid grid-cols-2 gap-5 border-t border-slate-800 pt-5 md:grid-cols-4">
-              <div>
+            <div className="grid grid-cols-2 gap-4 p-6 md:grid-cols-4">
+              <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400">
+                  <FileQuestion size={19} />
+                </div>
                 <p className="text-xs text-slate-500">Questions</p>
-                <p className="mt-1 text-lg font-semibold">
+                <p className="mt-1 text-xl font-bold text-white">
                   {assignment.questions.length}
                 </p>
               </div>
 
-              <div>
+              <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
+                  <Award size={19} />
+                </div>
                 <p className="text-xs text-slate-500">Total Marks</p>
-                <p className="mt-1 text-lg font-semibold">
+                <p className="mt-1 text-xl font-bold text-white">
                   {assignment.totalMarks}
                 </p>
               </div>
 
-              <div>
+              <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                  <CheckCircle2 size={19} />
+                </div>
                 <p className="text-xs text-slate-500">Passing Marks</p>
-                <p className="mt-1 text-lg font-semibold">
+                <p className="mt-1 text-xl font-bold text-white">
                   {assignment.passingMarks}
                 </p>
               </div>
 
-              <div>
+              <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400">
+                  <Clock3 size={19} />
+                </div>
                 <p className="text-xs text-slate-500">Attempts Allowed</p>
-                <p className="mt-1 text-lg font-semibold">
+                <p className="mt-1 text-xl font-bold text-white">
                   {assignment.attemptsAllowed ?? "Unlimited"}
                 </p>
               </div>
             </div>
 
             {assignment.dueDate && (
-              <div className="mt-5 border-t border-slate-800 pt-4">
-                <p className="text-xs text-slate-500">Due Date</p>
+              <div className="mx-6 mb-5 flex items-center gap-3 rounded-xl border border-violet-500/20 bg-violet-500/5 p-4">
+                <CalendarClock size={20} className="text-violet-400" />
 
-                <p className="mt-1 text-sm font-medium">
-                  {new Date(assignment.dueDate).toLocaleString()}
-                </p>
+                <div>
+                  <p className="text-xs text-slate-500">Submission Deadline</p>
+                  <p className="mt-1 text-sm font-medium text-slate-200">
+                    {new Date(assignment.dueDate).toLocaleString()}
+                  </p>
+                </div>
               </div>
             )}
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 border-t border-slate-800 p-6">
               <Button
                 type="button"
                 onClick={() =>
@@ -223,23 +284,29 @@ export default function AssignmentManagementPage() {
           </section>
         )}
 
-        {/* Create assignment */}
+        {/* Create Assignment */}
         {!loading && !error && !assignment && (
-          <section>
-            <div className="mb-5">
-              <h2 className="text-lg font-semibold">
-                Create Lesson Assignment
-              </h2>
+          <section className="space-y-5">
+            <div className="flex flex-col gap-3 rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 sm:flex-row sm:items-center">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                <ClipboardList size={20} />
+              </div>
 
-              <p className="mt-1 text-sm text-slate-400">
-                No assignment exists for this lesson yet. Create one below.
-              </p>
+              <div>
+                <h2 className="font-semibold text-white">
+                  Create Lesson Assignment
+                </h2>
+
+                <p className="mt-1 text-sm text-slate-400">
+                  No assignment exists for this lesson yet. Configure one below.
+                </p>
+              </div>
             </div>
 
             {createError && (
               <div
                 role="alert"
-                className="mb-5 rounded-lg border border-red-500/20 bg-red-500/5 p-4 text-sm text-red-400"
+                className="rounded-xl border border-red-500/20 bg-red-500/5 p-4 text-sm text-red-400"
               >
                 {createError}
               </div>

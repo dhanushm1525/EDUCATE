@@ -1,4 +1,5 @@
-export type LessonMediaType = "video" | "thumbnail";
+
+export type LessonMediaType = "video" | "thumbnail" | "attachment";
 
 export interface ILessonMediaKeyPolicy {
     createKey(

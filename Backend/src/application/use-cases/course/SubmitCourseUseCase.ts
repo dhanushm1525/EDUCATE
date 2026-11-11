@@ -1,4 +1,3 @@
-
 import { IAssignmentRepository } from "../../../domain/repositories/courseRepositories/IAssingmentRepository";
 import { IChapterRepository } from "../../../domain/repositories/courseRepositories/IChapterRepository";
 import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
@@ -24,10 +23,9 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
         private readonly _lessonRepository: ILessonRepository,
         private readonly _assignmentRepository: IAssignmentRepository,
         private readonly _courseStatusPolicy: ICourseStatusPolicy
-    ) { }
+    ) {}
 
     async execute(dto: SubmitCourseDTO): Promise<Course> {
-        // 1. Find course
         const course = await this._courseRepository.findById(
             dto.courseId
         );
@@ -39,7 +37,6 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
             );
         }
 
-        // 2. Verify teacher ownership
         if (course.teacherId !== dto.teacherId) {
             throw new AppError(
                 "You are not authorized to submit this course",
@@ -47,7 +44,6 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
             );
         }
 
-        // 3. Validate required course details
         if (
             !course.title?.trim() ||
             !course.subtitle?.trim() ||
@@ -68,7 +64,6 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
             );
         }
 
-        // 4. Verify course status
         if (!this._courseStatusPolicy.canSubmit(course.status)) {
             throw new AppError(
                 "Course cannot be submitted in its current status",
@@ -76,7 +71,6 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
             );
         }
 
-        // 5. Find chapters
         const chapters = await this._chapterRepository.findByCourseId(
             dto.courseId
         );
@@ -88,7 +82,6 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
             );
         }
 
-        // 6. Validate every chapter
         for (const chapter of chapters) {
             if (!chapter.title?.trim()) {
                 throw new AppError(
@@ -115,7 +108,6 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
                 );
             }
 
-            // 7. Validate every lesson
             for (const lesson of lessons) {
                 if (!lesson.title?.trim()) {
                     throw new AppError(
@@ -134,17 +126,23 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
                     );
                 }
 
-                if (
-                    lesson.type === LessonType.READING &&
-                    !lesson.content?.trim()
-                ) {
-                    throw new AppError(
-                        "Reading lesson must contain content",
-                        HttpStatusCode.BAD_REQUEST
-                    );
+                if (lesson.type === LessonType.READING) {
+                    const hasTextContent =
+                        Boolean(lesson.content?.trim());
+
+                    const hasPdfAttachment =
+                        Boolean(lesson.attachments?.some(
+                            (key) => key.trim().length > 0
+                        ));
+
+                    if (!hasTextContent && !hasPdfAttachment) {
+                        throw new AppError(
+                            "Reading lesson must contain text content or a PDF attachment",
+                            HttpStatusCode.BAD_REQUEST
+                        );
+                    }
                 }
 
-                // 8. Validate assignment when one exists
                 if (!lesson.lessonId) {
                     throw new AppError(
                         "Invalid lesson data",
@@ -157,7 +155,7 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
                         lesson.lessonId
                     );
 
-                // Assignments remain optional for now
+                // Assignments remain optional for now.
                 if (!assignment) {
                     continue;
                 }
@@ -172,7 +170,6 @@ export class SubmitCourseUseCase implements ISubmitCourseUseCase {
             }
         }
 
-        // 9. Submit course for admin review
         const updatedCourse = await this._courseRepository.update(
             dto.courseId,
             {

@@ -36,10 +36,15 @@ export interface LessonApiResponse<T> {
     data: T;
 }
 
+export type LessonMediaType =
+    | "video"
+    | "thumbnail"
+    | "attachment";
+
 export interface GenerateLessonMediaUploadUrlRequest {
     fileName: string;
     contentType: string;
-    mediaType: "video" | "thumbnail";
+    mediaType: LessonMediaType;
 }
 
 export interface GenerateLessonMediaUploadUrlResponse {

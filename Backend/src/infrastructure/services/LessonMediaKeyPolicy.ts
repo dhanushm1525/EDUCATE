@@ -1,3 +1,4 @@
+
 import { randomUUID } from "crypto";
 
 import {
@@ -19,7 +20,16 @@ export class S3LessonMediaKeyPolicy
             ? fileName.substring(fileName.lastIndexOf(".")).toLowerCase()
             : "";
 
-        return `courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/${mediaType}/${randomUUID()}${extension}`;
+        return [
+            "courses",
+            courseId,
+            "chapters",
+            chapterId,
+            "lessons",
+            lessonId,
+            mediaType,
+            `${randomUUID()}${extension}`,
+        ].join("/");
     }
 
     isOwnedByLesson(
@@ -38,7 +48,8 @@ export class S3LessonMediaKeyPolicy
 
         return (
             key.startsWith(`${basePrefix}video/`) ||
-            key.startsWith(`${basePrefix}thumbnail/`)
+            key.startsWith(`${basePrefix}thumbnail/`) ||
+            key.startsWith(`${basePrefix}pdf/`)
         );
     }
 }
