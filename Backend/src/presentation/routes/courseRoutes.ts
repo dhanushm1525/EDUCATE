@@ -7,32 +7,14 @@ import { roleMiddleware } from "../middlewares/roleMiddleware";
 
 import { UserRole } from "../../shared/enums/UserRole";
 
-import {
-    authenticateUser,
-    
-} from "../../infrastructure/DI/authDependencies";
-
-import {
-    createCourseController,
-    updateCourseController,
-    submitCourseController,
-    getMyCoursesController,
-    getPublishedCoursesController,
-    getPublishedCourseByIdController,
-    getPendingCoursesController,
-    approveCourseController,
-    rejectCourseController,
-    getTeacherCourseByIdController,
-    getCourseLearningContentController,
-    generateCourseThumbnailUploadUrlController
-} from "../../infrastructure/DI/courseDependencies";
-
 import { createCourseSchema } from "../../shared/schema/course/createCourseSchema";
 import { updateCourseSchema } from "../../shared/schema/course/updateCourseSchema";
 import { getPublishedCoursesSchema } from "../../shared/schema/course/getPublishedCoursesSchema";
 import { getPublishedCourseByIdSchema } from "../../shared/schema/course/getPublishedCourseByIdSchema";
 import { generateCourseThumbnailUploadUrlSchema } from "../../shared/schema/course/generateCourseThumbnailUploadUrlSchema";
+import type { RouteDependencies } from "./routeDependencies";
 
+export const createCourseRoutes = (dependencies: Pick<RouteDependencies, "authenticateUser" | "courses">) => {
 const router = Router();
 
 
@@ -43,56 +25,52 @@ const router = Router();
 // Teacher: retrieve an owned course, including unpublished courses.
 router.get(
     "/:courseId/manage",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
-    getTeacherCourseByIdController.handle.bind(
-        getTeacherCourseByIdController
-    )
+    dependencies.courses.getTeacherById.handle.bind(dependencies.courses.getTeacherById)
 );
 
 // Teacher: retrieve own courses.
 router.get(
     "/my-courses",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
-    getMyCoursesController.handle.bind(getMyCoursesController)
+    dependencies.courses.getMine.handle.bind(dependencies.courses.getMine)
 );
 
 // Teacher: create a course.
 router.post(
     "/",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     validate(createCourseSchema),
-    createCourseController.handle.bind(createCourseController)
+    dependencies.courses.create.handle.bind(dependencies.courses.create)
 );
 
 // Teacher: generate a signed upload URL for a course thumbnail.
 router.post(
     "/:courseId/thumbnail/upload-url",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     validate(generateCourseThumbnailUploadUrlSchema),
-    generateCourseThumbnailUploadUrlController.handle.bind(
-        generateCourseThumbnailUploadUrlController
-    )
+    dependencies.courses.generateThumbnailUploadUrl.handle.bind(dependencies.courses.generateThumbnailUploadUrl)
 );
 
 // Teacher: update a course.
 router.patch(
     "/:courseId",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     validate(updateCourseSchema),
-    updateCourseController.handle.bind(updateCourseController)
+    dependencies.courses.update.handle.bind(dependencies.courses.update)
 );
 
 // Teacher: submit a course for approval.
 router.patch(
     "/:courseId/submit",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
-    submitCourseController.handle.bind(submitCourseController)
+    dependencies.courses.submit.handle.bind(dependencies.courses.submit)
 );
 
 
@@ -103,27 +81,25 @@ router.patch(
 // Admin: retrieve courses awaiting approval.
 router.get(
     "/pending",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.ADMIN),
-    getPendingCoursesController.handle.bind(
-        getPendingCoursesController
-    )
+    dependencies.courses.getPending.handle.bind(dependencies.courses.getPending)
 );
 
 // Admin: approve a course awaiting review.
 router.patch(
     "/:courseId/approve",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.ADMIN),
-    approveCourseController.handle.bind(approveCourseController)
+    dependencies.courses.approve.handle.bind(dependencies.courses.approve)
 );
 
 // Admin: reject a course awaiting review.
 router.patch(
     "/:courseId/reject",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.ADMIN),
-    rejectCourseController.handle.bind(rejectCourseController)
+    dependencies.courses.reject.handle.bind(dependencies.courses.reject)
 );
 
 
@@ -135,27 +111,22 @@ router.patch(
 router.get(
     "/",
     validate(getPublishedCoursesSchema),
-    getPublishedCoursesController.handle.bind(
-        getPublishedCoursesController
-    )
+    dependencies.courses.getPublished.handle.bind(dependencies.courses.getPublished)
 );
 
 // Public: retrieve chapters, lessons and thumbnail previews.
 router.get(
     "/:courseId/learning-content",
     validate(getPublishedCourseByIdSchema),
-    getCourseLearningContentController.handle.bind(
-        getCourseLearningContentController
-    )
+    dependencies.courses.getLearningContent.handle.bind(dependencies.courses.getLearningContent)
 );
 
 // Public: retrieve one published course.
 router.get(
     "/:courseId",
     validate(getPublishedCourseByIdSchema),
-    getPublishedCourseByIdController.handle.bind(
-        getPublishedCourseByIdController
-    )
+    dependencies.courses.getPublishedById.handle.bind(dependencies.courses.getPublishedById)
 );
 
-export default router;
+return router;
+};

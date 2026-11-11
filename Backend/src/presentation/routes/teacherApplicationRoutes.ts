@@ -1,17 +1,5 @@
 import { Router } from "express";
 
-import {
-    createTeacherApplicationController,
-    getPendingTeacherApplicationsController,
-    approveTeacherApplicationController,
-    rejectTeacherApplicationController,
-    generateTeacherApplicationUploadUrlController,
-    getMyTeacherApplicationController
-} from "../../infrastructure/DI/teacherApplicationDependencies";
-
-import { authenticateUser }
-    from "../../infrastructure/DI/authDependencies";
-
 import { roleMiddleware }
     from "../middlewares/roleMiddleware";
 
@@ -32,79 +20,70 @@ import { rejectTeacherApplicationSchema }
 
 import { generateTeacherApplicationUploadUrlSchema }
     from "../../shared/schema/teacherApplication/generateTeacherApplicationUploadUrlSchema";
+import type { RouteDependencies } from "./routeDependencies";
 
 
+export const createTeacherApplicationRoutes = (dependencies: Pick<RouteDependencies, "authenticateUser" | "teacherApplications">) => {
 const router = Router();
 
 // Student: Generate teacher application document upload URL
 
 router.post(
     "/upload-url",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.STUDENT),
     validate(generateTeacherApplicationUploadUrlSchema),
-    generateTeacherApplicationUploadUrlController.handle.bind(
-        generateTeacherApplicationUploadUrlController
-    )
+    dependencies.teacherApplications.generateUploadUrl.handle.bind(dependencies.teacherApplications.generateUploadUrl)
 );
 
 // Student: Get own teacher application
 
 router.get(
     "/my-application",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.STUDENT),
-    getMyTeacherApplicationController.handle.bind(
-        getMyTeacherApplicationController
-    )
+    dependencies.teacherApplications.getMine.handle.bind(dependencies.teacherApplications.getMine)
 );
 
 
 // Student: Submit teacher application
 router.post(
     "/",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.STUDENT),
     validate(createTeacherApplicationSchema),
-    createTeacherApplicationController.handle.bind(
-        createTeacherApplicationController
-    )
+    dependencies.teacherApplications.create.handle.bind(dependencies.teacherApplications.create)
 );
 
 
 // Admin: Get pending teacher applications
 router.get(
     "/pending",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.ADMIN),
-    getPendingTeacherApplicationsController.handle.bind(
-        getPendingTeacherApplicationsController
-    )
+    dependencies.teacherApplications.getPending.handle.bind(dependencies.teacherApplications.getPending)
 );
 
 
 // Admin: Approve teacher application
 router.patch(
     "/:applicationId/approve",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.ADMIN),
     validate(approveTeacherApplicationSchema),
-    approveTeacherApplicationController.handle.bind(
-        approveTeacherApplicationController
-    )
+    dependencies.teacherApplications.approve.handle.bind(dependencies.teacherApplications.approve)
 );
 
 
 // Admin: Reject teacher application
 router.patch(
     "/:applicationId/reject",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.ADMIN),
     validate(rejectTeacherApplicationSchema),
-    rejectTeacherApplicationController.handle.bind(
-        rejectTeacherApplicationController
-    )
+    dependencies.teacherApplications.reject.handle.bind(dependencies.teacherApplications.reject)
 );
 
 
-export default router;
+return router;
+};

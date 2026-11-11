@@ -1,28 +1,11 @@
 
 import { Router } from "express";
 
-import {
-    createAssignmentController,
-    getAssignmentByLessonController,
-    updateAssignmentController,
-    deleteAssignmentController,
-    getStudentAssignmentController,
-    submitAssignmentController,
-    getAssignmentResultsController,
-    getTeacherAssignmentSubmissionsController,
-    getTeacherSubmissionDetailController,
-    gradeAssignmentSubmissionController,
-    getTeacherAssignmentsController,
-} from "../../infrastructure/DI/assignmentDependencies";
-
-import { authenticateUser } from "../../infrastructure/DI/authDependencies";
-
-
 import { roleMiddleware } from "../middlewares/roleMiddleware";
-
-
 import { UserRole } from "../../shared/enums/UserRole";
+import type { RouteDependencies } from "./routeDependencies";
 
+export const createAssignmentRoutes = (dependencies: Pick<RouteDependencies, "authenticateUser" | "assignments">) => {
 const router = Router();
 
 // ========================================
@@ -32,31 +15,25 @@ const router = Router();
 // Get Assignment for Student
 router.get(
     "/assignments/student/lessons/:lessonId/assignment",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
-    getStudentAssignmentController.handle.bind(
-        getStudentAssignmentController
-    )
+    dependencies.assignments.getStudent.handle.bind(dependencies.assignments.getStudent)
 );
 
 // Submit Assignment
 router.post(
     "/assignments/student/assignments/:assignmentId/submit",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
-    submitAssignmentController.handle.bind(
-        submitAssignmentController
-    )
+    dependencies.assignments.submit.handle.bind(dependencies.assignments.submit)
 );
 
 // Get Assignment Results
 router.get(
     "/assignments/student/assignments/:assignmentId/results",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
-    getAssignmentResultsController.handle.bind(
-        getAssignmentResultsController
-    )
+    dependencies.assignments.getResults.handle.bind(dependencies.assignments.getResults)
 );
 
 // ========================================
@@ -66,81 +43,68 @@ router.get(
 // Create Assignment
 router.post(
     "/lessons/:lessonId/assignment",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
-    createAssignmentController.handle.bind(
-        createAssignmentController
-    )
+    dependencies.assignments.create.handle.bind(dependencies.assignments.create)
 );
 
 // Get Assignment
 router.get(
     "/lessons/:lessonId/assignment",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
-    getAssignmentByLessonController.handle.bind(
-        getAssignmentByLessonController
-    )
+    dependencies.assignments.getByLesson.handle.bind(dependencies.assignments.getByLesson)
 );
 
 // Update Assignment
 router.patch(
     "/assignments/:assignmentId",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
-    updateAssignmentController.handle.bind(
-        updateAssignmentController
-    )
+    dependencies.assignments.update.handle.bind(dependencies.assignments.update)
 );
 
 // Delete Assignment
 router.delete(
     "/assignments/:assignmentId",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
-    deleteAssignmentController.handle.bind(
-        deleteAssignmentController
-    )
+    dependencies.assignments.delete.handle.bind(dependencies.assignments.delete)
 );
 
 // Get Teacher Assignment Submissions
 router.get(
     "/teacher/assignments/:assignmentId/submissions",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
-    getTeacherAssignmentSubmissionsController.handle.bind(
-        getTeacherAssignmentSubmissionsController
-    )
+    dependencies.assignments.getTeacherSubmissions.handle.bind(dependencies.assignments.getTeacherSubmissions)
 );
 
 // Get Individual Teacher Submission Details
 router.get(
     "/teacher/assignments/:assignmentId/submissions/:submissionId",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
-    getTeacherSubmissionDetailController.handle.bind(
-        getTeacherSubmissionDetailController
-    )
+    dependencies.assignments.getTeacherSubmissionDetail.handle.bind(dependencies.assignments.getTeacherSubmissionDetail)
 );
 
 // Grade Assignment Submission
 router.patch(
     "/teacher/assignments/:assignmentId/submissions/:submissionId/grade",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
-    gradeAssignmentSubmissionController.handle.bind(
-        gradeAssignmentSubmissionController
-    )
+    dependencies.assignments.gradeSubmission.handle.bind(dependencies.assignments.gradeSubmission)
 );
 
 
 router.get(
     "/teacher/assignments",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     (req, res, next) =>
-        getTeacherAssignmentsController.handle(req, res, next)
+        dependencies.assignments.getTeacherAssignments.handle(req, res, next)
 );
 
 
-export default router;
+return router;
+};

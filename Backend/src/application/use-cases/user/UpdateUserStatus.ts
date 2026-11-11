@@ -12,8 +12,6 @@ import { AppError } from "../../../shared/errors/AppError";
 
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-import { Types } from "mongoose";
-
 export class UpdateUserStatus implements IUpdateUserStatus {
 
     constructor(
@@ -24,13 +22,6 @@ export class UpdateUserStatus implements IUpdateUserStatus {
         userId: string,
         status: UserStatus
     ): Promise<User> {
-
-        if (!Types.ObjectId.isValid(userId)) {
-            throw new AppError(
-                "Invalid user ID",
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
 
         if (
             status !== UserStatus.ACTIVE &&

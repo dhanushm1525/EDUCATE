@@ -1,19 +1,19 @@
 import { HttpStatusCode } from "../../shared/enums/HttpStatusCode";
+import { Router } from "express";
+import { createAuthRoutes } from "./authRoutes";
+import { createUserRoutes } from "./userRoutes";
+import { createStorageRoutes } from "./storageRoutes";
+import { createCourseRoutes } from "./courseRoutes";
+import { createCategoryRoutes } from "./categoryRoutes";
+import { createChapterRoutes } from "./chapterRoutes";
+import { createLessonRoutes } from "./lessonRoutes";
+import { createTeacherApplicationRoutes } from "./teacherApplicationRoutes";
+import { createAssignmentRoutes } from "./assingmentRoutes";
+import { createEnrollmentRoutes } from "./enrollmentRoutes";
+import { createAdminUserRoutes } from "./adminUserRoutes";
+import type { RouteDependencies } from "./routeDependencies";
 
-import {Router} from "express";
-
-import authRoutes from "./authRoutes";
-import userRoutes from "./userRoutes"
-import storageRoutes from "./storageRoutes";
-import courseRoutes from "./courseRoutes"
-import categoryRoutes from "./categoryRoutes";
-import chapterRoutes from "./chapterRoutes"
-import lessonRoutes from "./lessonRoutes"
-import teacherApplicationRoutes from "./teacherApplicationRoutes"
-import assingmentRoutes from "./assingmentRoutes"
-import enrollmentRoutes from "./enrollmentRoutes";
-import adminUserRoutes from "./adminUserRoutes";
-
+export const createApiRouter = (dependencies: RouteDependencies) => {
 const router = Router();
 
 router.get(
@@ -28,26 +28,27 @@ router.get(
   }
 );
 
-router.use("/auth",authRoutes);
+router.use("/auth", createAuthRoutes({ ...dependencies.auth, authenticateUser: dependencies.authenticateUser }));
 
-router.use("/users",userRoutes)
+router.use("/users", createUserRoutes(dependencies));
 
-router.use("/storage",storageRoutes)
+router.use("/storage", createStorageRoutes(dependencies));
 
-router.use("/courses",courseRoutes);
+router.use("/courses", createCourseRoutes(dependencies));
 
-router.use("/courses", chapterRoutes);
+router.use("/courses", createChapterRoutes(dependencies));
 
-router.use("/categories", categoryRoutes);
+router.use("/categories", createCategoryRoutes(dependencies));
 
-router.use("/courses",lessonRoutes)
+router.use("/courses", createLessonRoutes(dependencies));
 
-router.use("/teacher-applications",teacherApplicationRoutes)
+router.use("/teacher-applications", createTeacherApplicationRoutes(dependencies));
 
-router.use("/",assingmentRoutes);
+router.use("/", createAssignmentRoutes(dependencies));
 
-router.use("/enrollments", enrollmentRoutes);
+router.use("/enrollments", createEnrollmentRoutes(dependencies));
 
-router.use("/admin/users", adminUserRoutes);
+router.use("/admin/users", createAdminUserRoutes(dependencies));
 
-export default router;
+return router;
+};

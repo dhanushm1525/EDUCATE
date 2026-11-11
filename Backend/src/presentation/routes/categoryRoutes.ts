@@ -7,27 +7,24 @@ import { UserRole } from "../../shared/enums/UserRole";
 
 import { createCategorySchema } from "../../shared/schema/category/createCategorySchema";
 
-import { authenticateUser } from "../../infrastructure/DI/authDependencies";
+import type { RouteDependencies } from "./routeDependencies";
 
-import {
-    createCategoryController,
-    getCategoriesController
-} from "../../infrastructure/DI/categoryDependencies";
-
+export const createCategoryRoutes = (dependencies: Pick<RouteDependencies, "authenticateUser" | "categories">) => {
 const router = Router();
 
 router.post(
     "/",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.ADMIN),
     validate(createCategorySchema),
-    createCategoryController.handle.bind(createCategoryController)
+    dependencies.categories.create.handle.bind(dependencies.categories.create)
 );
 
 router.get(
     "/",
-    authenticateUser,
-    getCategoriesController.handle.bind(getCategoriesController)
+    dependencies.authenticateUser,
+    dependencies.categories.getAll.handle.bind(dependencies.categories.getAll)
 );
 
-export default router;
+return router;
+};

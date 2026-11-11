@@ -1,26 +1,19 @@
 import { Router } from "express";
 
-import {
-    authenticateUser
-} from "../../infrastructure/DI/authDependencies";
-
-import {
-    getUsersController,
-    updateUserStatusController
-} from "../../infrastructure/DI/userDependencies";
-
 import { roleMiddleware } from "../middlewares/roleMiddleware";
 import { validate } from "../middlewares/validationMiddleware";
+import type { RouteDependencies } from "./routeDependencies";
 
 import { UserRole } from "../../shared/enums/UserRole";
 
 import { getUsersSchema } from "../../shared/schema/user/getUsersSchema";
 import { updateUserStatusSchema } from "../../shared/schema/user/updateUserStatusSchema";
 
+export const createAdminUserRoutes = (dependencies: Pick<RouteDependencies, "authenticateUser" | "users">) => {
 const router = Router();
 
 router.use(
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.ADMIN)
 );
 
@@ -28,16 +21,15 @@ router.use(
 router.get(
     "/",
     validate(getUsersSchema),
-    getUsersController.handle.bind(getUsersController)
+    dependencies.users.getUsers.handle.bind(dependencies.users.getUsers)
 );
 
 // PATCH /api/admin/users/:userId/status
 router.patch(
     "/:userId/status",
     validate(updateUserStatusSchema),
-    updateUserStatusController.handle.bind(
-        updateUserStatusController
-    )
+    dependencies.users.updateUserStatus.handle.bind(dependencies.users.updateUserStatus)
 );
 
-export default router;
+return router;
+};

@@ -1,32 +1,17 @@
 import { Router } from "express";
+import type { RouteDependencies } from "./routeDependencies";
 
-import {
-    generateProfileImageUploadUrlController
-} from "../../infrastructure/DI/storageControllerDependencies";
-
-import {
-    updateProfileImageController
-} from "../../infrastructure/DI/userDependencies";
-
-import { authenticateUser } from "../../infrastructure/DI/authDependencies";
-
-
-const router = Router();
-
-router.post(
-    "/profile-image/upload-url",
-    authenticateUser,
-    generateProfileImageUploadUrlController.handle.bind(
-        generateProfileImageUploadUrlController
-    )
-);
-
-router.patch(
-    "/profile-image",
-    authenticateUser,
-    updateProfileImageController.handle.bind(
-        updateProfileImageController
-    )
-);
-
-export default router;
+export const createStorageRoutes = (dependencies: Pick<RouteDependencies, "authenticateUser"> & { users: Pick<RouteDependencies["users"], "generateProfileImageUploadUrl" | "updateProfileImage"> }) => {
+    const router = Router();
+    router.post(
+        "/profile-image/upload-url",
+        dependencies.authenticateUser,
+        dependencies.users.generateProfileImageUploadUrl.handle.bind(dependencies.users.generateProfileImageUploadUrl)
+    );
+    router.patch(
+        "/profile-image",
+        dependencies.authenticateUser,
+        dependencies.users.updateProfileImage.handle.bind(dependencies.users.updateProfileImage)
+    );
+    return router;
+};

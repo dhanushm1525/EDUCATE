@@ -5,25 +5,20 @@ import { validate } from "../middlewares/validationMiddleware";
 import { registerSchema } from "../../shared/schema/auth/registerSchema";
 import { loginSchema } from "../../shared/schema/auth/loginSchema";
 
-import {registerController,loginController,refreshTokenController,logoutController, resetPasswordController,getCurrentUserController, googleSignInController} from "../../infrastructure/DI/authDependencies";
-
-
 import { verifyEmailOtpSchema } from "../../shared/schema/auth/verifyEmailOtpSchema";
-
-import { verifyEmailOtpController } from "../../infrastructure/DI/authDependencies";
 
 import { resendVerificationOtpSchema } from "../../shared/schema/auth/resendVerificationOtpSchema";
 
-import { resendVerificationOtpController,forgotPasswordController } from "../../infrastructure/DI/authDependencies";
-
 import { forgotPasswordSchema } from "../../shared/schema/auth/forgotPasswordSchema";
 import { resetPasswordSchema } from "../../shared/schema/auth/resetPasswordSchema";
-import { authenticateUser } from "../../infrastructure/DI/authDependencies";
-
 import { googleSignInSchema } from "../../shared/schema/auth/googleSignInSchema";
+import type { RouteDependencies } from "./routeDependencies";
 
 
+export const createAuthRoutes = (dependencies: RouteDependencies["auth"] & Pick<RouteDependencies, "authenticateUser">) => {
 const router = Router();
+const { authenticateUser } = dependencies;
+const { register, login, refreshToken, logout, resetPassword, getCurrentUser, googleSignIn, verifyEmailOtp, resendVerificationOtp, forgotPassword } = dependencies;
 
 
 
@@ -33,69 +28,60 @@ const router = Router();
 router.post(
     "/register",
     validate(registerSchema),
-    registerController.handle.bind(registerController)
+    register.handle.bind(register)
 );
 
 router.post(
     "/login",
     validate(loginSchema),
-    loginController.handle.bind(loginController)
+    login.handle.bind(login)
 );
 
 router.post(
     "/refresh",
-    refreshTokenController.handle.bind(
-        refreshTokenController
-    )
+    refreshToken.handle.bind(refreshToken)
 );
 
 router.post(
     "/logout",
-    logoutController.handle.bind(logoutController)
+    logout.handle.bind(logout)
 )
 
 
 router.post(
     "/verify-email",
     validate(verifyEmailOtpSchema),
-    verifyEmailOtpController.handle.bind(
-        verifyEmailOtpController
-    )
+    verifyEmailOtp.handle.bind(verifyEmailOtp)
 );
 
 
 router.post(
     "/resend-verification-otp",
     validate(resendVerificationOtpSchema),
-    resendVerificationOtpController.handle.bind(
-        resendVerificationOtpController
-    )
+    resendVerificationOtp.handle.bind(resendVerificationOtp)
 );
 
 
 router.post(
     "/forgot-password",
     validate(forgotPasswordSchema),
-    forgotPasswordController.handle.bind(
-        forgotPasswordController
-    )
+    forgotPassword.handle.bind(forgotPassword)
 );
 
 
 router.post(
     "/reset-password",
     validate(resetPasswordSchema),
-    resetPasswordController.handle.bind(
-        resetPasswordController
-    )
+    resetPassword.handle.bind(resetPassword)
 );
 
 router.get(
     "/me",
     authenticateUser,
-    getCurrentUserController.handle.bind(getCurrentUserController)
+    getCurrentUser.handle.bind(getCurrentUser)
 )
 
-router.post("/google",validate(googleSignInSchema),googleSignInController.handle.bind(googleSignInController))
+router.post("/google",validate(googleSignInSchema),googleSignIn.handle.bind(googleSignIn))
 
-export default router;
+return router;
+};

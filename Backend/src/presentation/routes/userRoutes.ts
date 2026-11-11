@@ -1,24 +1,12 @@
-import {Router} from "express";
+import { Router } from "express";
+import type { RouteDependencies } from "./routeDependencies";
 
-import {getMyProfileController} from "../../infrastructure/DI/userDependencies";
-
-
-import { authenticateUser } from "../../infrastructure/DI/authDependencies";
-
-
-
-const router = Router();
-
-
-router.get(
-    "/profile",
-
-    authenticateUser,
-
-    getMyProfileController.handle.bind(
-        getMyProfileController
-    )
-);
-
-
-export default router;
+export const createUserRoutes = (dependencies: Pick<RouteDependencies, "authenticateUser"> & { users: Pick<RouteDependencies["users"], "getMyProfile"> }) => {
+    const router = Router();
+    router.get(
+        "/profile",
+        dependencies.authenticateUser,
+        dependencies.users.getMyProfile.handle.bind(dependencies.users.getMyProfile)
+    );
+    return router;
+};

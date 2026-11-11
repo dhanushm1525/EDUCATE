@@ -5,19 +5,6 @@ import { roleMiddleware } from "../middlewares/roleMiddleware";
 
 import { UserRole } from "../../shared/enums/UserRole";
 
-import { authenticateUser } from "../../infrastructure/DI/authDependencies";
-
-import {
-    createLessonController,
-    getLessonsByChapterController,
-    getLessonByIdController,
-    updateLessonController,
-    deleteLessonController,
-    generateLessonMediaUploadUrlController,
-    cleanupLessonMediaController,
-    getStudentLessonController
-} from "../../infrastructure/DI/lessonDependencies";
-
 import { createLessonSchema } from "../../shared/schema/lesson/createLessonSchema";
 
 import { getLessonByIdSchema } from "../../shared/schema/lesson/getLessonByIdSchema";
@@ -33,88 +20,79 @@ import { generateLessonMediaUploadUrlSchema } from "../../shared/schema/lesson/g
 
 
 import { cleanupLessonMediaSchema } from "../../shared/schema/lesson/cleanupLessonMediaSchema";
+import type { RouteDependencies } from "./routeDependencies";
 
+export const createLessonRoutes = (dependencies: Pick<RouteDependencies, "authenticateUser" | "lessons">) => {
 const router = Router();
 
 router.post(
     "/:courseId/chapters/:chapterId/lessons",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     validate(createLessonSchema),
-    createLessonController.handle.bind(createLessonController)
+    dependencies.lessons.create.handle.bind(dependencies.lessons.create)
 );
 
 
 router.get(
     "/:courseId/chapters/:chapterId/lessons",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     validate(getLessonsByChapterSchema),
-    getLessonsByChapterController.handle.bind(
-        getLessonsByChapterController
-    )
+    dependencies.lessons.getByChapter.handle.bind(dependencies.lessons.getByChapter)
 );
 
 router.get(
     "/:courseId/chapters/:chapterId/lessons/:lessonId",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     validate(getLessonByIdSchema),
-    getLessonByIdController.handle.bind(
-        getLessonByIdController
-    )
+    dependencies.lessons.getById.handle.bind(dependencies.lessons.getById)
 );
 
 // Student and enrolled teacher: retrieve lesson content.
 router.get(
     "/:courseId/chapters/:chapterId/lessons/:lessonId/student",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
-    getStudentLessonController.handle.bind(
-        getStudentLessonController
-    )
+    dependencies.lessons.getStudentLesson.handle.bind(dependencies.lessons.getStudentLesson)
 );
 
 
 router.patch(
     "/:courseId/chapters/:chapterId/lessons/:lessonId",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     validate(updateLessonSchema),
-    updateLessonController.handle.bind(
-        updateLessonController
-    )
+    dependencies.lessons.update.handle.bind(dependencies.lessons.update)
 );
 
 router.delete(
     "/:courseId/chapters/:chapterId/lessons/:lessonId",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     validate(deleteLessonSchema),
-    deleteLessonController.handle.bind(
-        deleteLessonController
-    )
+    dependencies.lessons.delete.handle.bind(dependencies.lessons.delete)
 );
 
 
 router.post(
     "/:courseId/chapters/:chapterId/lessons/:lessonId/media/upload-url",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     validate(generateLessonMediaUploadUrlSchema),
-    generateLessonMediaUploadUrlController.handle.bind(
-        generateLessonMediaUploadUrlController
-    )
+    dependencies.lessons.generateMediaUploadUrl.handle.bind(dependencies.lessons.generateMediaUploadUrl)
 );
 
 router.delete(
     "/:courseId/chapters/:chapterId/lessons/:lessonId/media",
-    authenticateUser,
+    dependencies.authenticateUser,
     roleMiddleware(UserRole.TEACHER),
     validate(cleanupLessonMediaSchema),
-    cleanupLessonMediaController.handle.bind(cleanupLessonMediaController)
+    dependencies.lessons.cleanupMedia.handle.bind(dependencies.lessons.cleanupMedia)
 );
 
 
 
-export default router;
+return router;
+};

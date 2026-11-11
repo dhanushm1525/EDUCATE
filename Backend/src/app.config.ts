@@ -12,7 +12,7 @@ import { notFoundMiddleware } from "./presentation/middlewares/notFoundMiddlewar
 import { errorMiddleware } from "./presentation/middlewares/errorMiddleware";
 import { requestLoggerMiddleware } from "./presentation/middlewares/requestLoggerMiddleware";
 
-import apiRoutes from "./presentation/routes"
+import { apiRoutes } from "./infrastructure/DI/apiRoutes";
 import { logger } from "./infrastructure/services/logger";
 
 const app = express();
