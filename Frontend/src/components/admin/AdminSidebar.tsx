@@ -29,13 +29,11 @@ const menuItems = [
     icon: Users,
     path: "/admin/teachers",
   },
-
   {
     name: "Teacher Applications",
     icon: ClipboardList,
     path: "/admin/teacher-applications",
   },
-  
   {
     name: "Course Approval",
     icon: BookOpen,
@@ -52,16 +50,16 @@ export default function AdminSidebar() {
   const { logout } = useLogout();
 
   return (
-    <aside className="flex min-h-screen w-64 flex-col border-r border-slate-800 bg-[#0B1120]">
+    <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-slate-800 bg-[#0B1120]">
       {/* Logo */}
-      <div className="flex h-20 items-center border-b border-slate-800 px-7">
+      <div className="flex h-20 shrink-0 items-center border-b border-slate-800 px-7">
         <h1 className="text-xl font-bold text-white">
           EDU<span className="text-indigo-500">CATE</span>
         </h1>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-2 px-4 py-6">
+      <nav className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
         {menuItems.map((item) => {
           const Icon = item.icon;
 
@@ -80,15 +78,15 @@ export default function AdminSidebar() {
                 }
               `}
             >
-              <Icon className="h-5 w-5" />
+              <Icon className="h-5 w-5 shrink-0" />
               {item.name}
             </NavLink>
           );
         })}
       </nav>
 
-      {/* Bottom Settings & Actions */}
-      <div className="space-y-2 border-t border-slate-800 p-4">
+      {/* Bottom actions */}
+      <div className="shrink-0 space-y-2 border-t border-slate-800 p-4">
         <NavLink
           to="/admin/profile"
           className={({ isActive }) => `

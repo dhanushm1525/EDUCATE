@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, GraduationCap, Clock, Users } from "lucide-react";
 
-import AdminSidebar from "../../components/admin/AdminSidebar";
-import AdminHeader from "../../components/admin/AdminHeader.";
-
 import PendingTeacherApplicationTable from "../../components/admin/teacherApplications/PendingTeacherApplicationTable";
 import TeacherApplicationReviewModal from "../../components/admin/teacherApplications/TeacherApplicationReviewModal";
 
@@ -31,8 +28,6 @@ export default function TeacherApplicationsPage() {
   >(null);
 
   const addToast = useToastStore((state) => state.addToast);
-
-  // Fetch pending applications
 
   const loadPendingApplications = useCallback(async () => {
     return teacherApplicationService.getPendingApplications();
@@ -79,8 +74,6 @@ export default function TeacherApplicationsPage() {
     };
   }, [addToast, loadPendingApplications]);
 
-  // Open review modal
-
   const handleReview = (application: TeacherApplication) => {
     setSelectedApplication(application);
     setReviewModalOpen(true);
@@ -94,8 +87,6 @@ export default function TeacherApplicationsPage() {
     setReviewModalOpen(false);
     setSelectedApplication(null);
   };
-
-  // Approve application
 
   const handleApprove = async (application: TeacherApplication) => {
     setProcessingApplicationId(application.applicationId);
@@ -124,8 +115,6 @@ export default function TeacherApplicationsPage() {
       setProcessingApplicationId(null);
     }
   };
-
-  // Reject application
 
   const handleReject = async (
     application: TeacherApplication,
@@ -160,91 +149,79 @@ export default function TeacherApplicationsPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0B1120] text-white">
-      <AdminSidebar />
+    <>
+      <div className="space-y-6 text-white">
+        {/* Page Header */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="flex items-center gap-3">
+              <GraduationCap size={28} className="text-indigo-400" />
 
-      <div className="min-w-0 flex-1">
-        <AdminHeader title="Teacher Applications" />
-
-        <main className="p-6 lg:p-8">
-          {/* Page Header */}
-
-          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="flex items-center gap-3">
-                <GraduationCap size={28} className="text-indigo-400" />
-
-                <h1 className="text-2xl font-semibold">Teacher Applications</h1>
-              </div>
-
-              <p className="mt-2 text-sm text-slate-400">
-                Review student applications and manage requests to become
-                teachers on EDUCATE.
-              </p>
+              <h1 className="text-2xl font-semibold">Teacher Applications</h1>
             </div>
 
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => void refreshApplications()}
-              loading={loading}
-              disabled={Boolean(processingApplicationId)}
-            >
-              <RefreshCw size={16} />
-              Refresh
-            </Button>
+            <p className="mt-2 text-sm text-slate-400">
+              Review student applications and manage requests to become teachers
+              on EDUCATE.
+            </p>
           </div>
 
-          {/* Statistics */}
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => void refreshApplications()}
+            loading={loading}
+            disabled={Boolean(processingApplicationId)}
+          >
+            <RefreshCw size={16} />
+            Refresh
+          </Button>
+        </div>
 
-          <div className="mb-5 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-slate-400">Awaiting review</p>
+        {/* Statistics */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-slate-400">Awaiting review</p>
 
-                <Clock size={20} className="text-amber-400" />
-              </div>
-
-              <p className="mt-2 text-3xl font-semibold">
-                {applications.length}
-              </p>
+              <Clock size={20} className="text-amber-400" />
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-slate-400">Review status</p>
-
-                <Users size={20} className="text-indigo-400" />
-              </div>
-
-              <p className="mt-2 text-sm font-medium text-amber-400">
-                {loading
-                  ? "Loading applications..."
-                  : applications.length > 0
-                    ? "Pending applications"
-                    : "All applications reviewed"}
-              </p>
-            </div>
+            <p className="mt-2 text-3xl font-semibold">{applications.length}</p>
           </div>
 
-          {/* Applications Table */}
+          <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-slate-400">Review status</p>
 
-          {loading ? (
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-10 text-center text-sm text-slate-400">
-              Loading pending teacher applications...
+              <Users size={20} className="text-indigo-400" />
             </div>
-          ) : (
-            <PendingTeacherApplicationTable
-              applications={applications}
-              onReview={handleReview}
-              processingApplicationId={processingApplicationId}
-            />
-          )}
-        </main>
+
+            <p className="mt-2 text-sm font-medium text-amber-400">
+              {loading
+                ? "Loading applications..."
+                : applications.length > 0
+                  ? "Pending applications"
+                  : "All applications reviewed"}
+            </p>
+          </div>
+        </div>
+
+        {/* Applications Table */}
+        {loading ? (
+          <div className="rounded-xl border border-slate-800 bg-slate-900 p-10 text-center text-sm text-slate-400">
+            Loading pending teacher applications...
+          </div>
+        ) : (
+          <PendingTeacherApplicationTable
+            applications={applications}
+            onReview={handleReview}
+            processingApplicationId={processingApplicationId}
+          />
+        )}
       </div>
 
       {/* Review Modal */}
-
       {reviewModalOpen && (
         <TeacherApplicationReviewModal
           key={
@@ -258,6 +235,6 @@ export default function TeacherApplicationsPage() {
           processing={Boolean(processingApplicationId)}
         />
       )}
-    </div>
+    </>
   );
 }

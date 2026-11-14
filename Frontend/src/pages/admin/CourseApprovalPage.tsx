@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, ClipboardCheck } from "lucide-react";
 
-import AdminSidebar from "../../components/admin/AdminSidebar";
-import AdminHeader from "../../components/admin/AdminHeader.";
 import PendingCourseTable from "../../components/admin/courses/PendingCourseTable";
 import CourseReviewModal from "../../components/admin/courses/CourseReviewModal";
 
@@ -126,67 +124,68 @@ export default function CourseApprovalPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0B1120] text-white">
-      <AdminSidebar />
+    <>
+      <div className="space-y-6 text-white">
+        {/* Page Header */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="flex items-center gap-3">
+              <ClipboardCheck size={28} className="text-indigo-400" />
 
-      <div className="min-w-0 flex-1">
-        <AdminHeader />
-
-        <main className="p-6 lg:p-8">
-          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="flex items-center gap-3">
-                <ClipboardCheck size={28} className="text-indigo-400" />
-                <h1 className="text-2xl font-semibold">Course Approval</h1>
-              </div>
-
-              <p className="mt-2 text-sm text-slate-400">
-                Review submitted courses before publishing them on EDUCATE.
-              </p>
+              <h1 className="text-2xl font-semibold">Course Approval</h1>
             </div>
 
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => void refreshPendingCourses()}
-              loading={loading}
-              disabled={Boolean(processingCourseId)}
-            >
-              <RefreshCw size={16} />
-              Refresh
-            </Button>
+            <p className="mt-2 text-sm text-slate-400">
+              Review submitted courses before publishing them on EDUCATE.
+            </p>
           </div>
 
-          <div className="mb-5 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <p className="text-sm text-slate-400">Awaiting review</p>
-              <p className="mt-2 text-3xl font-semibold">{courses.length}</p>
-            </div>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => void refreshPendingCourses()}
+            loading={loading}
+            disabled={Boolean(processingCourseId)}
+          >
+            <RefreshCw size={16} />
+            Refresh
+          </Button>
+        </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <p className="text-sm text-slate-400">Review status</p>
-              <p className="mt-2 text-sm font-medium text-amber-400">
-                {loading ? "Loading courses..." : "Pending courses"}
-              </p>
-            </div>
+        {/* Statistics */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+            <p className="text-sm text-slate-400">Awaiting review</p>
+
+            <p className="mt-2 text-3xl font-semibold">{courses.length}</p>
           </div>
 
-          {loading ? (
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-10 text-center text-sm text-slate-400">
-              Loading pending courses...
-            </div>
-          ) : (
-            <PendingCourseTable
-              courses={courses}
-              onReview={handleReview}
-              onApprove={(course) => void handleApprove(course)}
-              onReject={handleReview}
-              processingCourseId={processingCourseId}
-            />
-          )}
-        </main>
+          <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+            <p className="text-sm text-slate-400">Review status</p>
+
+            <p className="mt-2 text-sm font-medium text-amber-400">
+              {loading ? "Loading courses..." : "Pending courses"}
+            </p>
+          </div>
+        </div>
+
+        {/* Pending Courses */}
+        {loading ? (
+          <div className="rounded-xl border border-slate-800 bg-slate-900 p-10 text-center text-sm text-slate-400">
+            Loading pending courses...
+          </div>
+        ) : (
+          <PendingCourseTable
+            courses={courses}
+            onReview={handleReview}
+            onApprove={(course) => void handleApprove(course)}
+            onReject={handleReview}
+            processingCourseId={processingCourseId}
+          />
+        )}
       </div>
 
+      {/* Review Modal */}
       {reviewModalOpen && (
         <CourseReviewModal
           key={selectedCourse?.courseId ?? "course-review"}
@@ -198,6 +197,6 @@ export default function CourseApprovalPage() {
           processing={Boolean(processingCourseId)}
         />
       )}
-    </div>
+    </>
   );
 }

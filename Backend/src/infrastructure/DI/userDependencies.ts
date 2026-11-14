@@ -38,7 +38,11 @@ export const updateProfileImageController =
 
 // Admin: User management
 
-const getUsers = new GetUsers(userRepository);
+const getUsers = new GetUsers(
+    userRepository,
+    s3StorageService,
+    profileImagePolicy
+);
 
 export const getUsersController =
     new GetUsersController(getUsers);

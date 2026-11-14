@@ -85,10 +85,9 @@ export default function CategoriesPage() {
   };
 
   return (
-    <div className="min-h-full bg-slate-950 p-6 text-white">
+    <div className="space-y-6 text-white">
       {/* Header */}
-
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Categories</h1>
 
@@ -104,9 +103,8 @@ export default function CategoriesPage() {
         </Button>
       </div>
 
-      {/* Filters */}
-
-      <div className="mb-4 flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-900 p-4 sm:flex-row">
+      {/* Search */}
+      <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-900 p-4 sm:flex-row">
         <div className="relative flex-1">
           <Search
             size={16}
@@ -123,8 +121,7 @@ export default function CategoriesPage() {
         </div>
       </div>
 
-      {/* Table */}
-
+      {/* Categories table */}
       {loading ? (
         <div className="rounded-xl border border-slate-800 bg-slate-900 p-10 text-center text-sm text-slate-400">
           Loading categories...
@@ -137,8 +134,7 @@ export default function CategoriesPage() {
         <CategoryTable categories={filteredCategories} />
       )}
 
-      {/* Create Modal */}
-
+      {/* Create category modal */}
       <Modal
         open={showCreateModal}
         onClose={() => setShowCreateModal(false)}

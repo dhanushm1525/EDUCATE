@@ -39,6 +39,9 @@ import AdminStudentsPage from "../../pages/admin/AdminStudentsPage";
 import AdminTeachersPage from "../../pages/admin/AdminTeachersPage";
 import TeacherApplicationsPage from "../../pages/admin/TeacherApplicationsPage";
 
+// Layouts
+import AdminLayout from "../../components/admin/AdminLayout";
+
 // Route guards
 import RoleRoute from "./RoleRoute";
 import PublicRoute from "./PublicRoute";
@@ -74,12 +77,14 @@ export function AppRouter() {
           path="/student/courses/:courseId/learn"
           element={<StudentLearningPage />}
         />
+
         <Route path="/student/become-teacher" element={<BecomeTeacherPage />} />
       </Route>
 
       {/* Teacher routes */}
       <Route element={<RoleRoute allowedRoles={["teacher"]} />}>
         <Route path="/teacher" element={<TeacherDashboard />} />
+
         <Route path="/teacher/profile" element={<TeacherProfilePage />} />
 
         <Route path="/teacher/courses" element={<MyCoursesPage />} />
@@ -119,19 +124,27 @@ export function AppRouter() {
 
       {/* Admin routes */}
       <Route element={<RoleRoute allowedRoles={["admin"]} />}>
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/profile" element={<AdminProfilePage />} />
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminDashboard />} />
 
-        <Route path="/admin/courses/pending" element={<CourseApprovalPage />} />
+          <Route path="/admin/profile" element={<AdminProfilePage />} />
 
-        <Route path="/admin/categories" element={<CategoriesPage />} />
-        <Route path="/admin/students" element={<AdminStudentsPage />} />
+          <Route
+            path="/admin/courses/pending"
+            element={<CourseApprovalPage />}
+          />
 
-        <Route path="/admin/teachers" element={<AdminTeachersPage />} />
-        <Route
-          path="/admin/teacher-applications"
-          element={<TeacherApplicationsPage />}
-        />
+          <Route path="/admin/categories" element={<CategoriesPage />} />
+
+          <Route path="/admin/students" element={<AdminStudentsPage />} />
+
+          <Route path="/admin/teachers" element={<AdminTeachersPage />} />
+
+          <Route
+            path="/admin/teacher-applications"
+            element={<TeacherApplicationsPage />}
+          />
+        </Route>
       </Route>
     </Routes>
   );
