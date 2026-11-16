@@ -1,9 +1,25 @@
+
 export interface StudentAssignmentQuestion {
     questionId: string;
     question: string;
     options: string[];
     marks: number;
 }
+
+
+export interface StudentAssignmentAnswer {
+    questionId: string;
+    selectedAnswer: string;
+}
+
+export interface StudentActiveAttempt {
+    submissionId: string;
+    attemptNumber: number;
+    startedAt: string;
+    expiresAt?: string;
+    answers: StudentAssignmentAnswer[];
+}
+
 
 export interface StudentAssignment {
     assignmentId: string;
@@ -25,6 +41,8 @@ export interface StudentAssignment {
 
     isExpired: boolean;
     canAttempt: boolean;
+
+    activeAttempt: StudentActiveAttempt | null;
 }
 
 export interface StudentAssignmentResponse {

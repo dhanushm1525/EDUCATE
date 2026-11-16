@@ -142,4 +142,25 @@ export const assignmentService = {
 
         return response.data;
     },
+
+    startAttempt: async (
+        assignmentId: string
+    ): Promise<void> => {
+        await apiClient.post(
+            API_ROUTES.assignments.student.start(assignmentId)
+        );
+    },
+
+
+    saveAnswers: async (
+        assignmentId: string,
+        answers: SubmitAssignmentRequest["answers"]
+    ): Promise<void> => {
+        await apiClient.patch(
+            API_ROUTES.assignments.student.saveAnswers(assignmentId),
+            { answers }
+        );
+    },
+
+
 };

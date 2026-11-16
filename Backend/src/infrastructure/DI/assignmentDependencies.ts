@@ -55,6 +55,11 @@ import {
 
 import { StartAssignmentAttemptUseCase } from "../../application/use-cases/assingment/StartAssignmentAttemptUseCase";
 import { StartAssignmentAttemptController } from "../../presentation/controllers/assingment/StartAssignmentAttemptController";
+import { SaveAssignmentAnswersUseCase }
+    from "../../application/use-cases/assingment/SaveAssignmentAnswersUseCase";
+
+import { SaveAssignmentAnswersController }
+    from "../../presentation/controllers/assingment/SaveAssignmentAnswersController";
 
 
 export const assignmentRepository =
@@ -178,8 +183,18 @@ const getAssignmentByLessonUseCase =
         courseRepository
     );
 
-    const startAssignmentAttemptUseCase =
+const startAssignmentAttemptUseCase =
     new StartAssignmentAttemptUseCase(
+        assignmentRepository,
+        lessonRepository,
+        chapterRepository,
+        courseRepository,
+        enrollmentRepository,
+        assignmentSubmissionRepository
+    );
+
+const saveAssignmentAnswersUseCase =
+    new SaveAssignmentAnswersUseCase(
         assignmentRepository,
         lessonRepository,
         chapterRepository,
@@ -272,8 +287,15 @@ export const getAssignmentByLessonController =
         identifierValidator
     );
 
-    export const startAssignmentAttemptController =
+export const startAssignmentAttemptController =
     new StartAssignmentAttemptController(
         startAssignmentAttemptUseCase,
+        identifierValidator
+    );
+
+
+export const saveAssignmentAnswersController =
+    new SaveAssignmentAnswersController(
+        saveAssignmentAnswersUseCase,
         identifierValidator
     );

@@ -1,7 +1,7 @@
 
 import {
     AssignmentSubmission,
-    SubmissionStatus
+    SubmissionStatus,
 } from "../../../domain/entities/AssignmentSubmission";
 
 import { EnrollmentStatus } from "../../../domain/entities/Enrollment";
@@ -28,7 +28,7 @@ export class StartAssignmentAttemptUseCase
         private readonly _courseRepository: ICourseRepository,
         private readonly _enrollmentRepository: IEnrollmentRepository,
         private readonly _submissionRepository: IAssignmentSubmissionRepository
-    ) {}
+    ) { }
 
     async execute(
         assignmentId: string,
@@ -122,12 +122,15 @@ export class StartAssignmentAttemptUseCase
                 activeAttempt.expiresAt !== undefined &&
                 now.getTime() >= activeAttempt.expiresAt.getTime();
 
-            if (!attemptExpired) {
-                // Resume the same attempt instead of creating another.
+            const deadlinePassed =
+                assignment.dueDate != null &&
+                now.getTime() >= assignment.dueDate.getTime();
+
+            if (!attemptExpired && !deadlinePassed) {
+                // Resume the same attempt.
                 return activeAttempt;
             }
 
-            // Expire the old attempt before allowing a new one.
             if (!activeAttempt.submissionId) {
                 throw new AppError(
                     "Unable to identify the expired attempt",
@@ -135,12 +138,13 @@ export class StartAssignmentAttemptUseCase
                 );
             }
 
+            // Expire the old attempt.
             await this._submissionRepository.update(
                 activeAttempt.submissionId,
                 {
                     ...activeAttempt,
                     status: SubmissionStatus.EXPIRED,
-                    updatedAt: now
+                    updatedAt: now,
                 }
             );
         }
@@ -176,7 +180,7 @@ export class StartAssignmentAttemptUseCase
             );
         }
 
-        // 9. Calculate the next attempt number.
+        // 9. Calculate next attempt number.
         const attemptNumber =
             previousAttempts.reduce(
                 (highest, attempt) =>
@@ -184,7 +188,7 @@ export class StartAssignmentAttemptUseCase
                 0
             ) + 1;
 
-        // 10. Calculate expiry using the server clock.
+        // 10. Calculate expiry using server time.
         let expiresAt: Date | undefined;
 
         if (assignment.timeLimit !== undefined) {
@@ -193,7 +197,7 @@ export class StartAssignmentAttemptUseCase
             );
         }
 
-        // The assignment deadline takes precedence if it is earlier.
+        // Assignment deadline takes precedence.
         if (
             assignment.dueDate &&
             (
@@ -204,7 +208,7 @@ export class StartAssignmentAttemptUseCase
             expiresAt = assignment.dueDate;
         }
 
-        // 11. Create the in-progress attempt.
+        // 11. Create the in-progress attempt safely.
         const attempt: AssignmentSubmission = {
             assignmentId,
             userId,
@@ -224,9 +228,38 @@ export class StartAssignmentAttemptUseCase
             expiresAt,
 
             createdAt: now,
-            updatedAt: now
+            updatedAt: now,
         };
 
-        return this._submissionRepository.create(attempt);
+        try {
+            return await this._submissionRepository.create(attempt);
+
+        } catch (error: unknown) {
+
+            // MongoDB duplicate-key error.
+            const isDuplicateKeyError =
+                typeof error === "object" &&
+                error !== null &&
+                "code" in error &&
+                error.code === 11000;
+
+            if (!isDuplicateKeyError) {
+                throw error;
+            }
+
+            // Another simultaneous request may have created the attempt.
+            const existingAttempt =
+                await this._submissionRepository.findActiveAttempt(
+                    assignmentId,
+                    userId
+                );
+
+            if (existingAttempt) {
+                return existingAttempt;
+            }
+
+            // Preserve unrelated duplicate-key errors.
+            throw error;
+        }
     }
 }

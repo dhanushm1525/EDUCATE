@@ -129,16 +129,24 @@ export const API_ROUTES = {
     },
 
     // Student APIs
-    student: {
-      byLesson: (lessonId: string) =>
+    
+student: {
+    byLesson: (lessonId: string) =>
         `/assignments/student/lessons/${lessonId}/assignment`,
 
-      submit: (assignmentId: string) =>
+    start: (assignmentId: string) =>
+        `/assignments/student/assignments/${assignmentId}/start`,
+
+    submit: (assignmentId: string) =>
         `/assignments/student/assignments/${assignmentId}/submit`,
 
-      results: (assignmentId: string) =>
+    results: (assignmentId: string) =>
         `/assignments/student/assignments/${assignmentId}/results`,
-    },
+
+    saveAnswers: (assignmentId: string) =>
+    `/assignments/student/assignments/${assignmentId}/answers`,
+},
+
   },
 
 

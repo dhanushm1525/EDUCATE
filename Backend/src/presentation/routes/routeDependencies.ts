@@ -81,6 +81,7 @@ export interface RouteDependencies {
         gradeSubmission: RouteController;
         getTeacherAssignments: RouteController;
         startAttempt: RouteController;
+        saveAnswers: RouteController;
     };
     enrollments: {
         enroll: RouteController;

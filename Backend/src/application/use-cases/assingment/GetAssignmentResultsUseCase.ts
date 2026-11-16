@@ -3,6 +3,10 @@ import { IAssignmentRepository } from "../../../domain/repositories/courseReposi
 
 import { IAssignmentSubmissionRepository } from "../../../domain/repositories/courseRepositories/IAssignmentSubmissionRepository";
 
+import {
+    SubmissionStatus,
+} from "../../../domain/entities/AssignmentSubmission";
+
 import { AssignmentSubmissionResultDTO } from "../../dtos/assingment/AssignmentSubmissionResultDTO";
 
 import { IGetAssignmentResultsUseCase } from "../../interfaces/assingment/IGetAssignmentResultsUseCase";
@@ -49,21 +53,29 @@ export class GetAssignmentResultsUseCase
             );
         }
 
-        // 3. Retrieve only this student's submissions.
+        // 3. Retrieve this student's submissions.
         const submissions =
             await this._submissionRepository.findByAssignmentAndUser(
                 assignmentId,
                 userId
             );
 
-        // 4. Sort attempts in chronological order.
-        submissions.sort(
+        // 4. Include only completed attempts.
+        const completedSubmissions = submissions.filter(
+            submission =>
+                submission.status === SubmissionStatus.SUBMITTED ||
+                submission.status === SubmissionStatus.GRADED
+        );
+
+        // 5. Sort attempts chronologically.
+        completedSubmissions.sort(
             (a, b) => a.attemptNumber - b.attemptNumber
         );
 
-        // 5. Convert domain entities into result DTOs.
-        return submissions.map(
-            AssignmentSubmissionResultMapper.toDTO
+        // 6. Convert domain entities into result DTOs.
+        return completedSubmissions.map(
+            submission =>
+                AssignmentSubmissionResultMapper.toDTO(submission)
         );
     }
 }

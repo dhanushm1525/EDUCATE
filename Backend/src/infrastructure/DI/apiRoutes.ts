@@ -69,6 +69,7 @@ import {
     getTeacherAssignmentsController,
     getTeacherSubmissionDetailController,
     gradeAssignmentSubmissionController,
+    saveAssignmentAnswersController,
     startAssignmentAttemptController,
     submitAssignmentController,
     updateAssignmentController
@@ -152,6 +153,7 @@ export const apiRoutes = createApiRouter({
         gradeSubmission: gradeAssignmentSubmissionController,
         getTeacherAssignments: getTeacherAssignmentsController,
         startAttempt: startAssignmentAttemptController,
+        saveAnswers: saveAssignmentAnswersController,
     },
     enrollments: {
         enroll: enrollInCourseController,

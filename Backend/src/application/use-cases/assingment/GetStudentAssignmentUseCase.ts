@@ -1,10 +1,13 @@
-
 import { IAssignmentRepository } from "../../../domain/repositories/courseRepositories/IAssingmentRepository";
 import { ILessonRepository } from "../../../domain/repositories/courseRepositories/ILessonRepository";
 import { IChapterRepository } from "../../../domain/repositories/courseRepositories/IChapterRepository";
 import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
 import { IEnrollmentRepository } from "../../../domain/repositories/courseRepositories/IEnrollmentRepository";
 import { IAssignmentSubmissionRepository } from "../../../domain/repositories/courseRepositories/IAssignmentSubmissionRepository";
+
+import {
+    SubmissionStatus,
+} from "../../../domain/entities/AssignmentSubmission";
 
 import { EnrollmentStatus } from "../../../domain/entities/Enrollment";
 
@@ -25,7 +28,7 @@ export class GetStudentAssignmentUseCase
         private readonly _courseRepository: ICourseRepository,
         private readonly _enrollmentRepository: IEnrollmentRepository,
         private readonly _submissionRepository: IAssignmentSubmissionRepository
-    ) {}
+    ) { }
 
     async execute(
         lessonId: string,
@@ -86,7 +89,10 @@ export class GetStudentAssignmentUseCase
                 chapter.courseId
             );
 
-        if (!enrollment || enrollment.status !== EnrollmentStatus.ACTIVE) {
+        if (
+            !enrollment ||
+            enrollment.status !== EnrollmentStatus.ACTIVE
+        ) {
             throw new AppError(
                 "You must be actively enrolled in this course to access the assignment",
                 HttpStatusCode.FORBIDDEN
@@ -104,16 +110,59 @@ export class GetStudentAssignmentUseCase
             );
         }
 
-        // 7. Retrieve previous attempts.
+        const now = new Date();
+
+        // 7. Retrieve all previous attempts.
         const submissions =
             await this._submissionRepository.findByAssignmentAndUser(
                 assignment.assignmentId,
                 userId
             );
 
+        // 8. Find the currently active attempt.
+        let activeAttempt =
+            await this._submissionRepository.findActiveAttempt(
+                assignment.assignmentId,
+                userId
+            );
+
+        // 9. Expire the active attempt if its timer or deadline has passed.
+        if (activeAttempt) {
+
+            const attemptExpired =
+                activeAttempt.expiresAt !== undefined &&
+                now.getTime() >= activeAttempt.expiresAt.getTime();
+
+            const deadlinePassed =
+                assignment.dueDate != null &&
+                now.getTime() >= assignment.dueDate.getTime();
+
+            if (attemptExpired || deadlinePassed) {
+
+                if (!activeAttempt.submissionId) {
+                    throw new AppError(
+                        "Active attempt has an invalid submission ID",
+                        HttpStatusCode.INTERNAL_SERVER_ERROR
+                    );
+                }
+
+                await this._submissionRepository.update(
+                    activeAttempt.submissionId,
+                    {
+                        ...activeAttempt,
+                        status: SubmissionStatus.EXPIRED,
+                        updatedAt: now,
+                    }
+                );
+
+                activeAttempt = null;
+            }
+        }
+
+        // 10. Count all attempts, including expired attempts.
         const attemptsUsed = submissions.length;
 
-        // 8. Calculate remaining attempts.
+        // 11. Calculate remaining attempts.
         const attemptsRemaining =
             assignment.attemptsAllowed === undefined
                 ? null
@@ -122,26 +171,30 @@ export class GetStudentAssignmentUseCase
                     0
                 );
 
-        // 9. Check deadline.
-        const now = new Date();
-
+        // 12. Check assignment deadline.
         const isExpired =
             assignment.dueDate != null &&
-            now.getTime() > assignment.dueDate.getTime();
+            now.getTime() >= assignment.dueDate.getTime();
 
+        // 13. An existing active attempt can always be resumed.
         const canAttempt =
-            !isExpired &&
+            activeAttempt !== null ||
             (
-                attemptsRemaining === null ||
-                attemptsRemaining > 0
+                !isExpired &&
+                (
+                    attemptsRemaining === null ||
+                    attemptsRemaining > 0
+                )
             );
 
+        // 14. Return the student-safe assignment response.
         return StudentAssignmentMapper.toDTO(
             assignment,
             attemptsUsed,
             attemptsRemaining,
             isExpired,
-            canAttempt
+            canAttempt,
+            activeAttempt
         );
     }
 }

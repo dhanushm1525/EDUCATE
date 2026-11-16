@@ -29,7 +29,7 @@ export class SubmitAssignmentUseCase
         private readonly _courseRepository: ICourseRepository,
         private readonly _enrollmentRepository: IEnrollmentRepository,
         private readonly _submissionRepository: IAssignmentSubmissionRepository
-    ) {}
+    ) { }
 
     async execute(
         dto: SubmitAssignmentDTO
@@ -119,40 +119,49 @@ export class SubmitAssignmentUseCase
             );
         }
 
-        // 8. Check assignment deadline.
-        const now = new Date();
-
-        if (
-            assignment.dueDate &&
-            now.getTime() > assignment.dueDate.getTime()
-        ) {
-            throw new AppError(
-                "The assignment deadline has passed",
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
-
-        // 9. Retrieve previous attempts.
-        const previousSubmissions =
-            await this._submissionRepository.findByAssignmentAndUser(
+        // 8. Retrieve the active attempt.
+        const activeAttempt =
+            await this._submissionRepository.findActiveAttempt(
                 assignmentId,
                 userId
             );
 
-        const attemptsUsed = previousSubmissions.length;
-
-        // 10. Enforce attempt limit.
-        if (
-            assignment.attemptsAllowed !== undefined &&
-            attemptsUsed >= assignment.attemptsAllowed
-        ) {
+        if (!activeAttempt || !activeAttempt.submissionId) {
             throw new AppError(
-                "You have used all your allowed attempts",
-                HttpStatusCode.FORBIDDEN
+                "No active assignment attempt found. Start an attempt first.",
+                HttpStatusCode.BAD_REQUEST
             );
         }
 
-        // 11. Validate question IDs and prevent duplicate answers.
+        const now = new Date();
+
+        // 9. Check attempt expiry.
+        const isAttemptExpired =
+            activeAttempt.expiresAt !== undefined &&
+            now.getTime() >= activeAttempt.expiresAt.getTime();
+
+        const isDeadlinePassed =
+            assignment.dueDate != null &&
+            now.getTime() >= assignment.dueDate.getTime();
+
+        if (isAttemptExpired || isDeadlinePassed) {
+
+            await this._submissionRepository.update(
+                activeAttempt.submissionId,
+                {
+                    ...activeAttempt,
+                    status: SubmissionStatus.EXPIRED,
+                    updatedAt: now,
+                }
+            );
+
+            throw new AppError(
+                "Your assignment attempt has expired",
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
+
+        // 10. Validate question IDs and prevent duplicate answers.
         const questionIds = new Set(
             assignment.questions.map(question => question.questionId)
         );
@@ -189,15 +198,18 @@ export class SubmitAssignmentUseCase
             submittedQuestionIds.add(answer.questionId);
         }
 
-        // 12. Require an answer for every question.
-        if (submittedQuestionIds.size !== assignment.questions.length) {
+        // 11. Require an answer for every question.
+        if (
+            submittedQuestionIds.size !==
+            assignment.questions.length
+        ) {
             throw new AppError(
                 "Please answer all assignment questions",
                 HttpStatusCode.BAD_REQUEST
             );
         }
 
-        // 13. Calculate marks on the backend.
+        // 12. Calculate marks on the backend.
         let score = 0;
 
         for (const question of assignment.questions) {
@@ -210,8 +222,11 @@ export class SubmitAssignmentUseCase
                 continue;
             }
 
+            const selectedAnswer =
+                submittedAnswer.selectedAnswer.trim();
+
             const selectedOption = question.options.find(
-                option => option === submittedAnswer.selectedAnswer.trim()
+                option => option === selectedAnswer
             );
 
             if (!selectedOption) {
@@ -226,20 +241,14 @@ export class SubmitAssignmentUseCase
             }
         }
 
-        // 14. Calculate attempt number.
-        const attemptNumber = attemptsUsed + 1;
-
-        // 15. Create submission.
-        const submission: AssignmentSubmission = {
-            assignmentId,
-            userId,
+        // 13. Update the existing attempt.
+        const updatedSubmission: AssignmentSubmission = {
+            ...activeAttempt,
 
             answers: answers.map(answer => ({
                 questionId: answer.questionId,
                 selectedAnswer: answer.selectedAnswer.trim(),
             })),
-
-            attemptNumber,
 
             score,
             totalMarks: assignment.totalMarks,
@@ -249,10 +258,22 @@ export class SubmitAssignmentUseCase
             status: SubmissionStatus.SUBMITTED,
 
             submittedAt: now,
-            createdAt: now,
             updatedAt: now,
         };
 
-        return this._submissionRepository.create(submission);
+        const savedSubmission =
+            await this._submissionRepository.update(
+                activeAttempt.submissionId,
+                updatedSubmission
+            );
+
+        if (!savedSubmission) {
+            throw new AppError(
+                "Unable to submit assignment",
+                HttpStatusCode.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return savedSubmission;
     }
 }

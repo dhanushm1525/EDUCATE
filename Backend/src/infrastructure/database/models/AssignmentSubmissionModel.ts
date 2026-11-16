@@ -1,3 +1,4 @@
+
 import { Schema, model, Document, Types } from "mongoose";
 
 import {
@@ -157,6 +158,21 @@ assignmentSubmissionSchema.index({
     userId: 1,
     attemptNumber: 1,
 });
+
+// Allow only one IN_PROGRESS attempt per student per assignment.
+assignmentSubmissionSchema.index(
+    {
+        assignmentId: 1,
+        userId: 1,
+    },
+    {
+        unique: true,
+        partialFilterExpression: {
+            status: SubmissionStatus.IN_PROGRESS,
+        },
+        name: "unique_active_assignment_attempt",
+    }
+);
 
 export const AssignmentSubmissionModel =
     model<AssignmentSubmissionDocument>(

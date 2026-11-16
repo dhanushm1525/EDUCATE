@@ -6,6 +6,19 @@ export interface StudentAssignmentQuestionDTO {
     marks: number;
 }
 
+export interface StudentAssignmentAnswerDTO {
+    questionId: string;
+    selectedAnswer: string;
+}
+
+export interface StudentActiveAttemptDTO {
+    submissionId: string;
+    attemptNumber: number;
+    startedAt: Date;
+    expiresAt?: Date;
+    answers: StudentAssignmentAnswerDTO[];
+}
+
 export interface StudentAssignmentDTO {
     assignmentId: string;
     lessonId: string;
@@ -20,7 +33,6 @@ export interface StudentAssignmentDTO {
 
     timeLimit?: number;
     attemptsAllowed?: number;
-
     dueDate?: Date | null;
 
     attemptsUsed: number;
@@ -28,4 +40,6 @@ export interface StudentAssignmentDTO {
 
     isExpired: boolean;
     canAttempt: boolean;
+
+    activeAttempt: StudentActiveAttemptDTO | null;
 }

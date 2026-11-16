@@ -1,14 +1,20 @@
+
 import { Assignment } from "../../domain/entities/Assingment";
+import { AssignmentSubmission } from "../../domain/entities/AssignmentSubmission";
+
 import { StudentAssignmentDTO } from "../dtos/assingment/StudentAssignmentDTO";
 
 export class StudentAssignmentMapper {
+
     static toDTO(
         assignment: Assignment,
         attemptsUsed: number,
         attemptsRemaining: number | null,
         isExpired: boolean,
-        canAttempt: boolean
+        canAttempt: boolean,
+        activeAttempt: AssignmentSubmission | null
     ): StudentAssignmentDTO {
+
         if (!assignment.assignmentId) {
             throw new Error(
                 "Cannot map an assignment without an assignment ID"
@@ -18,23 +24,44 @@ export class StudentAssignmentMapper {
         return {
             assignmentId: assignment.assignmentId,
             lessonId: assignment.lessonId,
+
             title: assignment.title,
             description: assignment.description,
+
             questions: assignment.questions.map(question => ({
                 questionId: question.questionId,
                 question: question.question,
                 options: question.options,
                 marks: question.marks,
             })),
+
             totalMarks: assignment.totalMarks,
             passingMarks: assignment.passingMarks,
+
             timeLimit: assignment.timeLimit,
             attemptsAllowed: assignment.attemptsAllowed,
             dueDate: assignment.dueDate ?? null,
+
             attemptsUsed,
             attemptsRemaining,
+
             isExpired,
             canAttempt,
+
+            activeAttempt:
+                activeAttempt?.submissionId &&
+                activeAttempt.startedAt
+                    ? {
+                        submissionId: activeAttempt.submissionId,
+                        attemptNumber: activeAttempt.attemptNumber,
+                        startedAt: activeAttempt.startedAt,
+                        expiresAt: activeAttempt.expiresAt,
+                        answers: activeAttempt.answers.map(answer => ({
+                            questionId: answer.questionId,
+                            selectedAnswer: answer.selectedAnswer,
+                        })),
+                    }
+                    : null,
         };
     }
 }

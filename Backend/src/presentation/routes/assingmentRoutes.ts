@@ -20,6 +20,16 @@ router.get(
     dependencies.assignments.getStudent.handle.bind(dependencies.assignments.getStudent)
 );
 
+// Save Assignment Answers
+router.patch(
+    "/assignments/student/assignments/:assignmentId/answers",
+    dependencies.authenticateUser,
+    roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
+    dependencies.assignments.saveAnswers.handle.bind(
+        dependencies.assignments.saveAnswers
+    )
+);
+
 // Submit Assignment
 router.post(
     "/assignments/student/assignments/:assignmentId/submit",
