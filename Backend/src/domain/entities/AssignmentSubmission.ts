@@ -1,7 +1,8 @@
-
 export enum SubmissionStatus {
+    IN_PROGRESS = "in_progress",
     SUBMITTED = "submitted",
     GRADED = "graded",
+    EXPIRED = "expired",
 }
 
 export interface AssignmentSubmissionAnswer {
@@ -26,12 +27,18 @@ export interface AssignmentSubmission {
 
     status: SubmissionStatus;
 
+    // Attempt timing
+    startedAt?: Date;
+    expiresAt?: Date;
+
     // Teacher grading information
     teacherFeedback?: string;
     gradedBy?: string;
     gradedAt?: Date;
 
-    submittedAt: Date;
+    // Not present until the student submits
+    submittedAt?: Date;
+
     createdAt: Date;
     updatedAt: Date;
 }

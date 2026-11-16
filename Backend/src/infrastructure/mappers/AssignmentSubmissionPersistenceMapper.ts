@@ -1,4 +1,3 @@
-
 import {
     AssignmentSubmission,
 } from "../../domain/entities/AssignmentSubmission";
@@ -7,11 +6,9 @@ import {
     AssignmentSubmissionDocument,
 } from "../database/models/AssignmentSubmissionModel";
 
-
 export class AssignmentSubmissionPersistenceMapper {
 
     static toPersistence(submission: AssignmentSubmission) {
-
         return {
             assignmentId: submission.assignmentId,
             userId: submission.userId,
@@ -30,7 +27,9 @@ export class AssignmentSubmissionPersistenceMapper {
 
             status: submission.status,
 
-            // Teacher grading information
+            startedAt: submission.startedAt,
+            expiresAt: submission.expiresAt,
+
             teacherFeedback: submission.teacherFeedback,
             gradedBy: submission.gradedBy,
             gradedAt: submission.gradedAt,
@@ -39,11 +38,9 @@ export class AssignmentSubmissionPersistenceMapper {
         };
     }
 
-
     static toDomain(
         document: AssignmentSubmissionDocument
     ): AssignmentSubmission {
-
         return {
             submissionId: document._id.toString(),
 
@@ -64,7 +61,9 @@ export class AssignmentSubmissionPersistenceMapper {
 
             status: document.status,
 
-            // Teacher grading information
+            startedAt: document.startedAt,
+            expiresAt: document.expiresAt,
+
             teacherFeedback: document.teacherFeedback,
             gradedBy: document.gradedBy?.toString(),
             gradedAt: document.gradedAt,

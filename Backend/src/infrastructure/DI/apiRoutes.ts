@@ -69,6 +69,7 @@ import {
     getTeacherAssignmentsController,
     getTeacherSubmissionDetailController,
     gradeAssignmentSubmissionController,
+    startAssignmentAttemptController,
     submitAssignmentController,
     updateAssignmentController
 } from "./assignmentDependencies";
@@ -149,7 +150,8 @@ export const apiRoutes = createApiRouter({
         getTeacherSubmissions: getTeacherAssignmentSubmissionsController,
         getTeacherSubmissionDetail: getTeacherSubmissionDetailController,
         gradeSubmission: gradeAssignmentSubmissionController,
-        getTeacherAssignments: getTeacherAssignmentsController
+        getTeacherAssignments: getTeacherAssignmentsController,
+        startAttempt: startAssignmentAttemptController,
     },
     enrollments: {
         enroll: enrollInCourseController,

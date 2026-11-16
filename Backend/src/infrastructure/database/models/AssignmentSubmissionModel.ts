@@ -1,16 +1,13 @@
-
 import { Schema, model, Document, Types } from "mongoose";
 
 import {
     SubmissionStatus,
 } from "../../../domain/entities/AssignmentSubmission";
 
-
 export interface AssignmentSubmissionAnswerDocument {
     questionId: string;
     selectedAnswer: string;
 }
-
 
 export interface AssignmentSubmissionDocument extends Document {
     _id: Types.ObjectId;
@@ -29,16 +26,18 @@ export interface AssignmentSubmissionDocument extends Document {
 
     status: SubmissionStatus;
 
-    // Teacher grading information
+    startedAt?: Date;
+    expiresAt?: Date;
+
     teacherFeedback?: string;
     gradedBy?: Types.ObjectId;
     gradedAt?: Date;
 
-    submittedAt: Date;
+    submittedAt?: Date;
+
     createdAt: Date;
     updatedAt: Date;
 }
-
 
 const submissionAnswerSchema =
     new Schema<AssignmentSubmissionAnswerDocument>(
@@ -58,7 +57,6 @@ const submissionAnswerSchema =
             _id: false,
         }
     );
-
 
 const assignmentSubmissionSchema =
     new Schema<AssignmentSubmissionDocument>(
@@ -93,6 +91,7 @@ const assignmentSubmissionSchema =
                 type: Number,
                 required: true,
                 min: 0,
+                default: 0,
             },
 
             totalMarks: {
@@ -110,36 +109,41 @@ const assignmentSubmissionSchema =
             isPassed: {
                 type: Boolean,
                 required: true,
+                default: false,
             },
 
             status: {
                 type: String,
                 enum: Object.values(SubmissionStatus),
                 required: true,
-                default: SubmissionStatus.SUBMITTED,
+                default: SubmissionStatus.IN_PROGRESS,
             },
 
-            // Teacher feedback
+            startedAt: {
+                type: Date,
+            },
+
+            expiresAt: {
+                type: Date,
+            },
+
             teacherFeedback: {
                 type: String,
                 trim: true,
                 maxlength: 2000,
             },
 
-            // Teacher who graded the submission
             gradedBy: {
                 type: Schema.Types.ObjectId,
                 ref: "User",
             },
 
-            // Grading timestamp
             gradedAt: {
                 type: Date,
             },
 
             submittedAt: {
                 type: Date,
-                required: true,
             },
         },
         {
@@ -147,14 +151,12 @@ const assignmentSubmissionSchema =
         }
     );
 
-
 // Efficiently retrieve a student's attempts for an assignment.
 assignmentSubmissionSchema.index({
     assignmentId: 1,
     userId: 1,
     attemptNumber: 1,
 });
-
 
 export const AssignmentSubmissionModel =
     model<AssignmentSubmissionDocument>(

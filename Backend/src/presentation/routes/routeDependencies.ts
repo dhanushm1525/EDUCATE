@@ -80,6 +80,7 @@ export interface RouteDependencies {
         getTeacherSubmissionDetail: RouteController;
         gradeSubmission: RouteController;
         getTeacherAssignments: RouteController;
+        startAttempt: RouteController;
     };
     enrollments: {
         enroll: RouteController;

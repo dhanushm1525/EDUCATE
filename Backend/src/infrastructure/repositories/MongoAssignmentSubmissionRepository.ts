@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 
 import {
     AssignmentSubmission,
+    SubmissionStatus,
 } from "../../domain/entities/AssignmentSubmission";
 
 import {
@@ -74,6 +75,26 @@ export class MongoAssignmentSubmissionRepository
 
         return documents.map(
             AssignmentSubmissionPersistenceMapper.toDomain
+        );
+    }
+
+    async findActiveAttempt(
+        assignmentId: string,
+        userId: string
+    ): Promise<AssignmentSubmission | null> {
+
+        const documents = await this.findManyDocuments({
+            assignmentId: new Types.ObjectId(assignmentId),
+            userId: new Types.ObjectId(userId),
+            status: SubmissionStatus.IN_PROGRESS,
+        });
+
+        if (documents.length === 0) {
+            return null;
+        }
+
+        return AssignmentSubmissionPersistenceMapper.toDomain(
+            documents[0]
         );
     }
 

@@ -1,26 +1,22 @@
 
 import { IAssignmentRepository } from "../../../domain/repositories/courseRepositories/IAssingmentRepository";
-
 import { IAssignmentSubmissionRepository } from "../../../domain/repositories/courseRepositories/IAssignmentSubmissionRepository";
-
 import { ILessonRepository } from "../../../domain/repositories/courseRepositories/ILessonRepository";
-
 import { IChapterRepository } from "../../../domain/repositories/courseRepositories/IChapterRepository";
-
 import { ICourseRepository } from "../../../domain/repositories/courseRepositories/ICourseRepository";
-
 import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
 
+import {
+    AssignmentSubmission,
+    SubmissionStatus
+} from "../../../domain/entities/AssignmentSubmission";
+
 import { TeacherAssignmentSubmissionDTO } from "../../dtos/assingment/TeacherAssignmentSubmissionDTO";
-
 import { IGetTeacherAssignmentSubmissionsUseCase } from "../../interfaces/assingment/IGetTeacherAssignmentSubmissionsUseCase";
-
 import { TeacherAssignmentSubmissionMapper } from "../../mappers/TeacherAssignmentSubmissionMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
-
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
-
 
 export class GetTeacherAssignmentSubmissionsUseCase
     implements IGetTeacherAssignmentSubmissionsUseCase {
@@ -32,14 +28,13 @@ export class GetTeacherAssignmentSubmissionsUseCase
         private readonly _chapterRepository: IChapterRepository,
         private readonly _courseRepository: ICourseRepository,
         private readonly _userRepository: IUserRepository
-    ) {}
+    ) { }
 
     async execute(
         assignmentId: string,
         teacherId: string
     ): Promise<TeacherAssignmentSubmissionDTO[]> {
 
-        // 1. Validate IDs.
         const objectIdPattern = /^[a-f\d]{24}$/i;
 
         if (
@@ -52,7 +47,6 @@ export class GetTeacherAssignmentSubmissionsUseCase
             );
         }
 
-        // 2. Find assignment.
         const assignment =
             await this._assignmentRepository.findById(assignmentId);
 
@@ -63,7 +57,6 @@ export class GetTeacherAssignmentSubmissionsUseCase
             );
         }
 
-        // 3. Find lesson.
         const lesson =
             await this._lessonRepository.findById(assignment.lessonId);
 
@@ -74,7 +67,6 @@ export class GetTeacherAssignmentSubmissionsUseCase
             );
         }
 
-        // 4. Find chapter.
         const chapter =
             await this._chapterRepository.findById(lesson.chapterId);
 
@@ -85,7 +77,6 @@ export class GetTeacherAssignmentSubmissionsUseCase
             );
         }
 
-        // 5. Find course.
         const course =
             await this._courseRepository.findById(chapter.courseId);
 
@@ -96,7 +87,6 @@ export class GetTeacherAssignmentSubmissionsUseCase
             );
         }
 
-        // 6. Verify teacher ownership.
         if (course.teacherId !== teacherId) {
             throw new AppError(
                 "You are not authorized to view these submissions",
@@ -104,40 +94,50 @@ export class GetTeacherAssignmentSubmissionsUseCase
             );
         }
 
-        // 7. Retrieve all submissions for this assignment.
         const submissions =
             await this._submissionRepository.findByAssignmentId(
                 assignmentId
             );
 
-        if (submissions.length === 0) {
+        // Only completed submissions should appear in teacher results.
+        const completedSubmissions = submissions.filter(
+            (
+                submission
+            ): submission is AssignmentSubmission & {
+                submittedAt: Date;
+            } =>
+                submission.submittedAt instanceof Date &&
+                (
+                    submission.status === SubmissionStatus.SUBMITTED ||
+                    submission.status === SubmissionStatus.GRADED
+                )
+        );
+
+        if (completedSubmissions.length === 0) {
             return [];
         }
 
-        // 8. Retrieve all unique student IDs.
         const studentIds = [
             ...new Set(
-                submissions.map(submission => submission.userId)
+                completedSubmissions.map(
+                    submission => submission.userId
+                )
             )
         ];
 
-        // 9. Fetch all students in one database query.
         const students =
             await this._userRepository.findByIds(studentIds);
 
-        // 10. Create a lookup map for students.
         const studentMap = new Map(
             students.map(student => [student.id, student])
         );
 
-        // 11. Sort submissions by newest first.
-        submissions.sort(
+        completedSubmissions.sort(
             (a, b) =>
                 b.submittedAt.getTime() - a.submittedAt.getTime()
         );
 
-        // 12. Map submissions into teacher DTOs.
-        return submissions.map(submission => {
+        return completedSubmissions.map(submission => {
 
             const student = studentMap.get(submission.userId);
 

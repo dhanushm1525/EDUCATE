@@ -16,6 +16,11 @@ export interface IAssignmentSubmissionRepository {
         userId: string
     ): Promise<AssignmentSubmission[]>;
 
+    findActiveAttempt(
+        assignmentId: string,
+        userId: string
+    ): Promise<AssignmentSubmission | null>;
+
     findByUserId(
         userId: string
     ): Promise<AssignmentSubmission[]>;

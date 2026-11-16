@@ -9,6 +9,10 @@ export class AssignmentSubmissionResultMapper {
             throw new Error("Submission ID is missing");
         }
 
+        if (!submission.submittedAt) {
+            throw new Error("Submission timestamp is missing");
+        }
+
         return {
             submissionId: submission.submissionId,
             assignmentId: submission.assignmentId,
@@ -17,6 +21,7 @@ export class AssignmentSubmissionResultMapper {
             score: submission.score,
             totalMarks: submission.totalMarks,
             passingMarks: submission.passingMarks,
+
             percentage:
                 submission.totalMarks > 0
                     ? Number(
@@ -26,8 +31,8 @@ export class AssignmentSubmissionResultMapper {
                         ).toFixed(2)
                     )
                     : 0,
-            isPassed: submission.isPassed,
 
+            isPassed: submission.isPassed,
             status: submission.status,
 
             teacherFeedback: submission.teacherFeedback,

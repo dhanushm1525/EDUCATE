@@ -106,5 +106,16 @@ router.get(
 );
 
 
+// Start Assignment Attempt
+router.post(
+    "/assignments/student/assignments/:assignmentId/start",
+    dependencies.authenticateUser,
+    roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
+    dependencies.assignments.startAttempt.handle.bind(
+        dependencies.assignments.startAttempt
+    )
+);
+
+
 return router;
 };

@@ -53,6 +53,9 @@ import {
     userRepository
 } from "./repositoryDependencies";
 
+import { StartAssignmentAttemptUseCase } from "../../application/use-cases/assingment/StartAssignmentAttemptUseCase";
+import { StartAssignmentAttemptController } from "../../presentation/controllers/assingment/StartAssignmentAttemptController";
+
 
 export const assignmentRepository =
     new MongoAssignmentRepository();
@@ -175,6 +178,16 @@ const getAssignmentByLessonUseCase =
         courseRepository
     );
 
+    const startAssignmentAttemptUseCase =
+    new StartAssignmentAttemptUseCase(
+        assignmentRepository,
+        lessonRepository,
+        chapterRepository,
+        courseRepository,
+        enrollmentRepository,
+        assignmentSubmissionRepository
+    );
+
 // ==============================
 // CONTROLLERS
 // ==============================
@@ -256,5 +269,11 @@ export const getTeacherAssignmentsController =
 export const getAssignmentByLessonController =
     new GetAssignmentByLessonController(
         getAssignmentByLessonUseCase,
+        identifierValidator
+    );
+
+    export const startAssignmentAttemptController =
+    new StartAssignmentAttemptController(
+        startAssignmentAttemptUseCase,
         identifierValidator
     );

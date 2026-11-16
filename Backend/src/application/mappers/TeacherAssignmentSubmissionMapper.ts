@@ -1,4 +1,3 @@
-
 import { AssignmentSubmission } from "../../domain/entities/AssignmentSubmission";
 import { User } from "../../domain/entities/User";
 
@@ -15,6 +14,10 @@ export class TeacherAssignmentSubmissionMapper {
             throw new Error("Submission ID is missing");
         }
 
+        if (!submission.submittedAt) {
+            throw new Error("Submission timestamp is missing");
+        }
+
         const percentage =
             submission.totalMarks > 0
                 ? Number(
@@ -25,7 +28,6 @@ export class TeacherAssignmentSubmissionMapper {
                 : 0;
 
         return {
-
             submissionId: submission.submissionId,
 
             student: {
@@ -33,7 +35,7 @@ export class TeacherAssignmentSubmissionMapper {
                 firstName: student.firstName,
                 lastName: student.lastName,
                 email: student.email,
-                avatar: student.avatar
+                avatar: student.avatar,
             },
 
             attemptNumber: submission.attemptNumber,
@@ -45,10 +47,9 @@ export class TeacherAssignmentSubmissionMapper {
             percentage,
 
             isPassed: submission.isPassed,
-
             status: submission.status,
 
-            submittedAt: submission.submittedAt
+            submittedAt: submission.submittedAt,
         };
     }
 }

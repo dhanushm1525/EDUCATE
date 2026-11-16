@@ -34,7 +34,6 @@ export class GetTeacherAssignmentsUseCase
             );
         }
 
-        // 1. Get all courses belonging to this teacher.
         const courses =
             await this._courseRepository.findByTeacherId(teacherId);
 
@@ -42,7 +41,6 @@ export class GetTeacherAssignmentsUseCase
             return [];
         }
 
-        // 2. Get chapters for all courses.
         const chapterGroups = await Promise.all(
             courses.map(course =>
                 this._chapterRepository.findByCourseId(
@@ -63,7 +61,6 @@ export class GetTeacherAssignmentsUseCase
             return [];
         }
 
-        // 3. Get lessons for all chapters.
         const lessonGroups = await Promise.all(
             chapterContexts.map(context =>
                 this._lessonRepository.findByChapterId(
@@ -85,7 +82,6 @@ export class GetTeacherAssignmentsUseCase
             return [];
         }
 
-        // 4. Retrieve all assignments using their lesson IDs.
         const lessonIds = lessonContexts
             .map(context => context.lesson.lessonId)
             .filter((id): id is string => Boolean(id));
@@ -97,7 +93,6 @@ export class GetTeacherAssignmentsUseCase
             return [];
         }
 
-        // 5. Create a lookup for lesson, chapter and course details.
         const lessonContextMap = new Map(
             lessonContexts.map(context => [
                 context.lesson.lessonId!,
@@ -105,7 +100,6 @@ export class GetTeacherAssignmentsUseCase
             ])
         );
 
-        // 6. Get submission information for all assignments.
         const submissionGroups = await Promise.all(
             assignments.map(assignment =>
                 this._submissionRepository.findByAssignmentId(
@@ -114,7 +108,6 @@ export class GetTeacherAssignmentsUseCase
             )
         );
 
-        // 7. Build the teacher assignment overview DTOs.
         return assignments.flatMap((assignment, index) => {
 
             const context = lessonContextMap.get(assignment.lessonId);
@@ -136,7 +129,12 @@ export class GetTeacherAssignmentsUseCase
                     submission.status === SubmissionStatus.GRADED
             ).length;
 
-            const totalSubmissions = submissions.length;
+            // Count only completed submissions, not active or expired attempts.
+            const totalSubmissions = submissions.filter(
+                submission =>
+                    submission.status === SubmissionStatus.SUBMITTED ||
+                    submission.status === SubmissionStatus.GRADED
+            ).length;
 
             return [{
                 assignmentId: assignment.assignmentId,

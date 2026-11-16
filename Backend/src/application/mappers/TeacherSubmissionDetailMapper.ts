@@ -1,4 +1,3 @@
-
 import { Assignment } from "../../domain/entities/Assingment";
 import { AssignmentSubmission } from "../../domain/entities/AssignmentSubmission";
 import { User } from "../../domain/entities/User";
@@ -17,10 +16,14 @@ export class TeacherSubmissionDetailMapper {
             throw new Error("Invalid submission or assignment data");
         }
 
+        if (!submission.submittedAt) {
+            throw new Error("Submission timestamp is missing");
+        }
+
         const questionMap = new Map(
             assignment.questions.map(question => [
                 question.questionId,
-                question
+                question,
             ])
         );
 
@@ -42,7 +45,7 @@ export class TeacherSubmissionDetailMapper {
                 correctAnswer: question.correctAnswer,
                 marks: question.marks,
                 isCorrect:
-                    answer.selectedAnswer === question.correctAnswer
+                    answer.selectedAnswer === question.correctAnswer,
             };
         });
 
@@ -56,7 +59,6 @@ export class TeacherSubmissionDetailMapper {
                 : 0;
 
         return {
-
             submissionId: submission.submissionId,
 
             student: {
@@ -64,14 +66,14 @@ export class TeacherSubmissionDetailMapper {
                 firstName: student.firstName,
                 lastName: student.lastName,
                 email: student.email,
-                avatar: student.avatar
+                avatar: student.avatar,
             },
 
             assignment: {
                 assignmentId: assignment.assignmentId,
                 title: assignment.title,
                 totalMarks: assignment.totalMarks,
-                passingMarks: assignment.passingMarks
+                passingMarks: assignment.passingMarks,
             },
 
             attemptNumber: submission.attemptNumber,
@@ -92,7 +94,7 @@ export class TeacherSubmissionDetailMapper {
 
             submittedAt: submission.submittedAt,
             createdAt: submission.createdAt,
-            updatedAt: submission.updatedAt
+            updatedAt: submission.updatedAt,
         };
     }
 }
