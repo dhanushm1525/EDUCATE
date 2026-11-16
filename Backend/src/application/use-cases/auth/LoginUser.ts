@@ -41,6 +41,7 @@ import {
     AUTH_MESSAGES
 } from "../../../shared/messages/authMessages";
 import { ILoginUser } from "../../interfaces/auth/ILoginUser";
+import { UserResponseMapper } from "../../mappers/UserResponseMapper";
 
 
 export class LoginUser implements ILoginUser{
@@ -154,13 +155,7 @@ export class LoginUser implements ILoginUser{
 
         return {
             response: {
-                user: {
-                    id: user.id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    role: user.role
-                },
+                user: UserResponseMapper.toLoginUserDTO(user),
 
                 accessToken
             },

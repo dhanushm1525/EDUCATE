@@ -8,6 +8,7 @@ import {
 
 import { ICreateChapterUseCase } from "../../../application/interfaces/chapter/ICreateChapterUseCase";
 import { ChapterCreationMapper } from "../../../application/mappers/ChapterCreationMapper";
+import { ChapterResponseMapper } from "../../../application/mappers/ChapterResponseMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 
@@ -50,7 +51,7 @@ export class CreateChapterController {
             res.status(HttpStatusCode.CREATED).json({
                 success: true,
                 message: "Chapter created successfully",
-                data: chapter,
+                data: ChapterResponseMapper.toDTO(chapter),
             });
 
         } catch (error) {

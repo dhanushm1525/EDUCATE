@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { ICreateAssignmentUseCase } from "../../../application/interfaces/assingment/ICreateAssignmentUseCase";
 import { IIdentifierValidator } from "../../../application/interfaces/services/IIdentifierValidator";
 import { AssignmentCreationMapper } from "../../../application/mappers/AssignmentCreationMapper";
+import { AssignmentResponseMapper } from "../../../application/mappers/AssignmentResponseMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
@@ -66,7 +67,7 @@ export class CreateAssignmentController {
             res.status(HttpStatusCode.CREATED).json({
                 success: true,
                 message: "Assignment created successfully",
-                data: assignment,
+                data: AssignmentResponseMapper.toDTO(assignment),
             });
 
         } catch (error) {

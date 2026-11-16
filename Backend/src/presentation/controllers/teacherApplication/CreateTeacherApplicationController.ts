@@ -7,6 +7,8 @@ import { ICreateTeacherApplication }
 
 import { TeacherApplicationCreationMapper }
     from "../../../application/mappers/TeacherApplicationCreationMapper";
+import { TeacherApplicationResponseMapper }
+    from "../../../application/mappers/TeacherApplicationResponseMapper";
 
 import { successResponse }
     from "../../../shared/response/apiResponse";
@@ -51,7 +53,7 @@ export class CreateTeacherApplicationController {
                 res,
                 HttpStatusCode.CREATED,
                 "Teacher application submitted successfully",
-                result
+                TeacherApplicationResponseMapper.toDTO(result)
             );
 
         } catch (error) {

@@ -2,6 +2,7 @@ import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 import { Request, Response, NextFunction } from "express";
 import { IGetCategoriesUseCase } from "../../../application/interfaces/category/IGetCategoriesUseCase";
+import { CategoryResponseMapper } from "../../../application/mappers/CategoryResponseMapper";
 
 export class GetCategoriesController {
     constructor(
@@ -19,7 +20,7 @@ export class GetCategoriesController {
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Categories fetched successfully",
-                data: categories
+                data: CategoryResponseMapper.toDTOList(categories)
             });
         } catch (error) {
             next(error);

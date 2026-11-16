@@ -11,6 +11,7 @@ import { GetCurrentUserDTO } from "../../dtos/auth/GetCurrentUserDTO";
 import { GetCurrentUserResponseDTO } from "../../dtos/auth/GetCurrentUserResponseDTO";
 import { IGetCurrentUser } from "../../interfaces/auth/IGetCurrentUser";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
+import { UserResponseMapper } from "../../mappers/UserResponseMapper";
 
 
 export class GetCurrentUser implements IGetCurrentUser{
@@ -41,24 +42,7 @@ export class GetCurrentUser implements IGetCurrentUser{
         }
 
 
-        return {
-
-            id:
-                user.id,
-
-            firstName:
-                user.firstName,
-
-            lastName:
-                user.lastName,
-
-            email:
-                user.email,
-
-            role:
-                user.role
-
-        };
+        return UserResponseMapper.toCurrentUserDTO(user);
 
     }
 

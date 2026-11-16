@@ -5,6 +5,7 @@ import { IGetMyTeacherApplication } from "../../../application/interfaces/teache
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { successResponse } from "../../../shared/response/apiResponse";
+import { TeacherApplicationResponseMapper } from "../../../application/mappers/TeacherApplicationResponseMapper";
 
 export class GetMyTeacherApplicationController {
 
@@ -39,6 +40,8 @@ export class GetMyTeacherApplicationController {
                     ? "Teacher application retrieved successfully"
                     : "No teacher application found",
                 result
+                    ? TeacherApplicationResponseMapper.toDTO(result)
+                    : null
             );
 
         } catch (error) {

@@ -9,6 +9,7 @@ import {
 import { AppError } from "../../../shared/errors/AppError";
 
 import { LessonCreationMapper } from "../../../application/mappers/LessonCreationMapper";
+import { LessonResponseMapper } from "../../../application/mappers/LessonResponseMapper";
 import { IUpdateLessonUseCase } from "../../../application/interfaces/lesson/IUpdateLessonUseCase";
 
 export class UpdateLessonController {
@@ -66,7 +67,7 @@ export class UpdateLessonController {
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Lesson updated successfully",
-                data: updatedLesson,
+                data: LessonResponseMapper.toDTO(updatedLesson),
             });
 
         } catch (error) {

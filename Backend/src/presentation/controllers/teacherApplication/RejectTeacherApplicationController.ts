@@ -11,6 +11,8 @@ import { AppError }
 
 import { successResponse }
     from "../../../shared/response/apiResponse";
+import { TeacherApplicationResponseMapper }
+    from "../../../application/mappers/TeacherApplicationResponseMapper";
 
 export class RejectTeacherApplicationController {
 
@@ -49,12 +51,7 @@ export class RejectTeacherApplicationController {
                 res,
                 HttpStatusCode.OK,
                 "Teacher application rejected successfully",
-                {
-                    applicationId: result.applicationId,
-                    userId: result.userId,
-                    status: result.status,
-                    rejectionReason: result.rejectionReason
-                }
+                TeacherApplicationResponseMapper.toActionDTO(result)
             );
 
         } catch (error: unknown) {

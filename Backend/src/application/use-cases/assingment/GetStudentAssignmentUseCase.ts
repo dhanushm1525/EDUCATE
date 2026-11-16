@@ -10,6 +10,7 @@ import { EnrollmentStatus } from "../../../domain/entities/Enrollment";
 
 import { StudentAssignmentDTO } from "../../dtos/assingment/StudentAssignmentDTO";
 import { IGetStudentAssignmentUseCase } from "../../interfaces/assingment/IGetStudentAssignmentUseCase";
+import { StudentAssignmentMapper } from "../../mappers/StudentAssignmentMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
@@ -135,34 +136,12 @@ export class GetStudentAssignmentUseCase
                 attemptsRemaining > 0
             );
 
-        // 10. Return safe student DTO.
-        return {
-            assignmentId: assignment.assignmentId,
-            lessonId: assignment.lessonId,
-
-            title: assignment.title,
-            description: assignment.description,
-
-            questions: assignment.questions.map(question => ({
-                questionId: question.questionId,
-                question: question.question,
-                options: question.options,
-                marks: question.marks,
-            })),
-
-            totalMarks: assignment.totalMarks,
-            passingMarks: assignment.passingMarks,
-
-            timeLimit: assignment.timeLimit,
-            attemptsAllowed: assignment.attemptsAllowed,
-
-            dueDate: assignment.dueDate ?? null,
-
+        return StudentAssignmentMapper.toDTO(
+            assignment,
             attemptsUsed,
             attemptsRemaining,
-
             isExpired,
-            canAttempt,
-        };
+            canAttempt
+        );
     }
 }

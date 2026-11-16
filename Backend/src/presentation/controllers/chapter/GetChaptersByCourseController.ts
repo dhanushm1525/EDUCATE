@@ -7,6 +7,7 @@ import {
 } from "express";
 
 import { IGetChaptersByCourseUseCase } from "../../../application/interfaces/chapter/IGetChaptersByCourseUseCase";
+import { ChapterResponseMapper } from "../../../application/mappers/ChapterResponseMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 
@@ -45,7 +46,7 @@ export class GetChaptersByCourseController {
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Chapters fetched successfully",
-                data: chapters,
+                data: ChapterResponseMapper.toDTOList(chapters),
             });
 
         } catch (error) {

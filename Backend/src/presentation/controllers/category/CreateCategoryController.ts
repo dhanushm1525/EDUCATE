@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 
 import { ICreateCategoryUseCase } from "../../../application/interfaces/category/ICreateCategoryUseCase";
 import { CategoryCreationMapper } from "../../../application/mappers/CategoryCreationMapper";
+import { CategoryResponseMapper } from "../../../application/mappers/CategoryResponseMapper";
 
 export class CreateCategoryController {
     constructor(
@@ -25,7 +26,7 @@ export class CreateCategoryController {
             res.status(HttpStatusCode.CREATED).json({
                 success: true,
                 message: "Category created successfully",
-                data: category
+                data: CategoryResponseMapper.toDTO(category)
             });
         } catch (error) {
             next(error);

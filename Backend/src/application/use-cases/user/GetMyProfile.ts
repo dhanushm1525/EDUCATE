@@ -11,6 +11,7 @@ import type {
 import { GetMyProfileResponseDTO } from "../../dtos/user/GetMyProfileResponseDTO"
 import { IProfileImagePolicy } from "../../interfaces/user/IProfileImagePolicy";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
+import { UserResponseMapper } from "../../mappers/UserResponseMapper";
 
 export class GetMyProfile {
     constructor(
@@ -51,16 +52,6 @@ export class GetMyProfile {
                 );
         }
 
-        return {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            role: user.role,
-            isVerified: user.isVerified,
-            avatar,
-            status: user.status,
-            createdAt: user.createdAt,
-        };
+        return UserResponseMapper.toProfileDTO(user, avatar);
     }
 }

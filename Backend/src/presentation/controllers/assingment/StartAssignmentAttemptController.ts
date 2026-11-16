@@ -7,6 +7,7 @@ import { IIdentifierValidator } from "../../../application/interfaces/services/I
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
+import { AssignmentSubmissionResponseMapper } from "../../../application/mappers/AssignmentSubmissionResponseMapper";
 
 export class StartAssignmentAttemptController {
 
@@ -52,7 +53,7 @@ export class StartAssignmentAttemptController {
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Assignment attempt started successfully",
-                data: attempt
+                data: AssignmentSubmissionResponseMapper.toDTO(attempt)
             });
 
         } catch (error) {

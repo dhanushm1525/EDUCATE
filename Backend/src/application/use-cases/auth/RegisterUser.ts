@@ -12,6 +12,7 @@ import { RegisterUserResponseDTO } from "../../dtos/auth/RegisterUserResponseDTO
 import { ISendVerificationOtp } from "../../interfaces/auth/ISendVerificationOtp"
 import { AuthProvider } from "../../../shared/enums/AuthProvider"
 import { IRegisterUser } from "../../interfaces/auth/IRegisterUser"
+import { UserResponseMapper } from "../../mappers/UserResponseMapper"
 
 
 export class RegisterUser implements IRegisterUser {
@@ -51,12 +52,6 @@ export class RegisterUser implements IRegisterUser {
         })
 
         
-        return {
-            id: createdUser.id,
-            firstName: createdUser.firstName,
-            lastName: createdUser.lastName,
-            email: createdUser.email,
-            role: createdUser.role
-        };
+        return UserResponseMapper.toRegisterUserDTO(createdUser);
     }
 }

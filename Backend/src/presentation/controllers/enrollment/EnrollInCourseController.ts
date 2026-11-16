@@ -5,6 +5,7 @@ import { IEnrollInCourseUseCase } from "../../../application/interfaces/enrollme
 
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { AppError } from "../../../shared/errors/AppError";
+import { EnrollmentResponseMapper } from "../../../application/mappers/EnrollmentResponseMapper";
 
 export class EnrollInCourseController {
     constructor(
@@ -41,7 +42,7 @@ export class EnrollInCourseController {
             res.status(HttpStatusCode.CREATED).json({
                 success: true,
                 message: "Enrolled in course successfully",
-                data: enrollment,
+                data: EnrollmentResponseMapper.toDTO(enrollment),
             });
         } catch (error) {
             next(error);

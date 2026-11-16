@@ -9,6 +9,7 @@ import { IStorageService } from "../../interfaces/storage/IStorageService";
 import { IGetCourseLearningContentUseCase } from "../../interfaces/course/IGetCourseLearningContentUseCase";
 
 import { CourseLearningContentDTO } from "../../dtos/courses/CourseLearningContentDTO";
+import { CourseLearningContentMapper } from "../../mappers/CourseLearningContentMapper";
 
 export class GetCourseLearningContentUseCase
     implements IGetCourseLearningContentUseCase {
@@ -60,31 +61,20 @@ export class GetCourseLearningContentUseCase
                                 );
                         }
 
-                        return {
-                            lessonId: lesson.lessonId,
-                            title: lesson.title,
-                            description: lesson.description,
-                            order: lesson.order,
-                            type: lesson.type,
-                            duration: lesson.duration,
-                            thumbnailUrl,
-                        };
+                        return CourseLearningContentMapper.toLessonPreviewDTO(
+                            lesson,
+                            thumbnailUrl
+                        );
                     })
                 );
 
-                return {
-                    chapterId: chapter.chapterId,
-                    title: chapter.title,
-                    description: chapter.description,
-                    order: chapter.order,
-                    outcomes: chapter.outcomes,
-                    lessons: lessonPreviews,
-                };
+                return CourseLearningContentMapper.toChapterPreviewDTO(
+                    chapter,
+                    lessonPreviews
+                );
             })
         );
 
-        return {
-            chapters: chapterPreviews,
-        };
+        return CourseLearningContentMapper.toDTO(chapterPreviews);
     }
 }

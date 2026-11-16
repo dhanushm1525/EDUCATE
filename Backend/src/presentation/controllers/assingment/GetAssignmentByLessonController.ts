@@ -17,6 +17,8 @@ import { HttpStatusCode }
 
 import { AUTH_MESSAGES }
     from "../../../shared/messages/authMessages";
+import { AssignmentResponseMapper }
+    from "../../../application/mappers/AssignmentResponseMapper";
 
 export class GetAssignmentByLessonController {
 
@@ -73,7 +75,7 @@ export class GetAssignmentByLessonController {
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Assignment fetched successfully",
-                data: assignment,
+                data: AssignmentResponseMapper.toDTO(assignment),
             });
 
         } catch (error) {

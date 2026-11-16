@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
 import { AppError } from "../../../shared/errors/AppError";
 
 import { LessonCreationMapper } from "../../../application/mappers/LessonCreationMapper";
+import { LessonResponseMapper } from "../../../application/mappers/LessonResponseMapper";
 import { ICreateLessonUseCase } from "../../../application/interfaces/lesson/ICreateLessonUseCase";
 
 export class CreateLessonController {
@@ -52,7 +53,7 @@ export class CreateLessonController {
             res.status(HttpStatusCode.CREATED).json({
                 success: true,
                 message: "Lesson created successfully",
-                data: lesson,
+                data: LessonResponseMapper.toDTO(lesson),
             });
 
         } catch (error) {

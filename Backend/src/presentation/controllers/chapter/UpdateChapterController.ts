@@ -8,6 +8,7 @@ import {
 
 import { IUpdateChapterUseCase } from "../../../application/interfaces/chapter/IUpdateChapterUseCase";
 import { ChapterCreationMapper } from "../../../application/mappers/ChapterCreationMapper";
+import { ChapterResponseMapper } from "../../../application/mappers/ChapterResponseMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 
@@ -50,7 +51,7 @@ export class UpdateChapterController {
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Chapter updated successfully",
-                data: chapter,
+                data: ChapterResponseMapper.toDTO(chapter),
             });
 
         } catch (error) {

@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 
 import { IGetMyEnrolledCoursesUseCase } from "../../../application/interfaces/enrollment/IGetMyEnrolledCoursesUseCase";
 import { CourseResponseService } from "../../../application/services/CourseResponseService";
+import { EnrollmentResponseMapper } from "../../../application/mappers/EnrollmentResponseMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
@@ -32,13 +33,14 @@ export class GetMyEnrolledCoursesController {
                 );
 
             const responseData = await Promise.all(
-                enrolledCourses.map(async (enrollment) => ({
-                    enrollmentId: enrollment.enrollmentId,
-                    enrolledAt: enrollment.enrolledAt,
-                    course: await this._courseResponseService.toDTO(
-                        enrollment.course
-                    ),
-                }))
+                enrolledCourses.map(async enrollment =>
+                    EnrollmentResponseMapper.toEnrolledCourseDTO(
+                        enrollment,
+                        await this._courseResponseService.toDTO(
+                            enrollment.course
+                        )
+                    )
+                )
             );
 
             res.status(HttpStatusCode.OK).json({

@@ -9,6 +9,7 @@ import {
 import { AppError } from "../../../shared/errors/AppError";
 
 import { IGetLessonByIdUseCase } from "../../../application/interfaces/lesson/IGetLessonByIdUseCase";
+import { LessonResponseMapper } from "../../../application/mappers/LessonResponseMapper";
 
 export class GetLessonByIdController {
 
@@ -61,7 +62,7 @@ export class GetLessonByIdController {
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Lesson fetched successfully",
-                data: lesson,
+                data: LessonResponseMapper.toDTO(lesson),
             });
 
         } catch (error) {

@@ -4,6 +4,7 @@ import { IGetAssignmentUseCase } from "../../../application/interfaces/assingmen
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
+import { AssignmentResponseMapper } from "../../../application/mappers/AssignmentResponseMapper";
 
 export class GetAssignmentController {
     constructor(
@@ -47,7 +48,7 @@ export class GetAssignmentController {
         return res.status(HttpStatusCode.OK).json({
             success: true,
             message: "Assignment fetched successfully",
-            data: assignment,
+            data: AssignmentResponseMapper.toDTO(assignment),
         });
     }
 }

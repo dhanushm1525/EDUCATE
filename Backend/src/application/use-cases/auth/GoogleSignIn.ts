@@ -12,6 +12,7 @@ import { UserStatus } from "../../../shared/enums/UserStatus";
 import { AuthProvider } from "../../../shared/enums/AuthProvider";
 import { IGoogleSignIn } from "../../interfaces/auth/IGoogleSignIn";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
+import { UserResponseMapper } from "../../mappers/UserResponseMapper";
 
 export class GoogleSignIn implements IGoogleSignIn{
   constructor(
@@ -78,14 +79,7 @@ export class GoogleSignIn implements IGoogleSignIn{
     
     return {
       response: {
-        user: {
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          avatar: user.avatar,
-          role: user.role,
-        },
+        user: UserResponseMapper.toGoogleSignInUserDTO(user),
         accessToken,
       },
       refreshToken,

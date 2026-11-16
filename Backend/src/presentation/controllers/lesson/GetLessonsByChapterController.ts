@@ -9,6 +9,7 @@ import {
 import { AppError } from "../../../shared/errors/AppError";
 
 import { IGetLessonsByChapterUseCase } from "../../../application/interfaces/lesson/IGetLessonsByChapterUseCase";
+import { LessonResponseMapper } from "../../../application/mappers/LessonResponseMapper";
 
 export class GetLessonsByChapterController {
 
@@ -55,7 +56,7 @@ export class GetLessonsByChapterController {
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Lessons fetched successfully",
-                data: lessons,
+                data: LessonResponseMapper.toDTOList(lessons),
             });
 
         } catch (error) {

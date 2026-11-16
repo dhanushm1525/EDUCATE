@@ -11,6 +11,7 @@ import { IGetTeacherAssignmentsUseCase } from "../../interfaces/assingment/IGetT
 import { SubmissionStatus } from "../../../domain/entities/AssignmentSubmission";
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+import { TeacherAssignmentMapper } from "../../mappers/TeacherAssignmentMapper";
 
 export class GetTeacherAssignmentsUseCase
     implements IGetTeacherAssignmentsUseCase {
@@ -136,36 +137,14 @@ export class GetTeacherAssignmentsUseCase
                     submission.status === SubmissionStatus.GRADED
             ).length;
 
-            return [{
-                assignmentId: assignment.assignmentId,
-                title: assignment.title,
-                description: assignment.description,
-
-                courseId: context.course.courseId,
-                courseTitle: context.course.title,
-
-                chapterId: context.chapter.chapterId,
-                chapterTitle: context.chapter.title,
-
-                lessonId: context.lesson.lessonId,
-                lessonTitle: context.lesson.title,
-
-                totalQuestions: assignment.questions.length,
-                totalMarks: assignment.totalMarks,
-                passingMarks: assignment.passingMarks,
-
-                timeLimit: assignment.timeLimit,
-                attemptsAllowed: assignment.attemptsAllowed,
-                dueDate: assignment.dueDate,
-
+            return [TeacherAssignmentMapper.toDTO(
+                assignment,
+                context.course,
+                context.chapter,
+                context.lesson,
                 totalSubmissions,
-                gradedSubmissions,
-                pendingSubmissions:
-                    totalSubmissions - gradedSubmissions,
-
-                createdAt: assignment.createdAt,
-                updatedAt: assignment.updatedAt
-            }];
+                gradedSubmissions
+            )];
         });
     }
 }

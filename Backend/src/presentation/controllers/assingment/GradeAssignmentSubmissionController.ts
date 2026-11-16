@@ -8,6 +8,7 @@ import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
+import { AssignmentSubmissionResponseMapper } from "../../../application/mappers/AssignmentSubmissionResponseMapper";
 
 export class GradeAssignmentSubmissionController {
 
@@ -75,7 +76,7 @@ export class GradeAssignmentSubmissionController {
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Assignment feedback submitted successfully",
-                data: submission
+                data: AssignmentSubmissionResponseMapper.toDTO(submission)
             });
 
         } catch (error) {

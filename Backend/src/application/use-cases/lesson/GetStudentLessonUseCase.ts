@@ -10,6 +10,7 @@ import { IStorageService } from "../../interfaces/storage/IStorageService";
 import { IGetStudentLessonUseCase } from "../../interfaces/lesson/IGetStudentLessonUseCase";
 
 import { StudentLessonDTO } from "../../dtos/lesson/StudentLessonDTO";
+import { StudentLessonMapper } from "../../mappers/StudentLessonMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
@@ -123,18 +124,10 @@ export class GetStudentLessonUseCase
         );
 
         // 7. Return student-safe lesson data.
-        return {
-            lessonId: lesson.lessonId!,
-            chapterId: lesson.chapterId,
-            title: lesson.title,
-            description: lesson.description,
-            order: lesson.order,
-            type: lesson.type,
-            duration: lesson.duration,
+        return StudentLessonMapper.toDTO(lesson, {
             videoUrl,
             thumbnailUrl,
             attachments,
-            content: lesson.content
-        };
+        });
     }
 }

@@ -11,6 +11,8 @@ import { AppError }
 
 import { successResponse }
     from "../../../shared/response/apiResponse";
+import { TeacherApplicationResponseMapper }
+    from "../../../application/mappers/TeacherApplicationResponseMapper";
 
 export class ApproveTeacherApplicationController {
 
@@ -46,11 +48,7 @@ export class ApproveTeacherApplicationController {
                 res,
                 HttpStatusCode.OK,
                 "Teacher application approved successfully",
-                {
-                    applicationId: result.applicationId,
-                    userId: result.userId,
-                    status: result.status
-                }
+                TeacherApplicationResponseMapper.toActionDTO(result)
             );
 
         } catch (error: unknown) {

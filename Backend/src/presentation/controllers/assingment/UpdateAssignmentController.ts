@@ -8,6 +8,7 @@ import { IUpdateAssignmentUseCase } from "../../../application/interfaces/assing
 import { IIdentifierValidator } from "../../../application/interfaces/services/IIdentifierValidator";
 
 import { AssignmentCreationMapper } from "../../../application/mappers/AssignmentCreationMapper";
+import { AssignmentResponseMapper } from "../../../application/mappers/AssignmentResponseMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
@@ -75,7 +76,7 @@ export class UpdateAssignmentController {
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Assignment updated successfully",
-                data: assignment,
+                data: AssignmentResponseMapper.toDTO(assignment),
             });
 
         } catch (error) {
