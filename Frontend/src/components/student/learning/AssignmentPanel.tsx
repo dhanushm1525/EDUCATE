@@ -243,7 +243,11 @@ export default function AssignmentPanel({ lessonId }: Props) {
             return;
           }
 
-          await assignmentService.saveAnswers(assignmentId, answerPayload);
+          await assignmentService.saveAnswers(
+            assignmentId,
+            attemptId,
+            answerPayload,
+          );
         })
         .catch((error: unknown) => {
           setErrorMessage(
@@ -348,9 +352,10 @@ export default function AssignmentPanel({ lessonId }: Props) {
       // Save the latest snapshot before submitting.
       await assignmentService.saveAnswers(
         assignment.assignmentId,
+        activeAttempt.submissionId,
         assignment.questions.map((question) => ({
           questionId: question.questionId,
-          selectedAnswer: currentAnswers[question.questionId],
+          selectedAnswer: answersRef.current[question.questionId] ?? "",
         })),
       );
 
@@ -429,7 +434,6 @@ export default function AssignmentPanel({ lessonId }: Props) {
     (a, b) =>
       new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime(),
   )[0];
-
 
   const allAnswered = assignment.questions.every((question) =>
     Boolean(answers[question.questionId]),

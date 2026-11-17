@@ -33,9 +33,10 @@ export class SaveAssignmentAnswersController {
                 );
             }
 
-            // 2. Validate assignment ID.
-            const { assignmentId } = req.params;
+            // 2. Extract route parameters.
+            const { assignmentId, submissionId } = req.params;
 
+            // 3. Validate assignment ID.
             if (
                 !assignmentId ||
                 Array.isArray(assignmentId) ||
@@ -47,7 +48,19 @@ export class SaveAssignmentAnswersController {
                 );
             }
 
-            // 3. Validate answers payload.
+            // 4. Validate submission ID.
+            if (
+                !submissionId ||
+                Array.isArray(submissionId) ||
+                !this._identifierValidator.isValid(submissionId)
+            ) {
+                throw new AppError(
+                    "Invalid submission ID",
+                    HttpStatusCode.BAD_REQUEST
+                );
+            }
+
+            // 5. Validate answers payload.
             const { answers } = req.body;
 
             if (!Array.isArray(answers)) {
@@ -57,19 +70,20 @@ export class SaveAssignmentAnswersController {
                 );
             }
 
-            // 4. Execute use case.
+            // 6. Execute use case.
             const submission =
                 await this._saveAssignmentAnswersUseCase.execute({
                     assignmentId,
                     userId: req.user.userId,
-                    answers
+                    submissionId,
+                    answers,
                 });
 
-            // 5. Return response.
+            // 7. Return response.
             res.status(HttpStatusCode.OK).json({
                 success: true,
                 message: "Assignment answers saved successfully",
-                data: AssignmentSubmissionResponseMapper.toDTO(submission)
+                data: AssignmentSubmissionResponseMapper.toDTO(submission),
             });
 
         } catch (error) {

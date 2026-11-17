@@ -4,5 +4,6 @@ import { AssignmentSubmissionAnswer } from "../../../domain/entities/AssignmentS
 export interface SaveAssignmentAnswersDTO {
     assignmentId: string;
     userId: string;
+    submissionId: string;
     answers: AssignmentSubmissionAnswer[];
 }

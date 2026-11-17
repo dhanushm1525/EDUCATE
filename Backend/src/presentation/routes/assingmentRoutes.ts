@@ -22,7 +22,7 @@ router.get(
 
 // Save Assignment Answers
 router.patch(
-    "/assignments/student/assignments/:assignmentId/answers",
+    "/assignments/student/assignments/:assignmentId/attempts/:submissionId/answers",
     dependencies.authenticateUser,
     roleMiddleware([UserRole.STUDENT, UserRole.TEACHER]),
     dependencies.assignments.saveAnswers.handle.bind(

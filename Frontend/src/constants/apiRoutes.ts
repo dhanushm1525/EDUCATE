@@ -143,8 +143,8 @@ student: {
     results: (assignmentId: string) =>
         `/assignments/student/assignments/${assignmentId}/results`,
 
-    saveAnswers: (assignmentId: string) =>
-    `/assignments/student/assignments/${assignmentId}/answers`,
+    saveAnswers: (assignmentId: string, submissionId: string) =>
+    `/assignments/student/assignments/${assignmentId}/attempts/${submissionId}/answers`,
 },
 
   },

@@ -154,10 +154,14 @@ export const assignmentService = {
 
     saveAnswers: async (
         assignmentId: string,
+        submissionId: string,
         answers: SubmitAssignmentRequest["answers"]
     ): Promise<void> => {
         await apiClient.patch(
-            API_ROUTES.assignments.student.saveAnswers(assignmentId),
+            API_ROUTES.assignments.student.saveAnswers(
+                assignmentId,
+                submissionId
+            ),
             { answers }
         );
     },

@@ -30,23 +30,29 @@ export class SaveAssignmentAnswersUseCase
         private readonly _courseRepository: ICourseRepository,
         private readonly _enrollmentRepository: IEnrollmentRepository,
         private readonly _submissionRepository: IAssignmentSubmissionRepository
-    ) {}
+    ) { }
 
     async execute(
         dto: SaveAssignmentAnswersDTO
     ): Promise<AssignmentSubmission> {
 
-        const { assignmentId, userId, answers } = dto;
+        const {
+            assignmentId,
+            userId,
+            submissionId,
+            answers
+        } = dto;
 
         // 1. Validate IDs.
         const objectIdPattern = /^[a-f\d]{24}$/i;
 
         if (
             !objectIdPattern.test(assignmentId) ||
-            !objectIdPattern.test(userId)
+            !objectIdPattern.test(userId) ||
+            !objectIdPattern.test(submissionId)
         ) {
             throw new AppError(
-                "Invalid assignment ID or user ID",
+                "Invalid assignment, user or submission ID",
                 HttpStatusCode.BAD_REQUEST
             );
         }
@@ -118,7 +124,7 @@ export class SaveAssignmentAnswersUseCase
             );
         }
 
-        // 6. Find the existing active attempt.
+        // 6. Find the active attempt.
         const activeAttempt =
             await this._submissionRepository.findActiveAttempt(
                 assignmentId,
@@ -132,9 +138,17 @@ export class SaveAssignmentAnswersUseCase
             );
         }
 
+        // 7. Verify that the requested submission is the active attempt.
+        if (activeAttempt.submissionId !== submissionId) {
+            throw new AppError(
+                "The requested submission is not the active attempt",
+                HttpStatusCode.BAD_REQUEST
+            );
+        }
+
         const now = new Date();
 
-        // 7. Check attempt expiry and assignment deadline.
+        // 8. Check attempt expiry and assignment deadline.
         const attemptExpired =
             activeAttempt.expiresAt !== undefined &&
             now.getTime() >= activeAttempt.expiresAt.getTime();
@@ -160,7 +174,7 @@ export class SaveAssignmentAnswersUseCase
             );
         }
 
-        // 8. Validate question IDs and prevent duplicates.
+        // 9. Validate question IDs and prevent duplicates.
         const questionMap = new Map(
             assignment.questions.map(question => [
                 question.questionId,
@@ -221,17 +235,18 @@ export class SaveAssignmentAnswersUseCase
             });
         }
 
-        // 9. Save answers to the existing IN_PROGRESS attempt.
+        // 10. Save answers to the exact active attempt.
         const savedSubmission =
             await this._submissionRepository.updateAnswers(
                 assignmentId,
                 userId,
+                submissionId,
                 validatedAnswers
             );
 
         if (!savedSubmission) {
             throw new AppError(
-                "Unable to save answers. Your attempt may have expired.",
+                "Unable to save answers. Your attempt may have expired or is no longer active.",
                 HttpStatusCode.BAD_REQUEST
             );
         }

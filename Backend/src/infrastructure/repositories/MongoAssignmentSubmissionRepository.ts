@@ -149,41 +149,39 @@ export class MongoAssignmentSubmissionRepository
         );
     }
 
-
-
     async updateAnswers(
         assignmentId: string,
         userId: string,
+        submissionId: string,
         answers: AssignmentSubmission["answers"]
     ): Promise<AssignmentSubmission | null> {
 
         const now = new Date();
 
-        const document =
-            await AssignmentSubmissionModel.findOneAndUpdate(
-                {
-                    assignmentId: new Types.ObjectId(assignmentId),
-                    userId: new Types.ObjectId(userId),
-                    status: SubmissionStatus.IN_PROGRESS,
-
-                    $or: [
-                        { expiresAt: { $gt: now } },
-                        { expiresAt: { $exists: false } },
-                    ],
+        const document = await AssignmentSubmissionModel.findOneAndUpdate(
+            {
+                _id: new Types.ObjectId(submissionId),
+                assignmentId: new Types.ObjectId(assignmentId),
+                userId: new Types.ObjectId(userId),
+                status: SubmissionStatus.IN_PROGRESS,
+                $or: [
+                    { expiresAt: { $gt: now } },
+                    { expiresAt: { $exists: false } },
+                ],
+            },
+            {
+                $set: {
+                    answers: answers.map((answer) => ({
+                        questionId: answer.questionId,
+                        selectedAnswer: answer.selectedAnswer,
+                    })),
                 },
-                {
-                    $set: {
-                        answers: answers.map(answer => ({
-                            questionId: answer.questionId,
-                            selectedAnswer: answer.selectedAnswer,
-                        })),
-                    },
-                },
-                {
-                    new: true,
-                    runValidators: true,
-                }
-            );
+            },
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
 
         if (!document) {
             return null;
@@ -193,5 +191,4 @@ export class MongoAssignmentSubmissionRepository
             document
         );
     }
-
 }

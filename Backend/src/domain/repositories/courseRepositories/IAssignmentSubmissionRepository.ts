@@ -2,6 +2,7 @@
 import { AssignmentSubmission } from "../../entities/AssignmentSubmission";
 
 export interface IAssignmentSubmissionRepository {
+
     create(
         submission: AssignmentSubmission
     ): Promise<AssignmentSubmission>;
@@ -36,6 +37,7 @@ export interface IAssignmentSubmissionRepository {
     updateAnswers(
         assignmentId: string,
         userId: string,
+        submissionId: string,
         answers: AssignmentSubmission["answers"]
     ): Promise<AssignmentSubmission | null>;
 }
