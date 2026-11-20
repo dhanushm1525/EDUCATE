@@ -16,12 +16,18 @@ export default function CourseDetailsPage() {
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
+  const user = useAuthStore((state) => state.user);
+
+  const learningRoute =
+    user?.role === "teacher"
+      ? `/teacher/learn/${courseId}`
+      : `/student/courses/${courseId}/learn`;
+
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [checkingEnrollment, setCheckingEnrollment] = useState(false);
   const [enrolling, setEnrolling] = useState(false);
   const [enrollmentError, setEnrollmentError] = useState<string | null>(null);
 
-  // Check whether the current user is already enrolled.
   useEffect(() => {
     let isMounted = true;
 
@@ -62,7 +68,6 @@ export default function CourseDetailsPage() {
     };
   }, [courseId, isAuthenticated]);
 
-  // Handle enrollment.
   const handleEnroll = async () => {
     if (!courseId || !course) return;
 
@@ -71,7 +76,6 @@ export default function CourseDetailsPage() {
       return;
     }
 
-    // Paid enrollment requires payment integration.
     if (course.finalPrice > 0) {
       setEnrollmentError(
         "Online payment for paid courses is not available yet.",
@@ -88,8 +92,7 @@ export default function CourseDetailsPage() {
       await enrollmentService.enroll(courseId);
 
       setIsEnrolled(true);
-
-      navigate(`/student/courses/${courseId}/learn`);
+      navigate(learningRoute);
     } catch (error) {
       setEnrollmentError(getApiErrorMessage(error));
     } finally {
@@ -99,7 +102,7 @@ export default function CourseDetailsPage() {
 
   const handleGoToLearning = () => {
     if (courseId) {
-      navigate(`/student/courses/${courseId}/learn`);
+      navigate(learningRoute);
     }
   };
 

@@ -7,6 +7,7 @@ import type { CourseProgress } from "../../types/courseProgress";
 interface EnrolledCourseCardProps {
   enrollment: EnrolledCourse;
   progress?: CourseProgress;
+  learningBasePath?: string;
 }
 
 function formatDate(date?: string): string {
@@ -20,7 +21,9 @@ function formatDate(date?: string): string {
 }
 
 function formatDuration(duration: number): string {
-  if (!duration || duration <= 0) return "Duration unavailable";
+  if (!duration || duration <= 0) {
+    return "Duration unavailable";
+  }
 
   const hours = Math.floor(duration / 60);
   const minutes = duration % 60;
@@ -34,6 +37,7 @@ function formatDuration(duration: number): string {
 export default function EnrolledCourseCard({
   enrollment,
   progress,
+  learningBasePath = "/student/courses",
 }: EnrolledCourseCardProps) {
   const { course } = enrollment;
 
@@ -41,6 +45,11 @@ export default function EnrolledCourseCard({
     100,
     Math.max(0, progress?.progressPercentage ?? 0),
   );
+
+  const learningPath =
+    learningBasePath === "/teacher/learn"
+      ? `${learningBasePath}/${course.courseId}`
+      : `${learningBasePath}/${course.courseId}/learn`;
 
   return (
     <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
@@ -91,7 +100,6 @@ export default function EnrolledCourseCard({
           <span>{course.language || "Language unavailable"}</span>
         </div>
 
-        {/* Learning progress */}
         <div className="mt-5 rounded-xl bg-slate-50 p-4">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm font-semibold text-slate-700">
@@ -138,7 +146,7 @@ export default function EnrolledCourseCard({
           </p>
 
           <Link
-            to={`/student/courses/${course.courseId}/learn`}
+            to={learningPath}
             className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700"
           >
             {progress?.isCompleted

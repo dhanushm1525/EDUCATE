@@ -30,6 +30,10 @@ import TeacherAssignmentSubmissionsPage from "../../pages/teacher/TeacherAssignm
 import TeacherSubmissionDetailPage from "../../pages/teacher/TeacherSubmissionDetailPage";
 import TeacherAssignmentOverviewPage from "../../pages/teacher/TeacherAssignmentOverviewPage";
 
+import TeacherCoursesPage from "../../pages/teacher/TeacherCoursesPage";
+import TeacherMyLearningPage from "../../pages/teacher/TeacherMyLearningPage";
+import TeacherLearningPage from "../../pages/teacher/TeacherLearningPage";
+
 // Admin pages
 import AdminDashboard from "../../pages/admin/AdminDashboard";
 import AdminProfilePage from "../../components/admin/AdminProfilePage";
@@ -66,11 +70,8 @@ export function AppRouter() {
       {/* Student routes */}
       <Route element={<RoleRoute allowedRoles={["student"]} />}>
         <Route path="/student" element={<StudentDashboardPage />} />
-
         <Route path="/student/profile" element={<StudentProfilePage />} />
-
         <Route path="/student/courses" element={<StudentCoursesPage />} />
-
         <Route path="/student/my-courses" element={<MyLearningPage />} />
 
         <Route
@@ -84,10 +85,24 @@ export function AppRouter() {
       {/* Teacher routes */}
       <Route element={<RoleRoute allowedRoles={["teacher"]} />}>
         <Route path="/teacher" element={<TeacherDashboard />} />
-
         <Route path="/teacher/profile" element={<TeacherProfilePage />} />
 
         <Route path="/teacher/courses" element={<MyCoursesPage />} />
+
+        <Route
+          path="/teacher/explore-courses"
+          element={<TeacherCoursesPage />}
+        />
+
+        <Route
+          path="/teacher/my-learning"
+          element={<TeacherMyLearningPage />}
+        />
+
+        <Route
+          path="/teacher/learn/:courseId"
+          element={<TeacherLearningPage />}
+        />
 
         <Route path="/teacher/courses/create" element={<CreateCoursePage />} />
 
@@ -126,7 +141,6 @@ export function AppRouter() {
       <Route element={<RoleRoute allowedRoles={["admin"]} />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<AdminDashboard />} />
-
           <Route path="/admin/profile" element={<AdminProfilePage />} />
 
           <Route
@@ -135,9 +149,7 @@ export function AppRouter() {
           />
 
           <Route path="/admin/categories" element={<CategoriesPage />} />
-
           <Route path="/admin/students" element={<AdminStudentsPage />} />
-
           <Route path="/admin/teachers" element={<AdminTeachersPage />} />
 
           <Route
