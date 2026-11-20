@@ -16,6 +16,7 @@ import { MongoEnrollmentRepository } from "../repositories/MongoEnrollmentReposi
 import { MongoAssignmentSubmissionRepository } from "../repositories/MongoAssignmentSubmissionRepository";
 
 import { MongoCourseProgressRepository } from "../repositories/MongoCourseProgressRepository";
+import { MongoAssignmentRepository } from "../repositories/MongoAssignmentRepository";
 
 
 export const userRepository = new MongoUserRepository();
@@ -37,3 +38,5 @@ export const assignmentSubmissionRepository =
 
 
 export const courseProgressRepository = new MongoCourseProgressRepository();
+
+export const assignmentRepository = new MongoAssignmentRepository();

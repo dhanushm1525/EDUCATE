@@ -7,13 +7,13 @@ import { RecordLessonAccessController } from "../../presentation/controllers/cou
 import { CompleteLessonController } from "../../presentation/controllers/courseProgress/CompleteLessonController";
 import { GetMyCourseProgressController } from "../../presentation/controllers/courseProgress/GetMyCourseProgressController";
 import { SaveVideoProgressController } from "../../presentation/controllers/courseProgress/SaveVideoProgressController";
-
 import {
     courseProgressRepository,
     enrollmentRepository,
     courseRepository,
     chapterRepository,
     lessonRepository,
+    assignmentRepository,
 } from "./repositoryDependencies";
 
 const recordLessonAccessUseCase = new RecordLessonAccessUseCase(
@@ -35,7 +35,8 @@ const getMyCourseProgressUseCase = new GetMyCourseProgressUseCase(
     enrollmentRepository,
     courseRepository,
     chapterRepository,
-    lessonRepository
+    lessonRepository,
+    assignmentRepository
 );
 
 const saveVideoProgressUseCase = new SaveVideoProgressUseCase(

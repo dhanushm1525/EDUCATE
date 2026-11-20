@@ -6,6 +6,8 @@ import {
     lessonRepository,
     chapterRepository,
     courseRepository,
+    enrollmentRepository,
+    assignmentRepository
 } from "./repositoryDependencies";
 
 import { DefaultCourseStatusPolicy } from "../../domain/policies/CourseStatusPolicy";
@@ -40,12 +42,12 @@ import { env } from "../config/env";
 
 import { CleanupLessonMediaUseCase } from "../../application/use-cases/lesson/CleanupLessonMediaUseCase";
 import { CleanupLessonMediaController } from "../../presentation/controllers/lesson/CleanupLessonMediaController";
-import { assignmentRepository } from "./assignmentDependencies";
+
 
 import { GetStudentLessonUseCase } from "../../application/use-cases/lesson/GetStudentLessonUseCase";
 import { GetStudentLessonController } from "../../presentation/controllers/lesson/GetStudentLessonController";
 
-import { enrollmentRepository } from "./repositoryDependencies";
+
 import { s3StorageService } from "./storageDependencies";
 
 const courseStatusPolicy =

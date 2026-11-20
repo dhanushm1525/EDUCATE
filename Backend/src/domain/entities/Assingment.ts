@@ -16,6 +16,8 @@ export interface Assignment {
 
     dueDate?: Date | null;
 
+    isRequired: boolean;
+
     createdAt: Date;
     updatedAt: Date;
 }

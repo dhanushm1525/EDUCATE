@@ -1,5 +1,5 @@
 
-import { MongoAssignmentRepository } from "../repositories/MongoAssignmentRepository";
+
 
 import { CreateAssignmentUseCase } from "../../application/use-cases/assingment/CreateAssignmentUseCase";
 import { GetAssignmentUseCase } from "../../application/use-cases/assingment/GetAssignmentUseCase";
@@ -47,10 +47,12 @@ import { GetAssignmentByLessonController }
 import {
     enrollmentRepository,
     assignmentSubmissionRepository,
+    assignmentRepository,
     lessonRepository,
     courseRepository,
     chapterRepository,
-    userRepository
+    userRepository,
+    courseProgressRepository
 } from "./repositoryDependencies";
 
 import { StartAssignmentAttemptUseCase } from "../../application/use-cases/assingment/StartAssignmentAttemptUseCase";
@@ -62,8 +64,7 @@ import { SaveAssignmentAnswersController }
     from "../../presentation/controllers/assingment/SaveAssignmentAnswersController";
 
 
-export const assignmentRepository =
-    new MongoAssignmentRepository();
+
 
 
 const identifierValidator = new MongoObjectIdValidator();
@@ -127,7 +128,8 @@ const submitAssignmentUseCase =
         chapterRepository,
         courseRepository,
         enrollmentRepository,
-        assignmentSubmissionRepository
+        assignmentSubmissionRepository,
+        courseProgressRepository
     );
 
 

@@ -132,6 +132,10 @@ export class UpdateAssignmentUseCase
             attemptsAllowed,
             dueDate,
             updatedAt: new Date(),
+            isRequired:
+                dto.isRequired !== undefined
+                    ? dto.isRequired
+                    : existingAssignment.isRequired ?? true,
         };
 
         const updatedAssignment =

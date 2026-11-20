@@ -201,6 +201,18 @@ export default function StudentLearningPage() {
     }
   };
 
+  // Refresh course progress from the backend.
+  const refreshCourseProgress = async () => {
+    if (!courseId) return;
+
+    const allProgress = await courseProgressService.getMyProgress();
+
+    const updatedProgress =
+      allProgress.find((item) => item.courseId === courseId) ?? null;
+
+    setProgress(updatedProgress);
+  };
+
   const handleVideoProgress = async (lessonId: string, percentage: number) => {
     if (!courseId || !lessonId) return;
 
@@ -233,13 +245,7 @@ export default function StudentLearningPage() {
 
     try {
       await courseProgressService.completeLesson(courseId, lessonId);
-
-      const allProgress = await courseProgressService.getMyProgress();
-
-      const updatedProgress =
-        allProgress.find((item) => item.courseId === courseId) ?? null;
-
-      setProgress(updatedProgress);
+      await refreshCourseProgress();
     } catch (error) {
       console.error("Unable to complete video lesson:", error);
       setErrorMessage(getApiErrorMessage(error));
@@ -262,13 +268,7 @@ export default function StudentLearningPage() {
 
     try {
       await courseProgressService.completeLesson(courseId, lessonId);
-
-      const allProgress = await courseProgressService.getMyProgress();
-
-      const updatedProgress =
-        allProgress.find((item) => item.courseId === courseId) ?? null;
-
-      setProgress(updatedProgress);
+      await refreshCourseProgress();
     } catch (error) {
       console.error("Unable to complete reading lesson:", error);
       setErrorMessage(getApiErrorMessage(error));
@@ -276,6 +276,22 @@ export default function StudentLearningPage() {
       completingLessonsRef.current.delete(lessonId);
     }
   };
+
+  const progressPercentage = Math.min(
+    100,
+    Math.max(0, progress?.progressPercentage ?? 0),
+  );
+
+  const completedAssignments = progress?.completedRequiredAssignments ?? 0;
+
+  const totalRequiredAssignments = progress?.totalRequiredAssignments ?? 0;
+
+  const remainingAssignments = progress?.remainingRequiredAssignments ?? 0;
+
+  const assignmentProgressPercentage =
+    totalRequiredAssignments > 0
+      ? (completedAssignments / totalRequiredAssignments) * 100
+      : 0;
 
   if (loading) {
     return (
@@ -334,44 +350,79 @@ export default function StudentLearningPage() {
             <p className="mt-1 text-sm text-slate-500">{course.subtitle}</p>
           )}
 
+          {/* Overall course progress */}
           <div className="mt-5 max-w-2xl">
             <div className="mb-2 flex items-center justify-between text-sm">
               <span className="font-semibold text-slate-700">
                 Course progress
               </span>
               <span className="font-bold text-indigo-600">
-                {progress?.progressPercentage ?? 0}%
+                {progressPercentage}%
               </span>
             </div>
 
             <div className="h-2 overflow-hidden rounded-full bg-slate-100">
               <div
                 className="h-full rounded-full bg-indigo-600 transition-all duration-500"
-                style={{
-                  width: `${Math.min(
-                    100,
-                    Math.max(0, progress?.progressPercentage ?? 0),
-                  )}%`,
-                }}
+                style={{ width: `${progressPercentage}%` }}
               />
             </div>
 
-            <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-500">
-              <span>{progress?.completedLessons ?? 0} completed</span>
-              <span>
-                {progress?.remainingLessons ?? allLessons.length} remaining
-              </span>
-              <span>
-                {progress?.totalLessons ?? allLessons.length} total lessons
-              </span>
-            </div>
+            {/* Lesson progress */}
+            <div className="mt-3 space-y-3">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-500">
+                <span>
+                  Lessons: {progress?.completedLessons ?? 0} /{" "}
+                  {progress?.totalLessons ?? allLessons.length} completed
+                </span>
+                <span>
+                  {progress?.remainingLessons ?? allLessons.length} lessons
+                  remaining
+                </span>
+              </div>
 
-            {progress?.isCompleted && (
-              <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-green-600">
-                <CheckCircle2 size={17} />
-                Course completed!
-              </p>
-            )}
+              {/* Required assignment progress */}
+              {totalRequiredAssignments > 0 && (
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <div className="mb-2 flex items-center justify-between gap-3">
+                    <h3 className="text-sm font-semibold text-slate-700">
+                      Required assignments
+                    </h3>
+                    <span className="text-sm font-semibold text-indigo-600">
+                      {completedAssignments} / {totalRequiredAssignments}
+                    </span>
+                  </div>
+
+                  <div className="h-2 overflow-hidden rounded-full bg-slate-200">
+                    <div
+                      className="h-full rounded-full bg-indigo-600 transition-all duration-500"
+                      style={{
+                        width: `${assignmentProgressPercentage}%`,
+                      }}
+                    />
+                  </div>
+
+                  <p className="mt-2 text-xs text-slate-500">
+                    {remainingAssignments} required assignments remaining
+                  </p>
+                </div>
+              )}
+
+              {/* Course completion */}
+              {progress?.isCompleted && (
+                <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 p-4">
+                  <CheckCircle2 className="shrink-0 text-green-600" size={22} />
+                  <div>
+                    <p className="text-sm font-semibold text-green-700">
+                      Course completed!
+                    </p>
+                    <p className="mt-1 text-xs text-green-600">
+                      You have completed all lessons and required assignments.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -444,6 +495,7 @@ export default function StudentLearningPage() {
               <AssignmentPanel
                 key={selectedLesson.lessonId}
                 lessonId={selectedLesson.lessonId}
+                onAssignmentSubmitted={refreshCourseProgress}
               />
 
               <div className="mt-10 flex items-center justify-between border-t border-slate-200 pt-6">

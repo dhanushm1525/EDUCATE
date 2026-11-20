@@ -100,6 +100,7 @@ export class CreateAssignmentUseCase
             timeLimit: dto.timeLimit,
             attemptsAllowed: dto.attemptsAllowed,
             dueDate,
+            isRequired: dto.isRequired ?? true,
             createdAt: now,
             updatedAt: now,
         };

@@ -9,4 +9,5 @@ export interface CreateAssignmentDTO {
     timeLimit?: number;
     attemptsAllowed?: number;
     dueDate?: string | null;
+    isRequired?: boolean;
 }

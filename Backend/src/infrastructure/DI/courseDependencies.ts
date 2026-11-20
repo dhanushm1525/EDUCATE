@@ -5,7 +5,8 @@ import { CreateCourseController } from "../../presentation/controllers/course/Cr
 import {
     chapterRepository,
     courseRepository,
-    lessonRepository
+    lessonRepository,
+    assignmentRepository
 } from "./repositoryDependencies";
 
 import { UpdateCourseUseCase } from "../../application/use-cases/course/UpdateCourseUseCase";
@@ -16,7 +17,6 @@ import { DefaultCourseStatusPolicy } from "../../domain/policies/CourseStatusPol
 import { SubmitCourseUseCase } from "../../application/use-cases/course/SubmitCourseUseCase";
 import { SubmitCourseController } from "../../presentation/controllers/course/SubmitCourseController";
 
-import { assignmentRepository } from "./assignmentDependencies";
 
 import { GetMyCoursesUseCase } from "../../application/use-cases/course/GetMyCoursesUseCase";
 import { GetMyCoursesController } from "../../presentation/controllers/course/GetMyCoursesController";

@@ -23,6 +23,7 @@ import type {
 
 interface Props {
   lessonId: string;
+  onAssignmentSubmitted?: () => void | Promise<void>;
 }
 
 const formatTime = (seconds: number): string => {
@@ -39,7 +40,10 @@ const formatTime = (seconds: number): string => {
   ].join(":");
 };
 
-export default function AssignmentPanel({ lessonId }: Props) {
+export default function AssignmentPanel({
+  lessonId,
+  onAssignmentSubmitted,
+}: Props) {
   const [assignment, setAssignment] = useState<StudentAssignment | null>(null);
 
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -57,14 +61,8 @@ export default function AssignmentPanel({ lessonId }: Props) {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const expiredAttemptRef = useRef<string | null>(null);
-
-  // Keep the latest answers available to asynchronous callbacks.
   const answersRef = useRef<Record<string, string>>({});
-
-  // Track the current active attempt.
   const activeAttemptRef = useRef<string | null>(null);
-
-  // Serialize answer-saving requests.
   const saveQueueRef = useRef<Promise<void>>(Promise.resolve());
 
   // Restore answers from the backend.
@@ -182,7 +180,6 @@ export default function AssignmentPanel({ lessonId }: Props) {
   }, [activeAttempt?.submissionId, activeAttempt?.expiresAt]);
 
   // Refresh assignment when the timer expires.
-  // Backend remains responsible for marking the attempt EXPIRED.
   useEffect(() => {
     if (
       !activeAttempt?.expiresAt ||
@@ -238,7 +235,6 @@ export default function AssignmentPanel({ lessonId }: Props) {
           // Allow the queue to continue after an earlier failure.
         })
         .then(async () => {
-          // Do not save answers for an attempt that is no longer active.
           if (activeAttemptRef.current !== attemptId) {
             return;
           }
@@ -346,10 +342,8 @@ export default function AssignmentPanel({ lessonId }: Props) {
       setErrorMessage(null);
       setSuccessMessage(null);
 
-      // Wait for any previous autosave requests to finish.
       await saveQueueRef.current;
 
-      // Save the latest snapshot before submitting.
       await assignmentService.saveAnswers(
         assignment.assignmentId,
         activeAttempt.submissionId,
@@ -377,6 +371,13 @@ export default function AssignmentPanel({ lessonId }: Props) {
       setSuccessMessage("Your assignment was submitted successfully.");
 
       await loadAssignment();
+
+      // Refresh course progress after successful submission.
+      try {
+        await onAssignmentSubmitted?.();
+      } catch (error) {
+        console.error("Unable to refresh course progress:", error);
+      }
     } catch (error) {
       setErrorMessage(getApiErrorMessage(error));
     } finally {

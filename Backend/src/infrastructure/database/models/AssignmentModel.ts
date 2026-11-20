@@ -27,6 +27,7 @@ export interface AssignmentDocument extends Document {
 
     createdAt: Date;
     updatedAt: Date;
+    isRequired: boolean;
 }
 
 const assignmentQuestionSchema =
@@ -117,6 +118,11 @@ const assignmentSchema =
             dueDate: {
                 type: Date,
                 default: null,
+            },
+            isRequired: {
+                type: Boolean,
+                required: true,
+                default: true,
             },
         },
         {

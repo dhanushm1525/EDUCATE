@@ -8,4 +8,5 @@ export interface UpdateAssignmentDTO {
     timeLimit?: number;
     attemptsAllowed?: number;
     dueDate?: string | null;
+    isRequired?: boolean;
 }

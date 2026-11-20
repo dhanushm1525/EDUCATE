@@ -38,6 +38,7 @@ export class AssignmentPersistenceMapper {
             attemptsAllowed: assignment.attemptsAllowed,
 
             dueDate: assignment.dueDate ?? null,
+            isRequired: assignment.isRequired ?? true,
         };
     }
 
@@ -73,6 +74,7 @@ export class AssignmentPersistenceMapper {
 
             createdAt: document.createdAt,
             updatedAt: document.updatedAt,
+            isRequired: document.isRequired ?? true,
         };
     }
 
@@ -115,6 +117,9 @@ export class AssignmentPersistenceMapper {
 
             ...(assignment.dueDate !== undefined && {
                 dueDate: assignment.dueDate,
+            }),
+            ...(assignment.isRequired !== undefined && {
+                isRequired: assignment.isRequired,
             }),
         };
     }

@@ -18,6 +18,7 @@ import { ISubmitAssignmentUseCase } from "../../interfaces/assingment/ISubmitAss
 
 import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
+import { ICourseProgressRepository } from "../../../domain/repositories/courseRepositories/ICourseProgressRepository";
 
 export class SubmitAssignmentUseCase
     implements ISubmitAssignmentUseCase {
@@ -28,7 +29,8 @@ export class SubmitAssignmentUseCase
         private readonly _chapterRepository: IChapterRepository,
         private readonly _courseRepository: ICourseRepository,
         private readonly _enrollmentRepository: IEnrollmentRepository,
-        private readonly _submissionRepository: IAssignmentSubmissionRepository
+        private readonly _submissionRepository: IAssignmentSubmissionRepository,
+        private readonly _progressRepository: ICourseProgressRepository
     ) { }
 
     async execute(
@@ -274,6 +276,70 @@ export class SubmitAssignmentUseCase
             );
         }
 
+        // Record completion only for required assignments.
+        // Older assignments without isRequired are treated as required.
+        if (assignment.isRequired ?? true) {
+
+            if (!enrollment.enrollmentId) {
+                throw new AppError(
+                    "Enrollment ID is missing",
+                    HttpStatusCode.INTERNAL_SERVER_ERROR
+                );
+            }
+
+            const existingProgress =
+                await this._progressRepository.findByUserAndCourse(
+                    userId,
+                    chapter.courseId
+                );
+
+            if (existingProgress?.progressId) {
+
+                const alreadyCompleted =
+                    existingProgress.completedAssignments.some(
+                        item => item.assignmentId === assignmentId
+                    );
+
+                if (!alreadyCompleted) {
+                    await this._progressRepository.update(
+                        existingProgress.progressId,
+                        {
+                            completedAssignments: [
+                                ...existingProgress.completedAssignments,
+                                {
+                                    assignmentId,
+                                    submissionId: savedSubmission.submissionId!,
+                                    completedAt: now,
+                                },
+                            ],
+                            updatedAt: now,
+                        }
+                    );
+                }
+
+            } else {
+
+                await this._progressRepository.create({
+                    enrollmentId: enrollment.enrollmentId,
+                    userId,
+                    courseId: chapter.courseId,
+                    completedLessons: [],
+                    completedAssignments: [
+                        {
+                            assignmentId,
+                            submissionId: savedSubmission.submissionId!,
+                            completedAt: now,
+                        },
+                    ],
+                    videoProgress: [],
+                    createdAt: now,
+                    updatedAt: now,
+                });
+            }
+        }
+
         return savedSubmission;
+
+        
     }
 }

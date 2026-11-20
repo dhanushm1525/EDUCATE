@@ -1,4 +1,3 @@
-
 export interface CourseProgressDTO {
     enrollmentId: string;
     courseId: string;
@@ -7,6 +6,11 @@ export interface CourseProgressDTO {
     totalLessons: number;
     completedLessons: number;
     remainingLessons: number;
+
+    totalRequiredAssignments: number;
+    completedRequiredAssignments: number;
+    remainingRequiredAssignments: number;
+
     progressPercentage: number;
 
     lastAccessedLessonId?: string;
@@ -14,4 +18,5 @@ export interface CourseProgressDTO {
     completedAt?: Date;
 
     completedLessonIds: string[];
+    completedAssignmentIds: string[];
 }
