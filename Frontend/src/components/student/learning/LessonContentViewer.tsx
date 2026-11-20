@@ -1,14 +1,68 @@
+import { useEffect, useRef } from "react";
 import { FileText, Download, PlayCircle } from "lucide-react";
 
 import type { StudentLesson } from "../../../types/studentLesson";
 
 interface LessonContentViewerProps {
   lesson: StudentLesson;
+  onVideoProgress?: (lessonId: string, percentage: number) => void;
+  onReadingComplete?: (lessonId: string) => void;
 }
 
 export default function LessonContentViewer({
   lesson,
+  onVideoProgress,
+  onReadingComplete,
 }: LessonContentViewerProps) {
+  const readingEndRef = useRef<HTMLDivElement | null>(null);
+  const readingCompleteCallbackRef = useRef(onReadingComplete);
+
+  useEffect(() => {
+    readingCompleteCallbackRef.current = onReadingComplete;
+  }, [onReadingComplete]);
+
+  useEffect(() => {
+    if (lesson.type === "video" || !lesson.content || !readingEndRef.current) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (entry?.isIntersecting) {
+          readingCompleteCallbackRef.current?.(lesson.lessonId);
+        }
+      },
+      {
+        root: null,
+        threshold: 1,
+      },
+    );
+
+    observer.observe(readingEndRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [lesson.lessonId, lesson.type, lesson.content]);
+  const handleVideoProgress = (
+    event: React.SyntheticEvent<HTMLVideoElement>,
+  ) => {
+    const video = event.currentTarget;
+
+    if (!Number.isFinite(video.duration) || video.duration <= 0) {
+      return;
+    }
+
+    const percentage = Math.min(
+      100,
+      Math.floor((video.currentTime / video.duration) * 100),
+    );
+
+    onVideoProgress?.(lesson.lessonId, percentage);
+  };
+
   return (
     <div className="min-w-0">
       {lesson.type === "video" ? (
@@ -19,6 +73,8 @@ export default function LessonContentViewer({
               controls
               controlsList="nodownload"
               poster={lesson.thumbnailUrl}
+              onTimeUpdate={handleVideoProgress}
+              onEnded={handleVideoProgress}
               className="aspect-video w-full"
             >
               <source src={lesson.videoUrl} />
@@ -49,9 +105,18 @@ export default function LessonContentViewer({
           </div>
 
           {lesson.content ? (
-            <div className="whitespace-pre-wrap break-words text-sm leading-8 text-slate-700">
-              {lesson.content}
-            </div>
+            <>
+              <div className="whitespace-pre-wrap break-words text-sm leading-8 text-slate-700">
+                {lesson.content}
+              </div>
+
+              {/* Observed when the student reaches the end of the reading */}
+              <div
+                ref={readingEndRef}
+                aria-hidden="true"
+                className="h-px w-full"
+              />
+            </>
           ) : (
             <p className="text-sm text-slate-400">
               No reading content is available for this lesson.

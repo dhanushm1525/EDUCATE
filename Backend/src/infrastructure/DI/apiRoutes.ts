@@ -75,6 +75,7 @@ import {
     updateAssignmentController
 } from "./assignmentDependencies";
 import { enrollInCourseController, getMyEnrolledCoursesController } from "./enrollmentDependencies";
+import { courseProgressControllers } from "./courseProgressDependencies";
 
 export const apiRoutes = createApiRouter({
     authenticateUser,
@@ -155,8 +156,9 @@ export const apiRoutes = createApiRouter({
         startAttempt: startAssignmentAttemptController,
         saveAnswers: saveAssignmentAnswersController,
     },
-    enrollments: {
-        enroll: enrollInCourseController,
-        getMine: getMyEnrolledCoursesController
-    }
+  enrollments: {
+    enroll: enrollInCourseController,
+    getMine: getMyEnrolledCoursesController
+},
+courseProgress: courseProgressControllers
 });

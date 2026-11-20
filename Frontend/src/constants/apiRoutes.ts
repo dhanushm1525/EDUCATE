@@ -198,4 +198,19 @@ teacherApplications: {
     reject: (applicationId: string) =>
         `/teacher-applications/${applicationId}/reject`,
 },
+
+
+courseProgress: {
+  myProgress: "/course-progress/my-progress",
+
+  recordAccess: (courseId: string, lessonId: string) =>
+    `/course-progress/${courseId}/lessons/${lessonId}/access`,
+
+  completeLesson: (courseId: string, lessonId: string) =>
+    `/course-progress/${courseId}/lessons/${lessonId}/complete`,
+
+  videoProgress: (courseId: string, lessonId: string) =>
+    `/course-progress/${courseId}/lessons/${lessonId}/video-progress`,
+},
+
 } as const;

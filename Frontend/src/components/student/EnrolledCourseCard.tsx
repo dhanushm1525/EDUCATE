@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
-import { BookOpen, Clock, Star, ArrowRight } from "lucide-react";
+import { BookOpen, Clock, Star, ArrowRight, CheckCircle2 } from "lucide-react";
 
 import type { EnrolledCourse } from "../../types/enrollment";
+import type { CourseProgress } from "../../types/courseProgress";
 
 interface EnrolledCourseCardProps {
   enrollment: EnrolledCourse;
+  progress?: CourseProgress;
 }
 
 function formatDate(date?: string): string {
@@ -31,8 +33,14 @@ function formatDuration(duration: number): string {
 
 export default function EnrolledCourseCard({
   enrollment,
+  progress,
 }: EnrolledCourseCardProps) {
   const { course } = enrollment;
+
+  const percentage = Math.min(
+    100,
+    Math.max(0, progress?.progressPercentage ?? 0),
+  );
 
   return (
     <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
@@ -83,6 +91,47 @@ export default function EnrolledCourseCard({
           <span>{course.language || "Language unavailable"}</span>
         </div>
 
+        {/* Learning progress */}
+        <div className="mt-5 rounded-xl bg-slate-50 p-4">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-sm font-semibold text-slate-700">
+              Your progress
+            </span>
+
+            <span className="text-sm font-bold text-indigo-600">
+              {percentage}%
+            </span>
+          </div>
+
+          <div className="h-2 overflow-hidden rounded-full bg-slate-200">
+            <div
+              className="h-full rounded-full bg-indigo-600 transition-all duration-500"
+              style={{ width: `${percentage}%` }}
+            />
+          </div>
+
+          <div className="mt-3 flex items-center justify-between gap-2 text-xs text-slate-500">
+            <span>
+              {progress
+                ? `${progress.completedLessons} of ${progress.totalLessons} lessons completed`
+                : "No lessons completed yet"}
+            </span>
+          </div>
+
+          {progress && (
+            <p className="mt-1 text-xs text-slate-500">
+              {progress.remainingLessons} lessons remaining
+            </p>
+          )}
+
+          {progress?.isCompleted && (
+            <p className="mt-3 flex items-center gap-2 text-xs font-semibold text-green-600">
+              <CheckCircle2 size={15} />
+              Course completed
+            </p>
+          )}
+        </div>
+
         <div className="mt-5 border-t border-slate-100 pt-4">
           <p className="text-xs text-slate-400">
             Enrolled on {formatDate(enrollment.enrolledAt)}
@@ -92,7 +141,12 @@ export default function EnrolledCourseCard({
             to={`/student/courses/${course.courseId}/learn`}
             className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700"
           >
-            Continue Learning
+            {progress?.isCompleted
+              ? "Review Course"
+              : progress?.lastAccessedLessonId
+                ? "Resume Learning"
+                : "Start Learning"}
+
             <ArrowRight size={16} />
           </Link>
         </div>

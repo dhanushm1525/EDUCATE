@@ -12,43 +12,45 @@ import { createAssignmentRoutes } from "./assingmentRoutes";
 import { createEnrollmentRoutes } from "./enrollmentRoutes";
 import { createAdminUserRoutes } from "./adminUserRoutes";
 import type { RouteDependencies } from "./routeDependencies";
+import { createCourseProgressRoutes } from "./courseProgressRoutes";
 
 export const createApiRouter = (dependencies: RouteDependencies) => {
-const router = Router();
+  const router = Router();
 
-router.get(
-  "/health",
-  (_req, res) => {
-    return res.status(HttpStatusCode.OK).json({
-      success: true,
-      message:
-        "EDUCATE API is running",
-      data: null
-    });
-  }
-);
+  router.get(
+    "/health",
+    (_req, res) => {
+      return res.status(HttpStatusCode.OK).json({
+        success: true,
+        message:
+          "EDUCATE API is running",
+        data: null
+      });
+    }
+  );
 
-router.use("/auth", createAuthRoutes({ ...dependencies.auth, authenticateUser: dependencies.authenticateUser }));
+  router.use("/auth", createAuthRoutes({ ...dependencies.auth, authenticateUser: dependencies.authenticateUser }));
 
-router.use("/users", createUserRoutes(dependencies));
+  router.use("/users", createUserRoutes(dependencies));
 
-router.use("/storage", createStorageRoutes(dependencies));
+  router.use("/storage", createStorageRoutes(dependencies));
 
-router.use("/courses", createCourseRoutes(dependencies));
+  router.use("/courses", createCourseRoutes(dependencies));
 
-router.use("/courses", createChapterRoutes(dependencies));
+  router.use("/courses", createChapterRoutes(dependencies));
 
-router.use("/categories", createCategoryRoutes(dependencies));
+  router.use("/categories", createCategoryRoutes(dependencies));
 
-router.use("/courses", createLessonRoutes(dependencies));
+  router.use("/courses", createLessonRoutes(dependencies));
 
-router.use("/teacher-applications", createTeacherApplicationRoutes(dependencies));
+  router.use("/teacher-applications", createTeacherApplicationRoutes(dependencies));
 
-router.use("/", createAssignmentRoutes(dependencies));
+  router.use("/", createAssignmentRoutes(dependencies));
 
-router.use("/enrollments", createEnrollmentRoutes(dependencies));
+  router.use("/enrollments", createEnrollmentRoutes(dependencies));
 
-router.use("/admin/users", createAdminUserRoutes(dependencies));
+  router.use("/admin/users", createAdminUserRoutes(dependencies));
 
-return router;
+  router.use("/course-progress",createCourseProgressRoutes(dependencies));
+  return router;
 };

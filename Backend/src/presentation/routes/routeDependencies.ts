@@ -87,4 +87,11 @@ export interface RouteDependencies {
         enroll: RouteController;
         getMine: RouteController;
     };
+
+   courseProgress: {
+    recordAccess: RouteController;
+    completeLesson: RouteController;
+    getMine: RouteController;
+    saveVideoProgress: RouteController;
+};
 }

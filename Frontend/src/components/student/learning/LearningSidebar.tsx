@@ -5,6 +5,7 @@ import {
   ChevronRight,
   PlayCircle,
   FileText,
+  CheckCircle2,
 } from "lucide-react";
 
 import type {
@@ -15,12 +16,14 @@ import type {
 interface LearningSidebarProps {
   chapters: ChapterPreview[];
   selectedLessonId: string;
+  completedLessonIds?: string[];
   onSelectLesson: (chapterId: string, lesson: LessonPreview) => void;
 }
 
 export default function LearningSidebar({
   chapters,
   selectedLessonId,
+  completedLessonIds = [],
   onSelectLesson,
 }: LearningSidebarProps) {
   const [expandedChapters, setExpandedChapters] = useState<string[]>(() =>
@@ -52,6 +55,10 @@ export default function LearningSidebar({
         {chapters.map((chapter, index) => {
           const isExpanded = expandedChapters.includes(chapter.chapterId);
 
+          const completedInChapter = chapter.lessons.filter((lesson) =>
+            completedLessonIds.includes(lesson.lessonId),
+          ).length;
+
           return (
             <div key={chapter.chapterId} className="border-b border-slate-100">
               <button
@@ -70,7 +77,7 @@ export default function LearningSidebar({
                     </p>
 
                     <p className="mt-1 text-xs text-slate-400">
-                      {chapter.lessons.length} lessons
+                      {completedInChapter}/{chapter.lessons.length} completed
                     </p>
                   </div>
                 </div>
@@ -86,6 +93,9 @@ export default function LearningSidebar({
                 <div className="pb-2">
                   {chapter.lessons.map((lesson) => {
                     const selected = selectedLessonId === lesson.lessonId;
+                    const completed = completedLessonIds.includes(
+                      lesson.lessonId,
+                    );
 
                     return (
                       <button
@@ -100,7 +110,12 @@ export default function LearningSidebar({
                             : "hover:bg-slate-50"
                         }`}
                       >
-                        {lesson.type === "video" ? (
+                        {completed ? (
+                          <CheckCircle2
+                            size={17}
+                            className="shrink-0 text-green-600"
+                          />
+                        ) : lesson.type === "video" ? (
                           <PlayCircle
                             size={17}
                             className={
@@ -121,7 +136,9 @@ export default function LearningSidebar({
                             className={`truncate text-sm ${
                               selected
                                 ? "font-semibold text-indigo-700"
-                                : "text-slate-600"
+                                : completed
+                                  ? "text-green-700"
+                                  : "text-slate-600"
                             }`}
                           >
                             {lesson.title}

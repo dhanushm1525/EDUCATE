@@ -55,12 +55,20 @@ export const errorMiddleware = (
         }
 
 
-        logger.error(
-            "Unexpected server error",
-            {
-                error
-            }
-        );
+    logger.error(
+    "Unexpected server error",
+    {
+        errorMessage:
+            error instanceof Error
+                ? error.message
+                : String(error),
+
+        stack:
+            error instanceof Error
+                ? error.stack
+                : undefined
+    }
+);
 
 
         return errorResponse(

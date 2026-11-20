@@ -6,38 +6,66 @@ import { StudentNavbar } from "../../components/student/StudentNavbar";
 import EnrolledCourseCard from "../../components/student/EnrolledCourseCard";
 
 import { enrollmentService } from "../../services/enrollment.service";
+import { courseProgressService } from "../../services/courseProgress.service";
 import { getApiErrorMessage } from "../../utils/apiError";
 
 import type { EnrolledCourse } from "../../types/enrollment";
+import type { CourseProgress } from "../../types/courseProgress";
+
+interface MyLearningData {
+  courses: EnrolledCourse[];
+  progressList: CourseProgress[];
+  progressError: string | null;
+}
+
+async function fetchMyLearningData(): Promise<MyLearningData> {
+  const courses = await enrollmentService.getMyCourses();
+
+  let progressList: CourseProgress[] = [];
+  let progressError: string | null = null;
+
+  try {
+    progressList = await courseProgressService.getMyProgress();
+  } catch (error) {
+    progressError = getApiErrorMessage(error);
+  }
+
+  return {
+    courses,
+    progressList,
+    progressError,
+  };
+}
 
 export default function MyLearningPage() {
   const [courses, setCourses] = useState<EnrolledCourse[]>([]);
+  const [progressList, setProgressList] = useState<CourseProgress[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [progressError, setProgressError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
-    const fetchCourses = async () => {
-      try {
-        const result = await enrollmentService.getMyCourses();
+    fetchMyLearningData()
+      .then((data) => {
+        if (!isMounted) return;
 
-        if (isMounted) {
-          setCourses(result);
-          setErrorMessage(null);
-        }
-      } catch (error) {
-        if (isMounted) {
-          setErrorMessage(getApiErrorMessage(error));
-        }
-      } finally {
+        setCourses(data.courses);
+        setProgressList(data.progressList);
+        setProgressError(data.progressError);
+      })
+      .catch((error) => {
+        if (!isMounted) return;
+
+        setErrorMessage(getApiErrorMessage(error));
+      })
+      .finally(() => {
         if (isMounted) {
           setLoading(false);
         }
-      }
-    };
-
-    void fetchCourses();
+      });
 
     return () => {
       isMounted = false;
@@ -45,12 +73,16 @@ export default function MyLearningPage() {
   }, []);
 
   const handleRetry = async () => {
-    try {
-      setLoading(true);
-      setErrorMessage(null);
+    setLoading(true);
+    setErrorMessage(null);
+    setProgressError(null);
 
-      const result = await enrollmentService.getMyCourses();
-      setCourses(result);
+    try {
+      const data = await fetchMyLearningData();
+
+      setCourses(data.courses);
+      setProgressList(data.progressList);
+      setProgressError(data.progressError);
     } catch (error) {
       setErrorMessage(getApiErrorMessage(error));
     } finally {
@@ -71,6 +103,7 @@ export default function MyLearningPage() {
 
             <div>
               <h1 className="text-2xl font-bold text-slate-900">My Courses</h1>
+
               <p className="mt-1 text-sm text-slate-500">
                 Access your enrolled courses and continue learning.
               </p>
@@ -81,6 +114,7 @@ export default function MyLearningPage() {
         {!loading && !errorMessage && (
           <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-5">
             <p className="text-sm text-slate-500">Enrolled courses</p>
+
             <p className="mt-2 text-3xl font-bold text-slate-900">
               {courses.length}
             </p>
@@ -91,6 +125,7 @@ export default function MyLearningPage() {
           <div className="flex min-h-64 items-center justify-center rounded-2xl border border-slate-200 bg-white">
             <div className="text-center">
               <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
+
               <p className="mt-4 text-sm text-slate-500">
                 Loading your courses...
               </p>
@@ -110,6 +145,13 @@ export default function MyLearningPage() {
               <RefreshCw size={15} />
               Try again
             </button>
+          </div>
+        )}
+
+        {!loading && !errorMessage && progressError && (
+          <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+            Course progress could not be loaded. Your enrolled courses are still
+            available. Refresh the page to retry.
           </div>
         )}
 
@@ -139,12 +181,19 @@ export default function MyLearningPage() {
 
         {!loading && !errorMessage && courses.length > 0 && (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {courses.map((enrollment) => (
-              <EnrolledCourseCard
-                key={enrollment.enrollmentId}
-                enrollment={enrollment}
-              />
-            ))}
+            {courses.map((enrollment) => {
+              const courseProgress = progressList.find(
+                (item) => item.courseId === enrollment.course.courseId,
+              );
+
+              return (
+                <EnrolledCourseCard
+                  key={enrollment.enrollmentId}
+                  enrollment={enrollment}
+                  progress={courseProgress}
+                />
+              );
+            })}
           </div>
         )}
       </main>
