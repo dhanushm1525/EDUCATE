@@ -1,37 +1,21 @@
 import { z } from "zod";
 
 export const createTeacherApplicationSchema = z.object({
+  body: z.object({
+    qualification: z.string().trim().min(2, "Qualification is required"),
 
-    body: z.object({
+    experience: z.number().min(0, "Experience cannot be negative"),
 
-        qualification: z
-            .string()
-            .trim()
-            .min(2, "Qualification is required"),
+    skills: z.array(z.string().trim()).min(1, "At least one skill is required"),
 
-        experience: z
-            .number()
-            .min(0, "Experience cannot be negative"),
+    bio: z.string().trim().min(20, "Bio must contain at least 20 characters"),
 
-        skills: z
-            .array(z.string().trim())
-            .min(1, "At least one skill is required"),
+    documents: z.array(z.string()).optional(),
 
-        bio: z
-            .string()
-            .trim()
-            .min(20, "Bio must contain at least 20 characters"),
+    certificates: z.array(z.string()).optional(),
+  }),
 
-        documents: z
-            .array(z.string())
-            .optional(),
+  params: z.object({}),
 
-        certificates: z
-            .array(z.string())
-            .optional()
-    }),
-
-    params: z.object({}),
-
-    query: z.object({})
+  query: z.object({}),
 });

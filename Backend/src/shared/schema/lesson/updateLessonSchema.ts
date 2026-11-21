@@ -3,55 +3,29 @@ import { LessonType } from "../../../shared/enums/LessonType";
 import { mongoIdSchema } from "../common/mongoIdSchema";
 
 export const updateLessonSchema = z.object({
+  body: z.object({
+    title: z.string().min(3).max(150).trim().optional(),
 
-    body: z.object({
-        title: z
-            .string()
-            .min(3)
-            .max(150)
-            .trim()
-            .optional(),
+    description: z.string().max(1000).trim().optional(),
 
-        description: z
-            .string()
-            .max(1000)
-            .trim()
-            .optional(),
+    order: z.number().int().positive().optional(),
 
-        order: z
-            .number()
-            .int()
-            .positive()
-            .optional(),
+    type: z.enum([LessonType.VIDEO, LessonType.READING]).optional(),
 
-        type: z
-            .enum([
-                LessonType.VIDEO,
-                LessonType.READING,
-            ])
-            .optional(),
+    videoKey: z.string().min(1).optional(),
 
-        videoKey: z.string().min(1).optional(),
+    content: z.string().optional(),
 
-        content: z
-            .string()
-            .optional(),
+    attachments: z.array(z.string().min(1).trim()).optional(),
 
-        attachments: z
-            .array(z.string().min(1).trim())
-            .optional(),
+    duration: z.number().nonnegative().optional(),
+  }),
 
-        duration: z
-            .number()
-            .nonnegative()
-            .optional(),
-    }),
+  params: z.object({
+    courseId: mongoIdSchema,
+    chapterId: mongoIdSchema,
+    lessonId: mongoIdSchema,
+  }),
 
-    params: z.object({
-        courseId: mongoIdSchema,
-        chapterId: mongoIdSchema,
-        lessonId: mongoIdSchema,
-    }),
-
-    query: z.object({}),
+  query: z.object({}),
 });

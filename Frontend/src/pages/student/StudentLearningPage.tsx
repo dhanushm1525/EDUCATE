@@ -22,10 +22,7 @@ import { courseProgressService } from "../../services/courseProgress.service";
 import { getApiErrorMessage } from "../../utils/apiError";
 
 import type { Course } from "../../types/course";
-import type {
-  ChapterPreview,
-  LessonPreview,
-} from "../../types/courseLearningContent";
+import type { ChapterPreview, LessonPreview } from "../../types/courseLearningContent";
 import type { StudentLesson } from "../../types/studentLesson";
 import type { CourseProgress } from "../../types/courseProgress";
 
@@ -38,20 +35,14 @@ interface StudentLearningPageProps {
   isTeacher?: boolean;
 }
 
-export default function StudentLearningPage({
-  isTeacher = false,
-}: StudentLearningPageProps) {
+export default function StudentLearningPage({ isTeacher = false }: StudentLearningPageProps) {
   const { courseId } = useParams<{ courseId: string }>();
 
-  const myLearningPath = isTeacher
-    ? "/teacher/my-learning"
-    : "/student/my-courses";
+  const myLearningPath = isTeacher ? "/teacher/my-learning" : "/student/my-courses";
 
   const [course, setCourse] = useState<Course | null>(null);
   const [chapters, setChapters] = useState<ChapterPreview[]>([]);
-  const [selectedLesson, setSelectedLesson] = useState<StudentLesson | null>(
-    null,
-  );
+  const [selectedLesson, setSelectedLesson] = useState<StudentLesson | null>(null);
 
   const [selectedLessonId, setSelectedLessonId] = useState("");
   const [progress, setProgress] = useState<CourseProgress | null>(null);
@@ -85,8 +76,7 @@ export default function StudentLearningPage({
         setCourse(courseData);
         setChapters(learningContent.chapters);
 
-        const courseProgress =
-          allProgress.find((item) => item.courseId === courseId) ?? null;
+        const courseProgress = allProgress.find((item) => item.courseId === courseId) ?? null;
 
         setProgress(courseProgress);
 
@@ -104,8 +94,7 @@ export default function StudentLearningPage({
 
         const resumeLesson = courseProgress?.lastAccessedLessonId
           ? availableLessons.find(
-              (item) =>
-                item.lesson.lessonId === courseProgress.lastAccessedLessonId,
+              (item) => item.lesson.lessonId === courseProgress.lastAccessedLessonId,
             )
           : undefined;
 
@@ -125,10 +114,7 @@ export default function StudentLearningPage({
         setLoading(false);
 
         try {
-          await courseProgressService.recordLessonAccess(
-            courseId,
-            initialLesson.lesson.lessonId,
-          );
+          await courseProgressService.recordLessonAccess(courseId, initialLesson.lesson.lessonId);
         } catch (error) {
           if (isMounted) {
             setErrorMessage(getApiErrorMessage(error));
@@ -149,21 +135,14 @@ export default function StudentLearningPage({
     };
   }, [courseId]);
 
-  const handleSelectLesson = async (
-    chapterId: string,
-    lesson: LessonPreview,
-  ) => {
+  const handleSelectLesson = async (chapterId: string, lesson: LessonPreview) => {
     if (!courseId || lesson.lessonId === selectedLessonId) return;
 
     try {
       setLessonLoading(true);
       setErrorMessage(null);
 
-      const lessonData = await lessonService.getStudentLesson(
-        courseId,
-        chapterId,
-        lesson.lessonId,
-      );
+      const lessonData = await lessonService.getStudentLesson(courseId, chapterId, lesson.lessonId);
 
       setSelectedLesson(lessonData);
       setSelectedLessonId(lesson.lessonId);
@@ -192,18 +171,14 @@ export default function StudentLearningPage({
     })),
   );
 
-  const currentIndex = allLessons.findIndex(
-    (item) => item.lesson.lessonId === selectedLessonId,
-  );
+  const currentIndex = allLessons.findIndex((item) => item.lesson.lessonId === selectedLessonId);
 
   const completedLessonIds = progress?.completedLessonIds ?? [];
 
-  const isCurrentLessonCompleted =
-    completedLessonIds.includes(selectedLessonId);
+  const isCurrentLessonCompleted = completedLessonIds.includes(selectedLessonId);
 
   const navigateLesson = async (direction: "previous" | "next") => {
-    const nextIndex =
-      direction === "next" ? currentIndex + 1 : currentIndex - 1;
+    const nextIndex = direction === "next" ? currentIndex + 1 : currentIndex - 1;
 
     const nextLesson = allLessons[nextIndex];
 
@@ -217,8 +192,7 @@ export default function StudentLearningPage({
 
     const allProgress = await courseProgressService.getMyProgress();
 
-    const updatedProgress =
-      allProgress.find((item) => item.courseId === courseId) ?? null;
+    const updatedProgress = allProgress.find((item) => item.courseId === courseId) ?? null;
 
     setProgress(updatedProgress);
   };
@@ -233,11 +207,7 @@ export default function StudentLearningPage({
       lastVideoSaveTimeRef.current.set(lessonId, now);
 
       try {
-        await courseProgressService.saveVideoProgress(
-          courseId,
-          lessonId,
-          percentage,
-        );
+        await courseProgressService.saveVideoProgress(courseId, lessonId, percentage);
       } catch (error) {
         console.error("Unable to save video progress:", error);
       }
@@ -287,19 +257,14 @@ export default function StudentLearningPage({
     }
   };
 
-  const progressPercentage = Math.min(
-    100,
-    Math.max(0, progress?.progressPercentage ?? 0),
-  );
+  const progressPercentage = Math.min(100, Math.max(0, progress?.progressPercentage ?? 0));
 
   const completedAssignments = progress?.completedRequiredAssignments ?? 0;
   const totalRequiredAssignments = progress?.totalRequiredAssignments ?? 0;
   const remainingAssignments = progress?.remainingRequiredAssignments ?? 0;
 
   const assignmentProgressPercentage =
-    totalRequiredAssignments > 0
-      ? (completedAssignments / totalRequiredAssignments) * 100
-      : 0;
+    totalRequiredAssignments > 0 ? (completedAssignments / totalRequiredAssignments) * 100 : 0;
 
   const content = (
     <>
@@ -307,16 +272,12 @@ export default function StudentLearningPage({
         <div className="flex min-h-96 items-center justify-center">
           <div className="text-center">
             <div className="mx-auto h-9 w-9 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
-            <p className="mt-4 text-sm text-slate-500">
-              Preparing your learning experience...
-            </p>
+            <p className="mt-4 text-sm text-slate-500">Preparing your learning experience...</p>
           </div>
         </div>
       ) : errorMessage && !selectedLesson ? (
         <div className="mx-auto max-w-2xl px-4 py-20 text-center">
-          <h2 className="text-xl font-bold text-slate-900">
-            Unable to load course
-          </h2>
+          <h2 className="text-xl font-bold text-slate-900">Unable to load course</h2>
           <p className="mt-3 text-sm text-red-600">{errorMessage}</p>
           <Link
             to={myLearningPath}
@@ -338,22 +299,14 @@ export default function StudentLearningPage({
                 My Learning
               </Link>
 
-              <h1 className="text-xl font-bold text-slate-900">
-                {course?.title}
-              </h1>
+              <h1 className="text-xl font-bold text-slate-900">{course?.title}</h1>
 
-              {course?.subtitle && (
-                <p className="mt-1 text-sm text-slate-500">{course.subtitle}</p>
-              )}
+              {course?.subtitle && <p className="mt-1 text-sm text-slate-500">{course.subtitle}</p>}
 
               <div className="mt-5 max-w-2xl">
                 <div className="mb-2 flex items-center justify-between text-sm">
-                  <span className="font-semibold text-slate-700">
-                    Course progress
-                  </span>
-                  <span className="font-bold text-indigo-600">
-                    {progressPercentage}%
-                  </span>
+                  <span className="font-semibold text-slate-700">Course progress</span>
+                  <span className="font-bold text-indigo-600">{progressPercentage}%</span>
                 </div>
 
                 <div className="h-2 overflow-hidden rounded-full bg-slate-100">
@@ -369,10 +322,7 @@ export default function StudentLearningPage({
                       Lessons: {progress?.completedLessons ?? 0} /{" "}
                       {progress?.totalLessons ?? allLessons.length} completed
                     </span>
-                    <span>
-                      {progress?.remainingLessons ?? allLessons.length} lessons
-                      remaining
-                    </span>
+                    <span>{progress?.remainingLessons ?? allLessons.length} lessons remaining</span>
                   </div>
 
                   {totalRequiredAssignments > 0 && (
@@ -403,17 +353,11 @@ export default function StudentLearningPage({
 
                   {progress?.isCompleted && (
                     <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 p-4">
-                      <CheckCircle2
-                        className="shrink-0 text-green-600"
-                        size={22}
-                      />
+                      <CheckCircle2 className="shrink-0 text-green-600" size={22} />
                       <div>
-                        <p className="text-sm font-semibold text-green-700">
-                          Course completed!
-                        </p>
+                        <p className="text-sm font-semibold text-green-700">Course completed!</p>
                         <p className="mt-1 text-xs text-green-600">
-                          You have completed all lessons and required
-                          assignments.
+                          You have completed all lessons and required assignments.
                         </p>
                       </div>
                     </div>
@@ -453,9 +397,7 @@ export default function StudentLearningPage({
                 <div className="flex min-h-80 items-center justify-center rounded-2xl border border-slate-200 bg-white">
                   <div className="text-center">
                     <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
-                    <p className="mt-4 text-sm text-slate-500">
-                      Loading lesson...
-                    </p>
+                    <p className="mt-4 text-sm text-slate-500">Loading lesson...</p>
                   </div>
                 </div>
               ) : selectedLesson ? (
@@ -514,9 +456,7 @@ export default function StudentLearningPage({
                     <button
                       type="button"
                       disabled={
-                        currentIndex < 0 ||
-                        currentIndex >= allLessons.length - 1 ||
-                        lessonLoading
+                        currentIndex < 0 || currentIndex >= allLessons.length - 1 || lessonLoading
                       }
                       onClick={() => void navigateLesson("next")}
                       className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40"
@@ -529,9 +469,7 @@ export default function StudentLearningPage({
               ) : (
                 <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center">
                   <RefreshCw className="mx-auto text-slate-400" size={30} />
-                  <p className="mt-4 text-sm text-slate-500">
-                    Select a lesson to begin.
-                  </p>
+                  <p className="mt-4 text-sm text-slate-500">Select a lesson to begin.</p>
                 </div>
               )}
             </main>

@@ -1,12 +1,9 @@
 import ResetPasswordForm from "../../components/auth/ResetPasswordForm";
 
-
 export default function ResetPasswordPage() {
-
-    return (
-
-        <div
-            className="
+  return (
+    <div
+      className="
                 min-h-screen
                 flex
                 items-center
@@ -14,12 +11,8 @@ export default function ResetPasswordPage() {
                 bg-[#0B1120]
                 px-4
             "
-        >
-
-            <ResetPasswordForm />
-
-        </div>
-
-    );
-
+    >
+      <ResetPasswordForm />
+    </div>
+  );
 }

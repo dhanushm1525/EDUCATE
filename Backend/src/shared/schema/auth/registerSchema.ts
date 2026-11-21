@@ -1,37 +1,17 @@
 import { z } from "zod";
 
-export const registerSchema =
-  z.object({
+export const registerSchema = z.object({
+  body: z.object({
+    firstName: z.string().trim().min(2).max(50),
 
-    body: z.object({
+    lastName: z.string().trim().min(1).max(50),
 
-      firstName:
-        z.string()
-          .trim()
-          .min(2)
-          .max(50),
+    email: z.string().trim().email(),
 
-      lastName:
-        z.string()
-          .trim()
-          .min(1)
-          .max(50),
+    password: z.string().min(8).max(100),
+  }),
 
-      email:
-        z.string()
-          .trim()
-          .email(),
+  params: z.object({}),
 
-      password:
-        z.string()
-          .min(8)
-          .max(100)
-
-    }),
-
-    params:
-      z.object({}),
-
-    query:
-      z.object({})
-  });
+  query: z.object({}),
+});

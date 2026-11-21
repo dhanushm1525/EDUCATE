@@ -92,8 +92,7 @@ export default function CategoriesPage() {
           <h1 className="text-2xl font-semibold">Categories</h1>
 
           <p className="mt-1 text-sm text-slate-400">
-            Manage and organize course categories available on the EDUCATE
-            platform.
+            Manage and organize course categories available on the EDUCATE platform.
           </p>
         </div>
 
@@ -106,10 +105,7 @@ export default function CategoriesPage() {
       {/* Search */}
       <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-900 p-4 sm:flex-row">
         <div className="relative flex-1">
-          <Search
-            size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-          />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
 
           <input
             type="search"

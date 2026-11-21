@@ -7,29 +7,21 @@ import { CategoryCreationMapper } from "../../../application/mappers/CategoryCre
 import { CategoryResponseMapper } from "../../../application/mappers/CategoryResponseMapper";
 
 export class CreateCategoryController {
-    constructor(
-        private readonly _createCategoryUseCase: ICreateCategoryUseCase
-    ) {}
+  constructor(private readonly _createCategoryUseCase: ICreateCategoryUseCase) {}
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
-        try {
-            const dto =
-                CategoryCreationMapper.toCreateCategoryDTO(req.body);
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const dto = CategoryCreationMapper.toCreateCategoryDTO(req.body);
 
-            const category =
-                await this._createCategoryUseCase.execute(dto);
+      const category = await this._createCategoryUseCase.execute(dto);
 
-            res.status(HttpStatusCode.CREATED).json({
-                success: true,
-                message: "Category created successfully",
-                data: CategoryResponseMapper.toDTO(category)
-            });
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.CREATED).json({
+        success: true,
+        message: "Category created successfully",
+        data: CategoryResponseMapper.toDTO(category),
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

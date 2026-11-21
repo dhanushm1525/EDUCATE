@@ -2,14 +2,13 @@ import { z } from "zod";
 import { mongoIdSchema } from "../common/mongoIdSchema";
 
 export const getLessonByIdSchema = z.object({
+  body: z.any().optional(),
 
-    body: z.any().optional(),
+  params: z.object({
+    courseId: mongoIdSchema,
+    chapterId: mongoIdSchema,
+    lessonId: mongoIdSchema,
+  }),
 
-    params: z.object({
-        courseId: mongoIdSchema,
-        chapterId: mongoIdSchema,
-        lessonId: mongoIdSchema,
-    }),
-
-    query: z.object({}),
+  query: z.object({}),
 });

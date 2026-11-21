@@ -1,10 +1,6 @@
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-import {
-    Request,
-    Response,
-    NextFunction,
-} from "express";
+import { Request, Response, NextFunction } from "express";
 
 import { IUpdateChapterUseCase } from "../../../application/interfaces/chapter/IUpdateChapterUseCase";
 import { ChapterCreationMapper } from "../../../application/mappers/ChapterCreationMapper";
@@ -13,49 +9,31 @@ import { ChapterResponseMapper } from "../../../application/mappers/ChapterRespo
 import { AppError } from "../../../shared/errors/AppError";
 
 export class UpdateChapterController {
+  constructor(private readonly _updateChapterUseCase: IUpdateChapterUseCase) {}
 
-    constructor(
-        private readonly _updateChapterUseCase: IUpdateChapterUseCase
-    ) { }
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError("Authentication required", HttpStatusCode.UNAUTHORIZED);
+      }
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
+      const { chapterId } = req.params;
 
-        try {
-            if (!req.user) {
-                throw new AppError(
-                    "Authentication required",
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+      if (Array.isArray(chapterId)) {
+        throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            const { chapterId } = req.params;
+      const dto = ChapterCreationMapper.toUpdateChapterDTO(req.body);
 
-            if (Array.isArray(chapterId)) {
-                throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
-            }
+      const chapter = await this._updateChapterUseCase.execute(chapterId, req.user.userId, dto);
 
-            const dto =
-                ChapterCreationMapper.toUpdateChapterDTO(req.body);
-
-            const chapter =
-                await this._updateChapterUseCase.execute(
-                    chapterId,
-                    req.user.userId,
-                    dto
-                );
-
-            res.status(HttpStatusCode.OK).json({
-                success: true,
-                message: "Chapter updated successfully",
-                data: ChapterResponseMapper.toDTO(chapter),
-            });
-
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        message: "Chapter updated successfully",
+        data: ChapterResponseMapper.toDTO(chapter),
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

@@ -1,6 +1,6 @@
-export interface UpdateChapterDTO{
-    title?:string;
-    description?:string;
-    order?:number;
-    outcomes?:string[]
+export interface UpdateChapterDTO {
+  title?: string;
+  description?: string;
+  order?: number;
+  outcomes?: string[];
 }

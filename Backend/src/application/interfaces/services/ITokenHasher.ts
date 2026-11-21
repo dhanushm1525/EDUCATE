@@ -1,3 +1,3 @@
-export interface ITokenHasher{
-    hash(token:string):string;
+export interface ITokenHasher {
+  hash(token: string): string;
 }

@@ -1,16 +1,13 @@
 import { Chapter } from "../../entities/Chapter";
 
 export interface IChapterRepository {
-    create(chapter: Chapter): Promise<Chapter>;
+  create(chapter: Chapter): Promise<Chapter>;
 
-    findById(chapterId: string): Promise<Chapter | null>;
+  findById(chapterId: string): Promise<Chapter | null>;
 
-    findByCourseId(courseId: string): Promise<Chapter[]>;
+  findByCourseId(courseId: string): Promise<Chapter[]>;
 
-    update(
-        chapterId: string,
-        chapter: Partial<Chapter>
-    ): Promise<Chapter | null>;
+  update(chapterId: string, chapter: Partial<Chapter>): Promise<Chapter | null>;
 
-    delete(chapterId: string): Promise<boolean>;
+  delete(chapterId: string): Promise<boolean>;
 }

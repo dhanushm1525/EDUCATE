@@ -1,3 +1,3 @@
 export interface ICourseThumbnailKeyPolicy {
-    createKey(courseId: string, contentType: string): string;
+  createKey(courseId: string, contentType: string): string;
 }

@@ -1,4 +1,3 @@
-
 export interface ApproveCourseDTO {
-    courseId: string;
+  courseId: string;
 }

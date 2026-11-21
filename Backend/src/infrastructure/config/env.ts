@@ -3,87 +3,58 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const requiredEnv = [
-    "MONGO_URI",
-    "JWT_ACCESS_SECRET",
-    "JWT_REFRESH_SECRET",
-    "RESEND_API_KEY",
-    "EMAIL_FROM",
-     "AWS_REGION",
-    "AWS_ACCESS_KEY_ID",
-    "AWS_SECRET_ACCESS_KEY",
-    "AWS_S3_BUCKET_NAME",
+  "MONGO_URI",
+  "JWT_ACCESS_SECRET",
+  "JWT_REFRESH_SECRET",
+  "RESEND_API_KEY",
+  "EMAIL_FROM",
+  "AWS_REGION",
+  "AWS_ACCESS_KEY_ID",
+  "AWS_SECRET_ACCESS_KEY",
+  "AWS_S3_BUCKET_NAME",
 ];
 
 for (const key of requiredEnv) {
-    if (!process.env[key]) {
-        throw new Error(
-            `Missing Environment variables: ${key}`
-        );
-    }
+  if (!process.env[key]) {
+    throw new Error(`Missing Environment variables: ${key}`);
+  }
 }
 
 export const env = {
-    nodeEnv:
-        process.env.NODE_ENV ?? "development",
+  nodeEnv: process.env.NODE_ENV ?? "development",
 
-    port:
-        Number(process.env.PORT ?? 5050),
+  port: Number(process.env.PORT ?? 5050),
 
-    mongoUri:
-        process.env.MONGO_URI!,
+  mongoUri: process.env.MONGO_URI!,
 
-    clientUrl:
-        process.env.CLIENT_URL ??
-        "http://localhost:5173",
+  clientUrl: process.env.CLIENT_URL ?? "http://localhost:5173",
 
-    jwtAccessSecret:
-        process.env.JWT_ACCESS_SECRET!,
+  jwtAccessSecret: process.env.JWT_ACCESS_SECRET!,
 
-    jwtAccessExpiresIn:
-        process.env.JWT_ACCESS_EXPIRES_IN ??
-        "15m",
+  jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN ?? "15m",
 
-    jwtRefreshSecret:
-        process.env.JWT_REFRESH_SECRET!,
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,
 
-    jwtRefreshExpiresIn:
-        process.env.JWT_REFRESH_EXPIRES_IN ??
-        "3d",
+  jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN ?? "3d",
 
-    refreshTokenCookieName:
-        process.env.REFRESH_TOKEN_COOKIE_NAME ??
-        "educate_refresh_token",
+  refreshTokenCookieName: process.env.REFRESH_TOKEN_COOKIE_NAME ?? "educate_refresh_token",
 
-    refreshTokenCookieMaxAge:
-        Number(
-            process.env.REFRESH_TOKEN_COOKIE_MAX_AGE ??
-            259200000
-        ),
+  refreshTokenCookieMaxAge: Number(process.env.REFRESH_TOKEN_COOKIE_MAX_AGE ?? 259200000),
 
-    resendApiKey: process.env.RESEND_API_KEY!,
+  resendApiKey: process.env.RESEND_API_KEY!,
 
-    emailFrom: process.env.EMAIL_FROM!,
+  emailFrom: process.env.EMAIL_FROM!,
 
-    emailVerificationOtpExpiresInMs:
-        Number(
-            process.env.EMAIL_VERIFICATION_OTP_EXPIRES_IN_MS ??
-            600000
-        ),
-    passwordResetOtpExpiresInMs:
-        Number(
-            process.env.PASSWORD_RESET_OTP_EXPIRES_IN_MS
-        ),
+  emailVerificationOtpExpiresInMs: Number(
+    process.env.EMAIL_VERIFICATION_OTP_EXPIRES_IN_MS ?? 600000,
+  ),
+  passwordResetOtpExpiresInMs: Number(process.env.PASSWORD_RESET_OTP_EXPIRES_IN_MS),
 
+  awsRegion: process.env.AWS_REGION!,
 
-    awsRegion:
-        process.env.AWS_REGION!,
+  awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID!,
 
-    awsAccessKeyId:
-        process.env.AWS_ACCESS_KEY_ID!,
+  awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
 
-    awsSecretAccessKey:
-        process.env.AWS_SECRET_ACCESS_KEY!,
-
-    awsS3BucketName:
-        process.env.AWS_S3_BUCKET_NAME!,
+  awsS3BucketName: process.env.AWS_S3_BUCKET_NAME!,
 };

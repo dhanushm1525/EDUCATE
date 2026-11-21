@@ -122,9 +122,7 @@ export default function CourseReviewModal({
 
         {course.objectives && course.objectives.length > 0 && (
           <section>
-            <h4 className="text-sm font-semibold text-white">
-              Learning objectives
-            </h4>
+            <h4 className="text-sm font-semibold text-white">Learning objectives</h4>
             <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-300">
               {course.objectives.map((objective, index) => (
                 <li key={`${index}-${objective}`}>{objective}</li>
@@ -179,9 +177,7 @@ export default function CourseReviewModal({
               disabled={processing}
             />
 
-            <p className="text-right text-xs text-slate-400">
-              {rejectionReason.length}/1000
-            </p>
+            <p className="text-right text-xs text-slate-400">{rejectionReason.length}/1000</p>
 
             <div className="flex justify-end gap-2">
               <Button
@@ -208,12 +204,7 @@ export default function CourseReviewModal({
 
         {!showRejectionForm && (
           <div className="flex flex-wrap justify-end gap-2 border-t border-slate-800 pt-4">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={handleClose}
-              disabled={processing}
-            >
+            <Button type="button" variant="ghost" onClick={handleClose} disabled={processing}>
               Close
             </Button>
 
@@ -227,11 +218,7 @@ export default function CourseReviewModal({
               Reject
             </Button>
 
-            <Button
-              type="button"
-              loading={processing}
-              onClick={() => void onApprove(course)}
-            >
+            <Button type="button" loading={processing} onClick={() => void onApprove(course)}>
               <CheckCircle size={16} />
               Approve course
             </Button>

@@ -1,7 +1,6 @@
 export const LessonType = {
-    VIDEO: "video",
-    READING: "reading",
+  VIDEO: "video",
+  READING: "reading",
 } as const;
 
-export type LessonType =
-    (typeof LessonType)[keyof typeof LessonType];
+export type LessonType = (typeof LessonType)[keyof typeof LessonType];

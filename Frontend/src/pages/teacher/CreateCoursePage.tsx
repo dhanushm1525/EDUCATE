@@ -51,10 +51,7 @@ export default function CreateCoursePage() {
     void loadCategories();
   }, [addToast]);
 
-  const handleCreate = async (
-    data: CreateCourseRequest,
-    thumbnailFile?: File,
-  ) => {
+  const handleCreate = async (data: CreateCourseRequest, thumbnailFile?: File) => {
     let createdCourseId: string | undefined;
 
     try {
@@ -71,19 +68,14 @@ export default function CreateCoursePage() {
       if (thumbnailFile) {
         setUploadProgress(0);
 
-        const { uploadUrl, key } =
-          await courseService.generateThumbnailUploadUrl(
-            course.courseId,
-            thumbnailFile.type,
-          );
+        const { uploadUrl, key } = await courseService.generateThumbnailUploadUrl(
+          course.courseId,
+          thumbnailFile.type,
+        );
 
         // Step 3: Upload directly to S3.
 
-        await courseService.uploadThumbnail(
-          uploadUrl,
-          thumbnailFile,
-          setUploadProgress,
-        );
+        await courseService.uploadThumbnail(uploadUrl, thumbnailFile, setUploadProgress);
 
         // Step 4: Save the S3 object key in MongoDB.
 
@@ -149,9 +141,7 @@ export default function CreateCoursePage() {
           <div>
             <h1 className="text-2xl font-semibold">Create Course</h1>
 
-            <p className="mt-1 text-sm text-slate-400">
-              Start building your course content.
-            </p>
+            <p className="mt-1 text-sm text-slate-400">Start building your course content.</p>
           </div>
         </div>
 

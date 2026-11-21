@@ -1,27 +1,27 @@
 import { TeacherApplicationStatus } from "../../shared/enums/TeacherApplicationStatus";
 
 export interface TeacherApplication {
-    applicationId?: string;
+  applicationId?: string;
 
-    userId: string;
+  userId: string;
 
-    qualification: string;
+  qualification: string;
 
-    experience: number;
+  experience: number;
 
-    skills: string[];
+  skills: string[];
 
-    bio: string;
+  bio: string;
 
-    documents?: string[];
+  documents?: string[];
 
-    certificates?: string[];
+  certificates?: string[];
 
-    status: TeacherApplicationStatus;
+  status: TeacherApplicationStatus;
 
-    rejectionReason?: string;
+  rejectionReason?: string;
 
-    createdAt: Date;
+  createdAt: Date;
 
-    updatedAt: Date;
+  updatedAt: Date;
 }

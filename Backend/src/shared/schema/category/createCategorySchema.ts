@@ -1,24 +1,19 @@
 import { z } from "zod";
 
 export const createCategorySchema = z.object({
-    body: z.object({
-        name: z
-            .string()
-            .min(2, "Category name must be at least 2 characters")
-            .max(100, "Category name cannot exceed 100 characters")
-            .trim(),
+  body: z.object({
+    name: z
+      .string()
+      .min(2, "Category name must be at least 2 characters")
+      .max(100, "Category name cannot exceed 100 characters")
+      .trim(),
 
-        description: z
-            .string()
-            .max(500, "Description cannot exceed 500 characters")
-            .optional(),
+    description: z.string().max(500, "Description cannot exceed 500 characters").optional(),
 
-        image: z
-            .string()
-            .optional()
-    }),
+    image: z.string().optional(),
+  }),
 
-    params: z.object({}),
+  params: z.object({}),
 
-    query: z.object({})
+  query: z.object({}),
 });

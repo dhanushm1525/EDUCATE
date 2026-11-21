@@ -1,3 +1,3 @@
-export interface ResendVerificationOtpDTO{
-    email:string
+export interface ResendVerificationOtpDTO {
+  email: string;
 }

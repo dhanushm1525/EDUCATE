@@ -1,100 +1,71 @@
 import React from "react";
 import { logger } from "../../services/logger";
 
-
 interface ErrorBoundaryProps {
-
-    children: React.ReactNode;
-
+  children: React.ReactNode;
 }
-
 
 interface ErrorBoundaryState {
-
-    hasError: boolean;
-
+  hasError: boolean;
 }
 
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  public state: ErrorBoundaryState = {
+    hasError: false,
+  };
 
-export class ErrorBoundary extends React.Component<
-    ErrorBoundaryProps,
-    ErrorBoundaryState
-> {
-
-    public state: ErrorBoundaryState = {
-
-        hasError: false
-
+  public static getDerivedStateFromError(): ErrorBoundaryState {
+    return {
+      hasError: true,
     };
+  }
 
+  public componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    logger.error("Application Error", { error, errorInfo });
+  }
 
-    public static getDerivedStateFromError():
-
-        ErrorBoundaryState {
-
-        return {
-
-            hasError: true
-
-        };
-
-    }
-
-
-    public componentDidCatch(
-        error: Error,
-        errorInfo: React.ErrorInfo
-    ) {
-
-        logger.error("Application Error", { error, errorInfo });
-
-    }
-
-
-    public render() {
-
-        if (this.state.hasError) {
-
-            return (
-
-                <div className="
+  public render() {
+    if (this.state.hasError) {
+      return (
+        <div
+          className="
                     min-h-screen
                     flex
                     items-center
                     justify-center
                     bg-slate-950
                     px-6
-                ">
-
-                    <div className="
+                "
+        >
+          <div
+            className="
                         max-w-md
                         text-center
-                    ">
-
-                        <h1 className="
+                    "
+          >
+            <h1
+              className="
                             text-2xl
                             font-bold
                             text-white
-                        ">
-                            Something went wrong
-                        </h1>
+                        "
+            >
+              Something went wrong
+            </h1>
 
-
-                        <p className="
+            <p
+              className="
                             mt-3
                             text-sm
                             text-slate-400
-                        ">
-                            An unexpected error occurred.
-                            Please try again.
-                        </p>
+                        "
+            >
+              An unexpected error occurred. Please try again.
+            </p>
 
-
-                        <button
-                            onClick={() =>
-                                window.location.reload()
-                            }
-                            className="
+            <button
+              onClick={() => window.location.reload()}
+              className="
                                 mt-6
                                 rounded-lg
                                 bg-indigo-600
@@ -105,21 +76,14 @@ export class ErrorBoundary extends React.Component<
                                 text-white
                                 hover:bg-indigo-500
                             "
-                        >
-                            Reload Application
-                        </button>
-
-                    </div>
-
-                </div>
-
-            );
-
-        }
-
-
-        return this.props.children;
-
+            >
+              Reload Application
+            </button>
+          </div>
+        </div>
+      );
     }
 
+    return this.props.children;
+  }
 }

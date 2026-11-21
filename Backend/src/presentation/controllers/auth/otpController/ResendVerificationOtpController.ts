@@ -1,32 +1,21 @@
 import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
 
-import { Request,Response,NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { IResendVerificationOtp } from "../../../../application/interfaces/auth/IResendVerificationOtp";
 import { successResponse } from "../../../../shared/response/apiResponse";
 import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMapper";
 
+export class ResendVerificationOtpController {
+  constructor(private readonly _resendVerificationOtp: IResendVerificationOtp) {}
 
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const dto = AuthRequestMapper.toResendVerificationOtpDTO(req.body);
+      const result = await this._resendVerificationOtp.execute(dto);
 
-export class ResendVerificationOtpController{
-    constructor(
-        private readonly _resendVerificationOtp: IResendVerificationOtp
-    ){}
-
-
-    async handle(
-        req:Request,
-        res:Response,
-        next:NextFunction
-    ):Promise<void>{
-
-        try{
-
-            const dto = AuthRequestMapper.toResendVerificationOtpDTO(req.body);
-            const result = await this._resendVerificationOtp.execute(dto);
-
-            successResponse(res,HttpStatusCode.OK,result.message,result);
-        }catch(error){
-            next(error)
-        }
+      successResponse(res, HttpStatusCode.OK, result.message, result);
+    } catch (error) {
+      next(error);
     }
+  }
 }

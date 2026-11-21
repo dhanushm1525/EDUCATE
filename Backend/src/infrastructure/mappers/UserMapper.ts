@@ -2,63 +2,57 @@ import { User } from "../../domain/entities/User";
 import { IUserDocument } from "../database/models/UserModel";
 
 export class UserMapper {
+  static toDomain(document: IUserDocument): User {
+    return new User({
+      id: document._id.toString(),
 
-    static toDomain(
-        document: IUserDocument
-    ): User {
+      firstName: document.firstName,
 
-        return new User({
-            id: document._id.toString(),
+      lastName: document.lastName,
 
-            firstName: document.firstName,
+      email: document.email,
 
-            lastName: document.lastName,
+      password: document.password,
 
-            email: document.email,
+      googleId: document.googleId,
 
-            password: document.password,
+      avatar: document.avatar,
 
-            googleId:document.googleId,
+      authProvider: document.authProvider,
 
-            avatar: document.avatar,
+      role: document.role,
 
-            authProvider:document.authProvider,
+      status: document.status,
 
-            role: document.role,
+      isVerified: document.isVerified,
 
-            status: document.status,
+      createdAt: document.createdAt,
 
-            isVerified: document.isVerified,
+      updatedAt: document.updatedAt,
+    });
+  }
 
-            createdAt: document.createdAt,
+  static toPersistence(user: User) {
+    return {
+      firstName: user.firstName,
 
-            updatedAt: document.updatedAt
-        });
-    }
+      lastName: user.lastName,
 
-    static toPersistence(
-        user: User
-    ) {
-        return {
-            firstName: user.firstName,
+      email: user.email,
 
-            lastName: user.lastName,
+      password: user.password,
 
-            email: user.email,
+      googleId: user.googleId,
 
-            password: user.password,
+      avatar: user.avatar,
 
-            googleId:user.googleId,
+      authProvider: user.authProvider,
 
-            avatar: user.avatar,
+      role: user.role,
 
-            authProvider:user.authProvider,
+      status: user.status,
 
-            role: user.role,
-
-            status: user.status,
-
-            isVerified: user.isVerified
-        };
-    }
+      isVerified: user.isVerified,
+    };
+  }
 }

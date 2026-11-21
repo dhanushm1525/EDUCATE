@@ -1,14 +1,14 @@
 import { CategoryStatus } from "../../shared/enums/CategoryStatus";
 
 export interface Category {
-    categoryId?: string;
+  categoryId?: string;
 
-    name: string;
-    description?: string;
-    image?: string;
+  name: string;
+  description?: string;
+  image?: string;
 
-    status: CategoryStatus;
+  status: CategoryStatus;
 
-    createdAt: Date;
-    updatedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }

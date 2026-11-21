@@ -21,13 +21,7 @@ export default function ToastProvider() {
   );
 }
 
-function ToastItem({
-  toast,
-  onClose,
-}: {
-  toast: Toast;
-  onClose: (id: string) => void;
-}) {
+function ToastItem({ toast, onClose }: { toast: Toast; onClose: (id: string) => void }) {
   const Icon = toastIcon[toast.type];
 
   useEffect(() => {

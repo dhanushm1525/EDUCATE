@@ -1,4 +1,4 @@
 export interface SendVerificationOtpDTO {
-    userId: string;
-    email: string;
+  userId: string;
+  email: string;
 }

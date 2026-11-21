@@ -1,137 +1,131 @@
 import { Schema, model, Document, Types } from "mongoose";
 
 export interface AssignmentQuestionDocument {
-    questionId: string;
-    question: string;
-    options: string[];
-    correctAnswer: string;
-    marks: number;
+  questionId: string;
+  question: string;
+  options: string[];
+  correctAnswer: string;
+  marks: number;
 }
 
 export interface AssignmentDocument extends Document {
-    _id: Types.ObjectId;
-    lessonId: Types.ObjectId;
+  _id: Types.ObjectId;
+  lessonId: Types.ObjectId;
 
-    title: string;
-    description?: string;
+  title: string;
+  description?: string;
 
-    questions: AssignmentQuestionDocument[];
+  questions: AssignmentQuestionDocument[];
 
-    totalMarks: number;
-    passingMarks: number;
+  totalMarks: number;
+  passingMarks: number;
 
-    timeLimit?: number;
-    attemptsAllowed?: number;
+  timeLimit?: number;
+  attemptsAllowed?: number;
 
-    dueDate?: Date | null;
+  dueDate?: Date | null;
 
-    createdAt: Date;
-    updatedAt: Date;
-    isRequired: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  isRequired: boolean;
 }
 
-const assignmentQuestionSchema =
-    new Schema<AssignmentQuestionDocument>(
-        {
-            questionId: {
-                type: String,
-                required: true,
-            },
+const assignmentQuestionSchema = new Schema<AssignmentQuestionDocument>(
+  {
+    questionId: {
+      type: String,
+      required: true,
+    },
 
-            question: {
-                type: String,
-                required: true,
-                trim: true,
-            },
+    question: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-            options: {
-                type: [String],
-                required: true,
-            },
+    options: {
+      type: [String],
+      required: true,
+    },
 
-            correctAnswer: {
-                type: String,
-                required: true,
-            },
+    correctAnswer: {
+      type: String,
+      required: true,
+    },
 
-            marks: {
-                type: Number,
-                required: true,
-                min: 1,
-            },
-        },
-        {
-            _id: false,
-        }
-    );
+    marks: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+  },
+  {
+    _id: false,
+  },
+);
 
-const assignmentSchema =
-    new Schema<AssignmentDocument>(
-        {
-            lessonId: {
-                type: Schema.Types.ObjectId,
-                ref: "Lesson",
-                required: true,
-                unique: true,
-                index: true
-            },
+const assignmentSchema = new Schema<AssignmentDocument>(
+  {
+    lessonId: {
+      type: Schema.Types.ObjectId,
+      ref: "Lesson",
+      required: true,
+      unique: true,
+      index: true,
+    },
 
-            title: {
-                type: String,
-                required: true,
-                trim: true,
-            },
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-            description: {
-                type: String,
-                trim: true,
-            },
+    description: {
+      type: String,
+      trim: true,
+    },
 
-            questions: {
-                type: [assignmentQuestionSchema],
-                required: true,
-                default: [],
-            },
+    questions: {
+      type: [assignmentQuestionSchema],
+      required: true,
+      default: [],
+    },
 
-            totalMarks: {
-                type: Number,
-                required: true,
-                min: 1,
-            },
+    totalMarks: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
 
-            passingMarks: {
-                type: Number,
-                required: true,
-                min: 1,
-            },
+    passingMarks: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
 
-            timeLimit: {
-                type: Number,
-                min: 1,
-            },
+    timeLimit: {
+      type: Number,
+      min: 1,
+    },
 
-            attemptsAllowed: {
-                type: Number,
-                min: 1,
-            },
+    attemptsAllowed: {
+      type: Number,
+      min: 1,
+    },
 
-            dueDate: {
-                type: Date,
-                default: null,
-            },
-            isRequired: {
-                type: Boolean,
-                required: true,
-                default: true,
-            },
-        },
-        {
-            timestamps: true,
-        }
-    );
+    dueDate: {
+      type: Date,
+      default: null,
+    },
+    isRequired: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
 
-export const AssignmentModel =
-    model<AssignmentDocument>(
-        "Assignment",
-        assignmentSchema
-    );
+export const AssignmentModel = model<AssignmentDocument>("Assignment", assignmentSchema);

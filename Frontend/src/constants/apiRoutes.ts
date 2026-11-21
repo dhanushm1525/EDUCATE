@@ -17,173 +17,117 @@ export const API_ROUTES = {
   },
 
   storage: {
-    profileImageUploadUrl:
-      "/storage/profile-image/upload-url",
+    profileImageUploadUrl: "/storage/profile-image/upload-url",
 
-    profileImage:
-      "/storage/profile-image",
+    profileImage: "/storage/profile-image",
   },
 
   categories: {
     base: "/categories",
   },
 
-
   courses: {
     base: "/courses",
     myCourses: "/courses/my-courses",
     pending: "/courses/pending",
 
-    byId: (courseId: string) =>
-      `/courses/${courseId}`,
+    byId: (courseId: string) => `/courses/${courseId}`,
 
-    manage: (courseId: string) =>
-      `/courses/${courseId}/manage`,
+    manage: (courseId: string) => `/courses/${courseId}/manage`,
 
-    submit: (courseId: string) =>
-      `/courses/${courseId}/submit`,
+    submit: (courseId: string) => `/courses/${courseId}/submit`,
 
-    approve: (courseId: string) =>
-      `/courses/${courseId}/approve`,
+    approve: (courseId: string) => `/courses/${courseId}/approve`,
 
-    reject: (courseId: string) =>
-      `/courses/${courseId}/reject`,
+    reject: (courseId: string) => `/courses/${courseId}/reject`,
 
-    learningContent: (courseId: string) =>
-      `/courses/${courseId}/learning-content`,
+    learningContent: (courseId: string) => `/courses/${courseId}/learning-content`,
 
-    thumbnailUploadUrl: (courseId: string) =>
-      `/courses/${courseId}/thumbnail/upload-url`,
+    thumbnailUploadUrl: (courseId: string) => `/courses/${courseId}/thumbnail/upload-url`,
   },
 
-
   chapters: {
-    byCourse: (courseId: string) =>
-      `/courses/${courseId}/chapters`,
+    byCourse: (courseId: string) => `/courses/${courseId}/chapters`,
 
-    byId: (
-      courseId: string,
-      chapterId: string,
-    ) =>
-      `/courses/${courseId}/chapters/${chapterId}`,
+    byId: (courseId: string, chapterId: string) => `/courses/${courseId}/chapters/${chapterId}`,
   },
 
   lessons: {
-    byChapter: (
-      courseId: string,
-      chapterId: string,
-    ) =>
+    byChapter: (courseId: string, chapterId: string) =>
       `/courses/${courseId}/chapters/${chapterId}/lessons`,
 
-    byId: (
-      courseId: string,
-      chapterId: string,
-      lessonId: string,
-    ) =>
+    byId: (courseId: string, chapterId: string, lessonId: string) =>
       `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}`,
 
-    mediaUploadUrl: (
-      courseId: string,
-      chapterId: string,
-      lessonId: string,
-    ) =>
+    mediaUploadUrl: (courseId: string, chapterId: string, lessonId: string) =>
       `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/media/upload-url`,
 
     media: (courseId: string, chapterId: string, lessonId: string) =>
       `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/media`,
 
-    studentById: (
-      courseId: string,
-      chapterId: string,
-      lessonId: string
-    ) =>
+    studentById: (courseId: string, chapterId: string, lessonId: string) =>
       `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/student`,
   },
 
-
   assignments: {
-    byLesson: (lessonId: string) =>
-      `/lessons/${lessonId}/assignment`,
+    byLesson: (lessonId: string) => `/lessons/${lessonId}/assignment`,
 
-    byId: (assignmentId: string) =>
-      `/assignments/${assignmentId}`,
+    byId: (assignmentId: string) => `/assignments/${assignmentId}`,
 
     // Teacher APIs
     teacher: {
-      submissions: (assignmentId: string) =>
-        `/teacher/assignments/${assignmentId}/submissions`,
+      submissions: (assignmentId: string) => `/teacher/assignments/${assignmentId}/submissions`,
 
-      submissionDetail: (
-        assignmentId: string,
-        submissionId: string
-      ) =>
+      submissionDetail: (assignmentId: string, submissionId: string) =>
         `/teacher/assignments/${assignmentId}/submissions/${submissionId}`,
 
-      gradeSubmission: (
-        assignmentId: string,
-        submissionId: string
-      ) =>
+      gradeSubmission: (assignmentId: string, submissionId: string) =>
         `/teacher/assignments/${assignmentId}/submissions/${submissionId}/grade`,
 
       myAssignments: "/teacher/assignments",
     },
 
     // Student APIs
-    
-student: {
-    byLesson: (lessonId: string) =>
-        `/assignments/student/lessons/${lessonId}/assignment`,
 
-    start: (assignmentId: string) =>
-        `/assignments/student/assignments/${assignmentId}/start`,
+    student: {
+      byLesson: (lessonId: string) => `/assignments/student/lessons/${lessonId}/assignment`,
 
-    submit: (assignmentId: string) =>
-        `/assignments/student/assignments/${assignmentId}/submit`,
+      start: (assignmentId: string) => `/assignments/student/assignments/${assignmentId}/start`,
 
-    results: (assignmentId: string) =>
-        `/assignments/student/assignments/${assignmentId}/results`,
+      submit: (assignmentId: string) => `/assignments/student/assignments/${assignmentId}/submit`,
 
-    saveAnswers: (assignmentId: string, submissionId: string) =>
-    `/assignments/student/assignments/${assignmentId}/attempts/${submissionId}/answers`,
-},
+      results: (assignmentId: string) => `/assignments/student/assignments/${assignmentId}/results`,
 
+      saveAnswers: (assignmentId: string, submissionId: string) =>
+        `/assignments/student/assignments/${assignmentId}/attempts/${submissionId}/answers`,
+    },
   },
-
 
   enrollments: {
     base: "/enrollments",
 
-    enroll: (courseId: string) =>
-      `/enrollments/${courseId}`,
+    enroll: (courseId: string) => `/enrollments/${courseId}`,
 
     myCourses: "/enrollments/my-courses",
   },
 
   teacher: {
-    submissions: (assignmentId: string) =>
-      `/teacher/assignments/${assignmentId}/submissions`,
+    submissions: (assignmentId: string) => `/teacher/assignments/${assignmentId}/submissions`,
 
-    submissionDetail: (
-      assignmentId: string,
-      submissionId: string
-    ) =>
+    submissionDetail: (assignmentId: string, submissionId: string) =>
       `/teacher/assignments/${assignmentId}/submissions/${submissionId}`,
 
-    gradeSubmission: (
-      assignmentId: string,
-      submissionId: string
-    ) =>
+    gradeSubmission: (assignmentId: string, submissionId: string) =>
       `/teacher/assignments/${assignmentId}/submissions/${submissionId}/grade`,
   },
 
   adminUsers: {
     base: "/admin/users",
 
-    updateStatus: (userId: string) =>
-        `/admin/users/${userId}/status`,
-},
+    updateStatus: (userId: string) => `/admin/users/${userId}/status`,
+  },
 
-teacherApplications: {
+  teacherApplications: {
     base: "/teacher-applications",
 
     pending: "/teacher-applications/pending",
@@ -192,25 +136,21 @@ teacherApplications: {
 
     uploadUrl: "/teacher-applications/upload-url",
 
-    approve: (applicationId: string) =>
-        `/teacher-applications/${applicationId}/approve`,
+    approve: (applicationId: string) => `/teacher-applications/${applicationId}/approve`,
 
-    reject: (applicationId: string) =>
-        `/teacher-applications/${applicationId}/reject`,
-},
+    reject: (applicationId: string) => `/teacher-applications/${applicationId}/reject`,
+  },
 
+  courseProgress: {
+    myProgress: "/course-progress/my-progress",
 
-courseProgress: {
-  myProgress: "/course-progress/my-progress",
+    recordAccess: (courseId: string, lessonId: string) =>
+      `/course-progress/${courseId}/lessons/${lessonId}/access`,
 
-  recordAccess: (courseId: string, lessonId: string) =>
-    `/course-progress/${courseId}/lessons/${lessonId}/access`,
+    completeLesson: (courseId: string, lessonId: string) =>
+      `/course-progress/${courseId}/lessons/${lessonId}/complete`,
 
-  completeLesson: (courseId: string, lessonId: string) =>
-    `/course-progress/${courseId}/lessons/${lessonId}/complete`,
-
-  videoProgress: (courseId: string, lessonId: string) =>
-    `/course-progress/${courseId}/lessons/${lessonId}/video-progress`,
-},
-
+    videoProgress: (courseId: string, lessonId: string) =>
+      `/course-progress/${courseId}/lessons/${lessonId}/video-progress`,
+  },
 } as const;

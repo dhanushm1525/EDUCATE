@@ -1,3 +1,3 @@
 export interface CleanupLessonMediaDTO {
-    key: string;
+  key: string;
 }

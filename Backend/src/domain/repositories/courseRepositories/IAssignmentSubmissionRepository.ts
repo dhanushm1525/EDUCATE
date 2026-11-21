@@ -1,43 +1,27 @@
-
 import { AssignmentSubmission } from "../../entities/AssignmentSubmission";
 
 export interface IAssignmentSubmissionRepository {
+  create(submission: AssignmentSubmission): Promise<AssignmentSubmission>;
 
-    create(
-        submission: AssignmentSubmission
-    ): Promise<AssignmentSubmission>;
+  findById(submissionId: string): Promise<AssignmentSubmission | null>;
 
-    findById(
-        submissionId: string
-    ): Promise<AssignmentSubmission | null>;
+  findByAssignmentAndUser(assignmentId: string, userId: string): Promise<AssignmentSubmission[]>;
 
-    findByAssignmentAndUser(
-        assignmentId: string,
-        userId: string
-    ): Promise<AssignmentSubmission[]>;
+  findActiveAttempt(assignmentId: string, userId: string): Promise<AssignmentSubmission | null>;
 
-    findActiveAttempt(
-        assignmentId: string,
-        userId: string
-    ): Promise<AssignmentSubmission | null>;
+  findByUserId(userId: string): Promise<AssignmentSubmission[]>;
 
-    findByUserId(
-        userId: string
-    ): Promise<AssignmentSubmission[]>;
+  findByAssignmentId(assignmentId: string): Promise<AssignmentSubmission[]>;
 
-    findByAssignmentId(
-        assignmentId: string
-    ): Promise<AssignmentSubmission[]>;
+  update(
+    submissionId: string,
+    submission: AssignmentSubmission,
+  ): Promise<AssignmentSubmission | null>;
 
-    update(
-        submissionId: string,
-        submission: AssignmentSubmission
-    ): Promise<AssignmentSubmission | null>;
-
-    updateAnswers(
-        assignmentId: string,
-        userId: string,
-        submissionId: string,
-        answers: AssignmentSubmission["answers"]
-    ): Promise<AssignmentSubmission | null>;
+  updateAnswers(
+    assignmentId: string,
+    userId: string,
+    submissionId: string,
+    answers: AssignmentSubmission["answers"],
+  ): Promise<AssignmentSubmission | null>;
 }

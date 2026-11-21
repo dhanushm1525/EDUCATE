@@ -190,19 +190,13 @@ export default function LessonManagementPage() {
 
     setUploadProgress(0);
 
-    const contentType =
-      mediaType === "attachment" ? "application/pdf" : file.type;
+    const contentType = mediaType === "attachment" ? "application/pdf" : file.type;
 
-    const upload = await lessonService.generateMediaUploadUrl(
-      courseId,
-      chapterId,
-      lessonId,
-      {
-        fileName: file.name,
-        contentType,
-        mediaType,
-      },
-    );
+    const upload = await lessonService.generateMediaUploadUrl(courseId, chapterId, lessonId, {
+      fileName: file.name,
+      contentType,
+      mediaType,
+    });
 
     await lessonService.uploadMedia(upload.uploadUrl, file, (percentage) =>
       setUploadProgress(percentage),
@@ -259,27 +253,18 @@ export default function LessonManagementPage() {
 
       // Create lesson
       if (!editingLesson) {
-        const created = await lessonService.createLesson(
-          courseId,
-          chapterId,
-          data,
-        );
+        const created = await lessonService.createLesson(courseId, chapterId, data);
 
         createdLessonId = created.lessonId;
         let savedLesson = created;
 
         // Video lesson
         if (created.type === "video" && videoFile) {
-          const videoKey = await uploadLessonMedia(
-            created.lessonId,
-            videoFile,
-            "video",
-          );
+          const videoKey = await uploadLessonMedia(created.lessonId, videoFile, "video");
 
           uploadedMediaKeys.push(videoKey);
 
-          const thumbnailToUpload =
-            thumbnailFile ?? (await captureVideoThumbnail(videoFile));
+          const thumbnailToUpload = thumbnailFile ?? (await captureVideoThumbnail(videoFile));
 
           const thumbnailKey = await uploadLessonMedia(
             created.lessonId,
@@ -289,46 +274,30 @@ export default function LessonManagementPage() {
 
           uploadedMediaKeys.push(thumbnailKey);
 
-          savedLesson = await lessonService.updateLesson(
-            courseId,
-            chapterId,
-            created.lessonId,
-            {
-              videoUrl: videoKey,
-              thumbnailKey,
-            },
-          );
+          savedLesson = await lessonService.updateLesson(courseId, chapterId, created.lessonId, {
+            videoUrl: videoKey,
+            thumbnailKey,
+          });
 
           uploadedMediaKeys.length = 0;
         }
 
         // Reading lesson PDF attachment
         if (created.type === "reading" && pdfFile) {
-          const attachmentKey = await uploadLessonMedia(
-            created.lessonId,
-            pdfFile,
-            "attachment",
-          );
+          const attachmentKey = await uploadLessonMedia(created.lessonId, pdfFile, "attachment");
 
           uploadedMediaKeys.push(attachmentKey);
 
-          savedLesson = await lessonService.updateLesson(
-            courseId,
-            chapterId,
-            created.lessonId,
-            {
-              attachments: [attachmentKey],
-            },
-          );
+          savedLesson = await lessonService.updateLesson(courseId, chapterId, created.lessonId, {
+            attachments: [attachmentKey],
+          });
 
           uploadedMediaKeys.length = 0;
         }
 
         setLessons((current) =>
           [
-            ...current.filter(
-              (lesson) => lesson.lessonId !== savedLesson.lessonId,
-            ),
+            ...current.filter((lesson) => lesson.lessonId !== savedLesson.lessonId),
             savedLesson,
           ].sort((a, b) => a.order - b.order),
         );
@@ -346,11 +315,7 @@ export default function LessonManagementPage() {
 
         // Upload replacement video.
         if (videoFile) {
-          const videoKey = await uploadLessonMedia(
-            editingLesson.lessonId,
-            videoFile,
-            "video",
-          );
+          const videoKey = await uploadLessonMedia(editingLesson.lessonId, videoFile, "video");
 
           uploadedMediaKeys.push(videoKey);
           updatedData.videoUrl = videoKey;
@@ -401,9 +366,7 @@ export default function LessonManagementPage() {
 
         setLessons((current) =>
           current
-            .map((lesson) =>
-              lesson.lessonId === updated.lessonId ? updated : lesson,
-            )
+            .map((lesson) => (lesson.lessonId === updated.lessonId ? updated : lesson))
             .sort((a, b) => a.order - b.order),
         );
 
@@ -414,11 +377,7 @@ export default function LessonManagementPage() {
           oldMediaToRemove.push(oldVideoKey);
         }
 
-        if (
-          thumbnailToUpload &&
-          oldThumbnailKey &&
-          oldThumbnailKey !== updated.thumbnailKey
-        ) {
+        if (thumbnailToUpload && oldThumbnailKey && oldThumbnailKey !== updated.thumbnailKey) {
           oldMediaToRemove.push(oldThumbnailKey);
         }
 
@@ -455,10 +414,7 @@ export default function LessonManagementPage() {
 
       // Cleanup newly uploaded media that was not attached.
       if (targetLessonId && uploadedMediaKeys.length > 0) {
-        const failures = await cleanupUploadedMedia(
-          targetLessonId,
-          uploadedMediaKeys,
-        );
+        const failures = await cleanupUploadedMedia(targetLessonId, uploadedMediaKeys);
 
         if (failures.length > 0) {
           cleanupFailures.push("uploaded lesson media");
@@ -468,11 +424,7 @@ export default function LessonManagementPage() {
       // Rollback newly created lesson if saving fails.
       if (isCreating && createdLessonId) {
         try {
-          await lessonService.deleteLesson(
-            courseId,
-            chapterId,
-            createdLessonId,
-          );
+          await lessonService.deleteLesson(courseId, chapterId, createdLessonId);
         } catch {
           cleanupFailures.push("the newly created lesson");
         }
@@ -511,9 +463,7 @@ export default function LessonManagementPage() {
 
       await lessonService.deleteLesson(courseId, chapterId, lesson.lessonId);
 
-      setLessons((current) =>
-        current.filter((item) => item.lessonId !== lesson.lessonId),
-      );
+      setLessons((current) => current.filter((item) => item.lessonId !== lesson.lessonId));
 
       addToast("Lesson deleted successfully", "success");
       setLessonToDelete(null);
@@ -570,12 +520,7 @@ export default function LessonManagementPage() {
           {/* Header */}
           <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate(-1)}
-                disabled={saving}
-              >
+              <Button variant="ghost" size="sm" onClick={() => navigate(-1)} disabled={saving}>
                 <ArrowLeft size={16} />
                 Back
               </Button>
@@ -588,10 +533,7 @@ export default function LessonManagementPage() {
               </div>
             </div>
 
-            <Button
-              onClick={openCreate}
-              disabled={!courseId || !chapterId || saving}
-            >
+            <Button onClick={openCreate} disabled={!courseId || !chapterId || saving}>
               <Plus size={16} />
               Add Lesson
             </Button>
@@ -603,17 +545,12 @@ export default function LessonManagementPage() {
               className="rounded-xl border border-slate-800 bg-slate-900 p-10 text-center"
               role="status"
             >
-              <RefreshCw
-                size={22}
-                className="mx-auto animate-spin text-blue-400"
-              />
+              <RefreshCw size={22} className="mx-auto animate-spin text-blue-400" />
               <p className="mt-3 text-sm text-slate-400">Loading lessons...</p>
             </div>
           ) : loadError ? (
             <div className="rounded-xl border border-red-500/20 bg-slate-900 p-8 text-center">
-              <h2 className="font-medium text-red-400">
-                Unable to load lessons
-              </h2>
+              <h2 className="font-medium text-red-400">Unable to load lessons</h2>
               <p className="mt-2 text-sm text-slate-400">{loadError}</p>
 
               <div className="mt-5 flex justify-center">
@@ -640,12 +577,9 @@ export default function LessonManagementPage() {
         {/* Footer */}
         <footer className="mt-auto w-full border-t border-slate-800 bg-[#0B1120] px-6 py-5">
           <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-between gap-2 sm:flex-row">
-            <span className="text-sm font-bold tracking-wide text-blue-400">
-              EDUCATE
-            </span>
+            <span className="text-sm font-bold tracking-wide text-blue-400">EDUCATE</span>
             <p className="text-xs text-slate-500">
-              © {new Date().getFullYear()} EDUCATE Learning Platform. All rights
-              reserved.
+              © {new Date().getFullYear()} EDUCATE Learning Platform. All rights reserved.
             </p>
           </div>
         </footer>
@@ -657,9 +591,7 @@ export default function LessonManagementPage() {
         onClose={closeModal}
         title={editingLesson ? "Edit Lesson" : "Add Lesson"}
         description={
-          editingLesson
-            ? "Update the lesson details."
-            : "Create a lesson for this chapter."
+          editingLesson ? "Update the lesson details." : "Create a lesson for this chapter."
         }
         width="lg"
       >
@@ -668,9 +600,7 @@ export default function LessonManagementPage() {
           {uploadProgress !== null && (
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-slate-300">
-                  Uploading lesson media...
-                </span>
+                <span className="text-slate-300">Uploading lesson media...</span>
                 <span className="text-blue-400">{uploadProgress}%</span>
               </div>
 
@@ -723,10 +653,8 @@ export default function LessonManagementPage() {
         <div className="space-y-5">
           <p className="text-sm text-slate-300">
             Are you sure you want to delete{" "}
-            <span className="font-semibold text-white">
-              {lessonToDelete?.title}
-            </span>
-            ? The lesson and its associated content may be permanently removed.
+            <span className="font-semibold text-white">{lessonToDelete?.title}</span>? The lesson
+            and its associated content may be permanently removed.
           </p>
 
           <div className="flex justify-end gap-3">

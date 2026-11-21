@@ -1,4 +1,4 @@
-export enum LessonType{
-    VIDEO = 'video',
-    READING = 'reading'
+export enum LessonType {
+  VIDEO = "video",
+  READING = "reading",
 }

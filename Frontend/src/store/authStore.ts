@@ -2,74 +2,50 @@ import { create } from "zustand";
 
 import type { User } from "../types/auth";
 
-
 interface AuthState {
+  user: User | null;
 
-    user: User | null;
+  accessToken: string | null;
 
-    accessToken: string | null;
+  isAuthenticated: boolean;
 
-    isAuthenticated: boolean;
+  isInitialized: boolean;
 
-    isInitialized: boolean;
+  setAuth: (user: User, accessToken: string) => void;
 
+  setAccessToken: (accessToken: string) => void;
 
-    setAuth: (
-        user: User,
-        accessToken: string
-    ) => void;
+  clearAuth: () => void;
 
-
-    setAccessToken: (
-        accessToken: string
-    ) => void;
-
-
-    clearAuth: () => void;
-
-
-    setInitialized: (
-        isInitialized: boolean
-    ) => void;
-
+  setInitialized: (isInitialized: boolean) => void;
 }
 
+export const useAuthStore = create<AuthState>((set) => ({
+  user: null,
 
-export const useAuthStore =
-    create<AuthState>((set) => ({
+  accessToken: null,
 
-        user: null,
+  isAuthenticated: false,
 
-        accessToken: null,
+  isInitialized: false,
 
-        isAuthenticated: false,
+  setAuth: (user, accessToken) => {
+    sessionStorage.setItem("accessToken", accessToken);
+    set({ user, accessToken, isAuthenticated: true });
+  },
 
-        isInitialized: false,
+  setAccessToken: (accessToken) => {
+    sessionStorage.setItem("accessToken", accessToken);
 
+    set({ accessToken });
+  },
 
-        setAuth: (user, accessToken) => {
-            sessionStorage.setItem("accessToken",accessToken)
-            set({ user, accessToken, isAuthenticated: true });
-        },
+  clearAuth: () => {
+    sessionStorage.removeItem("accessToken");
+    set({ user: null, accessToken: null, isAuthenticated: false });
+  },
 
-
-        setAccessToken: (accessToken) => {
-            sessionStorage.setItem("accessToken",accessToken)
-
-            set({ accessToken });
-
-        },
-
-
-        clearAuth: () => {
-            sessionStorage.removeItem("accessToken")
-            set({ user: null, accessToken: null, isAuthenticated: false });
-
-        },
-
-
-        setInitialized: (isInitialized) => {
-            set({ isInitialized });
-        }
-
-    }));
+  setInitialized: (isInitialized) => {
+    set({ isInitialized });
+  },
+}));

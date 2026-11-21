@@ -2,5 +2,5 @@ import { ResendVerificationOtpDTO } from "../../dtos/auth/ResendVerificationOtpD
 import { ResendVerificationOtpResponseDTO } from "../../dtos/auth/ResendVerificationOtpResponseDTO";
 
 export interface IResendVerificationOtp {
-    execute(request: ResendVerificationOtpDTO): Promise<ResendVerificationOtpResponseDTO>;
+  execute(request: ResendVerificationOtpDTO): Promise<ResendVerificationOtpResponseDTO>;
 }

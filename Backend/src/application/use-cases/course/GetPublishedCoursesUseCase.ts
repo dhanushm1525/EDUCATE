@@ -4,19 +4,12 @@ import { GetPublishedCoursesDTO } from "../../dtos/courses/GetPublishedCoursesDT
 import { GetPublishedCoursesMapper } from "../../mappers/GetPublishedCoursesMapper";
 import { IGetPublishedCoursesUseCase } from "../../interfaces/course/IGetPublishedCoursesUseCase";
 
-export class GetPublishedCoursesUseCase
-    implements IGetPublishedCoursesUseCase {
+export class GetPublishedCoursesUseCase implements IGetPublishedCoursesUseCase {
+  constructor(private readonly _courseRepository: ICourseRepository) {}
 
-    constructor(
-        private readonly _courseRepository: ICourseRepository
-    ) {}
+  async execute(dto: GetPublishedCoursesDTO): Promise<Course[]> {
+    const criteria = GetPublishedCoursesMapper.toSearchCriteria(dto);
 
-    async execute(
-        dto: GetPublishedCoursesDTO
-    ): Promise<Course[]> {
-        const criteria =
-            GetPublishedCoursesMapper.toSearchCriteria(dto);
-
-        return this._courseRepository.findPublished(criteria);
-    }
+    return this._courseRepository.findPublished(criteria);
+  }
 }

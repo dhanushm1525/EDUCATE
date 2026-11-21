@@ -9,10 +9,7 @@ import { authService } from "../../services/auth.service";
 import { getApiErrorMessage } from "../../utils/apiError";
 import { useToastStore } from "../../store/toastStore";
 
-import {
-  validateEmail,
-  validateVerifyEmailForm,
-} from "../../utils/formValidation";
+import { validateEmail, validateVerifyEmailForm } from "../../utils/formValidation";
 
 interface VerifyEmailFormProps {
   userId: string;
@@ -144,9 +141,7 @@ export function VerifyEmailForm({ userId, email }: VerifyEmailFormProps) {
             <ShieldCheck className="w-6 h-6 text-white" />
           </div>
 
-          <span className="text-xl font-black tracking-wider text-white">
-            EDUCATE
-          </span>
+          <span className="text-xl font-black tracking-wider text-white">EDUCATE</span>
         </div>
 
         {/* Card */}
@@ -167,18 +162,13 @@ export function VerifyEmailForm({ userId, email }: VerifyEmailFormProps) {
               We've sent a verification code to
             </p>
 
-            <p className="text-sm font-semibold text-indigo-400 mt-1 break-all">
-              {email}
-            </p>
+            <p className="text-sm font-semibold text-indigo-400 mt-1 break-all">{email}</p>
           </div>
 
           {/* Form */}
 
           <form onSubmit={handleVerify} noValidate className="mt-8">
-            <label
-              htmlFor="otp"
-              className="block text-sm font-medium text-slate-300 mb-2"
-            >
+            <label htmlFor="otp" className="block text-sm font-medium text-slate-300 mb-2">
               Verification Code
             </label>
 
@@ -211,10 +201,7 @@ export function VerifyEmailForm({ userId, email }: VerifyEmailFormProps) {
           <div className="mt-6 text-center">
             {secondsLeft > 0 ? (
               <p className="text-sm text-slate-400">
-                Resend OTP in{" "}
-                <span className="font-semibold text-indigo-400">
-                  {secondsLeft}s
-                </span>
+                Resend OTP in <span className="font-semibold text-indigo-400">{secondsLeft}s</span>
               </p>
             ) : (
               <p className="text-sm text-slate-400">Didn't receive the code?</p>
@@ -226,9 +213,7 @@ export function VerifyEmailForm({ userId, email }: VerifyEmailFormProps) {
               disabled={secondsLeft > 0 || isResending}
               className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-indigo-400 hover:text-indigo-300 disabled:cursor-not-allowed disabled:text-slate-600"
             >
-              <RotateCcw
-                className={`w-4 h-4 ${isResending ? "animate-spin" : ""}`}
-              />
+              <RotateCcw className={`w-4 h-4 ${isResending ? "animate-spin" : ""}`} />
 
               {isResending ? "Sending..." : "Resend OTP"}
             </button>

@@ -1,28 +1,26 @@
-
 import { SubmissionStatus } from "../../../domain/entities/AssignmentSubmission";
 
 export interface TeacherAssignmentSubmissionDTO {
+  submissionId: string;
 
-    submissionId: string;
+  student: {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    avatar?: string;
+  };
 
-    student: {
-        userId: string;
-        firstName: string;
-        lastName: string;
-        email: string;
-        avatar?: string;
-    };
+  attemptNumber: number;
 
-    attemptNumber: number;
+  score: number;
+  totalMarks: number;
+  passingMarks: number;
+  percentage: number;
 
-    score: number;
-    totalMarks: number;
-    passingMarks: number;
-    percentage: number;
+  isPassed: boolean;
 
-    isPassed: boolean;
+  status: SubmissionStatus;
 
-    status: SubmissionStatus;
-
-    submittedAt: Date;
+  submittedAt: Date;
 }

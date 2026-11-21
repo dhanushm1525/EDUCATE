@@ -1,4 +1,4 @@
 export interface GenerateTeacherApplicationUploadUrlResponseDTO {
-    uploadUrl: string;
-    key: string;
+  uploadUrl: string;
+  key: string;
 }

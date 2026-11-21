@@ -1,33 +1,19 @@
-import axios, {
-    type AxiosError,
-    type InternalAxiosRequestConfig
-} from "axios";
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 
-import {
-    useAuthStore
-} from "../store/authStore";
+import { useAuthStore } from "../store/authStore";
 import { useToastStore } from "../store/toastStore";
 import { getApiErrorMessage } from "../utils/apiError";
 import { API_ROUTES } from "../constants/apiRoutes";
 
-export const apiClient =
-    axios.create({
+export const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 
-        baseURL:
-            import.meta.env
-                .VITE_API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 
-        headers: {
-
-            "Content-Type":
-                "application/json"
-
-        },
-
-        withCredentials: true
-
-    });
-
+  withCredentials: true,
+});
 
 /*
  * Separate client for refresh requests.
@@ -36,42 +22,28 @@ export const apiClient =
  * from triggering the same interceptors.
  */
 
-const refreshClient =
-    axios.create({
+const refreshClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 
-        baseURL:
-            import.meta.env
-                .VITE_API_BASE_URL,
-
-        withCredentials: true
-
-    });
-
+  withCredentials: true,
+});
 
 /*
  * Track whether a refresh request
  * is currently in progress.
  */
 
-let isRefreshing =
-    false;
-
+let isRefreshing = false;
 
 /*
  * Requests waiting for a new token.
  */
 
-let failedQueue:
-    {
-        resolve:
-            (token: string) => void;
+let failedQueue: {
+  resolve: (token: string) => void;
 
-        reject:
-            (error: unknown) => void;
-
-    }[] =
-    [];
-
+  reject: (error: unknown) => void;
+}[] = [];
 
 /*
  * Resolve or reject all requests
@@ -79,45 +51,20 @@ let failedQueue:
  */
 
 const processQueue = (
+  error: unknown,
 
-    error:
-        unknown,
-
-    token:
-        string | null = null
-
+  token: string | null = null,
 ) => {
+  failedQueue.forEach((request) => {
+    if (error) {
+      request.reject(error);
+    } else if (token) {
+      request.resolve(token);
+    }
+  });
 
-
-    failedQueue.forEach(
-
-        (request) => {
-
-
-            if (error) {
-
-                request.reject(
-                    error
-                );
-
-            } else if (token) {
-
-                request.resolve(
-                    token
-                );
-
-            }
-
-        }
-
-    );
-
-
-    failedQueue =
-        [];
-
+  failedQueue = [];
 };
-
 
 /*
  * REQUEST INTERCEPTOR
@@ -126,44 +73,20 @@ const processQueue = (
  */
 
 apiClient.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    const accessToken = useAuthStore.getState().accessToken;
 
-    (
-        config:
-            InternalAxiosRequestConfig
-    ) => {
-
-
-        const accessToken =
-            useAuthStore
-                .getState()
-                .accessToken;
-
-
-        if (accessToken) {
-
-            config.headers.Authorization =
-                `Bearer ${accessToken}`;
-
-        }
-
-
-        return config;
-
-    },
-
-
-    (
-        error
-    ) => {
-
-        return Promise.reject(
-            error
-        );
-
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
-);
+    return config;
+  },
 
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 /*
  * RESPONSE INTERCEPTOR
@@ -173,228 +96,110 @@ apiClient.interceptors.request.use(
  */
 
 apiClient.interceptors.response.use(
-
-    (
-        response
-    ) => {
-
-        return response;
-
-    },
-
-
-    async (
-        error:
-            AxiosError
-    ) => {
-        if (error.response?.status !== 401 || !error.config) {
-            useToastStore
-                .getState()
-                .addToast(
-                    getApiErrorMessage(error),
-                    "error"
-                );
-
-            return Promise.reject(
-                error
-            );
-        }
-
-        const originalRequest =
-            error.config as
-            InternalAxiosRequestConfig & {
-
-                _retry?:
-                    boolean;
-
-            };
-
-
-        /*
-         * Only handle 401 errors.
-         */
-
-        if (
-
-            error.response?.status !== 401 ||
-
-            originalRequest._retry
-
-        ) {
-
-            return Promise.reject(
-                error
-            );
-
-        }
-
-
-        /*
-         * Prevent retrying the same
-         * request multiple times.
-         */
-
-        originalRequest._retry =
-            true;
-
-
-        /*
-         * If refresh is already running,
-         * wait for it.
-         */
-
-        if (isRefreshing) {
-
-            return new Promise<string>(
-
-                (
-                    resolve,
-                    reject
-                ) => {
-
-                    failedQueue.push({
-
-                        resolve,
-
-                        reject
-
-                    });
-
-                }
-
-            ).then(
-
-                (
-                    token
-                ) => {
-
-
-                    originalRequest.headers.Authorization =
-                        `Bearer ${token}`;
-
-
-                    return apiClient(
-                        originalRequest
-                    );
-
-                }
-
-            ).catch(
-
-                (
-                    queueError
-                ) => {
-
-                    return Promise.reject(
-                        queueError
-                    );
-
-                }
-
-            );
-
-        }
-
-
-        /*
-         * Start token refresh.
-         */
-
-        isRefreshing =
-            true;
-
-
-        try {
-
-
-            const refreshResponse =
-                await refreshClient.post(
-                    API_ROUTES.auth.refresh
-                );
-
-
-            const newAccessToken =
-                refreshResponse
-                    .data
-                    .data
-                    .accessToken;
-
-
-            /*
-             * Update Zustand and
-             * sessionStorage.
-             */
-
-            useAuthStore
-                .getState()
-                .setAccessToken(
-                    newAccessToken
-                );
-
-
-            /*
-             * Process queued requests.
-             */
-
-            processQueue(
-
-                null,
-
-                newAccessToken
-
-            );
-
-
-            /*
-             * Retry original request.
-             */
-
-            originalRequest.headers.Authorization =
-                `Bearer ${newAccessToken}`;
-
-
-            return apiClient(
-                originalRequest
-            );
-
-
-        } catch (
-            refreshError
-        ) {
-
-
-            /*
-             * Reject all queued requests.
-             */
-
-            processQueue(
-                refreshError,
-                null
-            );
-
-
-            /*
-             * Session is no longer valid.
-             */
-
-            useAuthStore
-                .getState()
-                .clearAuth();
-
-
-            return Promise.reject(
-                refreshError
-            );
-
-
-        } finally {
-
-
-            isRefreshing =
-                false;
-
-        }
-
+  (response) => {
+    return response;
+  },
+
+  async (error: AxiosError) => {
+    if (error.response?.status !== 401 || !error.config) {
+      useToastStore.getState().addToast(getApiErrorMessage(error), "error");
+
+      return Promise.reject(error);
     }
 
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
+
+    /*
+     * Only handle 401 errors.
+     */
+
+    if (error.response?.status !== 401 || originalRequest._retry) {
+      return Promise.reject(error);
+    }
+
+    /*
+     * Prevent retrying the same
+     * request multiple times.
+     */
+
+    originalRequest._retry = true;
+
+    /*
+     * If refresh is already running,
+     * wait for it.
+     */
+
+    if (isRefreshing) {
+      return new Promise<string>((resolve, reject) => {
+        failedQueue.push({
+          resolve,
+
+          reject,
+        });
+      })
+        .then((token) => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+
+          return apiClient(originalRequest);
+        })
+        .catch((queueError) => {
+          return Promise.reject(queueError);
+        });
+    }
+
+    /*
+     * Start token refresh.
+     */
+
+    isRefreshing = true;
+
+    try {
+      const refreshResponse = await refreshClient.post(API_ROUTES.auth.refresh);
+
+      const newAccessToken = refreshResponse.data.data.accessToken;
+
+      /*
+       * Update Zustand and
+       * sessionStorage.
+       */
+
+      useAuthStore.getState().setAccessToken(newAccessToken);
+
+      /*
+       * Process queued requests.
+       */
+
+      processQueue(
+        null,
+
+        newAccessToken,
+      );
+
+      /*
+       * Retry original request.
+       */
+
+      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+      return apiClient(originalRequest);
+    } catch (refreshError) {
+      /*
+       * Reject all queued requests.
+       */
+
+      processQueue(refreshError, null);
+
+      /*
+       * Session is no longer valid.
+       */
+
+      useAuthStore.getState().clearAuth();
+
+      return Promise.reject(refreshError);
+    } finally {
+      isRefreshing = false;
+    }
+  },
 );

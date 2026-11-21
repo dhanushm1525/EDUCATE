@@ -74,10 +74,7 @@ export function AppRouter() {
         <Route path="/student/courses" element={<StudentCoursesPage />} />
         <Route path="/student/my-courses" element={<MyLearningPage />} />
 
-        <Route
-          path="/student/courses/:courseId/learn"
-          element={<StudentLearningPage />}
-        />
+        <Route path="/student/courses/:courseId/learn" element={<StudentLearningPage />} />
 
         <Route path="/student/become-teacher" element={<BecomeTeacherPage />} />
       </Route>
@@ -89,27 +86,15 @@ export function AppRouter() {
 
         <Route path="/teacher/courses" element={<MyCoursesPage />} />
 
-        <Route
-          path="/teacher/explore-courses"
-          element={<TeacherCoursesPage />}
-        />
+        <Route path="/teacher/explore-courses" element={<TeacherCoursesPage />} />
 
-        <Route
-          path="/teacher/my-learning"
-          element={<TeacherMyLearningPage />}
-        />
+        <Route path="/teacher/my-learning" element={<TeacherMyLearningPage />} />
 
-        <Route
-          path="/teacher/learn/:courseId"
-          element={<TeacherLearningPage />}
-        />
+        <Route path="/teacher/learn/:courseId" element={<TeacherLearningPage />} />
 
         <Route path="/teacher/courses/create" element={<CreateCoursePage />} />
 
-        <Route
-          path="/teacher/courses/:courseId"
-          element={<CourseBuilderPage />}
-        />
+        <Route path="/teacher/courses/:courseId" element={<CourseBuilderPage />} />
 
         <Route
           path="/teacher/courses/:courseId/chapters/:chapterId/lessons"
@@ -131,10 +116,7 @@ export function AppRouter() {
           element={<TeacherSubmissionDetailPage />}
         />
 
-        <Route
-          path="/teacher/assignments"
-          element={<TeacherAssignmentOverviewPage />}
-        />
+        <Route path="/teacher/assignments" element={<TeacherAssignmentOverviewPage />} />
       </Route>
 
       {/* Admin routes */}
@@ -143,19 +125,13 @@ export function AppRouter() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/profile" element={<AdminProfilePage />} />
 
-          <Route
-            path="/admin/courses/pending"
-            element={<CourseApprovalPage />}
-          />
+          <Route path="/admin/courses/pending" element={<CourseApprovalPage />} />
 
           <Route path="/admin/categories" element={<CategoriesPage />} />
           <Route path="/admin/students" element={<AdminStudentsPage />} />
           <Route path="/admin/teachers" element={<AdminTeachersPage />} />
 
-          <Route
-            path="/admin/teacher-applications"
-            element={<TeacherApplicationsPage />}
-          />
+          <Route path="/admin/teacher-applications" element={<TeacherApplicationsPage />} />
         </Route>
       </Route>
     </Routes>

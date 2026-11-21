@@ -1,4 +1,3 @@
-
 import { Request, Response, NextFunction } from "express";
 
 import { ISubmitCourseUseCase } from "../../../application/interfaces/course/ISubmitCourseUseCase";
@@ -12,63 +11,40 @@ import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { COURSE_MESSAGES } from "../../../shared/messages/courseMessages";
 
 export class SubmitCourseController {
+  constructor(
+    private readonly _submitCourseUseCase: ISubmitCourseUseCase,
+    private readonly _courseResponseService: CourseResponseService,
+  ) {}
 
-    constructor(
-        private readonly _submitCourseUseCase: ISubmitCourseUseCase,
-        private readonly _courseResponseService: CourseResponseService
-    ) {}
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError(AUTH_MESSAGES.AUTHENTICATION_REQUIRED, HttpStatusCode.UNAUTHORIZED);
+      }
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
+      const { courseId } = req.params;
 
-        try {
+      if (Array.isArray(courseId)) {
+        throw new AppError(COURSE_MESSAGES.COURSE_NOT_FOUND, HttpStatusCode.NOT_FOUND);
+      }
 
-            if (!req.user) {
-                throw new AppError(
-                    AUTH_MESSAGES.AUTHENTICATION_REQUIRED,
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+      if (!courseId) {
+        throw new AppError("Course ID is required", HttpStatusCode.BAD_REQUEST);
+      }
 
-            const { courseId } = req.params;
+      const dto = CourseSubmissionMapper.toSubmitCourseDTO(courseId, req.user.userId);
 
-            if (Array.isArray(courseId)) {
-                throw new AppError(
-                    COURSE_MESSAGES.COURSE_NOT_FOUND,
-                    HttpStatusCode.NOT_FOUND
-                );
-            }
+      const course = await this._submitCourseUseCase.execute(dto);
 
-            if (!courseId) {
-                throw new AppError(
-                    "Course ID is required",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
+      const responseData = await this._courseResponseService.toDTO(course);
 
-            const dto =
-                CourseSubmissionMapper.toSubmitCourseDTO(
-                    courseId,
-                    req.user.userId
-                );
-
-            const course =
-                await this._submitCourseUseCase.execute(dto);
-
-            const responseData =
-                await this._courseResponseService.toDTO(course);
-
-            res.status(HttpStatusCode.OK).json({
-                success: true,
-                message: COURSE_MESSAGES.COURSE_SUBMITTED,
-                data: responseData,
-            });
-
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        message: COURSE_MESSAGES.COURSE_SUBMITTED,
+        data: responseData,
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

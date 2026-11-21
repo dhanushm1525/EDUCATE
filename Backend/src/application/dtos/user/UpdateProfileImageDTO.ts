@@ -1,4 +1,4 @@
 export interface UpdateProfileImageDTO {
-    userId: string;
-    avatarKey: string;
+  userId: string;
+  avatarKey: string;
 }

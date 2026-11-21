@@ -4,9 +4,7 @@ interface AdminHeaderProps {
   title?: string;
 }
 
-export default function AdminHeader({
-  title = "Admin Dashboard",
-}: AdminHeaderProps) {
+export default function AdminHeader({ title = "Admin Dashboard" }: AdminHeaderProps) {
   return (
     <header className="flex h-20 items-center justify-between border-b border-slate-800 bg-[#0B1120] px-8">
       {/* Title */}

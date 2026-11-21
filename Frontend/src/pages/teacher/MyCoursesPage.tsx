@@ -90,8 +90,7 @@ export default function MyCoursesPage() {
                 <h2 className="text-lg font-semibold">All Courses</h2>
 
                 <p className="mt-1 text-sm text-slate-400">
-                  Manage your existing courses and continue building your
-                  content.
+                  Manage your existing courses and continue building your content.
                 </p>
               </div>
 

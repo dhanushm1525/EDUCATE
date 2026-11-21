@@ -5,18 +5,13 @@ interface ProfilePageProps {
   title?: string;
 }
 
-export default function ProfilePage({
-  profile,
-  title = "My Profile",
-}: ProfilePageProps) {
+export default function ProfilePage({ profile, title = "My Profile" }: ProfilePageProps) {
   return (
     <div className="min-h-screen bg-[#0B1120] p-6 text-white md:p-8">
       <div className="mx-auto max-w-5xl">
         <div className="mb-8">
           <h1 className="text-2xl font-bold">{title}</h1>
-          <p className="mt-1 text-sm text-slate-400">
-            Manage your personal information.
-          </p>
+          <p className="mt-1 text-sm text-slate-400">Manage your personal information.</p>
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-[#162032] p-6">

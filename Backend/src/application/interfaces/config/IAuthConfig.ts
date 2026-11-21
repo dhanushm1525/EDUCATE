@@ -1,9 +1,7 @@
 export interface IAuthConfig {
-    refreshTokenExpiresInMs: number;
+  refreshTokenExpiresInMs: number;
 
-    emailVerificationOtpExpiresInMs:number;
+  emailVerificationOtpExpiresInMs: number;
 
-    passwordResetOtpExpiresInMs:number;
+  passwordResetOtpExpiresInMs: number;
 }
-
-

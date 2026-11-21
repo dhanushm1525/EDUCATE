@@ -1,6 +1,3 @@
 export interface IDeleteAssignmentUseCase {
-    execute(
-        assignmentId: string,
-        teacherId: string
-    ): Promise<void>;
+  execute(assignmentId: string, teacherId: string): Promise<void>;
 }

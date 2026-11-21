@@ -9,7 +9,7 @@ interface TeacherLayoutProps {
 
 export default function TeacherLayout({
   children,
-  contentClassName = "mx-auto w-full max-w-7xl",
+  contentClassName = "w-full",
   mainClassName = "min-h-screen p-8",
 }: TeacherLayoutProps) {
   return (

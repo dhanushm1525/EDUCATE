@@ -1,11 +1,11 @@
 export interface IRefreshTokenCookie {
-    name: string;
+  name: string;
 
-    options: {
-        httpOnly: boolean;
-        secure: boolean;
-        sameSite: "lax" | "strict" | "none";
-        maxAge: number;
-        path: string;
-    };
+  options: {
+    httpOnly: boolean;
+    secure: boolean;
+    sameSite: "lax" | "strict" | "none";
+    maxAge: number;
+    path: string;
+  };
 }

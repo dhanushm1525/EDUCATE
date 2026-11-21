@@ -5,125 +5,75 @@ import { Assignment } from "../../domain/entities/Assingment";
 
 import { BaseRepository } from "./BaseRepository";
 
-import {
-    AssignmentDocument,
-    AssignmentModel,
-} from "../database/models/AssignmentModel";
+import { AssignmentDocument, AssignmentModel } from "../database/models/AssignmentModel";
 
 import { AssignmentPersistenceMapper } from "../mappers/AssignmentPersistenceMapper";
 
 export class MongoAssignmentRepository
-    extends BaseRepository<AssignmentDocument>
-    implements IAssignmentRepository {
+  extends BaseRepository<AssignmentDocument>
+  implements IAssignmentRepository
+{
+  constructor() {
+    super(AssignmentModel);
+  }
 
-    constructor() {
-        super(AssignmentModel);
+  async create(assignment: Assignment): Promise<Assignment> {
+    const documentData = AssignmentPersistenceMapper.toPersistence(assignment);
+
+    const document = await this.createDocument(documentData);
+
+    return AssignmentPersistenceMapper.toDomain(document);
+  }
+
+  async findById(assignmentId: string): Promise<Assignment | null> {
+    const document = await this.findByIdDocument(assignmentId);
+
+    if (!document) {
+      return null;
     }
 
-    async create(
-        assignment: Assignment
-    ): Promise<Assignment> {
+    return AssignmentPersistenceMapper.toDomain(document);
+  }
 
-        const documentData =
-            AssignmentPersistenceMapper.toPersistence(
-                assignment
-            );
+  async findByLessonId(lessonId: string): Promise<Assignment | null> {
+    const document = await this.findOneDocument({
+      lessonId: new Types.ObjectId(lessonId),
+    });
 
-        const document =
-            await this.createDocument(documentData);
+    return document ? AssignmentPersistenceMapper.toDomain(document) : null;
+  }
 
-        return AssignmentPersistenceMapper.toDomain(
-            document
-        );
+  async update(assignmentId: string, assignment: Partial<Assignment>): Promise<Assignment | null> {
+    const updateData = AssignmentPersistenceMapper.toPersistenceUpdate(assignment);
+
+    const document = await this.updateByIdDocument(assignmentId, updateData);
+
+    if (!document) {
+      return null;
     }
 
-    async findById(
-        assignmentId: string
-    ): Promise<Assignment | null> {
+    return AssignmentPersistenceMapper.toDomain(document);
+  }
 
-        const document =
-            await this.findByIdDocument(assignmentId);
+  async delete(assignmentId: string): Promise<boolean> {
+    return await this.deleteByIdDocument(assignmentId);
+  }
 
-        if (!document) {
-            return null;
-        }
-
-        return AssignmentPersistenceMapper.toDomain(
-            document
-        );
+  async findByLessonIds(lessonIds: string[]): Promise<Assignment[]> {
+    if (lessonIds.length === 0) {
+      return [];
     }
 
-    async findByLessonId(
-        lessonId: string
-    ): Promise<Assignment | null> {
-        const document = await this.findOneDocument({
-            lessonId: new Types.ObjectId(lessonId)
-        });
+    const lessonObjectIds = lessonIds.map((lessonId) => new Types.ObjectId(lessonId));
 
-        return document
-            ? AssignmentPersistenceMapper.toDomain(document)
-            : null;
-    }
+    const documents = await this.findManyDocuments({
+      lessonId: {
+        $in: lessonObjectIds,
+      },
+    });
 
-    async update(
-        assignmentId: string,
-        assignment: Partial<Assignment>
-    ): Promise<Assignment | null> {
-
-        const updateData =
-            AssignmentPersistenceMapper.toPersistenceUpdate(
-                assignment
-            );
-
-        const document =
-            await this.updateByIdDocument(
-                assignmentId,
-                updateData
-            );
-
-        if (!document) {
-            return null;
-        }
-
-        return AssignmentPersistenceMapper.toDomain(
-            document
-        );
-    }
-
-    async delete(
-        assignmentId: string
-    ): Promise<boolean> {
-
-        return await this.deleteByIdDocument(
-            assignmentId
-        );
-    }
-
-
-    async findByLessonIds(
-        lessonIds: string[]
-    ): Promise<Assignment[]> {
-
-        if (lessonIds.length === 0) {
-            return [];
-        }
-
-        const lessonObjectIds = lessonIds.map(
-            lessonId => new Types.ObjectId(lessonId)
-        );
-
-        const documents = await this.findManyDocuments({
-            lessonId: {
-                $in: lessonObjectIds
-            }
-        });
-
-        return documents
-            .sort(
-                (a, b) =>
-                    b.createdAt.getTime() - a.createdAt.getTime()
-            )
-            .map(AssignmentPersistenceMapper.toDomain);
-    }
-
+    return documents
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .map(AssignmentPersistenceMapper.toDomain);
+  }
 }

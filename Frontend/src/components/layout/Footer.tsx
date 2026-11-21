@@ -1,118 +1,86 @@
 export function Footer() {
-    return (
-        <footer className="border-t border-slate-200 bg-white px-6 pt-12 pb-6">
+  return (
+    <footer className="border-t border-slate-200 bg-white px-6 pt-12 pb-6">
+      <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-2 lg:grid-cols-4">
+        {/* Brand */}
 
-            <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <h2 className="text-xl font-black tracking-tight text-indigo-600">EDUCATE</h2>
 
-                {/* Brand */}
+          <p className="mt-3 text-sm leading-6 text-slate-500">
+            Empowering learners worldwide through world-class courses and a vibrant community of
+            experts and peers.
+          </p>
+        </div>
 
-                <div>
+        {/* Platform */}
 
-                    <h2 className="text-xl font-black tracking-tight text-indigo-600">
-                        EDUCATE
-                    </h2>
+        <div>
+          <h3 className="text-sm font-bold uppercase text-slate-900">Platform</h3>
 
-                    <p className="mt-3 text-sm leading-6 text-slate-500">
-                        Empowering learners worldwide through world-class
-                        courses and a vibrant community of experts and peers.
-                    </p>
+          <ul className="mt-3 space-y-2 text-sm text-slate-500">
+            <li>
+              <a href="#courses" className="hover:text-indigo-600">
+                Courses
+              </a>
+            </li>
 
-                </div>
+            <li>
+              <a href="#qa" className="hover:text-indigo-600">
+                Q&A Community
+              </a>
+            </li>
 
+            <li>
+              <a href="#live" className="hover:text-indigo-600">
+                Live Classes
+              </a>
+            </li>
 
-                {/* Platform */}
+            <li>
+              <a href="#support" className="hover:text-indigo-600">
+                Support
+              </a>
+            </li>
+          </ul>
+        </div>
 
-                <div>
+        {/* Company */}
 
-                    <h3 className="text-sm font-bold uppercase text-slate-900">
-                        Platform
-                    </h3>
+        <div>
+          <h3 className="text-sm font-bold uppercase text-slate-900">Company</h3>
 
-                    <ul className="mt-3 space-y-2 text-sm text-slate-500">
+          <ul className="mt-3 space-y-2 text-sm text-slate-500">
+            <li>About Us</li>
 
-                        <li>
-                            <a href="#courses" className="hover:text-indigo-600">
-                                Courses
-                            </a>
-                        </li>
+            <li>Careers</li>
 
-                        <li>
-                            <a href="#qa" className="hover:text-indigo-600">
-                                Q&A Community
-                            </a>
-                        </li>
+            <li>Contact Us</li>
 
-                        <li>
-                            <a href="#live" className="hover:text-indigo-600">
-                                Live Classes
-                            </a>
-                        </li>
+            <li>Help Center</li>
+          </ul>
+        </div>
 
-                        <li>
-                            <a href="#support" className="hover:text-indigo-600">
-                                Support
-                            </a>
-                        </li>
+        {/* Legal */}
 
-                    </ul>
+        <div>
+          <h3 className="text-sm font-bold uppercase text-slate-900">Legal</h3>
 
-                </div>
+          <ul className="mt-3 space-y-2 text-sm text-slate-500">
+            <li>Privacy Policy</li>
 
+            <li>Terms of Service</li>
 
-                {/* Company */}
+            <li>FAQ</li>
+          </ul>
+        </div>
+      </div>
 
-                <div>
+      {/* Copyright */}
 
-                    <h3 className="text-sm font-bold uppercase text-slate-900">
-                        Company
-                    </h3>
-
-                    <ul className="mt-3 space-y-2 text-sm text-slate-500">
-
-                        <li>About Us</li>
-
-                        <li>Careers</li>
-
-                        <li>Contact Us</li>
-
-                        <li>Help Center</li>
-
-                    </ul>
-
-                </div>
-
-
-                {/* Legal */}
-
-                <div>
-
-                    <h3 className="text-sm font-bold uppercase text-slate-900">
-                        Legal
-                    </h3>
-
-                    <ul className="mt-3 space-y-2 text-sm text-slate-500">
-
-                        <li>Privacy Policy</li>
-
-                        <li>Terms of Service</li>
-
-                        <li>FAQ</li>
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-
-            {/* Copyright */}
-
-            <div className="mx-auto mt-10 max-w-7xl border-t border-slate-100 pt-6 text-center text-xs text-slate-400">
-
-                © 2026 EDUCATE Learning Platform. All rights reserved.
-
-            </div>
-
-        </footer>
-    );
+      <div className="mx-auto mt-10 max-w-7xl border-t border-slate-100 pt-6 text-center text-xs text-slate-400">
+        © 2026 EDUCATE Learning Platform. All rights reserved.
+      </div>
+    </footer>
+  );
 }

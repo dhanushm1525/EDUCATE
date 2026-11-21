@@ -7,7 +7,6 @@ import ToastProvider from "./components/common/ToastProvider";
 function App() {
   return (
     <>
-      
       <AuthInitializer>
         <AppRouter />
       </AuthInitializer>

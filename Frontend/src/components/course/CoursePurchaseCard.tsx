@@ -1,13 +1,10 @@
-
 import type { Course } from "../../types/course";
 
-import {
-  BookOpen,
-  LoaderCircle,
-} from "lucide-react";
+import { BookOpen, LoaderCircle } from "lucide-react";
 
 interface CoursePurchaseCardProps {
   course: Course;
+  isOwnCourse: boolean;
   onEnroll: () => void;
   onGoToLearning: () => void;
   isEnrolled: boolean;
@@ -48,33 +45,25 @@ function formatDuration(duration: number): string {
 
 export default function CoursePurchaseCard({
   course,
+  isOwnCourse,
   onEnroll,
   onGoToLearning,
   isEnrolled,
   enrolling,
   checkingEnrollment,
 }: CoursePurchaseCardProps) {
-  const hasDiscount =
-    course.price > 0 &&
-    course.discount > 0 &&
-    course.finalPrice < course.price;
+  const hasDiscount = course.price > 0 && course.discount > 0 && course.finalPrice < course.price;
 
-  const savings = hasDiscount
-    ? course.price - course.finalPrice
-    : 0;
+  const savings = hasDiscount ? course.price - course.finalPrice : 0;
 
   const isFree = course.finalPrice <= 0;
 
-  const buttonDisabled =
-    checkingEnrollment ||
-    enrolling ||
-    (!isFree && !isEnrolled);
+  const buttonDisabled = isOwnCourse || checkingEnrollment || enrolling || (!isFree && !isEnrolled);
 
   return (
     <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-
       <h2 className="text-lg font-bold text-slate-900">
-        {isEnrolled ? "Your course" : "Get this course"}
+        {isOwnCourse || isEnrolled ? "Your course" : "Get this course"}
       </h2>
 
       {/* Price */}
@@ -85,21 +74,15 @@ export default function CoursePurchaseCard({
           </span>
 
           {hasDiscount && (
-            <span className="text-sm text-slate-400 line-through">
-              {formatPrice(course.price)}
-            </span>
+            <span className="text-sm text-slate-400 line-through">{formatPrice(course.price)}</span>
           )}
         </div>
 
         {hasDiscount && (
           <div className="mt-2 space-y-1">
-            <p className="text-sm font-semibold text-green-700">
-              {course.discount}% off
-            </p>
+            <p className="text-sm font-semibold text-green-700">{course.discount}% off</p>
 
-            <p className="text-xs text-slate-500">
-              You save {formatPrice(savings)}
-            </p>
+            <p className="text-xs text-slate-500">You save {formatPrice(savings)}</p>
           </div>
         )}
       </div>
@@ -107,22 +90,17 @@ export default function CoursePurchaseCard({
       {/* Enrollment button */}
       <button
         type="button"
-        onClick={
-          isEnrolled ? onGoToLearning : onEnroll
-        }
+        onClick={isEnrolled ? onGoToLearning : onEnroll}
         disabled={buttonDisabled}
         className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {checkingEnrollment || enrolling ? (
+        {isOwnCourse ? (
+          "You created this course"
+        ) : checkingEnrollment || enrolling ? (
           <>
-            <LoaderCircle
-              size={17}
-              className="animate-spin"
-            />
+            <LoaderCircle size={17} className="animate-spin" />
 
-            {checkingEnrollment
-              ? "Checking enrollment..."
-              : "Enrolling..."}
+            {checkingEnrollment ? "Checking enrollment..." : "Enrolling..."}
           </>
         ) : isEnrolled ? (
           <>
@@ -144,25 +122,19 @@ export default function CoursePurchaseCard({
 
       {/* Course information */}
       <div className="mt-6 border-t border-slate-100 pt-5">
-        <h3 className="font-semibold text-slate-900">
-          Course information
-        </h3>
+        <h3 className="font-semibold text-slate-900">Course information</h3>
 
         <ul className="mt-4 space-y-3 text-sm text-slate-600">
           <li className="flex justify-between gap-3">
             <span>Level</span>
 
-            <span className="font-medium text-slate-900">
-              {course.level}
-            </span>
+            <span className="font-medium text-slate-900">{course.level}</span>
           </li>
 
           <li className="flex justify-between gap-3">
             <span>Language</span>
 
-            <span className="font-medium text-slate-900">
-              {course.language || "Not specified"}
-            </span>
+            <span className="font-medium text-slate-900">{course.language || "Not specified"}</span>
           </li>
 
           <li className="flex justify-between gap-3">
@@ -176,9 +148,7 @@ export default function CoursePurchaseCard({
           <li className="flex justify-between gap-3">
             <span>Students</span>
 
-            <span className="font-medium text-slate-900">
-              {course.totalStudents ?? 0}
-            </span>
+            <span className="font-medium text-slate-900">{course.totalStudents ?? 0}</span>
           </li>
         </ul>
       </div>

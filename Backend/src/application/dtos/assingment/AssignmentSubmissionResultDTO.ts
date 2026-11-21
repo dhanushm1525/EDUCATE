@@ -1,18 +1,18 @@
 export interface AssignmentSubmissionResultDTO {
-    submissionId: string;
-    assignmentId: string;
-    attemptNumber: number;
+  submissionId: string;
+  assignmentId: string;
+  attemptNumber: number;
 
-    score: number;
-    totalMarks: number;
-    passingMarks: number;
-    percentage: number;
-    isPassed: boolean;
+  score: number;
+  totalMarks: number;
+  passingMarks: number;
+  percentage: number;
+  isPassed: boolean;
 
-    status: string;
+  status: string;
 
-    teacherFeedback?: string;
-    gradedAt?: Date;
+  teacherFeedback?: string;
+  gradedAt?: Date;
 
-    submittedAt: Date;
+  submittedAt: Date;
 }

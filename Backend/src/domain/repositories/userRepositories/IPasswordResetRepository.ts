@@ -1,26 +1,14 @@
-export interface PasswordResetRecord{
-    id:string;
-    userId:string;
-    otpHash:string;
-    expiresAt:Date;
+export interface PasswordResetRecord {
+  id: string;
+  userId: string;
+  otpHash: string;
+  expiresAt: Date;
 }
 
+export interface IPasswordResetRepository {
+  create(userId: string, otpHash: string, expiresAt: Date): Promise<void>;
 
-export interface IPasswordResetRepository{
+  findByUserId(userId: string): Promise<PasswordResetRecord | null>;
 
-    create(
-        userId:string,
-        otpHash:string,
-        expiresAt:Date
-    ):Promise<void>
-
-
-    findByUserId(
-        userId:string
-    ):Promise<PasswordResetRecord|null>
-
-
-    deleteByUserId(
-        userId:string
-    ):Promise<void>
+  deleteByUserId(userId: string): Promise<void>;
 }

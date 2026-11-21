@@ -21,10 +21,7 @@ interface TeacherApplicationReviewModalProps {
   open: boolean;
   onClose: () => void;
   onApprove: (application: TeacherApplication) => Promise<void>;
-  onReject: (
-    application: TeacherApplication,
-    rejectionReason: string,
-  ) => Promise<void>;
+  onReject: (application: TeacherApplication, rejectionReason: string) => Promise<void>;
   processing: boolean;
 }
 
@@ -36,8 +33,7 @@ export default function TeacherApplicationReviewModal({
   onReject,
   processing,
 }: TeacherApplicationReviewModalProps) {
-  const [showApprovalConfirmation, setShowApprovalConfirmation] =
-    useState(false);
+  const [showApprovalConfirmation, setShowApprovalConfirmation] = useState(false);
 
   const [showRejectionForm, setShowRejectionForm] = useState(false);
 
@@ -49,10 +45,7 @@ export default function TeacherApplicationReviewModal({
     return null;
   }
 
-  const applicantName = [
-    application.applicant.firstName,
-    application.applicant.lastName,
-  ]
+  const applicantName = [application.applicant.firstName, application.applicant.lastName]
     .filter(Boolean)
     .join(" ");
 
@@ -166,9 +159,7 @@ export default function TeacherApplicationReviewModal({
           )}
 
           <div className="min-w-0">
-            <h3 className="text-lg font-semibold text-white">
-              {applicantName}
-            </h3>
+            <h3 className="text-lg font-semibold text-white">{applicantName}</h3>
 
             <p className="mt-1 flex items-center gap-2 break-all text-sm text-slate-400">
               <Mail size={14} />
@@ -176,8 +167,7 @@ export default function TeacherApplicationReviewModal({
             </p>
 
             <p className="mt-2 text-xs text-slate-500">
-              Applied on{" "}
-              {new Date(application.createdAt).toLocaleDateString("en-IN")}
+              Applied on {new Date(application.createdAt).toLocaleDateString("en-IN")}
             </p>
           </div>
         </section>
@@ -194,9 +184,7 @@ export default function TeacherApplicationReviewModal({
             <div className="rounded-lg bg-slate-800 p-4">
               <p className="text-xs text-slate-400">Qualification</p>
 
-              <p className="mt-2 font-medium text-white">
-                {application.qualification}
-              </p>
+              <p className="mt-2 font-medium text-white">{application.qualification}</p>
             </div>
 
             <div className="rounded-lg bg-slate-800 p-4">
@@ -246,10 +234,7 @@ export default function TeacherApplicationReviewModal({
         <section>
           <h4 className="font-semibold text-white">Supporting Documents</h4>
 
-          {renderFileList(
-            application.documents,
-            "No supporting documents submitted.",
-          )}
+          {renderFileList(application.documents, "No supporting documents submitted.")}
         </section>
 
         {/* Certificates */}
@@ -257,10 +242,7 @@ export default function TeacherApplicationReviewModal({
         <section>
           <h4 className="font-semibold text-white">Certificates</h4>
 
-          {renderFileList(
-            application.certificates,
-            "No certificates submitted.",
-          )}
+          {renderFileList(application.certificates, "No certificates submitted.")}
         </section>
 
         {/* Approval Confirmation */}
@@ -273,9 +255,8 @@ export default function TeacherApplicationReviewModal({
             </div>
 
             <p className="text-sm leading-6 text-slate-300">
-              Approving this application will change{" "}
-              <strong>{applicantName}</strong>'s account role from Student to
-              Teacher.
+              Approving this application will change <strong>{applicantName}</strong>'s account role
+              from Student to Teacher.
             </p>
 
             <div className="flex justify-end gap-2">
@@ -288,11 +269,7 @@ export default function TeacherApplicationReviewModal({
                 Cancel
               </Button>
 
-              <Button
-                type="button"
-                loading={processing}
-                onClick={() => void handleApprove()}
-              >
+              <Button type="button" loading={processing} onClick={() => void handleApprove()}>
                 <CheckCircle size={16} />
                 Confirm approval
               </Button>
@@ -304,9 +281,7 @@ export default function TeacherApplicationReviewModal({
 
         {showRejectionForm && (
           <div className="space-y-3 rounded-lg border border-red-900/60 bg-red-950/20 p-4">
-            <h4 className="font-semibold text-red-400">
-              Reject teacher application
-            </h4>
+            <h4 className="font-semibold text-red-400">Reject teacher application</h4>
 
             <Textarea
               id="teacher-application-rejection"
@@ -325,9 +300,7 @@ export default function TeacherApplicationReviewModal({
               disabled={processing}
             />
 
-            <p className="text-right text-xs text-slate-400">
-              {rejectionReason.length}/500
-            </p>
+            <p className="text-right text-xs text-slate-400">{rejectionReason.length}/500</p>
 
             <div className="flex justify-end gap-2">
               <Button
@@ -356,12 +329,7 @@ export default function TeacherApplicationReviewModal({
 
         {!showApprovalConfirmation && !showRejectionForm && (
           <div className="flex flex-wrap justify-end gap-2 border-t border-slate-800 pt-4">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={handleClose}
-              disabled={processing}
-            >
+            <Button type="button" variant="ghost" onClick={handleClose} disabled={processing}>
               Close
             </Button>
 

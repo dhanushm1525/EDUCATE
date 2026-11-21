@@ -3,11 +3,7 @@ import tseslint from "typescript-eslint";
 
 export default [
   {
-    ignores: [
-      "node_modules/**",
-      "dist/**",
-      "coverage/**"
-    ]
+    ignores: ["node_modules/**", "dist/**", "coverage/**"],
   },
 
   js.configs.recommended,
@@ -23,9 +19,9 @@ export default [
         "error",
         {
           argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_"
-        }
-      ]
-    }
-  }
+          varsIgnorePattern: "^_",
+        },
+      ],
+    },
+  },
 ];

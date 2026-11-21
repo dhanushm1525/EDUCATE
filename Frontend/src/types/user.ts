@@ -1,7 +1,4 @@
-import type {
-    UserRole
-} from "./userRole";
-
+import type { UserRole } from "./userRole";
 
 export interface UserProfile {
   id: string;
@@ -15,13 +12,10 @@ export interface UserProfile {
   createdAt: string;
 }
 
-
 export interface GetMyProfileResponse {
+  success: boolean;
 
-    success: boolean;
+  message: string;
 
-    message: string;
-
-    data: UserProfile;
-
+  data: UserProfile;
 }

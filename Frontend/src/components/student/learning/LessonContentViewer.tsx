@@ -46,19 +46,14 @@ export default function LessonContentViewer({
       observer.disconnect();
     };
   }, [lesson.lessonId, lesson.type, lesson.content]);
-  const handleVideoProgress = (
-    event: React.SyntheticEvent<HTMLVideoElement>,
-  ) => {
+  const handleVideoProgress = (event: React.SyntheticEvent<HTMLVideoElement>) => {
     const video = event.currentTarget;
 
     if (!Number.isFinite(video.duration) || video.duration <= 0) {
       return;
     }
 
-    const percentage = Math.min(
-      100,
-      Math.floor((video.currentTime / video.duration) * 100),
-    );
+    const percentage = Math.min(100, Math.floor((video.currentTime / video.duration) * 100));
 
     onVideoProgress?.(lesson.lessonId, percentage);
   };
@@ -83,9 +78,7 @@ export default function LessonContentViewer({
           ) : (
             <div className="flex aspect-video flex-col items-center justify-center text-white">
               <PlayCircle size={48} className="mb-3 text-slate-400" />
-              <p className="text-sm text-slate-300">
-                Video is not available for this lesson.
-              </p>
+              <p className="text-sm text-slate-300">Video is not available for this lesson.</p>
             </div>
           )}
         </div>
@@ -97,9 +90,7 @@ export default function LessonContentViewer({
             </div>
 
             <div>
-              <p className="text-sm font-semibold text-slate-900">
-                Reading material
-              </p>
+              <p className="text-sm font-semibold text-slate-900">Reading material</p>
               <p className="text-xs text-slate-500">Study at your own pace</p>
             </div>
           </div>
@@ -111,11 +102,7 @@ export default function LessonContentViewer({
               </div>
 
               {/* Observed when the student reaches the end of the reading */}
-              <div
-                ref={readingEndRef}
-                aria-hidden="true"
-                className="h-px w-full"
-              />
+              <div ref={readingEndRef} aria-hidden="true" className="h-px w-full" />
             </>
           ) : (
             <p className="text-sm text-slate-400">
@@ -127,21 +114,15 @@ export default function LessonContentViewer({
 
       {lesson.description && (
         <div className="mt-7">
-          <h2 className="text-lg font-bold text-slate-900">
-            About this lesson
-          </h2>
+          <h2 className="text-lg font-bold text-slate-900">About this lesson</h2>
 
-          <p className="mt-2 text-sm leading-7 text-slate-600">
-            {lesson.description}
-          </p>
+          <p className="mt-2 text-sm leading-7 text-slate-600">{lesson.description}</p>
         </div>
       )}
 
       {lesson.attachments.length > 0 && (
         <div className="mt-7">
-          <h2 className="mb-3 text-lg font-bold text-slate-900">
-            Lesson resources
-          </h2>
+          <h2 className="mb-3 text-lg font-bold text-slate-900">Lesson resources</h2>
 
           <div className="space-y-2">
             {lesson.attachments.map((url, index) => (

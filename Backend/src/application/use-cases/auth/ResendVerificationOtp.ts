@@ -1,86 +1,54 @@
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-import { AppError }
-    from "../../../shared/errors/AppError";
+import { AppError } from "../../../shared/errors/AppError";
 
-import { AUTH_MESSAGES }
-    from "../../../shared/messages/authMessages";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
-import { IUserRepository }
-    from "../../../domain/repositories/userRepositories/IUserRepository";
+import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
 
-import { SendVerificationOtp }
-    from "./SendVerificationOtp";
+import { SendVerificationOtp } from "./SendVerificationOtp";
 
-import { ResendVerificationOtpDTO }
-    from "../../dtos/auth/ResendVerificationOtpDTO";
+import { ResendVerificationOtpDTO } from "../../dtos/auth/ResendVerificationOtpDTO";
 
-import { ResendVerificationOtpResponseDTO }
-    from "../../dtos/auth/ResendVerificationOtpResponseDTO";
+import { ResendVerificationOtpResponseDTO } from "../../dtos/auth/ResendVerificationOtpResponseDTO";
 
 import { IResendVerificationOtp } from "../../interfaces/auth/IResendVerificationOtp";
 
-
 export class ResendVerificationOtp implements IResendVerificationOtp {
+  constructor(
+    private readonly _userRepository: IUserRepository,
 
-    constructor(
-        private readonly _userRepository:
-            IUserRepository,
+    private readonly _sendVerificationOtp: SendVerificationOtp,
+  ) {}
 
-        private readonly _sendVerificationOtp:
-            SendVerificationOtp
-    ) { }
+  async execute(request: ResendVerificationOtpDTO): Promise<ResendVerificationOtpResponseDTO> {
+    const email = request.email.trim().toLowerCase();
 
+    const user = await this._userRepository.findByEmail(email);
 
-    async execute(
-        request: ResendVerificationOtpDTO
-    ): Promise<ResendVerificationOtpResponseDTO> {
-
-        const email =
-            request.email
-                .trim()
-                .toLowerCase();
-
-
-        const user =
-            await this._userRepository
-                .findByEmail(email);
-
-
-        if (!user) {
-            throw new AppError(
-                AUTH_MESSAGES.USER_NOT_FOUND,
-                HttpStatusCode.NOT_FOUND
-            );
-        }
-
-
-        if (user.isVerified) {
-            throw new AppError(
-                AUTH_MESSAGES.EMAIL_ALREADY_VERIFIED,
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
-
-
-        if (!user.id) {
-            throw new AppError(
-                AUTH_MESSAGES.USER_ID_IS_MISSING,
-                HttpStatusCode.INTERNAL_SERVER_ERROR,
-                false
-            );
-        }
-
-
-        await this._sendVerificationOtp.execute({
-            userId: user.id,
-            email: user.email
-        });
-
-
-        return {
-            message:
-                AUTH_MESSAGES.VERIFICATION_OTP_SENT
-        };
+    if (!user) {
+      throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND, HttpStatusCode.NOT_FOUND);
     }
+
+    if (user.isVerified) {
+      throw new AppError(AUTH_MESSAGES.EMAIL_ALREADY_VERIFIED, HttpStatusCode.BAD_REQUEST);
+    }
+
+    if (!user.id) {
+      throw new AppError(
+        AUTH_MESSAGES.USER_ID_IS_MISSING,
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+        false,
+      );
+    }
+
+    await this._sendVerificationOtp.execute({
+      userId: user.id,
+      email: user.email,
+    });
+
+    return {
+      message: AUTH_MESSAGES.VERIFICATION_OTP_SENT,
+    };
+  }
 }

@@ -1,82 +1,45 @@
-import { IEmailVerificationRepository }
-    from "../../../domain/repositories/userRepositories/IEmailVerificationRepository";
+import { IEmailVerificationRepository } from "../../../domain/repositories/userRepositories/IEmailVerificationRepository";
 
-import { ITokenHasher }
-    from "../../interfaces/services/ITokenHasher";
+import { ITokenHasher } from "../../interfaces/services/ITokenHasher";
 
-import { IOtpGenerator }
-    from "../../interfaces/services/IOtpGenerator";
+import { IOtpGenerator } from "../../interfaces/services/IOtpGenerator";
 
-import { IEmailService }
-    from "../../interfaces/services/IEmailService";
+import { IEmailService } from "../../interfaces/services/IEmailService";
 
-import { IAuthConfig }
-    from "../../interfaces/config/IAuthConfig";
+import { IAuthConfig } from "../../interfaces/config/IAuthConfig";
 
-    import { SendVerificationOtpDTO } from "../../dtos/auth/SendVerificationOtpDTO";
-
+import { SendVerificationOtpDTO } from "../../dtos/auth/SendVerificationOtpDTO";
 
 export class SendVerificationOtp {
+  constructor(
+    private readonly _emailVerificationRepository: IEmailVerificationRepository,
 
-    constructor(
-        private readonly _emailVerificationRepository:
-            IEmailVerificationRepository,
+    private readonly _otpGenerator: IOtpGenerator,
 
-        private readonly _otpGenerator:
-            IOtpGenerator,
+    private readonly _tokenHasher: ITokenHasher,
 
-        private readonly _tokenHasher:
-            ITokenHasher,
+    private readonly _emailService: IEmailService,
 
-        private readonly _emailService:
-            IEmailService,
+    private readonly _authConfig: IAuthConfig,
+  ) {}
 
-        private readonly _authConfig:
-            IAuthConfig
-    ) {}
+  async execute(request: SendVerificationOtpDTO): Promise<void> {
+    const { userId, email } = request;
 
+    await this._emailVerificationRepository.deleteByUserId(userId);
 
-    async execute(
-        request: SendVerificationOtpDTO
-    ): Promise<void> {
+    const otp = this._otpGenerator.generate();
 
-        const {
-            userId,
-            email
-        } = request;
+    const otpHash = await this._tokenHasher.hash(otp);
 
+    const expiresAt = new Date(Date.now() + this._authConfig.emailVerificationOtpExpiresInMs);
 
-        await this._emailVerificationRepository
-            .deleteByUserId(userId);
+    await this._emailVerificationRepository.create(userId, otpHash, expiresAt);
 
-
-        const otp =
-            this._otpGenerator.generate();
-
-
-        const otpHash =
-            await this._tokenHasher.hash(otp);
-
-
-        const expiresAt =
-            new Date(
-                Date.now() +
-                this._authConfig
-                    .emailVerificationOtpExpiresInMs
-            );
-
-
-        await this._emailVerificationRepository.create(
-            userId,
-            otpHash,
-            expiresAt
-        )
-
-
-        await this._emailService.send(
-            email,
-            "Verify your EDUCATE account",
-            `
+    await this._emailService.send(
+      email,
+      "Verify your EDUCATE account",
+      `
                 <h2>Email Verification</h2>
 
                 <p>
@@ -88,9 +51,7 @@ export class SendVerificationOtp {
                 <p>
                     This code will expire in 10 minutes.
                 </p>
-            `
-        );
-
-    }
-
+            `,
+    );
+  }
 }

@@ -1,221 +1,149 @@
-import type {
-    UserRole
-} from "./userRole";
-
+import type { UserRole } from "./userRole";
 
 export interface RegisterRequest {
+  firstName: string;
 
-    firstName: string;
+  lastName: string;
 
-    lastName: string;
+  email: string;
 
-    email: string;
-
-    password: string;
-
+  password: string;
 }
-
 
 export interface RegisteredUser {
+  id: string;
 
-    id: string;
+  firstName: string;
 
-    firstName: string;
+  lastName: string;
 
-    lastName: string;
+  email: string;
 
-    email: string;
-
-    role: UserRole;
-
+  role: UserRole;
 }
-
 
 export interface RegisterResponse {
+  success: boolean;
 
-    success: boolean;
+  message: string;
 
-    message: string;
-
-    data: RegisteredUser;
-
+  data: RegisteredUser;
 }
-
 
 export interface VerifyEmailOtpRequest {
+  userId: string;
 
-    userId: string;
-
-    otp: string;
-
+  otp: string;
 }
-
 
 export interface VerifyEmailOtpResponse {
+  success: boolean;
 
-    success: boolean;
-
-    message: string;
-
+  message: string;
 }
-
 
 export interface ResendVerificationOtpRequest {
-
-    email: string;
-
+  email: string;
 }
-
 
 export interface ResendVerificationOtpResponse {
+  success: boolean;
 
-    success: boolean;
-
-    message: string;
-
+  message: string;
 }
-
 
 export interface LoginRequest {
+  email: string;
 
-    email: string;
-
-    password: string;
-
+  password: string;
 }
-
 
 export interface User {
+  id: string;
 
-    id: string;
+  firstName: string;
 
-    firstName: string;
+  lastName: string;
 
-    lastName: string;
+  email: string;
 
-    email: string;
-
-    role: UserRole;
-
+  role: UserRole;
 }
-
 
 export interface LoginResponse {
+  success: boolean;
 
-    success: boolean;
+  message: string;
 
-    message: string;
+  data: {
+    user: User;
 
-    data: {
-
-        user: User;
-
-        accessToken: string;
-
-    };
-
+    accessToken: string;
+  };
 }
-
 
 export interface RefreshTokenResponse {
+  success: boolean;
 
-    success: boolean;
+  message: string;
 
-    message: string;
-
-    data: {
-
-        accessToken: string;
-
-    };
-
+  data: {
+    accessToken: string;
+  };
 }
-
 
 export interface GetCurrentUserResponse {
+  success: boolean;
 
-    success: boolean;
+  message: string;
 
-    message: string;
-
-    data: User;
-
+  data: User;
 }
-
-
-
 
 export interface ForgotPasswordRequest {
-    email: string
+  email: string;
 }
-
 
 export interface ForgotPasswordResponse {
+  success: boolean;
 
-    success: boolean;
+  message: string;
 
+  data: {
     message: string;
-
-    data: {
-
-        message: string;
-
-    };
-
+  };
 }
-
-
 
 export interface ResetPasswordRequest {
+  email: string;
 
-    email: string;
+  otp: string;
 
-    otp: string;
-
-    newPassword: string;
-
+  newPassword: string;
 }
-
 
 export interface ResetPasswordResponse {
+  success: boolean;
 
-    success: boolean;
+  message: string;
 
+  data: {
     message: string;
-
-    data: {
-
-        message: string;
-
-    };
-
+  };
 }
-
 
 export interface GoogleSignInRequest {
-
-    credential:
-    string;
-
+  credential: string;
 }
 
-
 export interface GoogleSignInResponse {
+  success: boolean;
 
-    success:
-    boolean;
+  message: string;
 
-    message:
-    string;
+  data: {
+    user: User;
 
-    data: {
-
-        user:
-        User;
-
-        accessToken:
-        string;
-
-    };
-
+    accessToken: string;
+  };
 }

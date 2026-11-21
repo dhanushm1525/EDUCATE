@@ -9,38 +9,23 @@ import { AppError } from "../../../shared/errors/AppError";
 
 import { IGetChaptersByCourseUseCase } from "../../interfaces/chapter/IGetChaptersByCourseUseCase";
 
-export class GetChaptersByCourseUseCase
-    implements IGetChaptersByCourseUseCase {
+export class GetChaptersByCourseUseCase implements IGetChaptersByCourseUseCase {
+  constructor(
+    private readonly _chapterRepository: IChapterRepository,
+    private readonly _courseRepository: ICourseRepository,
+  ) {}
 
-    constructor(
-        private readonly _chapterRepository: IChapterRepository,
-        private readonly _courseRepository: ICourseRepository
-    ) {}
+  async execute(courseId: string, teacherId: string): Promise<Chapter[]> {
+    const course = await this._courseRepository.findById(courseId);
 
-    async execute(
-        courseId: string,
-        teacherId: string
-    ): Promise<Chapter[]> {
-
-        const course =
-            await this._courseRepository.findById(courseId);
-
-        if (!course) {
-            throw new AppError(
-                "Course not found",
-                HttpStatusCode.NOT_FOUND
-            );
-        }
-
-        if (course.teacherId !== teacherId) {
-            throw new AppError(
-                "You are not authorized to view this course",
-                HttpStatusCode.FORBIDDEN
-            );
-        }
-
-        return await this._chapterRepository.findByCourseId(
-            courseId
-        );
+    if (!course) {
+      throw new AppError("Course not found", HttpStatusCode.NOT_FOUND);
     }
+
+    if (course.teacherId !== teacherId) {
+      throw new AppError("You are not authorized to view this course", HttpStatusCode.FORBIDDEN);
+    }
+
+    return await this._chapterRepository.findByCourseId(courseId);
+  }
 }

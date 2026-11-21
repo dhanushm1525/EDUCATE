@@ -1,79 +1,53 @@
 export const AUTH_MESSAGES = {
+  EMAIL_ALREADY_EXISTS: "Email already exists",
 
-    EMAIL_ALREADY_EXISTS:
-        "Email already exists",
+  USER_NOT_FOUND: "User not found",
 
-    USER_NOT_FOUND:
-        "User not found",
+  INVALID_CREDENTIALS: "Invalid email or password",
 
-    INVALID_CREDENTIALS:
-        "Invalid email or password",
+  ACCOUNT_BLOCKED: "Your account has been blocked",
 
-    ACCOUNT_BLOCKED:
-        "Your account has been blocked",
+  EMAIL_NOT_VERIFIED: "Please verify your email before logging in",
 
-    EMAIL_NOT_VERIFIED:
-        "Please verify your email before logging in",
+  AUTHENTICATION_REQUIRED: "Authentication required",
 
-    AUTHENTICATION_REQUIRED:
-        "Authentication required",
+  ACCESS_DENIED: "Access denied",
 
-    ACCESS_DENIED:
-        "Access denied",
+  INVALID_ACCESS_TOKEN: "Invalid or expired access token",
 
-    INVALID_ACCESS_TOKEN:
-        "Invalid or expired access token",
+  INVALID_REFRESH_TOKEN: "Invalid or expired refresh token",
 
-    INVALID_REFRESH_TOKEN:
-        "Invalid or expired refresh token",
+  LOGIN_SUCCESS: "Login successful",
 
-    LOGIN_SUCCESS:
-        "Login successful",
+  REGISTRATION_SUCCESS: "Registration successful",
 
-    REGISTRATION_SUCCESS:
-        "Registration successful",
+  UNAUTHORIZED: "You are not authorized to access this resource",
 
-    UNAUTHORIZED:
-        "You are not authorized to access this resource",
+  EMAIL_VERIFIED: "Email verified successfully",
 
-    EMAIL_VERIFIED:
-        "Email verified successfully",
+  OTP_SENT: "OTP sent successfully",
 
-    OTP_SENT:
-        "OTP sent successfully",
+  INVALID_OTP: "Invalid OTP",
 
-    INVALID_OTP:
-        "Invalid OTP",
+  OTP_EXPIRED: "OTP has expired",
 
-    OTP_EXPIRED:
-        "OTP has expired",
+  EMAIL_ALREADY_VERIFIED: "Email is already verified",
 
-    EMAIL_ALREADY_VERIFIED:
-        "Email is already verified",
+  VERIFICATION_OTP_SENT: "Verification OTP sent successfully",
 
-    VERIFICATION_OTP_SENT:
-        "Verification OTP sent successfully",
+  INVALID_OR_EXPIRED_OTP: "Invalid or expired OTP",
 
-    INVALID_OR_EXPIRED_OTP:
-        "Invalid or expired OTP",
+  PASSWORD_RESET_OTP_SENT: "Password reset OTP sent successfully",
 
-    PASSWORD_RESET_OTP_SENT:
-        "Password reset OTP sent successfully",
+  INVALID_PASSWORD_RESET_OTP: "Invalid password reset OTP",
 
-    INVALID_PASSWORD_RESET_OTP:
-        "Invalid password reset OTP",
+  INVALID_OR_EXPIRED_PASSWORD_RESET_OTP: "Invalid or expired password reset OTP",
 
-    INVALID_OR_EXPIRED_PASSWORD_RESET_OTP:
-        "Invalid or expired password reset OTP",
+  PASSWORD_RESET_OTP_EXPIRED: "Password reset OTP has expired",
 
-    PASSWORD_RESET_OTP_EXPIRED:
-        "Password reset OTP has expired",
+  PASSWORD_RESET_SUCCESS: "Password reset successfully",
 
-    PASSWORD_RESET_SUCCESS:
-        "Password reset successfully",
+  USER_ID_IS_MISSING: "User ID is missing",
 
-    USER_ID_IS_MISSING: "User ID is missing",
-
-    PROFILE_RETRIEVED_SUCCESSFULLY: "Profile retrieved successfully"
-
+  PROFILE_RETRIEVED_SUCCESSFULLY: "Profile retrieved successfully",
 } as const;

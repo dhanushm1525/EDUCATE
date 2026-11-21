@@ -13,8 +13,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <ErrorBoundary>
     <GoogleOAuthProvider clientId={googleClientId}>
       <BrowserRouter>
-      <App />
-    </BrowserRouter>
+        <App />
+      </BrowserRouter>
     </GoogleOAuthProvider>
   </ErrorBoundary>,
 );

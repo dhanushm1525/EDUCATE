@@ -1,3 +1,3 @@
-export interface ILessonMediaTypePolicy{
-    supports(contentType:string):boolean;
+export interface ILessonMediaTypePolicy {
+  supports(contentType: string): boolean;
 }

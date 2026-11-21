@@ -6,30 +6,19 @@ import { ILoginProviderRegistry } from "../../interfaces/auth/ILoginProviderRegi
 import { ILoginProviderStrategy } from "../../interfaces/auth/ILoginProviderStrategy";
 
 export class LoginProviderRegistry implements ILoginProviderRegistry {
-    private readonly _strategies: Map<
-        AuthProvider,
-        ILoginProviderStrategy
-    >;
+  private readonly _strategies: Map<AuthProvider, ILoginProviderStrategy>;
 
-    constructor(strategies: ILoginProviderStrategy[]) {
-        this._strategies = new Map(
-            strategies.map(strategy => [
-                strategy.provider,
-                strategy
-            ])
-        );
+  constructor(strategies: ILoginProviderStrategy[]) {
+    this._strategies = new Map(strategies.map((strategy) => [strategy.provider, strategy]));
+  }
+
+  get(provider: AuthProvider): ILoginProviderStrategy {
+    const strategy = this._strategies.get(provider);
+
+    if (!strategy) {
+      throw new AppError("Unsupported authentication provider", HttpStatusCode.BAD_REQUEST);
     }
 
-    get(provider: AuthProvider): ILoginProviderStrategy {
-        const strategy = this._strategies.get(provider);
-
-        if (!strategy) {
-            throw new AppError(
-                "Unsupported authentication provider",
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
-
-        return strategy;
-    }
+    return strategy;
+  }
 }

@@ -1,33 +1,17 @@
-import type {
-    UserRole
-} from "../types/userRole";
+import type { UserRole } from "../types/userRole";
 
+export function getRoleDashboardPath(role: UserRole): string {
+  switch (role) {
+    case "student":
+      return "/student";
 
-export function getRoleDashboardPath(
-    role: UserRole
-): string {
+    case "teacher":
+      return "/teacher";
 
-    switch (role) {
+    case "admin":
+      return "/admin";
 
-        case "student":
-
-            return "/student";
-
-
-        case "teacher":
-
-            return "/teacher";
-
-
-        case "admin":
-
-            return "/admin";
-
-
-        default:
-
-            return "/";
-
-    }
-
+    default:
+      return "/";
+  }
 }

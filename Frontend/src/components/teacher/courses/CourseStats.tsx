@@ -37,10 +37,7 @@ export default function CourseStats({ courses }: CourseStatsProps) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {stats.map(({ label, value, icon: Icon, iconStyle }) => (
-        <div
-          key={label}
-          className="rounded-xl border border-slate-800 bg-slate-900 p-5"
-        >
+        <div key={label} className="rounded-xl border border-slate-800 bg-slate-900 p-5">
           <div className="flex items-center justify-between">
             <p className="text-sm text-slate-400">{label}</p>
 

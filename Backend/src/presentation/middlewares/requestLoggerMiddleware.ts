@@ -1,29 +1,22 @@
-import {
-  Request,
-  Response,
-  NextFunction
-} from "express";
+import { Request, Response, NextFunction } from "express";
 
 import { ILogger } from "../../application/interfaces/services/ILogger";
 
-export const requestLoggerMiddleware = (logger:ILogger) =>(
-    req:Request,
-    res:Response,
-    next:NextFunction
-)=> {
-  const start = Date.now();
+export const requestLoggerMiddleware =
+  (logger: ILogger) => (req: Request, res: Response, next: NextFunction) => {
+    const start = Date.now();
 
-  res.on("finish", () => {
-    const duration = Date.now() - start;
+    res.on("finish", () => {
+      const duration = Date.now() - start;
 
-    logger.info("HTTP request", {
-      method: req.method,
-      url: req.originalUrl,
-      statusCode: res.statusCode,
-      duration: `${duration}ms`,
-      userAgent: req.get("user-agent")
+      logger.info("HTTP request", {
+        method: req.method,
+        url: req.originalUrl,
+        statusCode: res.statusCode,
+        duration: `${duration}ms`,
+        userAgent: req.get("user-agent"),
+      });
     });
-  });
 
-  next();
-};
+    next();
+  };

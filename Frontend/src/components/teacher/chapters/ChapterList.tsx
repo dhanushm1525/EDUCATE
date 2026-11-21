@@ -33,9 +33,7 @@ export function ChapterList({
   if (chapters.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-slate-700 bg-slate-900/50 p-10 text-center">
-        <p className="text-sm text-slate-400">
-          No chapters have been created yet.
-        </p>
+        <p className="text-sm text-slate-400">No chapters have been created yet.</p>
       </div>
     );
   }
@@ -60,11 +58,7 @@ export function ChapterList({
                 className="text-slate-400 hover:text-white"
                 aria-label={expanded ? "Collapse chapter" : "Expand chapter"}
               >
-                {expanded ? (
-                  <ChevronDown size={18} />
-                ) : (
-                  <ChevronRight size={18} />
-                )}
+                {expanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
               </button>
 
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-blue-500/10 text-xs font-semibold text-blue-400">
@@ -76,14 +70,10 @@ export function ChapterList({
                 onClick={() => onToggle(chapter.chapterId)}
                 className="min-w-0 flex-1 text-left"
               >
-                <p className="truncate text-sm font-medium text-white">
-                  {chapter.title}
-                </p>
+                <p className="truncate text-sm font-medium text-white">{chapter.title}</p>
 
                 {chapter.description && (
-                  <p className="mt-1 truncate text-xs text-slate-500">
-                    {chapter.description}
-                  </p>
+                  <p className="mt-1 truncate text-xs text-slate-500">{chapter.description}</p>
                 )}
               </button>
 
@@ -140,9 +130,7 @@ export function ChapterList({
 
                 {lessons.length === 0 ? (
                   <div className="rounded-md border border-dashed border-slate-700 p-5 text-center">
-                    <p className="text-sm text-slate-400">
-                      No lessons have been added yet.
-                    </p>
+                    <p className="text-sm text-slate-400">No lessons have been added yet.</p>
 
                     <p className="mt-1 text-xs text-slate-500">
                       Use Add Lesson to create the first lesson in this chapter.
@@ -171,9 +159,7 @@ export function ChapterList({
 
                         {/* Lesson information */}
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium text-white">
-                            {lesson.title}
-                          </p>
+                          <p className="truncate text-sm font-medium text-white">{lesson.title}</p>
 
                           {lesson.description && (
                             <p className="mt-1 truncate text-xs text-slate-500">

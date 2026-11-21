@@ -1,4 +1,3 @@
-
 import type { AssignmentQuestion } from "../../../types/assingment";
 
 interface QuestionFormProps {
@@ -19,10 +18,7 @@ export function QuestionForm({
   onRemove,
   canRemove,
 }: QuestionFormProps) {
-  const updateQuestion = (
-    field: keyof AssignmentQuestion,
-    value: string | number,
-  ) => {
+  const updateQuestion = (field: keyof AssignmentQuestion, value: string | number) => {
     onChange(index, {
       ...question,
       [field]: value,
@@ -38,10 +34,7 @@ export function QuestionForm({
     onChange(index, {
       ...question,
       options: updatedOptions,
-      correctAnswer:
-        question.correctAnswer === previousValue
-          ? value
-          : question.correctAnswer,
+      correctAnswer: question.correctAnswer === previousValue ? value : question.correctAnswer,
     });
   };
 
@@ -57,12 +50,8 @@ export function QuestionForm({
           </div>
 
           <div>
-            <h3 className="font-semibold text-slate-800">
-              Question {index + 1}
-            </h3>
-            <p className="text-xs text-slate-500">
-              Multiple choice question
-            </p>
+            <h3 className="font-semibold text-slate-800">Question {index + 1}</h3>
+            <p className="text-xs text-slate-500">Multiple choice question</p>
           </div>
         </div>
 
@@ -101,9 +90,7 @@ export function QuestionForm({
 
           <textarea
             value={question.question}
-            onChange={(event) =>
-              updateQuestion("question", event.target.value)
-            }
+            onChange={(event) => updateQuestion("question", event.target.value)}
             className={`${inputClass} min-h-24 resize-y`}
             placeholder="Type your question here..."
             rows={3}
@@ -130,9 +117,7 @@ export function QuestionForm({
                 <input
                   type="text"
                   value={option}
-                  onChange={(event) =>
-                    updateOption(optionIndex, event.target.value)
-                  }
+                  onChange={(event) => updateOption(optionIndex, event.target.value)}
                   className="min-w-0 flex-1 bg-transparent px-2 py-2 text-sm text-slate-800 outline-none placeholder:text-slate-400"
                   placeholder={`Enter option ${letters[optionIndex] ?? optionIndex + 1}`}
                   required
@@ -152,20 +137,14 @@ export function QuestionForm({
             <div className="relative">
               <select
                 value={question.correctAnswer}
-                onChange={(event) =>
-                  updateQuestion("correctAnswer", event.target.value)
-                }
+                onChange={(event) => updateQuestion("correctAnswer", event.target.value)}
                 className={`${inputClass} appearance-none pr-10`}
                 required
               >
                 <option value="">Select correct option</option>
 
                 {question.options.map((option, optionIndex) => (
-                  <option
-                    key={optionIndex}
-                    value={option}
-                    disabled={!option.trim()}
-                  >
+                  <option key={optionIndex} value={option} disabled={!option.trim()}>
                     Option {letters[optionIndex] ?? optionIndex + 1}
                     {option ? ` — ${option}` : ""}
                   </option>
@@ -193,9 +172,7 @@ export function QuestionForm({
               type="number"
               min={1}
               value={question.marks}
-              onChange={(event) =>
-                updateQuestion("marks", Number(event.target.value))
-              }
+              onChange={(event) => updateQuestion("marks", Number(event.target.value))}
               className={inputClass}
               required
             />

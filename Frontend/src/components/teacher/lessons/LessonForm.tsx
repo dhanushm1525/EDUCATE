@@ -47,18 +47,14 @@ export default function LessonForm({
   const [thumbnailFile, setThumbnailFile] = useState<File>();
   const [pdfFile, setPdfFile] = useState<File>();
 
-  const [thumbnailPreview, setThumbnailPreview] = useState(
-    initialThumbnailUrl ?? "",
-  );
+  const [thumbnailPreview, setThumbnailPreview] = useState(initialThumbnailUrl ?? "");
 
   const [error, setError] = useState("");
 
   const hasExistingPdf = Boolean(formData.attachments?.length);
 
   const handleChange = (
-    event: ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const { name, value } = event.target;
 
@@ -125,10 +121,7 @@ export default function LessonForm({
 
     if (!file) return;
 
-    if (
-      file.type !== "application/pdf" &&
-      !file.name.toLowerCase().endsWith(".pdf")
-    ) {
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
       setError("Please select a valid PDF file.");
       event.target.value = "";
       return;
@@ -200,12 +193,7 @@ export default function LessonForm({
       return;
     }
 
-    if (
-      formData.type === "reading" &&
-      !formData.content?.trim() &&
-      !pdfFile &&
-      !hasExistingPdf
-    ) {
+    if (formData.type === "reading" && !formData.content?.trim() && !pdfFile && !hasExistingPdf) {
       setError("Please provide reading content or upload a PDF.");
       return;
     }
@@ -219,11 +207,7 @@ export default function LessonForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      {error && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
-          {error}
-        </div>
-      )}
+      {error && <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</div>}
 
       <div>
         <label className="mb-1 block text-sm font-medium">Lesson Title</label>
@@ -278,17 +262,11 @@ export default function LessonForm({
               className="w-full rounded-lg border p-3"
             />
 
-            {videoFile && (
-              <p className="mt-1 text-xs text-gray-500">
-                Selected: {videoFile.name}
-              </p>
-            )}
+            {videoFile && <p className="mt-1 text-xs text-gray-500">Selected: {videoFile.name}</p>}
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">
-              Custom Thumbnail (Optional)
-            </label>
+            <label className="mb-1 block text-sm font-medium">Custom Thumbnail (Optional)</label>
 
             <input
               type="file"
@@ -298,8 +276,7 @@ export default function LessonForm({
             />
 
             <p className="mt-1 text-xs text-gray-500">
-              If you do not upload a thumbnail, one will be generated
-              automatically from the video.
+              If you do not upload a thumbnail, one will be generated automatically from the video.
             </p>
           </div>
 
@@ -330,9 +307,7 @@ export default function LessonForm({
       {formData.type === "reading" && (
         <>
           <div>
-            <label className="mb-1 block text-sm font-medium">
-              Reading Content
-            </label>
+            <label className="mb-1 block text-sm font-medium">Reading Content</label>
 
             <textarea
               name="content"
@@ -349,9 +324,7 @@ export default function LessonForm({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">
-              PDF Attachment (Optional)
-            </label>
+            <label className="mb-1 block text-sm font-medium">PDF Attachment (Optional)</label>
 
             <input
               type="file"
@@ -360,9 +333,7 @@ export default function LessonForm({
               className="w-full rounded-lg border p-3"
             />
 
-            <p className="mt-1 text-xs text-gray-500">
-              Maximum file size: 20 MB.
-            </p>
+            <p className="mt-1 text-xs text-gray-500">Maximum file size: 20 MB.</p>
 
             {pdfFile && (
               <div className="mt-2 flex items-center justify-between rounded-lg border p-3">
@@ -380,9 +351,7 @@ export default function LessonForm({
 
             {!pdfFile && hasExistingPdf && (
               <div className="mt-2 flex items-center justify-between rounded-lg border p-3">
-                <span className="text-sm text-gray-500">
-                  A PDF is already attached
-                </span>
+                <span className="text-sm text-gray-500">A PDF is already attached</span>
 
                 <button
                   type="button"
@@ -398,9 +367,7 @@ export default function LessonForm({
       )}
 
       <div>
-        <label className="mb-1 block text-sm font-medium">
-          Duration (minutes)
-        </label>
+        <label className="mb-1 block text-sm font-medium">Duration (minutes)</label>
 
         <input
           type="number"

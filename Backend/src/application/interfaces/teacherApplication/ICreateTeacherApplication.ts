@@ -1,14 +1,7 @@
-import { CreateTeacherApplicationDTO } 
-    from "../../dtos/TeacherApplication/CreateTeacherApplicationDTO";
+import { CreateTeacherApplicationDTO } from "../../dtos/TeacherApplication/CreateTeacherApplicationDTO";
 
-import { TeacherApplication } 
-    from "../../../domain/entities/TeacherApplication";
+import { TeacherApplication } from "../../../domain/entities/TeacherApplication";
 
 export interface ICreateTeacherApplication {
-
-    execute(
-        userId: string,
-        dto: CreateTeacherApplicationDTO
-    ): Promise<TeacherApplication>;
-
+  execute(userId: string, dto: CreateTeacherApplicationDTO): Promise<TeacherApplication>;
 }

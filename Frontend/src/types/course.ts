@@ -1,112 +1,101 @@
-export type CourseLevel =
-    | "Beginner"
-    | "Intermediate"
-    | "Advanced";
+export type CourseLevel = "Beginner" | "Intermediate" | "Advanced";
 
-export type CourseStatus =
-    | "draft"
-    | "pending"
-    | "published"
-    | "rejected";
+export type CourseStatus = "draft" | "pending" | "published" | "rejected";
 
 export interface Course {
+  courseId: string;
 
-    courseId: string;
+  teacherId: string;
 
-    teacherId: string;
+  categoryId: string;
 
-    categoryId: string;
+  title: string;
+  subtitle: string;
+  description: string;
 
-    title: string;
-    subtitle: string;
-    description: string;
+  thumbnail?: string;
+  trailer?: string;
 
-    thumbnail?: string;
-    trailer?: string;
+  language: string;
 
-    language: string;
+  level: CourseLevel;
 
-    level: CourseLevel;
+  duration: number;
 
-    duration: number;
+  price: number;
+  discount: number;
+  finalPrice: number;
 
-    price: number;
-    discount: number;
-    finalPrice: number;
+  tags?: string[];
 
-    tags?: string[];
+  objectives?: string[];
 
-    objectives?: string[];
+  requirements?: string[];
 
-    requirements?: string[];
+  featured?: boolean;
 
-    featured?: boolean;
+  averageRating?: number;
 
-    averageRating?: number;
+  totalStudents?: number;
 
-    totalStudents?: number;
+  status: CourseStatus;
 
-    status: CourseStatus;
+  rejectionReason?: string;
 
-    rejectionReason?: string;
+  createdAt: string;
 
-    createdAt: string;
-
-    updatedAt: string;
+  updatedAt: string;
 }
 
 export interface CreateCourseRequest {
+  categoryId: string;
 
-    categoryId: string;
+  title: string;
 
-    title: string;
+  subtitle: string;
 
-    subtitle: string;
+  description: string;
 
-    description: string;
+  thumbnail?: string;
 
-    thumbnail?: string;
+  trailer?: string;
 
-    trailer?: string;
+  language: string;
 
-    language: string;
+  level: CourseLevel;
 
-    level: CourseLevel;
+  duration: number;
 
-    duration: number;
+  price: number;
 
-    price: number;
+  discount: number;
 
-    discount: number;
+  tags?: string[];
 
-    tags?: string[];
+  objectives?: string[];
 
-    objectives?: string[];
-
-    requirements?: string[];
+  requirements?: string[];
 }
 
-export type UpdateCourseRequest =
-    Partial<CreateCourseRequest>;
+export type UpdateCourseRequest = Partial<CreateCourseRequest>;
 
 export interface CourseApiResponse<T> {
+  success: boolean;
 
-    success: boolean;
+  message: string;
 
-    message: string;
-
-    data: T;
+  data: T;
 }
 
 export interface CourseSearchFilters {
-    search?: string;
-    categoryId?: string;
-    level?: CourseLevel;
-    minPrice?: number;
-    maxPrice?: number;
+  search?: string;
+  categoryId?: string;
+  level?: CourseLevel;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
 export interface GenerateCourseThumbnailUploadUrlResponse {
-    uploadUrl: string;
-    key: string;
+  uploadUrl: string;
+  key: string;
 }

@@ -22,10 +22,7 @@ import { ErrorState } from "../../components/common/ui/ErrorState";
 import { assignmentService } from "../../services/assingment.service";
 import { getApiErrorMessage } from "../../utils/apiError";
 
-import type {
-  Assignment,
-  CreateAssignmentRequest,
-} from "../../types/assingment";
+import type { Assignment, CreateAssignmentRequest } from "../../types/assingment";
 
 export default function AssignmentManagementPage() {
   const { courseId, chapterId, lessonId } = useParams<{
@@ -123,10 +120,7 @@ export default function AssignmentManagementPage() {
             onClick={handleBack}
             className="group inline-flex items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-violet-400"
           >
-            <ArrowLeft
-              size={17}
-              className="transition-transform group-hover:-translate-x-1"
-            />
+            <ArrowLeft size={17} className="transition-transform group-hover:-translate-x-1" />
             Back to lessons
           </button>
 
@@ -180,9 +174,7 @@ export default function AssignmentManagementPage() {
 
                 <div>
                   <div className="mb-2 flex flex-wrap items-center gap-2">
-                    <h2 className="text-xl font-bold text-white">
-                      {assignment.title}
-                    </h2>
+                    <h2 className="text-xl font-bold text-white">{assignment.title}</h2>
 
                     <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-400">
                       <CheckCircle2 size={13} />
@@ -203,9 +195,7 @@ export default function AssignmentManagementPage() {
                   Description
                 </p>
 
-                <p className="mt-2 text-sm leading-7 text-slate-300">
-                  {assignment.description}
-                </p>
+                <p className="mt-2 text-sm leading-7 text-slate-300">{assignment.description}</p>
               </div>
             )}
 
@@ -215,9 +205,7 @@ export default function AssignmentManagementPage() {
                   <FileQuestion size={19} />
                 </div>
                 <p className="text-xs text-slate-500">Questions</p>
-                <p className="mt-1 text-xl font-bold text-white">
-                  {assignment.questions.length}
-                </p>
+                <p className="mt-1 text-xl font-bold text-white">{assignment.questions.length}</p>
               </div>
 
               <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
@@ -225,9 +213,7 @@ export default function AssignmentManagementPage() {
                   <Award size={19} />
                 </div>
                 <p className="text-xs text-slate-500">Total Marks</p>
-                <p className="mt-1 text-xl font-bold text-white">
-                  {assignment.totalMarks}
-                </p>
+                <p className="mt-1 text-xl font-bold text-white">{assignment.totalMarks}</p>
               </div>
 
               <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
@@ -235,9 +221,7 @@ export default function AssignmentManagementPage() {
                   <CheckCircle2 size={19} />
                 </div>
                 <p className="text-xs text-slate-500">Passing Marks</p>
-                <p className="mt-1 text-xl font-bold text-white">
-                  {assignment.passingMarks}
-                </p>
+                <p className="mt-1 text-xl font-bold text-white">{assignment.passingMarks}</p>
               </div>
 
               <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
@@ -268,9 +252,7 @@ export default function AssignmentManagementPage() {
               <Button
                 type="button"
                 onClick={() =>
-                  navigate(
-                    `/teacher/assignments/${assignment.assignmentId}/submissions`,
-                  )
+                  navigate(`/teacher/assignments/${assignment.assignmentId}/submissions`)
                 }
               >
                 <Eye size={16} />
@@ -293,9 +275,7 @@ export default function AssignmentManagementPage() {
               </div>
 
               <div>
-                <h2 className="font-semibold text-white">
-                  Create Lesson Assignment
-                </h2>
+                <h2 className="font-semibold text-white">Create Lesson Assignment</h2>
 
                 <p className="mt-1 text-sm text-slate-400">
                   No assignment exists for this lesson yet. Configure one below.

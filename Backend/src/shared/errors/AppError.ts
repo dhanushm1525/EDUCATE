@@ -1,19 +1,19 @@
 import { HttpStatusCode } from "../enums/HttpStatusCode";
 
-export class AppError extends Error{
-    public readonly statusCode:number;
-    public readonly isOperational:boolean;
+export class AppError extends Error {
+  public readonly statusCode: number;
+  public readonly isOperational: boolean;
 
-    constructor(
-        message:string,
-        statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR,
-        isOperational= true
-    ){
-        super(message);
-        this.name = "AppError"
-        this.statusCode = statusCode;
-        this.isOperational = isOperational;
+  constructor(
+    message: string,
+    statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR,
+    isOperational = true,
+  ) {
+    super(message);
+    this.name = "AppError";
+    this.statusCode = statusCode;
+    this.isOperational = isOperational;
 
-        Object.setPrototypeOf(this,AppError.prototype);
-    }
+    Object.setPrototypeOf(this, AppError.prototype);
+  }
 }

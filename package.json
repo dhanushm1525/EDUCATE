@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"Backend/src/**/*.ts\" \"Backend/*.mjs\" \"Backend/*.json\" \"Frontend/src/**/*.{ts,tsx,css}\" \"Frontend/*.{js,ts,json,html}\" \".prettierrc.json\"",
+    "format:check": "prettier --check \"Backend/src/**/*.ts\" \"Backend/*.mjs\" \"Backend/*.json\" \"Frontend/src/**/*.{ts,tsx,css}\" \"Frontend/*.{js,ts,json,html}\" \".prettierrc.json\""
+  },
+  "devDependencies": {
+    "prettier": "^3.10.1"
+  }
+}

@@ -1,4 +1,3 @@
-
 import { Request, Response, NextFunction } from "express";
 
 import { ISubmitAssignmentUseCase } from "../../../application/interfaces/assingment/ISubmitAssignmentUseCase";
@@ -11,69 +10,51 @@ import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { AssignmentSubmissionResponseMapper } from "../../../application/mappers/AssignmentSubmissionResponseMapper";
 
 export class SubmitAssignmentController {
+  constructor(
+    private readonly _submitAssignmentUseCase: ISubmitAssignmentUseCase,
+    private readonly _identifierValidator: IIdentifierValidator,
+  ) {}
 
-    constructor(
-        private readonly _submitAssignmentUseCase: ISubmitAssignmentUseCase,
-        private readonly _identifierValidator: IIdentifierValidator
-    ) {}
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      // 1. Check authentication.
+      if (!req.user) {
+        throw new AppError(AUTH_MESSAGES.AUTHENTICATION_REQUIRED, HttpStatusCode.UNAUTHORIZED);
+      }
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
+      // 2. Validate assignment ID.
+      const { assignmentId } = req.params;
 
-        try {
+      if (
+        !assignmentId ||
+        Array.isArray(assignmentId) ||
+        !this._identifierValidator.isValid(assignmentId)
+      ) {
+        throw new AppError("Invalid assignment ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            // 1. Check authentication.
-            if (!req.user) {
-                throw new AppError(
-                    AUTH_MESSAGES.AUTHENTICATION_REQUIRED,
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+      // 3. Validate answers payload.
+      const { answers } = req.body;
 
-            // 2. Validate assignment ID.
-            const { assignmentId } = req.params;
+      if (!Array.isArray(answers) || answers.length === 0) {
+        throw new AppError("At least one answer is required", HttpStatusCode.BAD_REQUEST);
+      }
 
-            if (
-                !assignmentId ||
-                Array.isArray(assignmentId) ||
-                !this._identifierValidator.isValid(assignmentId)
-            ) {
-                throw new AppError(
-                    "Invalid assignment ID",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
+      // 4. Execute use case.
+      const submission = await this._submitAssignmentUseCase.execute({
+        assignmentId,
+        userId: req.user.userId,
+        answers,
+      });
 
-            // 3. Validate answers payload.
-            const { answers } = req.body;
-
-            if (!Array.isArray(answers) || answers.length === 0) {
-                throw new AppError(
-                    "At least one answer is required",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
-
-            // 4. Execute use case.
-            const submission =
-                await this._submitAssignmentUseCase.execute({
-                    assignmentId,
-                    userId: req.user.userId,
-                    answers
-                });
-
-            // 5. Return response.
-            res.status(HttpStatusCode.CREATED).json({
-                success: true,
-                message: "Assignment submitted successfully",
-                data: AssignmentSubmissionResponseMapper.toDTO(submission)
-            });
-
-        } catch (error) {
-            next(error);
-        }
+      // 5. Return response.
+      res.status(HttpStatusCode.CREATED).json({
+        success: true,
+        message: "Assignment submitted successfully",
+        data: AssignmentSubmissionResponseMapper.toDTO(submission),
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

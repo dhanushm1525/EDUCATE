@@ -19,8 +19,7 @@ export default function ProfileAvatar({
 }: ProfileAvatarProps) {
   const [imageError, setImageError] = useState(false);
 
-  const initials =
-    `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 
   const sizeClasses = {
     sm: "w-9 h-9 text-xs",
@@ -28,10 +27,7 @@ export default function ProfileAvatar({
     lg: "w-28 h-28 text-3xl",
   };
 
-  const hasAvatar =
-    typeof avatar === "string" &&
-    avatar.trim().length > 0 &&
-    !imageError;
+  const hasAvatar = typeof avatar === "string" && avatar.trim().length > 0 && !imageError;
 
   const avatarElement = hasAvatar ? (
     <img

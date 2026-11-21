@@ -16,14 +16,7 @@ const widthClasses = {
   lg: "max-w-lg",
 };
 
-export function Modal({
-  open,
-  onClose,
-  title,
-  description,
-  children,
-  width = "md",
-}: ModalProps) {
+export function Modal({ open, onClose, title, description, children, width = "md" }: ModalProps) {
   useEffect(() => {
     if (!open) return;
 
@@ -70,9 +63,7 @@ export function Modal({
               {title}
             </h2>
 
-            {description && (
-              <p className="mt-1 text-xs text-slate-400">{description}</p>
-            )}
+            {description && <p className="mt-1 text-xs text-slate-400">{description}</p>}
           </div>
 
           <button

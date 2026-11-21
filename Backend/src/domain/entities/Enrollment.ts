@@ -1,19 +1,18 @@
-
 export enum EnrollmentStatus {
-    ACTIVE = "active",
-    PENDING = "pending",
-    CANCELLED = "cancelled",
+  ACTIVE = "active",
+  PENDING = "pending",
+  CANCELLED = "cancelled",
 }
 
 export interface Enrollment {
-    enrollmentId?: string;
+  enrollmentId?: string;
 
-    userId: string;
-    courseId: string;
+  userId: string;
+  courseId: string;
 
-    status: EnrollmentStatus;
+  status: EnrollmentStatus;
 
-    enrolledAt?: Date;
-    createdAt: Date;
-    updatedAt: Date;
+  enrolledAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }

@@ -1,166 +1,91 @@
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-import {
-    IUserRepository
-} from "../../../domain/repositories/userRepositories/IUserRepository";
+import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
 
-import {
-    IRefreshTokenRepository
-} from "../../../domain/repositories/userRepositories/IRefreshTokenRepository";
+import { IRefreshTokenRepository } from "../../../domain/repositories/userRepositories/IRefreshTokenRepository";
 
-import {
-    IJwtService
-} from "../../interfaces/auth/IJwtService";
+import { IJwtService } from "../../interfaces/auth/IJwtService";
 import { ILoginProviderRegistry } from "../../interfaces/auth/ILoginProviderRegistry";
 
-import {
-    ITokenHasher
-} from "../../interfaces/services/ITokenHasher";
+import { ITokenHasher } from "../../interfaces/services/ITokenHasher";
 
-import {
-    IAuthConfig
-} from "../../interfaces/config/IAuthConfig";
+import { IAuthConfig } from "../../interfaces/config/IAuthConfig";
 
-import {
-    LoginUserDTO
-} from "../../dtos/auth/LoginUserDTO";
+import { LoginUserDTO } from "../../dtos/auth/LoginUserDTO";
 
-import {
-    LoginUserResponseDTO
-} from "../../dtos/auth/LoginUserResponseDTO";
+import { LoginUserResponseDTO } from "../../dtos/auth/LoginUserResponseDTO";
 
-import {
-    AppError
-} from "../../../shared/errors/AppError";
+import { AppError } from "../../../shared/errors/AppError";
 
-import {
-    UserStatus
-} from "../../../shared/enums/UserStatus";
+import { UserStatus } from "../../../shared/enums/UserStatus";
 
-import {
-    AUTH_MESSAGES
-} from "../../../shared/messages/authMessages";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { ILoginUser } from "../../interfaces/auth/ILoginUser";
 import { UserResponseMapper } from "../../mappers/UserResponseMapper";
 
+export class LoginUser implements ILoginUser {
+  constructor(
+    private readonly _userRepository: IUserRepository,
+    private readonly _jwtService: IJwtService,
+    private readonly _refreshTokenRepository: IRefreshTokenRepository,
+    private readonly _tokenHasher: ITokenHasher,
+    private readonly _authConfig: IAuthConfig,
+    private readonly _loginProviderRegistry: ILoginProviderRegistry,
+  ) {}
 
-export class LoginUser implements ILoginUser{
+  async execute(request: LoginUserDTO): Promise<{
+    response: LoginUserResponseDTO;
+    refreshToken: string;
+  }> {
+    const email = request.email.trim().toLowerCase();
 
-    constructor(
-        private readonly _userRepository: IUserRepository,
-        private readonly _jwtService: IJwtService,
-        private readonly _refreshTokenRepository: IRefreshTokenRepository,
-        private readonly _tokenHasher: ITokenHasher,
-        private readonly _authConfig: IAuthConfig,
-        private readonly _loginProviderRegistry: ILoginProviderRegistry
-    ) { }
+    const user = await this._userRepository.findByEmail(email);
 
-
-    async execute(
-        request: LoginUserDTO
-    ): Promise<{
-        response: LoginUserResponseDTO;
-        refreshToken: string;
-    }> {
-
-        const email =
-            request.email
-                .trim()
-                .toLowerCase();
-
-
-        const user =
-            await this._userRepository.findByEmail(
-                email
-            );
-
-
-
-        if (!user) {
-            throw new AppError(
-                AUTH_MESSAGES.INVALID_CREDENTIALS,
-                HttpStatusCode.UNAUTHORIZED
-            );
-        }
-
-        if (
-            user.status ===
-            UserStatus.BLOCKED
-        ) {
-            throw new AppError(
-                AUTH_MESSAGES.ACCOUNT_BLOCKED,
-                HttpStatusCode.FORBIDDEN
-            );
-        }
-
-
-        if (!user.isVerified) {
-            throw new AppError(
-                AUTH_MESSAGES.EMAIL_NOT_VERIFIED,
-                HttpStatusCode.FORBIDDEN
-            );
-        }
-
-        const loginProvider =
-            this._loginProviderRegistry.get(user.authProvider);
-
-        await loginProvider.authenticate(
-            user,
-            request.password
-        );
-
-
-        if (!user.id) {
-            throw new AppError(
-                AUTH_MESSAGES.USER_ID_IS_MISSING,
-                HttpStatusCode.INTERNAL_SERVER_ERROR,
-                false
-            );
-        }
-
-
-        const accessToken =
-            this._jwtService.generateAccessToken({
-                userId: user.id,
-                role: user.role
-            });
-
-
-        const refreshToken =
-            this._jwtService.generateRefreshToken(
-                user.id
-            );
-
-
-        const tokenHash =
-            await this._tokenHasher.hash(
-                refreshToken
-            );
-
-
-        const expiresAt =
-            new Date(
-                Date.now() +
-                this._authConfig
-                    .refreshTokenExpiresInMs
-            );
-
-
-        await this._refreshTokenRepository.create(
-            user.id,
-            tokenHash,
-            expiresAt
-        );
-
-
-        return {
-            response: {
-                user: UserResponseMapper.toLoginUserDTO(user),
-
-                accessToken
-            },
-
-            refreshToken
-        };
+    if (!user) {
+      throw new AppError(AUTH_MESSAGES.INVALID_CREDENTIALS, HttpStatusCode.UNAUTHORIZED);
     }
+
+    if (user.status === UserStatus.BLOCKED) {
+      throw new AppError(AUTH_MESSAGES.ACCOUNT_BLOCKED, HttpStatusCode.FORBIDDEN);
+    }
+
+    if (!user.isVerified) {
+      throw new AppError(AUTH_MESSAGES.EMAIL_NOT_VERIFIED, HttpStatusCode.FORBIDDEN);
+    }
+
+    const loginProvider = this._loginProviderRegistry.get(user.authProvider);
+
+    await loginProvider.authenticate(user, request.password);
+
+    if (!user.id) {
+      throw new AppError(
+        AUTH_MESSAGES.USER_ID_IS_MISSING,
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+        false,
+      );
+    }
+
+    const accessToken = this._jwtService.generateAccessToken({
+      userId: user.id,
+      role: user.role,
+    });
+
+    const refreshToken = this._jwtService.generateRefreshToken(user.id);
+
+    const tokenHash = await this._tokenHasher.hash(refreshToken);
+
+    const expiresAt = new Date(Date.now() + this._authConfig.refreshTokenExpiresInMs);
+
+    await this._refreshTokenRepository.create(user.id, tokenHash, expiresAt);
+
+    return {
+      response: {
+        user: UserResponseMapper.toLoginUserDTO(user),
+
+        accessToken,
+      },
+
+      refreshToken,
+    };
+  }
 }

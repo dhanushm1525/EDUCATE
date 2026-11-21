@@ -8,47 +8,47 @@ import { CompleteLessonController } from "../../presentation/controllers/courseP
 import { GetMyCourseProgressController } from "../../presentation/controllers/courseProgress/GetMyCourseProgressController";
 import { SaveVideoProgressController } from "../../presentation/controllers/courseProgress/SaveVideoProgressController";
 import {
-    courseProgressRepository,
-    enrollmentRepository,
-    courseRepository,
-    chapterRepository,
-    lessonRepository,
-    assignmentRepository,
+  courseProgressRepository,
+  enrollmentRepository,
+  courseRepository,
+  chapterRepository,
+  lessonRepository,
+  assignmentRepository,
 } from "./repositoryDependencies";
 
 const recordLessonAccessUseCase = new RecordLessonAccessUseCase(
-    courseProgressRepository,
-    enrollmentRepository,
-    chapterRepository,
-    lessonRepository
+  courseProgressRepository,
+  enrollmentRepository,
+  chapterRepository,
+  lessonRepository,
 );
 
 const completeLessonUseCase = new CompleteLessonUseCase(
-    courseProgressRepository,
-    enrollmentRepository,
-    chapterRepository,
-    lessonRepository
+  courseProgressRepository,
+  enrollmentRepository,
+  chapterRepository,
+  lessonRepository,
 );
 
 const getMyCourseProgressUseCase = new GetMyCourseProgressUseCase(
-    courseProgressRepository,
-    enrollmentRepository,
-    courseRepository,
-    chapterRepository,
-    lessonRepository,
-    assignmentRepository
+  courseProgressRepository,
+  enrollmentRepository,
+  courseRepository,
+  chapterRepository,
+  lessonRepository,
+  assignmentRepository,
 );
 
 const saveVideoProgressUseCase = new SaveVideoProgressUseCase(
-    courseProgressRepository,
-    enrollmentRepository,
-    chapterRepository,
-    lessonRepository
+  courseProgressRepository,
+  enrollmentRepository,
+  chapterRepository,
+  lessonRepository,
 );
 
 export const courseProgressControllers = {
-    recordAccess: new RecordLessonAccessController(recordLessonAccessUseCase),
-    completeLesson: new CompleteLessonController(completeLessonUseCase),
-    getMine: new GetMyCourseProgressController(getMyCourseProgressUseCase),
-    saveVideoProgress: new SaveVideoProgressController(saveVideoProgressUseCase),
+  recordAccess: new RecordLessonAccessController(recordLessonAccessUseCase),
+  completeLesson: new CompleteLessonController(completeLessonUseCase),
+  getMine: new GetMyCourseProgressController(getMyCourseProgressUseCase),
+  saveVideoProgress: new SaveVideoProgressController(saveVideoProgressUseCase),
 };

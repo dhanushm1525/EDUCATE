@@ -76,10 +76,8 @@ export default function TeacherAssignmentOverviewPage() {
       (result, assignment) => ({
         totalAssignments: result.totalAssignments + 1,
         totalSubmissions: result.totalSubmissions + assignment.totalSubmissions,
-        pendingSubmissions:
-          result.pendingSubmissions + assignment.pendingSubmissions,
-        gradedSubmissions:
-          result.gradedSubmissions + assignment.gradedSubmissions,
+        pendingSubmissions: result.pendingSubmissions + assignment.pendingSubmissions,
+        gradedSubmissions: result.gradedSubmissions + assignment.gradedSubmissions,
       }),
       {
         totalAssignments: 0,
@@ -165,11 +163,7 @@ export default function TeacherAssignmentOverviewPage() {
             </p>
           </div>
 
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => navigate("/teacher/courses")}
-          >
+          <Button type="button" variant="secondary" onClick={() => navigate("/teacher/courses")}>
             <BookOpen size={16} />
             My Courses
           </Button>
@@ -179,9 +173,7 @@ export default function TeacherAssignmentOverviewPage() {
         {loading && <LoadingState message="Loading your assignments..." />}
 
         {/* Error */}
-        {!loading && error && (
-          <ErrorState message={error} onRetry={handleRetry} />
-        )}
+        {!loading && error && <ErrorState message={error} onRetry={handleRetry} />}
 
         {!loading && !error && (
           <>
@@ -208,14 +200,10 @@ export default function TeacherAssignmentOverviewPage() {
                         <div>
                           <p className="text-sm text-slate-400">{card.title}</p>
 
-                          <p className="mt-3 text-3xl font-bold text-white">
-                            {card.value}
-                          </p>
+                          <p className="mt-3 text-3xl font-bold text-white">{card.value}</p>
                         </div>
 
-                        <div
-                          className={`rounded-xl p-3 ${card.background} ${card.color}`}
-                        >
+                        <div className={`rounded-xl p-3 ${card.background} ${card.color}`}>
                           <Icon size={22} />
                         </div>
                       </div>
@@ -229,9 +217,7 @@ export default function TeacherAssignmentOverviewPage() {
             <section>
               <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h2 className="text-lg font-semibold text-white">
-                    Your Assignments
-                  </h2>
+                  <h2 className="text-lg font-semibold text-white">Your Assignments</h2>
 
                   <p className="mt-1 text-sm text-slate-400">
                     Assignments created across your courses.
@@ -249,10 +235,7 @@ export default function TeacherAssignmentOverviewPage() {
                   description="You haven't created any assignments. Open a course lesson and create your first assignment."
                   icon={<ClipboardList size={36} />}
                   action={
-                    <Button
-                      type="button"
-                      onClick={() => navigate("/teacher/courses")}
-                    >
+                    <Button type="button" onClick={() => navigate("/teacher/courses")}>
                       Go to My Courses
                       <ArrowRight size={16} />
                     </Button>
@@ -279,8 +262,7 @@ export default function TeacherAssignmentOverviewPage() {
                               </h3>
 
                               <p className="mt-1 text-sm text-slate-400">
-                                {assignment.description ||
-                                  "No description provided."}
+                                {assignment.description || "No description provided."}
                               </p>
                             </div>
                           </div>
@@ -294,52 +276,40 @@ export default function TeacherAssignmentOverviewPage() {
 
                             <div>
                               Chapter:{" "}
-                              <span className="text-slate-300">
-                                {assignment.chapterTitle}
-                              </span>
+                              <span className="text-slate-300">{assignment.chapterTitle}</span>
                             </div>
 
                             <div>
                               Lesson:{" "}
-                              <span className="text-slate-300">
-                                {assignment.lessonTitle}
-                              </span>
+                              <span className="text-slate-300">{assignment.lessonTitle}</span>
                             </div>
                           </div>
 
                           {/* Assignment Metadata */}
                           <div className="mt-5 grid grid-cols-2 gap-4 border-t border-slate-800 pt-4 sm:grid-cols-4">
                             <div>
-                              <p className="text-xs text-slate-500">
-                                Questions
-                              </p>
+                              <p className="text-xs text-slate-500">Questions</p>
                               <p className="mt-1 font-semibold text-white">
                                 {assignment.totalQuestions}
                               </p>
                             </div>
 
                             <div>
-                              <p className="text-xs text-slate-500">
-                                Total Marks
-                              </p>
+                              <p className="text-xs text-slate-500">Total Marks</p>
                               <p className="mt-1 font-semibold text-white">
                                 {assignment.totalMarks}
                               </p>
                             </div>
 
                             <div>
-                              <p className="text-xs text-slate-500">
-                                Passing Marks
-                              </p>
+                              <p className="text-xs text-slate-500">Passing Marks</p>
                               <p className="mt-1 font-semibold text-white">
                                 {assignment.passingMarks}
                               </p>
                             </div>
 
                             <div>
-                              <p className="text-xs text-slate-500">
-                                Attempts Allowed
-                              </p>
+                              <p className="text-xs text-slate-500">Attempts Allowed</p>
                               <p className="mt-1 font-semibold text-white">
                                 {assignment.attemptsAllowed ?? "Unlimited"}
                               </p>
@@ -384,11 +354,7 @@ export default function TeacherAssignmentOverviewPage() {
 
                           <div className="mt-4 border-t border-slate-800 pt-4">
                             <StatusBadge
-                              status={
-                                assignment.pendingSubmissions > 0
-                                  ? "pending"
-                                  : "graded"
-                              }
+                              status={assignment.pendingSubmissions > 0 ? "pending" : "graded"}
                             />
                           </div>
 
@@ -396,9 +362,7 @@ export default function TeacherAssignmentOverviewPage() {
                             type="button"
                             size="sm"
                             className="mt-4 w-full"
-                            onClick={() =>
-                              handleViewSubmissions(assignment.assignmentId)
-                            }
+                            onClick={() => handleViewSubmissions(assignment.assignmentId)}
                           >
                             View Submissions
                             <ArrowRight size={15} />

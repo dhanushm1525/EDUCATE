@@ -1,4 +1,3 @@
-
 import { Types } from "mongoose";
 
 import { ICourseRepository } from "../../domain/repositories/courseRepositories/ICourseRepository";
@@ -6,186 +5,148 @@ import { CourseSearchCriteria } from "../../domain/repositories/courseRepositori
 import { Course } from "../../domain/entities/Course";
 
 import { BaseRepository } from "./BaseRepository";
-import {
-    CourseDocument,
-    CourseModel,
-} from "../database/models/CourseModel";
+import { CourseDocument, CourseModel } from "../database/models/CourseModel";
 
 import { CoursePersistenceMapper } from "../mappers/CoursePersistanceMapper";
 import { CourseStatus } from "../../shared/enums/CourseStatus";
 
 export class MongoCourseRepository
-    extends BaseRepository<CourseDocument>
-    implements ICourseRepository {
+  extends BaseRepository<CourseDocument>
+  implements ICourseRepository
+{
+  constructor() {
+    super(CourseModel);
+  }
 
-    constructor() {
-        super(CourseModel);
+  async create(course: Course): Promise<Course> {
+    const documentData = CoursePersistenceMapper.toPersistence(course);
+
+    const document = await this.createDocument(documentData);
+
+    return CoursePersistenceMapper.toDomain(document);
+  }
+
+  async findById(courseId: string): Promise<Course | null> {
+    const document = await this.findByIdDocument(courseId);
+
+    if (!document) {
+      return null;
     }
 
-    async create(course: Course): Promise<Course> {
-        const documentData =
-            CoursePersistenceMapper.toPersistence(course);
+    return CoursePersistenceMapper.toDomain(document);
+  }
 
-        const document =
-            await this.createDocument(documentData);
+  async findByTeacherId(teacherId: string): Promise<Course[]> {
+    const documents = await this.findManyDocuments({
+      teacherId: new Types.ObjectId(teacherId),
+    });
 
-        return CoursePersistenceMapper.toDomain(document);
+    return documents.map(CoursePersistenceMapper.toDomain);
+  }
+
+  async findPublished(criteria: CourseSearchCriteria): Promise<Course[]> {
+    const conditions: {
+      status: CourseStatus;
+      $or?: Array<Record<string, unknown>>;
+      categoryId?: Types.ObjectId;
+      level?: string;
+      finalPrice?: {
+        $gte?: number;
+        $lte?: number;
+      };
+    } = {
+      status: CourseStatus.PUBLISHED,
+    };
+
+    if (criteria.search?.trim()) {
+      const escapedSearch = criteria.search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+      const searchRegex = {
+        $regex: escapedSearch,
+        $options: "i",
+      };
+
+      conditions.$or = [
+        { title: searchRegex },
+        { subtitle: searchRegex },
+        { description: searchRegex },
+      ];
     }
 
-    async findById(courseId: string): Promise<Course | null> {
-        const document =
-            await this.findByIdDocument(courseId);
-
-        if (!document) {
-            return null;
-        }
-
-        return CoursePersistenceMapper.toDomain(document);
+    if (criteria.categoryId) {
+      conditions.categoryId = new Types.ObjectId(criteria.categoryId);
     }
 
-    async findByTeacherId(teacherId: string): Promise<Course[]> {
-        const documents = await this.findManyDocuments({
-            teacherId: new Types.ObjectId(teacherId),
-        });
-
-        return documents.map(
-            CoursePersistenceMapper.toDomain
-        );
+    if (criteria.level) {
+      conditions.level = criteria.level;
     }
 
-    async findPublished(
-        criteria: CourseSearchCriteria
-    ): Promise<Course[]> {
-        const conditions: {
-            status: CourseStatus;
-            $or?: Array<Record<string, unknown>>;
-            categoryId?: Types.ObjectId;
-            level?: string;
-            finalPrice?: {
-                $gte?: number;
-                $lte?: number;
-            };
-        } = {
-            status: CourseStatus.PUBLISHED,
-        };
+    if (criteria.minPrice !== undefined || criteria.maxPrice !== undefined) {
+      conditions.finalPrice = {};
 
-        if (criteria.search?.trim()) {
-            const escapedSearch = criteria.search
-                .trim()
-                .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      if (criteria.minPrice !== undefined) {
+        conditions.finalPrice.$gte = criteria.minPrice;
+      }
 
-            const searchRegex = {
-                $regex: escapedSearch,
-                $options: "i",
-            };
-
-            conditions.$or = [
-                { title: searchRegex },
-                { subtitle: searchRegex },
-                { description: searchRegex },
-            ];
-        }
-
-        if (criteria.categoryId) {
-            conditions.categoryId = new Types.ObjectId(
-                criteria.categoryId
-            );
-        }
-
-        if (criteria.level) {
-            conditions.level = criteria.level;
-        }
-
-        if (
-            criteria.minPrice !== undefined ||
-            criteria.maxPrice !== undefined
-        ) {
-            conditions.finalPrice = {};
-
-            if (criteria.minPrice !== undefined) {
-                conditions.finalPrice.$gte = criteria.minPrice;
-            }
-
-            if (criteria.maxPrice !== undefined) {
-                conditions.finalPrice.$lte = criteria.maxPrice;
-            }
-        }
-
-        const documents = await this.model
-            .find(conditions)
-            .sort({ createdAt: -1 })
-            .exec();
-
-        return documents.map(
-            CoursePersistenceMapper.toDomain
-        );
+      if (criteria.maxPrice !== undefined) {
+        conditions.finalPrice.$lte = criteria.maxPrice;
+      }
     }
 
-    async findPublishedById(
-        courseId: string
-    ): Promise<Course | null> {
-        const document = await this.model
-            .findOne({
-                _id: courseId,
-                status: CourseStatus.PUBLISHED,
-            })
-            .exec();
+    const documents = await this.model.find(conditions).sort({ createdAt: -1 }).exec();
 
-        if (!document) {
-            return null;
-        }
+    return documents.map(CoursePersistenceMapper.toDomain);
+  }
 
-        return CoursePersistenceMapper.toDomain(document);
+  async findPublishedById(courseId: string): Promise<Course | null> {
+    const document = await this.model
+      .findOne({
+        _id: courseId,
+        status: CourseStatus.PUBLISHED,
+      })
+      .exec();
+
+    if (!document) {
+      return null;
     }
 
-    async update(
-        courseId: string,
-        course: Partial<Course>
-    ): Promise<Course | null> {
-        const updateData =
-            CoursePersistenceMapper.toPersistenceUpdate(course);
+    return CoursePersistenceMapper.toDomain(document);
+  }
 
-        const document =
-            await this.updateByIdDocument(
-                courseId,
-                updateData
-            );
+  async update(courseId: string, course: Partial<Course>): Promise<Course | null> {
+    const updateData = CoursePersistenceMapper.toPersistenceUpdate(course);
 
-        if (!document) {
-            return null;
-        }
+    const document = await this.updateByIdDocument(courseId, updateData);
 
-        return CoursePersistenceMapper.toDomain(document);
+    if (!document) {
+      return null;
     }
 
-    async delete(courseId: string): Promise<boolean> {
-        return await this.deleteByIdDocument(courseId);
-    }
+    return CoursePersistenceMapper.toDomain(document);
+  }
 
-    async incrementTotalStudents(
-        courseId: string
-    ): Promise<boolean> {
-        const updatedCourse = await this.model
-            .findByIdAndUpdate(
-                courseId,
-                { $inc: { totalStudents: 1 } },
-                { new: true, runValidators: true }
-            )
-            .exec();
+  async delete(courseId: string): Promise<boolean> {
+    return await this.deleteByIdDocument(courseId);
+  }
 
-        return updatedCourse !== null;
-    }
+  async incrementTotalStudents(courseId: string): Promise<boolean> {
+    const updatedCourse = await this.model
+      .findByIdAndUpdate(
+        courseId,
+        { $inc: { totalStudents: 1 } },
+        { new: true, runValidators: true },
+      )
+      .exec();
 
+    return updatedCourse !== null;
+  }
 
-    async findPending(): Promise<Course[]> {
-        const documents = await this.model
-            .find({ status: CourseStatus.PENDING })
-            .sort({ createdAt: 1 })
-            .exec();
+  async findPending(): Promise<Course[]> {
+    const documents = await this.model
+      .find({ status: CourseStatus.PENDING })
+      .sort({ createdAt: 1 })
+      .exec();
 
-        return documents.map(
-            CoursePersistenceMapper.toDomain
-        );
-    }
-
+    return documents.map(CoursePersistenceMapper.toDomain);
+  }
 }

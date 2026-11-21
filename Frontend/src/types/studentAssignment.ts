@@ -1,92 +1,89 @@
-
 export interface StudentAssignmentQuestion {
-    questionId: string;
-    question: string;
-    options: string[];
-    marks: number;
+  questionId: string;
+  question: string;
+  options: string[];
+  marks: number;
 }
 
-
 export interface StudentAssignmentAnswer {
-    questionId: string;
-    selectedAnswer: string;
+  questionId: string;
+  selectedAnswer: string;
 }
 
 export interface StudentActiveAttempt {
-    submissionId: string;
-    attemptNumber: number;
-    startedAt: string;
-    expiresAt?: string;
-    answers: StudentAssignmentAnswer[];
+  submissionId: string;
+  attemptNumber: number;
+  startedAt: string;
+  expiresAt?: string;
+  answers: StudentAssignmentAnswer[];
 }
 
-
 export interface StudentAssignment {
-    assignmentId: string;
-    lessonId: string;
-    title: string;
-    description?: string;
+  assignmentId: string;
+  lessonId: string;
+  title: string;
+  description?: string;
 
-    questions: StudentAssignmentQuestion[];
+  questions: StudentAssignmentQuestion[];
 
-    totalMarks: number;
-    passingMarks: number;
+  totalMarks: number;
+  passingMarks: number;
 
-    timeLimit?: number;
-    attemptsAllowed?: number;
-    dueDate?: string | null;
+  timeLimit?: number;
+  attemptsAllowed?: number;
+  dueDate?: string | null;
 
-    attemptsUsed: number;
-    attemptsRemaining: number | null;
+  attemptsUsed: number;
+  attemptsRemaining: number | null;
 
-    isExpired: boolean;
-    canAttempt: boolean;
+  isExpired: boolean;
+  canAttempt: boolean;
 
-    activeAttempt: StudentActiveAttempt | null;
+  activeAttempt: StudentActiveAttempt | null;
 }
 
 export interface StudentAssignmentResponse {
-    success: boolean;
-    message: string;
-    data: StudentAssignment;
+  success: boolean;
+  message: string;
+  data: StudentAssignment;
 }
 
 export interface SubmitAssignmentAnswer {
-    questionId: string;
-    selectedAnswer: string;
+  questionId: string;
+  selectedAnswer: string;
 }
 
 export interface SubmitAssignmentRequest {
-    answers: SubmitAssignmentAnswer[];
+  answers: SubmitAssignmentAnswer[];
 }
 
 export interface AssignmentSubmissionResult {
-    submissionId: string;
-    assignmentId: string;
-    attemptNumber: number;
+  submissionId: string;
+  assignmentId: string;
+  attemptNumber: number;
 
-    score: number;
-    totalMarks: number;
-    passingMarks: number;
-    percentage: number;
-    isPassed: boolean;
+  score: number;
+  totalMarks: number;
+  passingMarks: number;
+  percentage: number;
+  isPassed: boolean;
 
-    status: "submitted" | "graded";
+  status: "submitted" | "graded";
 
-    teacherFeedback?: string;
-    gradedAt?: string;
+  teacherFeedback?: string;
+  gradedAt?: string;
 
-    submittedAt: string;
+  submittedAt: string;
 }
 
 export interface AssignmentResultsResponse {
-    success: boolean;
-    message: string;
-    data: AssignmentSubmissionResult[];
+  success: boolean;
+  message: string;
+  data: AssignmentSubmissionResult[];
 }
 
 export interface SubmitAssignmentResponse {
-    success: boolean;
-    message: string;
-    data: unknown;
+  success: boolean;
+  message: string;
+  data: unknown;
 }

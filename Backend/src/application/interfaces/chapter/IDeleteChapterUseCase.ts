@@ -1,6 +1,3 @@
-export interface IDeleteChapterUseCase{
-    execute(
-        chapterId:string,
-        teacherId:string,
-    ):Promise<void>
+export interface IDeleteChapterUseCase {
+  execute(chapterId: string, teacherId: string): Promise<void>;
 }

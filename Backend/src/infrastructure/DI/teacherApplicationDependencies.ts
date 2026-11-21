@@ -1,136 +1,97 @@
-import { CreateTeacherApplication }
-    from "../../application/use-cases/teacherApplication/CreatTeacherApplication";
+import { CreateTeacherApplication } from "../../application/use-cases/teacherApplication/CreatTeacherApplication";
 
-import { GetPendingTeacherApplications }
-    from "../../application/use-cases/teacherApplication/GetPendingTeacherApplications";
+import { GetPendingTeacherApplications } from "../../application/use-cases/teacherApplication/GetPendingTeacherApplications";
 
-import { ApproveTeacherApplication }
-    from "../../application/use-cases/teacherApplication/ApproveTeacherApplication";
+import { ApproveTeacherApplication } from "../../application/use-cases/teacherApplication/ApproveTeacherApplication";
 
-import { RejectTeacherApplication }
-    from "../../application/use-cases/teacherApplication/RejectTeacherApplication";
+import { RejectTeacherApplication } from "../../application/use-cases/teacherApplication/RejectTeacherApplication";
 
+import { CreateTeacherApplicationController } from "../../presentation/controllers/teacherApplication/CreateTeacherApplicationController";
 
-import { CreateTeacherApplicationController }
-    from "../../presentation/controllers/teacherApplication/CreateTeacherApplicationController";
+import { GetPendingTeacherApplicationsController } from "../../presentation/controllers/teacherApplication/GetPendingTeacherApplicationsController";
 
-import { GetPendingTeacherApplicationsController }
-    from "../../presentation/controllers/teacherApplication/GetPendingTeacherApplicationsController";
+import { ApproveTeacherApplicationController } from "../../presentation/controllers/teacherApplication/ApproveTeacherApplicationController";
 
-import { ApproveTeacherApplicationController }
-    from "../../presentation/controllers/teacherApplication/ApproveTeacherApplicationController";
+import { RejectTeacherApplicationController } from "../../presentation/controllers/teacherApplication/RejectTeacherApplicationController";
 
-import { RejectTeacherApplicationController }
-    from "../../presentation/controllers/teacherApplication/RejectTeacherApplicationController";
+import { teacherApplicationRepository, userRepository } from "./repositoryDependencies";
 
+import { GenerateTeacherApplicationUploadUrl } from "../../application/use-cases/teacherApplication/GenerateTeacherApplicationUploadUrl";
 
-import {
-    teacherApplicationRepository,
-    userRepository
-} from "./repositoryDependencies";
+import { GenerateTeacherApplicationUploadUrlController } from "../../presentation/controllers/teacherApplication/GenerateTeacherApplicationUploadUrlController";
 
-import { GenerateTeacherApplicationUploadUrl }
-    from "../../application/use-cases/teacherApplication/GenerateTeacherApplicationUploadUrl";
+import { S3TeacherApplicationDocumentPolicy } from "../services/TeacherApplicationDocumentPolicy";
 
-import { GenerateTeacherApplicationUploadUrlController }
-    from "../../presentation/controllers/teacherApplication/GenerateTeacherApplicationUploadUrlController";
+import { s3Client } from "./storageDependencies";
 
-import { S3TeacherApplicationDocumentPolicy }
-    from "../services/TeacherApplicationDocumentPolicy";
+import { env } from "../config/env";
 
-import { s3Client }
-    from "./storageDependencies";
+import { GetMyTeacherApplication } from "../../application/use-cases/teacherApplication/GetMyTeacherApplication";
 
-import { env }
-    from "../config/env";
-
-import { GetMyTeacherApplication }
-    from "../../application/use-cases/teacherApplication/GetMyTeacherApplication";
-
-import { GetMyTeacherApplicationController }
-    from "../../presentation/controllers/teacherApplication/GetMyTeacherApplicationController";
-
+import { GetMyTeacherApplicationController } from "../../presentation/controllers/teacherApplication/GetMyTeacherApplicationController";
 
 // Create Teacher Application
 
-export const createTeacherApplicationUseCase =
-    new CreateTeacherApplication(
-        teacherApplicationRepository,
-        userRepository
-    );
+export const createTeacherApplicationUseCase = new CreateTeacherApplication(
+  teacherApplicationRepository,
+  userRepository,
+);
 
-export const createTeacherApplicationController =
-    new CreateTeacherApplicationController(
-        createTeacherApplicationUseCase
-    );
-
+export const createTeacherApplicationController = new CreateTeacherApplicationController(
+  createTeacherApplicationUseCase,
+);
 
 // Get Pending Teacher Applications
 
-export const getPendingTeacherApplicationsUseCase =
-    new GetPendingTeacherApplications(
-        teacherApplicationRepository,
-        userRepository
-    );
+export const getPendingTeacherApplicationsUseCase = new GetPendingTeacherApplications(
+  teacherApplicationRepository,
+  userRepository,
+);
 
-export const getPendingTeacherApplicationsController =
-    new GetPendingTeacherApplicationsController(
-        getPendingTeacherApplicationsUseCase
-    );
-
+export const getPendingTeacherApplicationsController = new GetPendingTeacherApplicationsController(
+  getPendingTeacherApplicationsUseCase,
+);
 
 // Approve Teacher Application
 
-export const approveTeacherApplicationUseCase =
-    new ApproveTeacherApplication(
-        teacherApplicationRepository,
-        userRepository
-    );
+export const approveTeacherApplicationUseCase = new ApproveTeacherApplication(
+  teacherApplicationRepository,
+  userRepository,
+);
 
-export const approveTeacherApplicationController =
-    new ApproveTeacherApplicationController(
-        approveTeacherApplicationUseCase
-    );
-
+export const approveTeacherApplicationController = new ApproveTeacherApplicationController(
+  approveTeacherApplicationUseCase,
+);
 
 // Reject Teacher Application
 
-export const rejectTeacherApplicationUseCase =
-    new RejectTeacherApplication(
-        teacherApplicationRepository
-    );
+export const rejectTeacherApplicationUseCase = new RejectTeacherApplication(
+  teacherApplicationRepository,
+);
 
-export const rejectTeacherApplicationController =
-    new RejectTeacherApplicationController(
-        rejectTeacherApplicationUseCase
-    );
+export const rejectTeacherApplicationController = new RejectTeacherApplicationController(
+  rejectTeacherApplicationUseCase,
+);
 
 // Teacher Application Document Upload
 
-const teacherApplicationDocumentPolicy =
-    new S3TeacherApplicationDocumentPolicy();
+const teacherApplicationDocumentPolicy = new S3TeacherApplicationDocumentPolicy();
 
-export const generateTeacherApplicationUploadUrlUseCase =
-    new GenerateTeacherApplicationUploadUrl(
-        s3Client,
-        teacherApplicationDocumentPolicy,
-        env.awsS3BucketName
-    );
+export const generateTeacherApplicationUploadUrlUseCase = new GenerateTeacherApplicationUploadUrl(
+  s3Client,
+  teacherApplicationDocumentPolicy,
+  env.awsS3BucketName,
+);
 
 export const generateTeacherApplicationUploadUrlController =
-    new GenerateTeacherApplicationUploadUrlController(
-        generateTeacherApplicationUploadUrlUseCase
-    );
-
+  new GenerateTeacherApplicationUploadUrlController(generateTeacherApplicationUploadUrlUseCase);
 
 // Get My Teacher Application
 
-export const getMyTeacherApplicationUseCase =
-    new GetMyTeacherApplication(
-        teacherApplicationRepository
-    );
+export const getMyTeacherApplicationUseCase = new GetMyTeacherApplication(
+  teacherApplicationRepository,
+);
 
-export const getMyTeacherApplicationController =
-    new GetMyTeacherApplicationController(
-        getMyTeacherApplicationUseCase
-    );
+export const getMyTeacherApplicationController = new GetMyTeacherApplicationController(
+  getMyTeacherApplicationUseCase,
+);

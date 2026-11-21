@@ -1,14 +1,14 @@
 export interface Chapter {
-    chapterId?: string;
+  chapterId?: string;
 
-    courseId: string;
+  courseId: string;
 
-    title: string;
-    description?: string;
+  title: string;
+  description?: string;
 
-    order: number;
-    outcomes?: string[];
+  order: number;
+  outcomes?: string[];
 
-    createdAt: Date;
-    updatedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }

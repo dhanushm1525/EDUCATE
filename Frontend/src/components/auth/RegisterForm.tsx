@@ -79,9 +79,7 @@ export default function RegisterForm() {
         <h2 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
           Create your account
         </h2>
-        <p className="mt-1 text-xs text-slate-400">
-          Join thousands of learners
-        </p>
+        <p className="mt-1 text-xs text-slate-400">Join thousands of learners</p>
       </div>
 
       <form onSubmit={handleSubmit} noValidate className="space-y-4">

@@ -115,9 +115,7 @@ export default function MyLearningPage() {
           <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-5">
             <p className="text-sm text-slate-500">Enrolled courses</p>
 
-            <p className="mt-2 text-3xl font-bold text-slate-900">
-              {courses.length}
-            </p>
+            <p className="mt-2 text-3xl font-bold text-slate-900">{courses.length}</p>
           </div>
         )}
 
@@ -126,9 +124,7 @@ export default function MyLearningPage() {
             <div className="text-center">
               <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
 
-              <p className="mt-4 text-sm text-slate-500">
-                Loading your courses...
-              </p>
+              <p className="mt-4 text-sm text-slate-500">Loading your courses...</p>
             </div>
           </div>
         )}
@@ -150,8 +146,8 @@ export default function MyLearningPage() {
 
         {!loading && !errorMessage && progressError && (
           <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-            Course progress could not be loaded. Your enrolled courses are still
-            available. Refresh the page to retry.
+            Course progress could not be loaded. Your enrolled courses are still available. Refresh
+            the page to retry.
           </div>
         )}
 
@@ -161,13 +157,10 @@ export default function MyLearningPage() {
               <BookOpen size={30} />
             </div>
 
-            <h2 className="mt-5 text-lg font-bold text-slate-900">
-              No courses yet
-            </h2>
+            <h2 className="mt-5 text-lg font-bold text-slate-900">No courses yet</h2>
 
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
-              You haven't enrolled in any courses yet. Explore our courses and
-              start learning today.
+              You haven't enrolled in any courses yet. Explore our courses and start learning today.
             </p>
 
             <Link

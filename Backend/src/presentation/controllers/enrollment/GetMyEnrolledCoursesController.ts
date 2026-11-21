@@ -1,4 +1,3 @@
-
 import { Request, Response, NextFunction } from "express";
 
 import { IGetMyEnrolledCoursesUseCase } from "../../../application/interfaces/enrollment/IGetMyEnrolledCoursesUseCase";
@@ -9,47 +8,35 @@ import { AppError } from "../../../shared/errors/AppError";
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 export class GetMyEnrolledCoursesController {
-    constructor(
-        private readonly _getMyEnrolledCoursesUseCase: IGetMyEnrolledCoursesUseCase,
-        private readonly _courseResponseService: CourseResponseService
-    ) {}
+  constructor(
+    private readonly _getMyEnrolledCoursesUseCase: IGetMyEnrolledCoursesUseCase,
+    private readonly _courseResponseService: CourseResponseService,
+  ) {}
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
-        try {
-            if (!req.user) {
-                throw new AppError(
-                    "Unauthorized",
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError("Unauthorized", HttpStatusCode.UNAUTHORIZED);
+      }
 
-            const enrolledCourses =
-                await this._getMyEnrolledCoursesUseCase.execute(
-                    req.user.userId
-                );
+      const enrolledCourses = await this._getMyEnrolledCoursesUseCase.execute(req.user.userId);
 
-            const responseData = await Promise.all(
-                enrolledCourses.map(async enrollment =>
-                    EnrollmentResponseMapper.toEnrolledCourseDTO(
-                        enrollment,
-                        await this._courseResponseService.toDTO(
-                            enrollment.course
-                        )
-                    )
-                )
-            );
+      const responseData = await Promise.all(
+        enrolledCourses.map(async (enrollment) =>
+          EnrollmentResponseMapper.toEnrolledCourseDTO(
+            enrollment,
+            await this._courseResponseService.toDTO(enrollment.course),
+          ),
+        ),
+      );
 
-            res.status(HttpStatusCode.OK).json({
-                success: true,
-                message: "Enrolled courses fetched successfully",
-                data: responseData,
-            });
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        message: "Enrolled courses fetched successfully",
+        data: responseData,
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

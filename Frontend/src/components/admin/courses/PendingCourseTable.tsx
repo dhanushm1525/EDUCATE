@@ -22,9 +22,7 @@ export default function PendingCourseTable({
   if (courses.length === 0) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-10 text-center">
-        <h3 className="text-lg font-semibold text-slate-800">
-          No pending courses
-        </h3>
+        <h3 className="text-lg font-semibold text-slate-800">No pending courses</h3>
 
         <p className="mt-2 text-sm text-slate-500">
           Courses submitted by teachers will appear here.
@@ -56,14 +54,10 @@ export default function PendingCourseTable({
                 <td className="px-5 py-4">
                   <p className="font-medium text-slate-800">{course.title}</p>
 
-                  <p className="mt-1 max-w-xs truncate text-sm text-slate-500">
-                    {course.subtitle}
-                  </p>
+                  <p className="mt-1 max-w-xs truncate text-sm text-slate-500">{course.subtitle}</p>
                 </td>
 
-                <td className="px-5 py-4 text-sm text-slate-600">
-                  {course.level}
-                </td>
+                <td className="px-5 py-4 text-sm text-slate-600">{course.level}</td>
 
                 <td className="px-5 py-4 text-sm text-slate-600">
                   {new Intl.NumberFormat("en-IN", {

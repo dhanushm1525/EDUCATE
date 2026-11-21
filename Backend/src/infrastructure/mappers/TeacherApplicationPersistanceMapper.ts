@@ -2,70 +2,58 @@ import { TeacherApplication } from "../../domain/entities/TeacherApplication";
 import { TeacherApplicationDocument } from "../database/models/TeacherApplicationModel";
 
 export class TeacherApplicationPersistenceMapper {
+  static toDomain(document: TeacherApplicationDocument): TeacherApplication {
+    return {
+      applicationId: document._id.toString(),
 
-    static toDomain(
-        document: TeacherApplicationDocument
-    ): TeacherApplication {
+      userId: document.userId.toString(),
 
-        return {
-            applicationId: document._id.toString(),
+      qualification: document.qualification,
+      experience: document.experience,
 
-            userId: document.userId.toString(),
+      skills: document.skills,
+      bio: document.bio,
 
-            qualification: document.qualification,
-            experience: document.experience,
+      documents: document.documents,
+      certificates: document.certificates,
 
-            skills: document.skills,
-            bio: document.bio,
+      status: document.status as TeacherApplication["status"],
 
-            documents: document.documents,
-            certificates: document.certificates,
+      rejectionReason: document.rejectionReason,
 
-            status: document.status as TeacherApplication["status"],
+      createdAt: document.createdAt,
+      updatedAt: document.updatedAt,
+    };
+  }
 
-            rejectionReason: document.rejectionReason,
+  static toPersistence(application: TeacherApplication) {
+    return {
+      userId: application.userId,
 
-            createdAt: document.createdAt,
-            updatedAt: document.updatedAt
-        };
-    }
+      qualification: application.qualification,
+      experience: application.experience,
 
+      skills: application.skills ?? [],
 
-    static toPersistence(
-        application: TeacherApplication
-    ) {
+      bio: application.bio,
 
-        return {
-            userId: application.userId,
+      documents: application.documents ?? [],
+      certificates: application.certificates ?? [],
 
-            qualification: application.qualification,
-            experience: application.experience,
+      status: application.status,
 
-            skills: application.skills ?? [],
+      rejectionReason: application.rejectionReason,
+    };
+  }
 
-            bio: application.bio,
+  static toPersistenceUpdate(application: Partial<TeacherApplication>) {
+    const {
+      applicationId: _applicationId,
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      ...updateData
+    } = application;
 
-            documents: application.documents ?? [],
-            certificates: application.certificates ?? [],
-
-            status: application.status,
-
-            rejectionReason: application.rejectionReason
-        };
-    }
-
-
-    static toPersistenceUpdate(
-        application: Partial<TeacherApplication>
-    ) {
-
-        const {
-            applicationId: _applicationId,
-            createdAt: _createdAt,
-            updatedAt: _updatedAt,
-            ...updateData
-        } = application;
-
-        return updateData;
-    }
+    return updateData;
+  }
 }

@@ -1,4 +1,3 @@
-
 import { Types } from "mongoose";
 
 import { CourseProgress } from "../../domain/entities/CourseProgress";
@@ -7,93 +6,83 @@ import { ICourseProgressRepository } from "../../domain/repositories/courseRepos
 import { BaseRepository } from "./BaseRepository";
 
 import {
-    CourseProgressDocument,
-    CourseProgressModel,
+  CourseProgressDocument,
+  CourseProgressModel,
 } from "../database/models/CourseProgressModel";
 
 import { CourseProgressPersistenceMapper } from "../mappers/CourseProgressPersistenceMapper";
 
 export class MongoCourseProgressRepository
-    extends BaseRepository<CourseProgressDocument>
-    implements ICourseProgressRepository {
+  extends BaseRepository<CourseProgressDocument>
+  implements ICourseProgressRepository
+{
+  constructor() {
+    super(CourseProgressModel);
+  }
 
-    constructor() {
-        super(CourseProgressModel);
+  async create(progress: CourseProgress): Promise<CourseProgress> {
+    const documentData = CourseProgressPersistenceMapper.toPersistence(progress);
+
+    const document = await this.createDocument(documentData);
+
+    return CourseProgressPersistenceMapper.toDomain(document);
+  }
+
+  async findById(progressId: string): Promise<CourseProgress | null> {
+    const document = await this.findByIdDocument(progressId);
+
+    if (!document) {
+      return null;
     }
 
-    async create(progress: CourseProgress): Promise<CourseProgress> {
-        const documentData =
-            CourseProgressPersistenceMapper.toPersistence(progress);
+    return CourseProgressPersistenceMapper.toDomain(document);
+  }
 
-        const document = await this.createDocument(documentData);
+  async findByEnrollmentId(enrollmentId: string): Promise<CourseProgress | null> {
+    const document = await this.findOneDocument({
+      enrollmentId: new Types.ObjectId(enrollmentId),
+    });
 
-        return CourseProgressPersistenceMapper.toDomain(document);
+    if (!document) {
+      return null;
     }
 
-    async findById(progressId: string): Promise<CourseProgress | null> {
-        const document = await this.findByIdDocument(progressId);
+    return CourseProgressPersistenceMapper.toDomain(document);
+  }
 
-        if (!document) {
-            return null;
-        }
+  async findByUserAndCourse(userId: string, courseId: string): Promise<CourseProgress | null> {
+    const document = await this.findOneDocument({
+      userId: new Types.ObjectId(userId),
+      courseId: new Types.ObjectId(courseId),
+    });
 
-        return CourseProgressPersistenceMapper.toDomain(document);
+    if (!document) {
+      return null;
     }
 
-    async findByEnrollmentId(
-        enrollmentId: string
-    ): Promise<CourseProgress | null> {
-        const document = await this.findOneDocument({
-            enrollmentId: new Types.ObjectId(enrollmentId),
-        });
+    return CourseProgressPersistenceMapper.toDomain(document);
+  }
 
-        if (!document) {
-            return null;
-        }
+  async findByUserId(userId: string): Promise<CourseProgress[]> {
+    const documents = await this.findManyDocuments({
+      userId: new Types.ObjectId(userId),
+    });
 
-        return CourseProgressPersistenceMapper.toDomain(document);
+    return documents.map(CourseProgressPersistenceMapper.toDomain);
+  }
+
+  async update(
+    progressId: string,
+    progress: Partial<CourseProgress>,
+  ): Promise<CourseProgress | null> {
+    const updateData = CourseProgressPersistenceMapper.toPersistenceUpdate(progress);
+
+    const document = await this.updateByIdDocument(progressId, updateData);
+
+    if (!document) {
+      return null;
     }
 
-    async findByUserAndCourse(
-        userId: string,
-        courseId: string
-    ): Promise<CourseProgress | null> {
-        const document = await this.findOneDocument({
-            userId: new Types.ObjectId(userId),
-            courseId: new Types.ObjectId(courseId),
-        });
-
-        if (!document) {
-            return null;
-        }
-
-        return CourseProgressPersistenceMapper.toDomain(document);
-    }
-
-    async findByUserId(userId: string): Promise<CourseProgress[]> {
-        const documents = await this.findManyDocuments({
-            userId: new Types.ObjectId(userId),
-        });
-
-        return documents.map(CourseProgressPersistenceMapper.toDomain);
-    }
-
-    async update(
-        progressId: string,
-        progress: Partial<CourseProgress>
-    ): Promise<CourseProgress | null> {
-        const updateData =
-            CourseProgressPersistenceMapper.toPersistenceUpdate(progress);
-
-        const document = await this.updateByIdDocument(
-            progressId,
-            updateData
-        );
-
-        if (!document) {
-            return null;
-        }
-
-        return CourseProgressPersistenceMapper.toDomain(document);
-    }
+    return CourseProgressPersistenceMapper.toDomain(document);
+  }
 }

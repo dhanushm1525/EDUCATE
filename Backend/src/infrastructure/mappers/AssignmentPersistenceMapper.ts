@@ -1,126 +1,109 @@
+import { Assignment, AssignmentQuestion } from "../../domain/entities/Assingment";
 
-import {
-    Assignment,
-    AssignmentQuestion,
-} from "../../domain/entities/Assingment";
-
-import {
-    AssignmentDocument,
-    AssignmentQuestionDocument,
-} from "../database/models/AssignmentModel";
+import { AssignmentDocument, AssignmentQuestionDocument } from "../database/models/AssignmentModel";
 
 import { randomUUID } from "crypto";
 
 export class AssignmentPersistenceMapper {
+  static toPersistence(assignment: Assignment) {
+    return {
+      lessonId: assignment.lessonId,
 
-    static toPersistence(assignment: Assignment) {
+      title: assignment.title,
+      description: assignment.description,
 
-        return {
-            lessonId: assignment.lessonId,
+      questions: assignment.questions.map((question) => ({
+        questionId: question.questionId ?? randomUUID(),
+        question: question.question,
+        options: question.options,
+        correctAnswer: question.correctAnswer,
+        marks: question.marks,
+      })),
 
-            title: assignment.title,
-            description: assignment.description,
+      totalMarks: assignment.totalMarks,
+      passingMarks: assignment.passingMarks,
 
-            questions: assignment.questions.map(
-                (question) => ({
-                    questionId: question.questionId ?? randomUUID(),
-                    question: question.question,
-                    options: question.options,
-                    correctAnswer: question.correctAnswer,
-                    marks: question.marks,
-                })
-            ),
+      timeLimit: assignment.timeLimit,
+      attemptsAllowed: assignment.attemptsAllowed,
 
-            totalMarks: assignment.totalMarks,
-            passingMarks: assignment.passingMarks,
+      dueDate: assignment.dueDate ?? null,
+      isRequired: assignment.isRequired ?? true,
+    };
+  }
 
-            timeLimit: assignment.timeLimit,
-            attemptsAllowed: assignment.attemptsAllowed,
+  static toDomain(document: AssignmentDocument): Assignment {
+    return {
+      assignmentId: document._id.toString(),
 
-            dueDate: assignment.dueDate ?? null,
-            isRequired: assignment.isRequired ?? true,
-        };
-    }
+      lessonId: document.lessonId.toString(),
 
-    static toDomain(
-        document: AssignmentDocument
-    ): Assignment {
+      title: document.title,
+      description: document.description,
 
-        return {
-            assignmentId: document._id.toString(),
+      questions: document.questions.map(
+        (question: AssignmentQuestionDocument): AssignmentQuestion => ({
+          questionId: question.questionId,
+          question: question.question,
+          options: question.options,
+          correctAnswer: question.correctAnswer,
+          marks: question.marks,
+        }),
+      ),
 
-            lessonId: document.lessonId.toString(),
+      totalMarks: document.totalMarks,
+      passingMarks: document.passingMarks,
 
-            title: document.title,
-            description: document.description,
+      timeLimit: document.timeLimit,
+      attemptsAllowed: document.attemptsAllowed,
 
-            questions: document.questions.map(
-                (question: AssignmentQuestionDocument): AssignmentQuestion => ({
-                    questionId: question.questionId,
-                    question: question.question,
-                    options: question.options,
-                    correctAnswer: question.correctAnswer,
-                    marks: question.marks,
-                })
-            ),
+      dueDate: document.dueDate ?? null,
 
-            totalMarks: document.totalMarks,
-            passingMarks: document.passingMarks,
+      createdAt: document.createdAt,
+      updatedAt: document.updatedAt,
+      isRequired: document.isRequired ?? true,
+    };
+  }
 
-            timeLimit: document.timeLimit,
-            attemptsAllowed: document.attemptsAllowed,
+  static toPersistenceUpdate(assignment: Partial<Assignment>) {
+    return {
+      ...(assignment.lessonId !== undefined && {
+        lessonId: assignment.lessonId,
+      }),
 
-            dueDate: document.dueDate ?? null,
+      ...(assignment.title !== undefined && {
+        title: assignment.title,
+      }),
 
-            createdAt: document.createdAt,
-            updatedAt: document.updatedAt,
-            isRequired: document.isRequired ?? true,
-        };
-    }
+      ...(assignment.description !== undefined && {
+        description: assignment.description,
+      }),
 
-    static toPersistenceUpdate(
-        assignment: Partial<Assignment>
-    ) {
+      ...(assignment.questions !== undefined && {
+        questions: assignment.questions,
+      }),
 
-        return {
-            ...(assignment.lessonId !== undefined && {
-                lessonId: assignment.lessonId,
-            }),
+      ...(assignment.totalMarks !== undefined && {
+        totalMarks: assignment.totalMarks,
+      }),
 
-            ...(assignment.title !== undefined && {
-                title: assignment.title,
-            }),
+      ...(assignment.passingMarks !== undefined && {
+        passingMarks: assignment.passingMarks,
+      }),
 
-            ...(assignment.description !== undefined && {
-                description: assignment.description,
-            }),
+      ...(assignment.timeLimit !== undefined && {
+        timeLimit: assignment.timeLimit,
+      }),
 
-            ...(assignment.questions !== undefined && {
-                questions: assignment.questions,
-            }),
+      ...(assignment.attemptsAllowed !== undefined && {
+        attemptsAllowed: assignment.attemptsAllowed,
+      }),
 
-            ...(assignment.totalMarks !== undefined && {
-                totalMarks: assignment.totalMarks,
-            }),
-
-            ...(assignment.passingMarks !== undefined && {
-                passingMarks: assignment.passingMarks,
-            }),
-
-            ...(assignment.timeLimit !== undefined && {
-                timeLimit: assignment.timeLimit,
-            }),
-
-            ...(assignment.attemptsAllowed !== undefined && {
-                attemptsAllowed: assignment.attemptsAllowed,
-            }),
-
-            ...(assignment.dueDate !== undefined && {
-                dueDate: assignment.dueDate,
-            }),
-            ...(assignment.isRequired !== undefined && {
-                isRequired: assignment.isRequired,
-            }),
-        };
-    }
+      ...(assignment.dueDate !== undefined && {
+        dueDate: assignment.dueDate,
+      }),
+      ...(assignment.isRequired !== undefined && {
+        isRequired: assignment.isRequired,
+      }),
+    };
+  }
 }

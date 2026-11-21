@@ -14,10 +14,7 @@ import {
   LoaderCircle,
 } from "lucide-react";
 
-import type {
-  AssignmentQuestion,
-  CreateAssignmentRequest,
-} from "../../../types/assingment";
+import type { AssignmentQuestion, CreateAssignmentRequest } from "../../../types/assingment";
 
 import { QuestionForm } from "./QuestionForm";
 
@@ -46,22 +43,16 @@ const inputClass =
 const sectionClass =
   "overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md";
 
-const sectionHeaderClass =
-  "flex items-center gap-3 border-b border-slate-100 px-5 py-5 sm:px-7";
+const sectionHeaderClass = "flex items-center gap-3 border-b border-slate-100 px-5 py-5 sm:px-7";
 
 const iconWrapperClass =
   "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-700";
 
-export function AssignmentForm({
-  onSubmit,
-  loading = false,
-}: AssignmentFormProps) {
+export function AssignmentForm({ onSubmit, loading = false }: AssignmentFormProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const [questions, setQuestions] = useState<AssignmentQuestion[]>([
-    createEmptyQuestion(),
-  ]);
+  const [questions, setQuestions] = useState<AssignmentQuestion[]>([createEmptyQuestion()]);
 
   const [passingMarks, setPassingMarks] = useState(1);
   const [timeLimit, setTimeLimit] = useState<number | undefined>();
@@ -69,15 +60,9 @@ export function AssignmentForm({
   const [dueDate, setDueDate] = useState("");
   const [deadlineError, setDeadlineError] = useState("");
 
-  const totalMarks = questions.reduce(
-    (total, question) => total + Number(question.marks || 0),
-    0,
-  );
+  const totalMarks = questions.reduce((total, question) => total + Number(question.marks || 0), 0);
 
-  const updateQuestion = (
-    index: number,
-    updatedQuestion: AssignmentQuestion,
-  ) => {
+  const updateQuestion = (index: number, updatedQuestion: AssignmentQuestion) => {
     setQuestions((previous) =>
       previous.map((question, questionIndex) =>
         questionIndex === index ? updatedQuestion : question,
@@ -86,9 +71,7 @@ export function AssignmentForm({
   };
 
   const removeQuestion = (index: number) => {
-    setQuestions((previous) =>
-      previous.filter((_, questionIndex) => questionIndex !== index),
-    );
+    setQuestions((previous) => previous.filter((_, questionIndex) => questionIndex !== index));
   };
 
   const addQuestion = () => {
@@ -108,10 +91,7 @@ export function AssignmentForm({
     if (dueDate) {
       const selectedDate = new Date(dueDate);
 
-      if (
-        Number.isNaN(selectedDate.getTime()) ||
-        selectedDate.getTime() <= Date.now()
-      ) {
+      if (Number.isNaN(selectedDate.getTime()) || selectedDate.getTime() <= Date.now()) {
         setDeadlineError("Please select a deadline in the future.");
         return;
       }
@@ -213,9 +193,7 @@ export function AssignmentForm({
               <textarea
                 id="assignment-description"
                 value={description}
-                onChange={(event) =>
-                  setDescription(event.target.value.slice(0, 500))
-                }
+                onChange={(event) => setDescription(event.target.value.slice(0, 500))}
                 className={`${inputClass} min-h-32 resize-y`}
                 rows={4}
                 placeholder="Describe this assignment (optional)"
@@ -249,9 +227,7 @@ export function AssignmentForm({
                   Total Marks
                 </p>
 
-                <p className="text-lg font-bold leading-tight text-violet-700">
-                  {totalMarks}
-                </p>
+                <p className="text-lg font-bold leading-tight text-violet-700">{totalMarks}</p>
               </div>
             </div>
           </div>
@@ -305,10 +281,7 @@ export function AssignmentForm({
                   <Award size={19} />
                 </span>
 
-                <label
-                  htmlFor="passing-marks"
-                  className="text-sm font-semibold text-slate-800"
-                >
+                <label htmlFor="passing-marks" className="text-sm font-semibold text-slate-800">
                   Passing Marks *
                 </label>
               </div>
@@ -319,16 +292,12 @@ export function AssignmentForm({
                 min={1}
                 max={totalMarks}
                 value={passingMarks}
-                onChange={(event) =>
-                  setPassingMarks(Number(event.target.value))
-                }
+                onChange={(event) => setPassingMarks(Number(event.target.value))}
                 className="w-full rounded-xl border border-emerald-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
                 required
               />
 
-              <p className="mt-2 text-xs text-slate-500">
-                Out of {totalMarks} marks
-              </p>
+              <p className="mt-2 text-xs text-slate-500">Out of {totalMarks} marks</p>
             </div>
 
             {/* Time Limit */}
@@ -338,10 +307,7 @@ export function AssignmentForm({
                   <Clock3 size={19} />
                 </span>
 
-                <label
-                  htmlFor="time-limit"
-                  className="text-sm font-semibold text-slate-800"
-                >
+                <label htmlFor="time-limit" className="text-sm font-semibold text-slate-800">
                   Time Limit
                 </label>
               </div>
@@ -352,17 +318,13 @@ export function AssignmentForm({
                 min={1}
                 value={timeLimit ?? ""}
                 onChange={(event) =>
-                  setTimeLimit(
-                    event.target.value ? Number(event.target.value) : undefined,
-                  )
+                  setTimeLimit(event.target.value ? Number(event.target.value) : undefined)
                 }
                 className="w-full rounded-xl border border-blue-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100"
                 placeholder="Minutes"
               />
 
-              <p className="mt-2 text-xs text-slate-500">
-                Optional, in minutes
-              </p>
+              <p className="mt-2 text-xs text-slate-500">Optional, in minutes</p>
             </div>
 
             {/* Attempts */}
@@ -372,10 +334,7 @@ export function AssignmentForm({
                   <Repeat2 size={19} />
                 </span>
 
-                <label
-                  htmlFor="attempts-allowed"
-                  className="text-sm font-semibold text-slate-800"
-                >
+                <label htmlFor="attempts-allowed" className="text-sm font-semibold text-slate-800">
                   Attempts Allowed
                 </label>
               </div>
@@ -386,17 +345,13 @@ export function AssignmentForm({
                 min={1}
                 value={attemptsAllowed ?? ""}
                 onChange={(event) =>
-                  setAttemptsAllowed(
-                    event.target.value ? Number(event.target.value) : undefined,
-                  )
+                  setAttemptsAllowed(event.target.value ? Number(event.target.value) : undefined)
                 }
                 className="w-full rounded-xl border border-orange-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
                 placeholder="Attempts"
               />
 
-              <p className="mt-2 text-xs text-slate-500">
-                Optional number of attempts
-              </p>
+              <p className="mt-2 text-xs text-slate-500">Optional number of attempts</p>
             </div>
 
             {/* Submission Deadline */}
@@ -426,14 +381,10 @@ export function AssignmentForm({
                 className="w-full min-w-0 rounded-xl border border-violet-200 bg-white px-2 py-2.5 text-sm text-slate-800 outline-none focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               />
 
-              <p className="mt-2 text-xs text-slate-500">
-                Optional submission deadline
-              </p>
+              <p className="mt-2 text-xs text-slate-500">Optional submission deadline</p>
 
               {deadlineError && (
-                <p className="mt-2 text-xs font-medium text-red-600">
-                  {deadlineError}
-                </p>
+                <p className="mt-2 text-xs font-medium text-red-600">{deadlineError}</p>
               )}
             </div>
           </div>

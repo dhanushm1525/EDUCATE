@@ -36,9 +36,7 @@ export default function CourseCard({ course }: CourseCardProps) {
           />
         ) : (
           <div className="flex h-full items-center justify-center bg-gradient-to-br from-indigo-50 to-slate-100">
-            <span className="text-sm font-medium text-slate-400">
-              Course preview
-            </span>
+            <span className="text-sm font-medium text-slate-400">Course preview</span>
           </div>
         )}
       </Link>
@@ -57,20 +55,15 @@ export default function CourseCard({ course }: CourseCardProps) {
         </Link>
 
         {course.subtitle && (
-          <p className="mt-2 line-clamp-2 text-xs text-slate-500">
-            {course.subtitle}
-          </p>
+          <p className="mt-2 line-clamp-2 text-xs text-slate-500">{course.subtitle}</p>
         )}
 
-        {typeof course.averageRating === "number" &&
-          course.averageRating > 0 && (
-            <div className="mt-3 flex items-center gap-1 text-xs">
-              <span className="font-bold text-slate-900">
-                {course.averageRating.toFixed(1)}
-              </span>
-              <span className="text-amber-500">★</span>
-            </div>
-          )}
+        {typeof course.averageRating === "number" && course.averageRating > 0 && (
+          <div className="mt-3 flex items-center gap-1 text-xs">
+            <span className="font-bold text-slate-900">{course.averageRating.toFixed(1)}</span>
+            <span className="text-amber-500">★</span>
+          </div>
+        )}
 
         <div className="mt-auto flex items-center justify-between gap-2 border-t border-slate-100 pt-3">
           <span className="text-sm font-extrabold text-slate-900">

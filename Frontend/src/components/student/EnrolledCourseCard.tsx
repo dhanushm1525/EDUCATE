@@ -41,10 +41,7 @@ export default function EnrolledCourseCard({
 }: EnrolledCourseCardProps) {
   const { course } = enrollment;
 
-  const percentage = Math.min(
-    100,
-    Math.max(0, progress?.progressPercentage ?? 0),
-  );
+  const percentage = Math.min(100, Math.max(0, progress?.progressPercentage ?? 0));
 
   const learningPath =
     learningBasePath === "/teacher/learn"
@@ -74,18 +71,15 @@ export default function EnrolledCourseCard({
             {course.level}
           </span>
 
-          {typeof course.averageRating === "number" &&
-            course.averageRating > 0 && (
-              <span className="flex items-center gap-1 text-sm font-medium text-slate-600">
-                <Star size={14} className="fill-amber-400 text-amber-400" />
-                {course.averageRating.toFixed(1)}
-              </span>
-            )}
+          {typeof course.averageRating === "number" && course.averageRating > 0 && (
+            <span className="flex items-center gap-1 text-sm font-medium text-slate-600">
+              <Star size={14} className="fill-amber-400 text-amber-400" />
+              {course.averageRating.toFixed(1)}
+            </span>
+          )}
         </div>
 
-        <h2 className="mt-4 line-clamp-2 text-lg font-bold text-slate-900">
-          {course.title}
-        </h2>
+        <h2 className="mt-4 line-clamp-2 text-lg font-bold text-slate-900">{course.title}</h2>
 
         <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">
           {course.subtitle || course.description}
@@ -102,13 +96,9 @@ export default function EnrolledCourseCard({
 
         <div className="mt-5 rounded-xl bg-slate-50 p-4">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm font-semibold text-slate-700">
-              Your progress
-            </span>
+            <span className="text-sm font-semibold text-slate-700">Your progress</span>
 
-            <span className="text-sm font-bold text-indigo-600">
-              {percentage}%
-            </span>
+            <span className="text-sm font-bold text-indigo-600">{percentage}%</span>
           </div>
 
           <div className="h-2 overflow-hidden rounded-full bg-slate-200">
@@ -141,9 +131,7 @@ export default function EnrolledCourseCard({
         </div>
 
         <div className="mt-5 border-t border-slate-100 pt-4">
-          <p className="text-xs text-slate-400">
-            Enrolled on {formatDate(enrollment.enrolledAt)}
-          </p>
+          <p className="text-xs text-slate-400">Enrolled on {formatDate(enrollment.enrolledAt)}</p>
 
           <Link
             to={learningPath}

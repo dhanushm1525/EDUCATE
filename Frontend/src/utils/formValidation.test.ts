@@ -10,63 +10,32 @@ import {
 
 describe("login validation", () => {
   it("rejects empty fields", () => {
-    expect(validateLoginForm("", "").errors).toEqual([
-      "Email is required",
-      "Password is required",
-    ]);
-    expect(validateLoginForm("", "").error).toBe(
-      "Email is required\nPassword is required",
-    );
+    expect(validateLoginForm("", "").errors).toEqual(["Email is required", "Password is required"]);
+    expect(validateLoginForm("", "").error).toBe("Email is required\nPassword is required");
   });
 
   it("rejects malformed email addresses", () => {
-    expect(validateLoginForm("not-an-email", "password123").error).toContain(
-      "valid email",
-    );
+    expect(validateLoginForm("not-an-email", "password123").error).toContain("valid email");
   });
 
   it("rejects short passwords", () => {
-    expect(validateLoginForm("user@example.com", "short").error).toContain(
-      "at least 8",
-    );
+    expect(validateLoginForm("user@example.com", "short").error).toContain("at least 8");
   });
 
   it("accepts valid credentials", () => {
-    expect(validateLoginForm("user@example.com", "password123").isValid).toBe(
-      true,
-    );
+    expect(validateLoginForm("user@example.com", "password123").isValid).toBe(true);
   });
 });
 
 describe("registration validation", () => {
-  const validForm = [
-    "Jane",
-    "Doe",
-    "jane@example.com",
-    "password123",
-    "password123",
-  ] as const;
+  const validForm = ["Jane", "Doe", "jane@example.com", "password123", "password123"] as const;
 
   it("rejects empty required fields", () => {
     expect(
-      validateRegisterForm(
-        "",
-        validForm[1],
-        validForm[2],
-        validForm[3],
-        validForm[4],
-      ).error,
-    ).toBe(
-      "First name is required",
-    );
+      validateRegisterForm("", validForm[1], validForm[2], validForm[3], validForm[4]).error,
+    ).toBe("First name is required");
     expect(
-      validateRegisterForm(
-        validForm[0],
-        "",
-        validForm[2],
-        validForm[3],
-        validForm[4],
-      ).error,
+      validateRegisterForm(validForm[0], "", validForm[2], validForm[3], validForm[4]).error,
     ).toBe("Last name is required");
   });
 
@@ -82,36 +51,24 @@ describe("registration validation", () => {
 
   it("rejects invalid email and short password", () => {
     expect(
-      validateRegisterForm("Jane", "Doe", "invalid", "password123", "password123")
-        .error,
+      validateRegisterForm("Jane", "Doe", "invalid", "password123", "password123").error,
     ).toContain("valid email");
     expect(
-      validateRegisterForm("Jane", "Doe", "jane@example.com", "short", "short")
-        .error,
+      validateRegisterForm("Jane", "Doe", "jane@example.com", "short", "short").error,
     ).toContain("at least 8");
   });
 
   it("rejects mismatching passwords", () => {
     expect(
-      validateRegisterForm(
-        validForm[0],
-        validForm[1],
-        validForm[2],
-        validForm[3],
-        "different",
-      ).error,
+      validateRegisterForm(validForm[0], validForm[1], validForm[2], validForm[3], "different")
+        .error,
     ).toBe("Passwords do not match");
   });
 
   it("accepts a complete registration", () => {
     expect(
-      validateRegisterForm(
-        validForm[0],
-        validForm[1],
-        validForm[2],
-        validForm[3],
-        validForm[4],
-      ).isValid,
+      validateRegisterForm(validForm[0], validForm[1], validForm[2], validForm[3], validForm[4])
+        .isValid,
     ).toBe(true);
   });
 });
@@ -125,39 +82,19 @@ describe("password reset validation", () => {
       "Please confirm your password",
     ]);
     expect(
-      validateResetPasswordForm(
-        "user@example.com",
-        "123",
-        "password123",
-        "password123",
-      ).error,
+      validateResetPasswordForm("user@example.com", "123", "password123", "password123").error,
     ).toContain("exactly 6");
     expect(
-      validateResetPasswordForm(
-        "user@example.com",
-        "123456",
-        "short",
-        "short",
-      ).error,
+      validateResetPasswordForm("user@example.com", "123456", "short", "short").error,
     ).toContain("at least 8");
     expect(
-      validateResetPasswordForm(
-        "user@example.com",
-        "123456",
-        "password123",
-        "different",
-      ).error,
+      validateResetPasswordForm("user@example.com", "123456", "password123", "different").error,
     ).toBe("Passwords do not match");
   });
 
   it("accepts valid reset details", () => {
     expect(
-      validateResetPasswordForm(
-        "user@example.com",
-        "123456",
-        "password123",
-        "password123",
-      ).isValid,
+      validateResetPasswordForm("user@example.com", "123456", "password123", "password123").isValid,
     ).toBe(true);
   });
 });
@@ -170,15 +107,9 @@ describe("email and OTP validation", () => {
   });
 
   it("validates verification user ID and exactly six numeric digits", () => {
-    expect(validateVerifyEmailForm("", "123456").error).toBe(
-      "User ID is required",
-    );
-    expect(validateVerifyEmailForm("user-id", "").error).toBe(
-      "Verification code is required",
-    );
-    expect(validateVerifyEmailForm("user-id", "12a456").error).toContain(
-      "exactly 6",
-    );
+    expect(validateVerifyEmailForm("", "123456").error).toBe("User ID is required");
+    expect(validateVerifyEmailForm("user-id", "").error).toBe("Verification code is required");
+    expect(validateVerifyEmailForm("user-id", "12a456").error).toContain("exactly 6");
     expect(validateVerifyEmailForm("user-id", "123456").isValid).toBe(true);
   });
 });

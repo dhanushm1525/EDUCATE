@@ -44,8 +44,7 @@ const ALLOWED_FILE_TYPES = [
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 export default function BecomeTeacherPage() {
-  const [application, setApplication] =
-    useState<StudentTeacherApplication | null>(null);
+  const [application, setApplication] = useState<StudentTeacherApplication | null>(null);
 
   const [qualification, setQualification] = useState("");
   const [experience, setExperience] = useState("");
@@ -119,9 +118,7 @@ export default function BecomeTeacherPage() {
 
     for (const file of Array.from(selectedFiles)) {
       if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-        errors.push(
-          `${file.name}: Unsupported file type. Use PDF, JPG, PNG, WEBP, DOC or DOCX.`,
-        );
+        errors.push(`${file.name}: Unsupported file type. Use PDF, JPG, PNG, WEBP, DOC or DOCX.`);
         continue;
       }
 
@@ -165,9 +162,7 @@ export default function BecomeTeacherPage() {
         selectedFile.file,
         (progress) => {
           setFiles((previous) =>
-            previous.map((item) =>
-              item.id === selectedFile.id ? { ...item, progress } : item,
-            ),
+            previous.map((item) => (item.id === selectedFile.id ? { ...item, progress } : item)),
           );
         },
       );
@@ -244,9 +239,7 @@ export default function BecomeTeacherPage() {
             </div>
 
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">
-                Become a Teacher
-              </h1>
+              <h1 className="text-2xl font-bold text-slate-900">Become a Teacher</h1>
               <p className="mt-1 text-sm text-slate-500">
                 Share your knowledge and start teaching on EDUCATE.
               </p>
@@ -258,9 +251,7 @@ export default function BecomeTeacherPage() {
           <div className="flex min-h-64 items-center justify-center rounded-2xl border border-slate-200 bg-white">
             <div className="text-center">
               <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
-              <p className="mt-4 text-sm text-slate-500">
-                Checking your application...
-              </p>
+              <p className="mt-4 text-sm text-slate-500">Checking your application...</p>
             </div>
           </div>
         )}
@@ -286,19 +277,16 @@ export default function BecomeTeacherPage() {
             <div className="flex items-center gap-3">
               <Clock className="text-amber-500" size={30} />
 
-              <h2 className="text-xl font-bold text-slate-900">
-                Application Under Review
-              </h2>
+              <h2 className="text-xl font-bold text-slate-900">Application Under Review</h2>
             </div>
 
             <p className="mt-4 text-sm leading-6 text-slate-600">
-              Your teacher application has been submitted successfully. Our
-              administration team will review your details.
+              Your teacher application has been submitted successfully. Our administration team will
+              review your details.
             </p>
 
             <p className="mt-5 text-xs text-slate-400">
-              Submitted on{" "}
-              {new Date(application.createdAt).toLocaleDateString()}
+              Submitted on {new Date(application.createdAt).toLocaleDateString()}
             </p>
           </div>
         )}
@@ -308,32 +296,23 @@ export default function BecomeTeacherPage() {
             <div className="flex items-center gap-3">
               <CheckCircle2 className="text-green-600" size={30} />
 
-              <h2 className="text-xl font-bold text-slate-900">
-                You're now a Teacher!
-              </h2>
+              <h2 className="text-xl font-bold text-slate-900">You're now a Teacher!</h2>
             </div>
 
             <p className="mt-4 text-sm leading-6 text-slate-600">
-              Your application has been approved. You can now access the teacher
-              portal.
+              Your application has been approved. You can now access the teacher portal.
             </p>
           </div>
         )}
 
         {!loading && canApply && (
-          <form
-            onSubmit={(event) => void handleSubmit(event)}
-            className="space-y-6"
-          >
+          <form onSubmit={(event) => void handleSubmit(event)} className="space-y-6">
             {application?.status === "rejected" && (
               <div className="rounded-xl border border-red-200 bg-red-50 p-5">
-                <h2 className="font-semibold text-red-800">
-                  Previous Application Rejected
-                </h2>
+                <h2 className="font-semibold text-red-800">Previous Application Rejected</h2>
 
                 <p className="mt-2 text-sm text-red-700">
-                  {application.rejectionReason ||
-                    "Your previous application was not approved."}
+                  {application.rejectionReason || "Your previous application was not approved."}
                 </p>
 
                 <p className="mt-3 text-sm text-red-700">
@@ -344,9 +323,7 @@ export default function BecomeTeacherPage() {
 
             <section className="rounded-2xl border border-slate-200 bg-white p-6">
               <div className="mb-6">
-                <h2 className="text-lg font-bold text-slate-900">
-                  Professional Information
-                </h2>
+                <h2 className="text-lg font-bold text-slate-900">Professional Information</h2>
 
                 <p className="mt-1 text-sm text-slate-500">
                   Tell us about your education and experience.
@@ -400,13 +377,10 @@ export default function BecomeTeacherPage() {
 
             <section className="rounded-2xl border border-slate-200 bg-white p-6">
               <div className="mb-5">
-                <h2 className="text-lg font-bold text-slate-900">
-                  Supporting Documents
-                </h2>
+                <h2 className="text-lg font-bold text-slate-900">Supporting Documents</h2>
 
                 <p className="mt-1 text-sm text-slate-500">
-                  Upload documents that support your qualifications and
-                  experience.
+                  Upload documents that support your qualifications and experience.
                 </p>
               </div>
 
@@ -479,10 +453,7 @@ export default function BecomeTeacherPage() {
               {files.length > 0 && (
                 <div className="mt-5 space-y-3">
                   {files.map((selectedFile) => (
-                    <div
-                      key={selectedFile.id}
-                      className="rounded-lg border border-slate-200 p-3"
-                    >
+                    <div key={selectedFile.id} className="rounded-lg border border-slate-200 p-3">
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                           <p className="truncate text-sm font-medium text-slate-800">
@@ -491,8 +462,7 @@ export default function BecomeTeacherPage() {
 
                           <p className="text-xs text-slate-500">
                             {selectedFile.fileType} ·{" "}
-                            {(selectedFile.file.size / 1024 / 1024).toFixed(2)}{" "}
-                            MB
+                            {(selectedFile.file.size / 1024 / 1024).toFixed(2)} MB
                           </p>
                         </div>
 
@@ -524,8 +494,7 @@ export default function BecomeTeacherPage() {
 
               <p className="mt-4 flex items-center gap-2 text-xs text-slate-500">
                 <Info size={14} />
-                Supported formats: PDF, JPG, PNG, WEBP, DOC and DOCX. Maximum 10
-                MB per file.
+                Supported formats: PDF, JPG, PNG, WEBP, DOC and DOCX. Maximum 10 MB per file.
               </p>
             </section>
 
@@ -536,16 +505,9 @@ export default function BecomeTeacherPage() {
             )}
 
             <div className="flex justify-end">
-              <Button
-                type="submit"
-                size="lg"
-                loading={submitting}
-                disabled={submitting}
-              >
+              <Button type="submit" size="lg" loading={submitting} disabled={submitting}>
                 <Send size={16} />
-                {submitting
-                  ? "Submitting Application..."
-                  : "Submit Application"}
+                {submitting ? "Submitting Application..." : "Submit Application"}
               </Button>
             </div>
           </form>

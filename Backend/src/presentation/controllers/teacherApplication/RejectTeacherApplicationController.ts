@@ -1,61 +1,37 @@
 import { Request, Response, NextFunction } from "express";
 
-import { IRejectTeacherApplication }
-    from "../../../application/interfaces/teacherApplication/IRejectTeacherApplication";
+import { IRejectTeacherApplication } from "../../../application/interfaces/teacherApplication/IRejectTeacherApplication";
 
-import { HttpStatusCode }
-    from "../../../shared/enums/HttpStatusCode";
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-import { AppError }
-    from "../../../shared/errors/AppError";
+import { AppError } from "../../../shared/errors/AppError";
 
-import { successResponse }
-    from "../../../shared/response/apiResponse";
-import { TeacherApplicationResponseMapper }
-    from "../../../application/mappers/TeacherApplicationResponseMapper";
+import { successResponse } from "../../../shared/response/apiResponse";
+import { TeacherApplicationResponseMapper } from "../../../application/mappers/TeacherApplicationResponseMapper";
 
 export class RejectTeacherApplicationController {
+  constructor(private readonly _rejectTeacherApplication: IRejectTeacherApplication) {}
 
-    constructor(
-        private readonly _rejectTeacherApplication:
-            IRejectTeacherApplication
-    ) {}
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const applicationId = req.params.applicationId;
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
-        try {
-            const applicationId = req.params.applicationId;
+      if (typeof applicationId !== "string" || !applicationId.trim()) {
+        throw new AppError("A valid application ID is required", HttpStatusCode.BAD_REQUEST);
+      }
 
-            if (
-                typeof applicationId !== "string" ||
-                !applicationId.trim()
-            ) {
-                throw new AppError(
-                    "A valid application ID is required",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
+      const rejectionReason = req.body.rejectionReason;
 
-            const rejectionReason = req.body.rejectionReason;
+      const result = await this._rejectTeacherApplication.execute(applicationId, rejectionReason);
 
-            const result =
-                await this._rejectTeacherApplication.execute(
-                    applicationId,
-                    rejectionReason
-                );
-
-            successResponse(
-                res,
-                HttpStatusCode.OK,
-                "Teacher application rejected successfully",
-                TeacherApplicationResponseMapper.toActionDTO(result)
-            );
-
-        } catch (error: unknown) {
-            next(error);
-        }
+      successResponse(
+        res,
+        HttpStatusCode.OK,
+        "Teacher application rejected successfully",
+        TeacherApplicationResponseMapper.toActionDTO(result),
+      );
+    } catch (error: unknown) {
+      next(error);
     }
+  }
 }

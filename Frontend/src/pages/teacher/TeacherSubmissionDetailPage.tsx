@@ -1,12 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  CircleX,
-  FileText,
-  UserRound,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle2, CircleX, FileText, UserRound } from "lucide-react";
 
 import TeacherLayout from "../../components/teacher/layout/TeacherLayout";
 
@@ -28,9 +22,7 @@ export default function TeacherSubmissionDetailPage() {
 
   const navigate = useNavigate();
 
-  const [submission, setSubmission] = useState<TeacherSubmissionDetail | null>(
-    null,
-  );
+  const [submission, setSubmission] = useState<TeacherSubmissionDetail | null>(null);
 
   const [teacherFeedback, setTeacherFeedback] = useState("");
 
@@ -115,17 +107,12 @@ export default function TeacherSubmissionDetailPage() {
 
   const handleBack = () => {
     navigate(
-      assignmentId
-        ? `/teacher/assignments/${assignmentId}/submissions`
-        : "/teacher/courses",
+      assignmentId ? `/teacher/assignments/${assignmentId}/submissions` : "/teacher/courses",
     );
   };
 
   return (
-    <TeacherLayout
-      contentClassName="mx-auto w-full max-w-5xl"
-      mainClassName="min-h-screen p-6"
-    >
+    <TeacherLayout contentClassName="mx-auto w-full max-w-5xl" mainClassName="min-h-screen p-6">
       <div className="space-y-8">
         {/* Header */}
         <header>
@@ -157,9 +144,7 @@ export default function TeacherSubmissionDetailPage() {
         {loading && <LoadingState message="Loading submission details..." />}
 
         {/* Error */}
-        {!loading && error && (
-          <ErrorState message={error} onRetry={handleRetry} />
-        )}
+        {!loading && error && <ErrorState message={error} onRetry={handleRetry} />}
 
         {/* Main Content */}
         {!loading && !error && submission && (
@@ -176,9 +161,7 @@ export default function TeacherSubmissionDetailPage() {
                   {submission.student.firstName} {submission.student.lastName}
                 </h3>
 
-                <p className="mt-1 text-sm text-slate-400">
-                  {submission.student.email}
-                </p>
+                <p className="mt-1 text-sm text-slate-400">{submission.student.email}</p>
 
                 <div className="mt-4">
                   <StatusBadge status={submission.status} />
@@ -188,21 +171,15 @@ export default function TeacherSubmissionDetailPage() {
               <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
                 <div className="mb-4 flex items-center gap-2 text-slate-400">
                   <FileText size={18} />
-                  <h2 className="text-sm font-semibold">
-                    Assignment Information
-                  </h2>
+                  <h2 className="text-sm font-semibold">Assignment Information</h2>
                 </div>
 
-                <h3 className="text-lg font-semibold">
-                  {submission.assignment.title}
-                </h3>
+                <h3 className="text-lg font-semibold">{submission.assignment.title}</h3>
 
                 <div className="mt-4 grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-slate-500">Attempt</p>
-                    <p className="mt-1 font-medium">
-                      #{submission.attemptNumber}
-                    </p>
+                    <p className="mt-1 font-medium">#{submission.attemptNumber}</p>
                   </div>
 
                   <div>
@@ -217,9 +194,7 @@ export default function TeacherSubmissionDetailPage() {
 
             {/* Automatically Calculated Result */}
             <section className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <h2 className="mb-4 font-semibold">
-                Automatically Calculated Result
-              </h2>
+              <h2 className="mb-4 font-semibold">Automatically Calculated Result</h2>
 
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 <div>
@@ -231,16 +206,12 @@ export default function TeacherSubmissionDetailPage() {
 
                 <div>
                   <p className="text-xs text-slate-500">Percentage</p>
-                  <p className="mt-1 text-xl font-bold">
-                    {submission.percentage.toFixed(1)}%
-                  </p>
+                  <p className="mt-1 text-xl font-bold">{submission.percentage.toFixed(1)}%</p>
                 </div>
 
                 <div>
                   <p className="text-xs text-slate-500">Passing Marks</p>
-                  <p className="mt-1 text-xl font-bold">
-                    {submission.passingMarks}
-                  </p>
+                  <p className="mt-1 text-xl font-bold">{submission.passingMarks}</p>
                 </div>
 
                 <div>
@@ -267,8 +238,8 @@ export default function TeacherSubmissionDetailPage() {
               </div>
 
               <p className="mt-4 text-xs text-slate-500">
-                The score and result are calculated automatically by the system
-                and cannot be modified by the teacher.
+                The score and result are calculated automatically by the system and cannot be
+                modified by the teacher.
               </p>
             </section>
 
@@ -289,13 +260,9 @@ export default function TeacherSubmissionDetailPage() {
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs font-medium text-slate-500">
-                        QUESTION {index + 1}
-                      </p>
+                      <p className="text-xs font-medium text-slate-500">QUESTION {index + 1}</p>
 
-                      <h3 className="mt-2 font-medium text-white">
-                        {answer.question}
-                      </h3>
+                      <h3 className="mt-2 font-medium text-white">{answer.question}</h3>
                     </div>
 
                     <span className="rounded-md bg-slate-800 px-3 py-1 text-xs text-slate-300">
@@ -308,15 +275,12 @@ export default function TeacherSubmissionDetailPage() {
                       const isSelected = option === answer.selectedAnswer;
                       const isCorrect = option === answer.correctAnswer;
 
-                      let optionStyle =
-                        "border-slate-800 bg-slate-950 text-slate-300";
+                      let optionStyle = "border-slate-800 bg-slate-950 text-slate-300";
 
                       if (isCorrect) {
-                        optionStyle =
-                          "border-emerald-500/40 bg-emerald-500/10 text-emerald-300";
+                        optionStyle = "border-emerald-500/40 bg-emerald-500/10 text-emerald-300";
                       } else if (isSelected) {
-                        optionStyle =
-                          "border-red-500/40 bg-red-500/10 text-red-300";
+                        optionStyle = "border-red-500/40 bg-red-500/10 text-red-300";
                       }
 
                       return (
@@ -328,17 +292,12 @@ export default function TeacherSubmissionDetailPage() {
                             {option}
 
                             {isSelected && (
-                              <span className="ml-2 text-xs opacity-70">
-                                (Selected)
-                              </span>
+                              <span className="ml-2 text-xs opacity-70">(Selected)</span>
                             )}
                           </span>
 
                           {isCorrect && (
-                            <CheckCircle2
-                              size={16}
-                              className="shrink-0 text-emerald-400"
-                            />
+                            <CheckCircle2 size={16} className="shrink-0 text-emerald-400" />
                           )}
                         </div>
                       );
@@ -348,9 +307,7 @@ export default function TeacherSubmissionDetailPage() {
                   <div className="mt-4 flex flex-wrap items-center gap-3 text-xs">
                     <span className="text-slate-500">Student answer:</span>
 
-                    <span className="text-slate-300">
-                      {answer.selectedAnswer}
-                    </span>
+                    <span className="text-slate-300">{answer.selectedAnswer}</span>
 
                     <span
                       className={
@@ -372,8 +329,7 @@ export default function TeacherSubmissionDetailPage() {
                 <h2 className="text-lg font-semibold">Teacher Evaluation</h2>
 
                 <p className="mt-1 text-sm text-slate-400">
-                  Review the automatically calculated result and provide
-                  feedback to the student.
+                  Review the automatically calculated result and provide feedback to the student.
                 </p>
               </div>
 
@@ -382,9 +338,7 @@ export default function TeacherSubmissionDetailPage() {
                   <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
                     <div className="flex items-center gap-2 text-emerald-400">
                       <CheckCircle2 size={18} />
-                      <p className="font-medium">
-                        This submission has already been reviewed.
-                      </p>
+                      <p className="font-medium">This submission has already been reviewed.</p>
                     </div>
 
                     <p className="mt-2 text-sm text-slate-400">
@@ -420,8 +374,7 @@ export default function TeacherSubmissionDetailPage() {
                     </p>
 
                     <p className="mt-2 text-xs text-slate-500">
-                      This score is calculated automatically and cannot be
-                      modified.
+                      This score is calculated automatically and cannot be modified.
                     </p>
                   </div>
 
@@ -431,9 +384,7 @@ export default function TeacherSubmissionDetailPage() {
                       className="mb-2 block text-sm font-medium text-slate-300"
                     >
                       Teacher Feedback{" "}
-                      <span className="ml-2 font-normal text-slate-500">
-                        (Optional)
-                      </span>
+                      <span className="ml-2 font-normal text-slate-500">(Optional)</span>
                     </label>
 
                     <textarea
@@ -441,9 +392,7 @@ export default function TeacherSubmissionDetailPage() {
                       rows={4}
                       maxLength={2000}
                       value={teacherFeedback}
-                      onChange={(event) =>
-                        setTeacherFeedback(event.target.value)
-                      }
+                      onChange={(event) => setTeacherFeedback(event.target.value)}
                       placeholder="Provide feedback to the student..."
                       className="w-full resize-y rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-indigo-500"
                     />
@@ -460,12 +409,7 @@ export default function TeacherSubmissionDetailPage() {
                   )}
 
                   <div className="flex flex-wrap justify-end gap-3">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={handleBack}
-                      disabled={grading}
-                    >
+                    <Button type="button" variant="ghost" onClick={handleBack} disabled={grading}>
                       Cancel
                     </Button>
 

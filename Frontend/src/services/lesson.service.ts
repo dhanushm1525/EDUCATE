@@ -5,191 +5,117 @@ import { apiClient } from "./apiClient";
 import { API_ROUTES } from "../constants/apiRoutes";
 
 import type {
-    Lesson,
-    LessonApiResponse,
-    CreateLessonRequest,
-    UpdateLessonRequest,
-    GenerateLessonMediaUploadUrlRequest,
-    GenerateLessonMediaUploadUrlResponse,
+  Lesson,
+  LessonApiResponse,
+  CreateLessonRequest,
+  UpdateLessonRequest,
+  GenerateLessonMediaUploadUrlRequest,
+  GenerateLessonMediaUploadUrlResponse,
 } from "../types/lesson";
 
-import type {
-    StudentLesson,
-    StudentLessonApiResponse,
-} from "../types/studentLesson";
+import type { StudentLesson, StudentLessonApiResponse } from "../types/studentLesson";
 
 export const lessonService = {
+  createLesson: async (
+    courseId: string,
+    chapterId: string,
+    payload: CreateLessonRequest,
+  ): Promise<Lesson> => {
+    const response = await apiClient.post<LessonApiResponse<Lesson>>(
+      API_ROUTES.lessons.byChapter(courseId, chapterId),
+      payload,
+    );
 
-    createLesson: async (
-        courseId: string,
-        chapterId: string,
-        payload: CreateLessonRequest
-    ): Promise<Lesson> => {
+    return response.data.data;
+  },
 
-        const response =
-            await apiClient.post<
-                LessonApiResponse<Lesson>
-            >(
-                API_ROUTES.lessons.byChapter(
-                    courseId,
-                    chapterId
-                ),
-                payload
-            );
+  getLessons: async (courseId: string, chapterId: string): Promise<Lesson[]> => {
+    const response = await apiClient.get<LessonApiResponse<Lesson[]>>(
+      API_ROUTES.lessons.byChapter(courseId, chapterId),
+    );
 
-        return response.data.data;
-    },
+    return response.data.data;
+  },
 
-    getLessons: async (
-        courseId: string,
-        chapterId: string
-    ): Promise<Lesson[]> => {
+  getLesson: async (courseId: string, chapterId: string, lessonId: string): Promise<Lesson> => {
+    const response = await apiClient.get<LessonApiResponse<Lesson>>(
+      API_ROUTES.lessons.byId(courseId, chapterId, lessonId),
+    );
 
-        const response =
-            await apiClient.get<
-                LessonApiResponse<Lesson[]>
-            >(
-                API_ROUTES.lessons.byChapter(
-                    courseId,
-                    chapterId
-                )
-            );
+    return response.data.data;
+  },
 
-        return response.data.data;
-    },
+  updateLesson: async (
+    courseId: string,
+    chapterId: string,
+    lessonId: string,
+    payload: UpdateLessonRequest,
+  ): Promise<Lesson> => {
+    const response = await apiClient.patch<LessonApiResponse<Lesson>>(
+      API_ROUTES.lessons.byId(courseId, chapterId, lessonId),
+      payload,
+    );
 
-    getLesson: async (
-        courseId: string,
-        chapterId: string,
-        lessonId: string
-    ): Promise<Lesson> => {
+    return response.data.data;
+  },
 
-        const response =
-            await apiClient.get<
-                LessonApiResponse<Lesson>
-            >(
-                API_ROUTES.lessons.byId(
-                    courseId,
-                    chapterId,
-                    lessonId
-                )
-            );
+  deleteLesson: async (courseId: string, chapterId: string, lessonId: string): Promise<void> => {
+    await apiClient.delete(API_ROUTES.lessons.byId(courseId, chapterId, lessonId));
+  },
 
-        return response.data.data;
-    },
+  generateMediaUploadUrl: async (
+    courseId: string,
+    chapterId: string,
+    lessonId: string,
+    payload: GenerateLessonMediaUploadUrlRequest,
+  ) => {
+    const response = await apiClient.post<GenerateLessonMediaUploadUrlResponse>(
+      API_ROUTES.lessons.mediaUploadUrl(courseId, chapterId, lessonId),
+      payload,
+    );
 
-    updateLesson: async (
-        courseId: string,
-        chapterId: string,
-        lessonId: string,
-        payload: UpdateLessonRequest
-    ): Promise<Lesson> => {
+    return response.data.data;
+  },
 
-        const response =
-            await apiClient.patch<
-                LessonApiResponse<Lesson>
-            >(
-                API_ROUTES.lessons.byId(
-                    courseId,
-                    chapterId,
-                    lessonId
-                ),
-                payload
-            );
+  uploadMedia: async (
+    uploadUrl: string,
+    file: File,
+    onProgress?: (percentage: number) => void,
+  ): Promise<void> => {
+    await axios.put(uploadUrl, file, {
+      headers: {
+        "Content-Type": file.type,
+      },
+      onUploadProgress: (event) => {
+        if (event.total) {
+          const percentage = Math.round((event.loaded / event.total) * 100);
 
-        return response.data.data;
-    },
+          onProgress?.(percentage);
+        }
+      },
+    });
+  },
 
-    deleteLesson: async (
-        courseId: string,
-        chapterId: string,
-        lessonId: string
-    ): Promise<void> => {
+  cleanupMedia: async (
+    courseId: string,
+    chapterId: string,
+    lessonId: string,
+    key: string,
+  ): Promise<void> => {
+    await apiClient.delete(API_ROUTES.lessons.media(courseId, chapterId, lessonId), {
+      data: { key },
+    });
+  },
 
-        await apiClient.delete(
-            API_ROUTES.lessons.byId(
-                courseId,
-                chapterId,
-                lessonId
-            )
-        );
-    },
+  getStudentLesson: async (
+    courseId: string,
+    chapterId: string,
+    lessonId: string,
+  ): Promise<StudentLesson> => {
+    const response = await apiClient.get<StudentLessonApiResponse>(
+      API_ROUTES.lessons.studentById(courseId, chapterId, lessonId),
+    );
 
-    generateMediaUploadUrl: async (
-        courseId: string,
-        chapterId: string,
-        lessonId: string,
-        payload: GenerateLessonMediaUploadUrlRequest
-    ) => {
-
-        const response =
-            await apiClient.post<
-                GenerateLessonMediaUploadUrlResponse
-            >(
-                API_ROUTES.lessons.mediaUploadUrl(
-                    courseId,
-                    chapterId,
-                    lessonId
-                ),
-                payload
-            );
-
-        return response.data.data;
-    },
-
-    uploadMedia: async (
-        uploadUrl: string,
-        file: File,
-        onProgress?: (percentage: number) => void
-    ): Promise<void> => {
-        await axios.put(uploadUrl, file, {
-            headers: {
-                "Content-Type": file.type,
-            },
-            onUploadProgress: (event) => {
-                if (event.total) {
-                    const percentage = Math.round(
-                        (event.loaded / event.total) * 100
-                    );
-
-                    onProgress?.(percentage);
-                }
-            },
-        });
-    },
-
-    cleanupMedia: async (
-        courseId: string,
-        chapterId: string,
-        lessonId: string,
-        key: string
-    ): Promise<void> => {
-        await apiClient.delete(
-            API_ROUTES.lessons.media(
-                courseId,
-                chapterId,
-                lessonId
-            ),
-            {
-                data: { key },
-            }
-        );
-    },
-
-    getStudentLesson: async (
-        courseId: string,
-        chapterId: string,
-        lessonId: string
-    ): Promise<StudentLesson> => {
-        const response =
-            await apiClient.get<StudentLessonApiResponse>(
-                API_ROUTES.lessons.studentById(
-                    courseId,
-                    chapterId,
-                    lessonId
-                )
-            );
-
-        return response.data.data;
-    },
+    return response.data.data;
+  },
 };

@@ -1,4 +1,3 @@
-
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 import { Request, Response, NextFunction } from "express";
@@ -11,53 +10,36 @@ import { AppError } from "../../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 export class UpdateCourseController {
-    constructor(
-        private readonly _updateCourseUseCase: IUpdateCourseUseCase,
-        private readonly _courseResponseService: CourseResponseService
-    ) { }
+  constructor(
+    private readonly _updateCourseUseCase: IUpdateCourseUseCase,
+    private readonly _courseResponseService: CourseResponseService,
+  ) {}
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
-        try {
-            if (!req.user) {
-                throw new AppError(
-                    AUTH_MESSAGES.AUTHENTICATION_REQUIRED,
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError(AUTH_MESSAGES.AUTHENTICATION_REQUIRED, HttpStatusCode.UNAUTHORIZED);
+      }
 
-            const { courseId } = req.params;
+      const { courseId } = req.params;
 
-            if (Array.isArray(courseId)) {
-                throw new AppError(
-                    "Invalid course ID",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
+      if (Array.isArray(courseId)) {
+        throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            const dto =
-                CourseUpdateMapper.toUpdateCourseDTO(req.body);
+      const dto = CourseUpdateMapper.toUpdateCourseDTO(req.body);
 
-            const course =
-                await this._updateCourseUseCase.execute(
-                    courseId,
-                    req.user.userId,
-                    dto
-                );
+      const course = await this._updateCourseUseCase.execute(courseId, req.user.userId, dto);
 
-            const responseData =
-                await this._courseResponseService.toDTO(course);
+      const responseData = await this._courseResponseService.toDTO(course);
 
-            res.status(HttpStatusCode.OK).json({
-                success: true,
-                message: "Course updated successfully",
-                data: responseData
-            });
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        message: "Course updated successfully",
+        data: responseData,
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

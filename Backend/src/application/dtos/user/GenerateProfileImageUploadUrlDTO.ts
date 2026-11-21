@@ -1,5 +1,5 @@
 export interface GenerateProfileImageUploadUrlDTO {
-    userId: string;
-    fileName: string;
-    contentType: string;
+  userId: string;
+  fileName: string;
+  contentType: string;
 }

@@ -1,20 +1,13 @@
 export interface GoogleUserPayload {
+  email: string;
 
-    email: string;
+  firstName: string;
 
-    firstName: string;
+  lastName: string;
 
-    lastName: string;
-
-    avatar?: string;
-
+  avatar?: string;
 }
 
-
 export interface IGoogleAuthService {
-
-    verifyIdToken(
-        credential: string
-    ): Promise<GoogleUserPayload>;
-
+  verifyIdToken(credential: string): Promise<GoogleUserPayload>;
 }

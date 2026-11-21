@@ -1,77 +1,70 @@
-import {
-    AssignmentSubmission,
-} from "../../domain/entities/AssignmentSubmission";
+import { AssignmentSubmission } from "../../domain/entities/AssignmentSubmission";
 
-import {
-    AssignmentSubmissionDocument,
-} from "../database/models/AssignmentSubmissionModel";
+import { AssignmentSubmissionDocument } from "../database/models/AssignmentSubmissionModel";
 
 export class AssignmentSubmissionPersistenceMapper {
+  static toPersistence(submission: AssignmentSubmission) {
+    return {
+      assignmentId: submission.assignmentId,
+      userId: submission.userId,
 
-    static toPersistence(submission: AssignmentSubmission) {
-        return {
-            assignmentId: submission.assignmentId,
-            userId: submission.userId,
+      answers: submission.answers.map((answer) => ({
+        questionId: answer.questionId,
+        selectedAnswer: answer.selectedAnswer,
+      })),
 
-            answers: submission.answers.map(answer => ({
-                questionId: answer.questionId,
-                selectedAnswer: answer.selectedAnswer,
-            })),
+      attemptNumber: submission.attemptNumber,
 
-            attemptNumber: submission.attemptNumber,
+      score: submission.score,
+      totalMarks: submission.totalMarks,
+      passingMarks: submission.passingMarks,
+      isPassed: submission.isPassed,
 
-            score: submission.score,
-            totalMarks: submission.totalMarks,
-            passingMarks: submission.passingMarks,
-            isPassed: submission.isPassed,
+      status: submission.status,
 
-            status: submission.status,
+      startedAt: submission.startedAt,
+      expiresAt: submission.expiresAt,
 
-            startedAt: submission.startedAt,
-            expiresAt: submission.expiresAt,
+      teacherFeedback: submission.teacherFeedback,
+      gradedBy: submission.gradedBy,
+      gradedAt: submission.gradedAt,
 
-            teacherFeedback: submission.teacherFeedback,
-            gradedBy: submission.gradedBy,
-            gradedAt: submission.gradedAt,
+      submittedAt: submission.submittedAt,
+    };
+  }
 
-            submittedAt: submission.submittedAt,
-        };
-    }
+  static toDomain(document: AssignmentSubmissionDocument): AssignmentSubmission {
+    return {
+      submissionId: document._id.toString(),
 
-    static toDomain(
-        document: AssignmentSubmissionDocument
-    ): AssignmentSubmission {
-        return {
-            submissionId: document._id.toString(),
+      assignmentId: document.assignmentId.toString(),
+      userId: document.userId.toString(),
 
-            assignmentId: document.assignmentId.toString(),
-            userId: document.userId.toString(),
+      answers: document.answers.map((answer) => ({
+        questionId: answer.questionId,
+        selectedAnswer: answer.selectedAnswer,
+      })),
 
-            answers: document.answers.map(answer => ({
-                questionId: answer.questionId,
-                selectedAnswer: answer.selectedAnswer,
-            })),
+      attemptNumber: document.attemptNumber,
 
-            attemptNumber: document.attemptNumber,
+      score: document.score,
+      totalMarks: document.totalMarks,
+      passingMarks: document.passingMarks,
+      isPassed: document.isPassed,
 
-            score: document.score,
-            totalMarks: document.totalMarks,
-            passingMarks: document.passingMarks,
-            isPassed: document.isPassed,
+      status: document.status,
 
-            status: document.status,
+      startedAt: document.startedAt,
+      expiresAt: document.expiresAt,
 
-            startedAt: document.startedAt,
-            expiresAt: document.expiresAt,
+      teacherFeedback: document.teacherFeedback,
+      gradedBy: document.gradedBy?.toString(),
+      gradedAt: document.gradedAt,
 
-            teacherFeedback: document.teacherFeedback,
-            gradedBy: document.gradedBy?.toString(),
-            gradedAt: document.gradedAt,
+      submittedAt: document.submittedAt,
 
-            submittedAt: document.submittedAt,
-
-            createdAt: document.createdAt,
-            updatedAt: document.updatedAt,
-        };
-    }
+      createdAt: document.createdAt,
+      updatedAt: document.updatedAt,
+    };
+  }
 }

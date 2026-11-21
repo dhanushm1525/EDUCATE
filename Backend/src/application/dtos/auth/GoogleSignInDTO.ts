@@ -1,6 +1,3 @@
 export interface GoogleSignInDTO {
-
-    credential:
-        string;
-
+  credential: string;
 }

@@ -1,27 +1,17 @@
-import {
-  Request,
-  Response,
-  NextFunction
-} from "express";
+import { Request, Response, NextFunction } from "express";
 
 import { ZodType } from "zod";
 
-export const validate = (
-  schema: ZodType
-) => {
-  return (
-    req: Request,
-    _res: Response,
-    next: NextFunction
-  ) => {
+export const validate = (schema: ZodType) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     const result = schema.safeParse({
       body: req.body,
       params: req.params,
-      query: req.query
+      query: req.query,
     });
 
     if (!result.success) {
-        return next(result.error)
+      return next(result.error);
     }
 
     next();

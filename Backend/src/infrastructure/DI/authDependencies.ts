@@ -45,128 +45,120 @@ import { LoginProviderRegistry } from "../../application/services/auth/LoginProv
 import { LocalPasswordLoginStrategy } from "../../application/services/auth/LocalPasswordLoginStrategy";
 import { GoogleLoginStrategy } from "../../application/services/auth/GoogleLoginStrategy";
 
+const refreshTokenRepository = new MongoRefreshTokenRepository();
 
-
-const refreshTokenRepository =
-    new MongoRefreshTokenRepository();
-
-const passwordHasher =
-    new BcryptPasswordHasher();
+const passwordHasher = new BcryptPasswordHasher();
 
 const loginProviderRegistry = new LoginProviderRegistry([
-    new LocalPasswordLoginStrategy(passwordHasher),
-    new GoogleLoginStrategy(),
+  new LocalPasswordLoginStrategy(passwordHasher),
+  new GoogleLoginStrategy(),
 ]);
 
-export const jwtService =
-    new JwtService();
+export const jwtService = new JwtService();
 
-const tokenHasher =
-    new Sha256TokenHasher();
+const tokenHasher = new Sha256TokenHasher();
 
+export const loginUser = new LoginUser(
+  userRepository,
+  jwtService,
+  refreshTokenRepository,
+  tokenHasher,
+  authConfig,
+  loginProviderRegistry,
+);
 
-
-
-export const loginUser =
-    new LoginUser(
-        userRepository,
-        jwtService,
-        refreshTokenRepository,
-        tokenHasher,
-        authConfig,
-        loginProviderRegistry
-    );
-
-
-
-
-export const refreshAccessToken =
-    new RefreshAccessToken(
-        userRepository,
-        refreshTokenRepository,
-        jwtService,
-        tokenHasher,
-        authConfig
-    )
+export const refreshAccessToken = new RefreshAccessToken(
+  userRepository,
+  refreshTokenRepository,
+  jwtService,
+  tokenHasher,
+  authConfig,
+);
 
 export const logoutUser = new LogoutUser(refreshTokenRepository, tokenHasher);
 
-const emailVerificationRepository = new MongoEmailVerificationRepository()
+const emailVerificationRepository = new MongoEmailVerificationRepository();
 
 const otpGenerator = new OtpGenerator();
 
 const emailClient = new Resend(env.resendApiKey);
-const emailService = new ResendEmailService(emailClient, env.emailFrom)
-
+const emailService = new ResendEmailService(emailClient, env.emailFrom);
 
 export const loginController = new LoginController(loginUser, refreshTokenCookie);
 
-export const refreshTokenController = new RefreshTokenController(refreshAccessToken, refreshTokenCookie)
+export const refreshTokenController = new RefreshTokenController(
+  refreshAccessToken,
+  refreshTokenCookie,
+);
 
 export const logoutController = new LogoutController(logoutUser, refreshTokenCookie);
 
 export const sendVerificationOtp = new SendVerificationOtp(
-    emailVerificationRepository,
-    otpGenerator,
-    tokenHasher,
-    emailService,
-    authConfig
-)
-
+  emailVerificationRepository,
+  otpGenerator,
+  tokenHasher,
+  emailService,
+  authConfig,
+);
 
 export const verifyEmailOtp = new VerifyEmailOtp(
-    userRepository,
-    emailVerificationRepository,
-    tokenHasher
-)
+  userRepository,
+  emailVerificationRepository,
+  tokenHasher,
+);
 
+export const registerUser = new RegisterUser(userRepository, passwordHasher, sendVerificationOtp);
 
-export const registerUser =
-    new RegisterUser(
-        userRepository,
-        passwordHasher,
-        sendVerificationOtp
-    );
+export const registerController = new RegisterController(registerUser);
 
-export const registerController = new RegisterController(registerUser)
+export const verifyEmailOtpController = new VerifyEmailOtpController(verifyEmailOtp);
 
-export const verifyEmailOtpController = new VerifyEmailOtpController(verifyEmailOtp)
-
-
-export const resendVerificationOtp =
-    new ResendVerificationOtp(
-        userRepository,
-        sendVerificationOtp
-    );
+export const resendVerificationOtp = new ResendVerificationOtp(userRepository, sendVerificationOtp);
 
 const passwordResetRepository = new MongoPasswordResetRepository();
 
-export const forgotPassword = new ForgotPassword(userRepository,passwordResetRepository,otpGenerator,tokenHasher,emailService,authConfig)
-
-export const forgotPasswordController=new ForgotPasswordController(forgotPassword)
-
-export const resendVerificationOtpController = new ResendVerificationOtpController(resendVerificationOtp)
-
-
-export const resetPassword = new ResetPassword(userRepository,passwordResetRepository,passwordHasher,tokenHasher,refreshTokenRepository)
-
-export const resetPasswordController = new ResetPasswordController(resetPassword)
-
-const getCurrentUser =new GetCurrentUser(userRepository);
-
-export const getCurrentUserController = new GetCurrentUserController(getCurrentUser)
-
-export const authenticateUser = authMiddleware(
-    jwtService,
-    userRepository
+export const forgotPassword = new ForgotPassword(
+  userRepository,
+  passwordResetRepository,
+  otpGenerator,
+  tokenHasher,
+  emailService,
+  authConfig,
 );
 
+export const forgotPasswordController = new ForgotPasswordController(forgotPassword);
 
+export const resendVerificationOtpController = new ResendVerificationOtpController(
+  resendVerificationOtp,
+);
+
+export const resetPassword = new ResetPassword(
+  userRepository,
+  passwordResetRepository,
+  passwordHasher,
+  tokenHasher,
+  refreshTokenRepository,
+);
+
+export const resetPasswordController = new ResetPasswordController(resetPassword);
+
+const getCurrentUser = new GetCurrentUser(userRepository);
+
+export const getCurrentUserController = new GetCurrentUserController(getCurrentUser);
+
+export const authenticateUser = authMiddleware(jwtService, userRepository);
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID!;
 const googleClient = new OAuth2Client(googleClientId);
-const googleAuthService = new GoogleAuthService(googleClient, googleClientId)
+const googleAuthService = new GoogleAuthService(googleClient, googleClientId);
 
-export const googleSignIn = new GoogleSignIn(userRepository,googleAuthService,jwtService,refreshTokenRepository,tokenHasher,authConfig)
+export const googleSignIn = new GoogleSignIn(
+  userRepository,
+  googleAuthService,
+  jwtService,
+  refreshTokenRepository,
+  tokenHasher,
+  authConfig,
+);
 
-export const googleSignInController = new GoogleSignInController(googleSignIn,refreshTokenCookie)
+export const googleSignInController = new GoogleSignInController(googleSignIn, refreshTokenCookie);

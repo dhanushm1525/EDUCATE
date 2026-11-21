@@ -1,0 +1,7 @@
+**/node_modules/
+**/dist/
+Backend/logs/
+**/package-lock.json
+**/.env
+**/*.png
+**/*.svg

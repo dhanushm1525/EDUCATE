@@ -9,55 +9,40 @@ import { LessonResponseMapper } from "../../../application/mappers/LessonRespons
 import { ICreateLessonUseCase } from "../../../application/interfaces/lesson/ICreateLessonUseCase";
 
 export class CreateLessonController {
+  constructor(private readonly _createLessonUseCase: ICreateLessonUseCase) {}
 
-    constructor(
-        private readonly _createLessonUseCase: ICreateLessonUseCase
-    ) { }
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError("Authentication required", HttpStatusCode.UNAUTHORIZED);
+      }
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
+      const { courseId, chapterId } = req.params;
 
-        try {
+      if (Array.isArray(chapterId)) {
+        throw new AppError("Invalid chapter ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            if (!req.user) {
-                throw new AppError(
-                    "Authentication required",
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+      if (Array.isArray(courseId)) {
+        throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            const { courseId, chapterId } = req.params;
+      const dto = LessonCreationMapper.toCreateLessonDTO(req.body);
 
-            if (Array.isArray(chapterId)) {
-                throw new AppError("Invalid chapter ID", HttpStatusCode.BAD_REQUEST);
-            }
+      const lesson = await this._createLessonUseCase.execute(
+        courseId,
+        chapterId,
+        req.user.userId,
+        dto,
+      );
 
-            if (Array.isArray(courseId)) {
-                throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
-            }
-
-            const dto =
-                LessonCreationMapper.toCreateLessonDTO(req.body);
-
-            const lesson =
-                await this._createLessonUseCase.execute(
-                    courseId,
-                    chapterId,
-                    req.user.userId,
-                    dto
-                );
-
-            res.status(HttpStatusCode.CREATED).json({
-                success: true,
-                message: "Lesson created successfully",
-                data: LessonResponseMapper.toDTO(lesson),
-            });
-
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.CREATED).json({
+        success: true,
+        message: "Lesson created successfully",
+        data: LessonResponseMapper.toDTO(lesson),
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

@@ -99,9 +99,7 @@ export default function TeacherMyLearningPage() {
           <div className="flex min-h-64 items-center justify-center rounded-xl border border-slate-800 bg-slate-900">
             <div className="text-center">
               <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
-              <p className="mt-4 text-sm text-slate-400">
-                Loading your courses...
-              </p>
+              <p className="mt-4 text-sm text-slate-400">Loading your courses...</p>
             </div>
           </div>
         )}

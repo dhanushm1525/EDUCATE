@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  Mail,
-  Lock,
-  ArrowLeft,
-  KeyRound,
-} from "lucide-react";
+import { Mail, Lock, ArrowLeft, KeyRound } from "lucide-react";
 import { authService } from "../../services/auth.service";
 import { getApiErrorMessage } from "../../utils/apiError";
 import { useToastStore } from "../../store/toastStore";
@@ -32,12 +27,7 @@ export default function ResetPasswordForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const validation = validateResetPasswordForm(
-      email,
-      otp,
-      newPassword,
-      confirmPassword,
-    );
+    const validation = validateResetPasswordForm(email, otp, newPassword, confirmPassword);
     if (!validation.isValid) {
       addToast(validation.error ?? "Please check the form", "error");
       return;
@@ -77,9 +67,7 @@ export default function ResetPasswordForm() {
 
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-bold tracking-tight text-white">
-          Reset Password
-        </h2>
+        <h2 className="text-2xl font-bold tracking-tight text-white">Reset Password</h2>
         <p className="mt-1 text-xs text-slate-400">
           Enter the OTP sent to your email and choose a new password.
         </p>
@@ -142,10 +130,7 @@ export default function ResetPasswordForm() {
         />
 
         {/* Submit */}
-        <AuthSubmitButton
-          isLoading={isLoading}
-          loadingText="Resetting Password..."
-        >
+        <AuthSubmitButton isLoading={isLoading} loadingText="Resetting Password...">
           Reset Password
         </AuthSubmitButton>
       </form>

@@ -1,8 +1,10 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 
-interface AuthSubmitButtonProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "type"> {
+interface AuthSubmitButtonProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "children" | "type"
+> {
   children: ReactNode;
   isLoading: boolean;
   loadingText: string;

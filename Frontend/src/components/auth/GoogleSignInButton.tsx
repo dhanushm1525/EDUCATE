@@ -11,9 +11,7 @@ export default function GoogleSignInButton() {
   const setAuth = useAuthStore((state) => state.setAuth);
   const addToast = useToastStore((state) => state.addToast);
 
-  const handleSuccess = async (credentialResponse: {
-    credential?: string;
-  }) => {
+  const handleSuccess = async (credentialResponse: { credential?: string }) => {
     try {
       const credential = credentialResponse.credential;
 
@@ -48,10 +46,8 @@ export default function GoogleSignInButton() {
         // shape="rectangular"
         // width="400"
 
-
-    text="continue_with"
+        text="continue_with"
       />
-
     </div>
   );
 }

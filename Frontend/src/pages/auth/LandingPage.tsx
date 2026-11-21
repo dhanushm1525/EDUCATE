@@ -6,30 +6,24 @@ import { CategorySection } from "../../components/landing/CategorySection";
 import { TrendingCoursesSection } from "../../components/landing/TrendingCoursesSection";
 import { QaCommunitySection } from "../../components/landing/QaCommunitySection";
 
-
 function LandingPage() {
-    return (
-        <div className="min-h-screen bg-slate-50 text-slate-800">
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800">
+      <PublicNavbar />
 
-            <PublicNavbar />
+      <main>
+        <HeroSection />
 
-            <main>
+        <CategorySection />
 
-                <HeroSection />
+        <TrendingCoursesSection />
 
-                <CategorySection />
+        <QaCommunitySection />
+      </main>
 
-                <TrendingCoursesSection />
-
-                <QaCommunitySection />
-
-            </main>
-
-            <Footer />
-
-        </div>
-    );
+      <Footer />
+    </div>
+  );
 }
-
 
 export default LandingPage;

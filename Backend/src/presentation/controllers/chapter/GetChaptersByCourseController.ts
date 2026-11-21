@@ -1,10 +1,6 @@
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-import {
-    Request,
-    Response,
-    NextFunction,
-} from "express";
+import { Request, Response, NextFunction } from "express";
 
 import { IGetChaptersByCourseUseCase } from "../../../application/interfaces/chapter/IGetChaptersByCourseUseCase";
 import { ChapterResponseMapper } from "../../../application/mappers/ChapterResponseMapper";
@@ -12,45 +8,29 @@ import { ChapterResponseMapper } from "../../../application/mappers/ChapterRespo
 import { AppError } from "../../../shared/errors/AppError";
 
 export class GetChaptersByCourseController {
+  constructor(private readonly _getChaptersByCourseUseCase: IGetChaptersByCourseUseCase) {}
 
-    constructor(
-        private readonly _getChaptersByCourseUseCase: IGetChaptersByCourseUseCase
-    ) { }
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError("Authentication required", HttpStatusCode.UNAUTHORIZED);
+      }
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
+      const { courseId } = req.params;
 
-        try {
-            if (!req.user) {
-                throw new AppError(
-                    "Authentication required",
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+      if (Array.isArray(courseId)) {
+        throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            const { courseId } = req.params;
+      const chapters = await this._getChaptersByCourseUseCase.execute(courseId, req.user.userId);
 
-            if (Array.isArray(courseId)) {
-                throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
-            }
-
-            const chapters =
-                await this._getChaptersByCourseUseCase.execute(
-                    courseId,
-                    req.user.userId
-                );
-
-            res.status(HttpStatusCode.OK).json({
-                success: true,
-                message: "Chapters fetched successfully",
-                data: ChapterResponseMapper.toDTOList(chapters),
-            });
-
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        message: "Chapters fetched successfully",
+        data: ChapterResponseMapper.toDTOList(chapters),
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

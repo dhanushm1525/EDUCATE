@@ -81,9 +81,7 @@ export function CourseForm({
     }));
   };
 
-  const handleThumbnailChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleThumbnailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
     if (!file) {
@@ -125,9 +123,7 @@ export function CourseForm({
     setThumbnailPreview(undefined);
     setThumbnailFile(null);
 
-    const input = document.getElementById(
-      "course-thumbnail",
-    ) as HTMLInputElement | null;
+    const input = document.getElementById("course-thumbnail") as HTMLInputElement | null;
 
     if (input) {
       input.value = "";
@@ -293,9 +289,7 @@ export function CourseForm({
             <div className="flex h-56 w-full flex-col items-center justify-center gap-2">
               <span className="text-3xl text-slate-500">+</span>
 
-              <span className="text-sm font-medium text-slate-300">
-                Choose course thumbnail
-              </span>
+              <span className="text-sm font-medium text-slate-300">Choose course thumbnail</span>
 
               <span className="text-xs text-slate-500">JPEG, PNG or WebP</span>
             </div>
@@ -314,9 +308,7 @@ export function CourseForm({
         {thumbnailFile && (
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="truncate text-sm text-slate-300">
-                {thumbnailFile.name}
-              </p>
+              <p className="truncate text-sm text-slate-300">{thumbnailFile.name}</p>
 
               <p className="text-xs text-slate-500">
                 {(thumbnailFile.size / (1024 * 1024)).toFixed(2)} MB
@@ -368,9 +360,7 @@ export function CourseForm({
             id="course-level"
             label="Level"
             value={form.level}
-            onChange={(event) =>
-              updateField("level", event.target.value as CourseLevel)
-            }
+            onChange={(event) => updateField("level", event.target.value as CourseLevel)}
             options={levelOptions}
           />
 
@@ -380,9 +370,7 @@ export function CourseForm({
             type="number"
             min={1}
             value={form.duration === 0 ? "" : form.duration}
-            onChange={(event) =>
-              updateField("duration", Number(event.target.value))
-            }
+            onChange={(event) => updateField("duration", Number(event.target.value))}
           />
         </div>
       </section>
@@ -399,9 +387,7 @@ export function CourseForm({
             type="number"
             min={0}
             value={form.price === 0 ? "" : form.price}
-            onChange={(event) =>
-              updateField("price", Number(event.target.value))
-            }
+            onChange={(event) => updateField("price", Number(event.target.value))}
           />
 
           <Input
@@ -411,9 +397,7 @@ export function CourseForm({
             min={0}
             max={100}
             value={form.discount === 0 ? "" : form.discount}
-            onChange={(event) =>
-              updateField("discount", Number(event.target.value))
-            }
+            onChange={(event) => updateField("discount", Number(event.target.value))}
           />
         </div>
       </section>
@@ -430,12 +414,7 @@ export function CourseForm({
           pt-5
         "
       >
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={onCancel}
-          disabled={loading}
-        >
+        <Button type="button" variant="secondary" onClick={onCancel} disabled={loading}>
           Cancel
         </Button>
 

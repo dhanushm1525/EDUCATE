@@ -1,4 +1,3 @@
-
 import { Types } from "mongoose";
 
 import { IUserRepository } from "../../domain/repositories/userRepositories/IUserRepository";
@@ -12,140 +11,113 @@ import { UserMapper } from "../mappers/UserMapper";
 import { BaseRepository } from "./BaseRepository";
 
 import {
-    UserFilters,
-    PaginatedUsers
+  UserFilters,
+  PaginatedUsers,
 } from "../../domain/repositories/userRepositories/IUserRepository";
 
+export class MongoUserRepository extends BaseRepository<IUserDocument> implements IUserRepository {
+  constructor() {
+    super(UserModel);
+  }
 
-export class MongoUserRepository
-    extends BaseRepository<IUserDocument>
-    implements IUserRepository {
+  async create(user: User): Promise<User> {
+    const document = await this.createDocument(UserMapper.toPersistence(user));
 
-    constructor() {
-        super(UserModel);
+    return UserMapper.toDomain(document);
+  }
+
+  async findById(id: string): Promise<User | null> {
+    const document = await this.findByIdDocument(id);
+
+    if (!document) {
+      return null;
     }
 
-    async create(user: User): Promise<User> {
+    return UserMapper.toDomain(document);
+  }
 
-        const document = await this.createDocument(
-            UserMapper.toPersistence(user)
-        );
-
-        return UserMapper.toDomain(document);
+  async findByIds(ids: string[]): Promise<User[]> {
+    if (ids.length === 0) {
+      return [];
     }
 
-    async findById(id: string): Promise<User | null> {
+    const objectIds = ids.map((id) => new Types.ObjectId(id));
 
-        const document = await this.findByIdDocument(id);
+    const documents = await this.findManyDocuments({
+      _id: { $in: objectIds },
+    });
 
-        if (!document) {
-            return null;
-        }
+    return documents.map(UserMapper.toDomain);
+  }
 
-        return UserMapper.toDomain(document);
+  async findByEmail(email: string): Promise<User | null> {
+    const document = await this.findOneDocument({
+      email: email.toLowerCase(),
+    });
+
+    if (!document) {
+      return null;
     }
 
-    async findByIds(ids: string[]): Promise<User[]> {
+    return UserMapper.toDomain(document);
+  }
 
-        if (ids.length === 0) {
-            return [];
-        }
-
-        const objectIds = ids.map(
-            id => new Types.ObjectId(id)
-        );
-
-        const documents = await this.findManyDocuments({
-            _id: { $in: objectIds }
-        });
-
-        return documents.map(
-            UserMapper.toDomain
-        );
+  async update(user: User): Promise<User> {
+    if (!user.id) {
+      throw new Error("User id is required to update");
     }
 
-    async findByEmail(email: string): Promise<User | null> {
+    const document = await this.updateByIdDocument(user.id, UserMapper.toPersistence(user));
 
-        const document = await this.findOneDocument({
-            email: email.toLowerCase()
-        });
-
-        if (!document) {
-            return null;
-        }
-
-        return UserMapper.toDomain(document);
+    if (!document) {
+      throw new Error("User could not be updated");
     }
 
-    async update(user: User): Promise<User> {
+    return UserMapper.toDomain(document);
+  }
 
-        if (!user.id) {
-            throw new Error("User id is required to update");
-        }
+  async existsByEmail(email: string): Promise<boolean> {
+    return this.existsDocument({
+      email: email.toLowerCase(),
+    });
+  }
 
-        const document = await this.updateByIdDocument(
-            user.id,
-            UserMapper.toPersistence(user)
-        );
-
-        if (!document) {
-            throw new Error("User could not be updated");
-        }
-
-        return UserMapper.toDomain(document);
-    }
-
-    async existsByEmail(email: string): Promise<boolean> {
-
-        return this.existsDocument({
-            email: email.toLowerCase()
-        });
-    }
-
-    async findAll(filters: UserFilters): Promise<PaginatedUsers> {
-
+  async findAll(filters: UserFilters): Promise<PaginatedUsers> {
     const { role, status, search, page, limit } = filters;
 
     const query: Record<string, unknown> = {};
 
     if (role) {
-        query.role = role;
+      query.role = role;
     }
 
     if (status) {
-        query.status = status;
+      query.status = status;
     }
 
     if (search?.trim()) {
-        const searchRegex = new RegExp(
-            search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-            "i"
-        );
+      const searchRegex = new RegExp(search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
 
-        query.$or = [
-            { firstName: searchRegex },
-            { lastName: searchRegex },
-            { email: searchRegex }
-        ];
+      query.$or = [{ firstName: searchRegex }, { lastName: searchRegex }, { email: searchRegex }];
     }
 
     const skip = (page - 1) * limit;
 
     const [documents, total] = await Promise.all([
-        this.model
-            .find(query)
-            .select("-password -googleId")
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit)
-            .exec(),
+      this.model
+        .find(query)
+        .select("-password -googleId")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .exec(),
 
-        this.countDocuments(query)
+      this.countDocuments(query),
     ]);
 
     return {
-        users: documents.map(UserMapper.toDomain),
-        total
+      users: documents.map(UserMapper.toDomain),
+      total,
     };
-}
+  }
 }

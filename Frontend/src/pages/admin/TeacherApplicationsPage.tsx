@@ -16,16 +16,13 @@ import type { TeacherApplication } from "../../types/teacherApplication";
 export default function TeacherApplicationsPage() {
   const [applications, setApplications] = useState<TeacherApplication[]>([]);
 
-  const [selectedApplication, setSelectedApplication] =
-    useState<TeacherApplication | null>(null);
+  const [selectedApplication, setSelectedApplication] = useState<TeacherApplication | null>(null);
 
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
 
-  const [processingApplicationId, setProcessingApplicationId] = useState<
-    string | null
-  >(null);
+  const [processingApplicationId, setProcessingApplicationId] = useState<string | null>(null);
 
   const addToast = useToastStore((state) => state.addToast);
 
@@ -92,14 +89,10 @@ export default function TeacherApplicationsPage() {
     setProcessingApplicationId(application.applicationId);
 
     try {
-      await teacherApplicationService.approveApplication(
-        application.applicationId,
-      );
+      await teacherApplicationService.approveApplication(application.applicationId);
 
       setApplications((current) =>
-        current.filter(
-          (item) => item.applicationId !== application.applicationId,
-        ),
+        current.filter((item) => item.applicationId !== application.applicationId),
       );
 
       setReviewModalOpen(false);
@@ -116,31 +109,20 @@ export default function TeacherApplicationsPage() {
     }
   };
 
-  const handleReject = async (
-    application: TeacherApplication,
-    rejectionReason: string,
-  ) => {
+  const handleReject = async (application: TeacherApplication, rejectionReason: string) => {
     setProcessingApplicationId(application.applicationId);
 
     try {
-      await teacherApplicationService.rejectApplication(
-        application.applicationId,
-        rejectionReason,
-      );
+      await teacherApplicationService.rejectApplication(application.applicationId, rejectionReason);
 
       setApplications((current) =>
-        current.filter(
-          (item) => item.applicationId !== application.applicationId,
-        ),
+        current.filter((item) => item.applicationId !== application.applicationId),
       );
 
       setReviewModalOpen(false);
       setSelectedApplication(null);
 
-      addToast(
-        `${application.applicant.firstName}'s teacher application rejected.`,
-        "success",
-      );
+      addToast(`${application.applicant.firstName}'s teacher application rejected.`, "success");
     } catch (error: unknown) {
       addToast(getApiErrorMessage(error), "error");
     } finally {
@@ -161,8 +143,7 @@ export default function TeacherApplicationsPage() {
             </div>
 
             <p className="mt-2 text-sm text-slate-400">
-              Review student applications and manage requests to become teachers
-              on EDUCATE.
+              Review student applications and manage requests to become teachers on EDUCATE.
             </p>
           </div>
 
@@ -224,9 +205,7 @@ export default function TeacherApplicationsPage() {
       {/* Review Modal */}
       {reviewModalOpen && (
         <TeacherApplicationReviewModal
-          key={
-            selectedApplication?.applicationId ?? "teacher-application-review"
-          }
+          key={selectedApplication?.applicationId ?? "teacher-application-review"}
           application={selectedApplication}
           open={reviewModalOpen}
           onClose={handleCloseReview}

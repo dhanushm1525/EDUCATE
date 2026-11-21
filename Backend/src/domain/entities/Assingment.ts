@@ -1,31 +1,31 @@
 export interface Assignment {
-    assignmentId?: string;
+  assignmentId?: string;
 
-    lessonId: string;
+  lessonId: string;
 
-    title: string;
-    description?: string;
+  title: string;
+  description?: string;
 
-    questions: AssignmentQuestion[];
+  questions: AssignmentQuestion[];
 
-    totalMarks: number;
-    passingMarks: number;
+  totalMarks: number;
+  passingMarks: number;
 
-    timeLimit?: number;
-    attemptsAllowed?: number;
+  timeLimit?: number;
+  attemptsAllowed?: number;
 
-    dueDate?: Date | null;
+  dueDate?: Date | null;
 
-    isRequired: boolean;
+  isRequired: boolean;
 
-    createdAt: Date;
-    updatedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface AssignmentQuestion {
-    questionId: string;
-    question: string;
-    options: string[];
-    correctAnswer: string;
-    marks: number;
+  questionId: string;
+  question: string;
+  options: string[];
+  correctAnswer: string;
+  marks: number;
 }

@@ -1,9 +1,5 @@
-
 import { StudentAssignmentDTO } from "../../dtos/assingment/StudentAssignmentDTO";
 
 export interface IGetStudentAssignmentUseCase {
-    execute(
-        lessonId: string,
-        userId: string
-    ): Promise<StudentAssignmentDTO>;
+  execute(lessonId: string, userId: string): Promise<StudentAssignmentDTO>;
 }

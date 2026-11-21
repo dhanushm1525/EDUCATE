@@ -12,44 +12,42 @@ import { ForgotPasswordDTO } from "../../dtos/auth/ForgotPasswordDTO";
 import { ForgotPasswordResponseDTO } from "../../dtos/auth/ForgotPasswordResponseDTO";
 import { IForgotPassword } from "../../interfaces/auth/IForgotPassword";
 
+export class ForgotPassword implements IForgotPassword {
+  constructor(
+    private readonly _userRepository: IUserRepository,
+    private readonly _passwordResetRepository: IPasswordResetRepository,
+    private readonly _otpGenerator: IOtpGenerator,
+    private readonly _tokenHasher: ITokenHasher,
+    private readonly _emailService: IEmailService,
+    private readonly _authConfig: IAuthConfig,
+  ) {}
 
-export class ForgotPassword implements IForgotPassword {    constructor(
-        private readonly _userRepository:IUserRepository,
-        private readonly _passwordResetRepository:IPasswordResetRepository,
-        private readonly _otpGenerator:IOtpGenerator,
-        private readonly _tokenHasher:ITokenHasher,
-        private readonly _emailService:IEmailService,
-        private readonly _authConfig:IAuthConfig
-    ){}
+  async execute(request: ForgotPasswordDTO): Promise<ForgotPasswordResponseDTO> {
+    const email = request.email.trim().toLowerCase();
 
-    async execute(
-        request:ForgotPasswordDTO
-    ):Promise<ForgotPasswordResponseDTO>{
-        const email = request.email.trim().toLowerCase()
+    const user = await this._userRepository.findByEmail(email);
 
-        const user = await this._userRepository.findByEmail(email)
+    if (!user) {
+      throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND, HttpStatusCode.NOT_FOUND);
+    }
 
-        if(!user){
-            throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND,HttpStatusCode.NOT_FOUND);
-        }
+    if (!user.id) {
+      throw new AppError("user id is missing", HttpStatusCode.INTERNAL_SERVER_ERROR, false);
+    }
 
-        if(!user.id){
-            throw new AppError("user id is missing",HttpStatusCode.INTERNAL_SERVER_ERROR,false)
-        }
+    await this._passwordResetRepository.deleteByUserId(user.id);
 
-        await this._passwordResetRepository.deleteByUserId(user.id);
+    const otp = this._otpGenerator.generate();
+    const otpHash = this._tokenHasher.hash(otp);
 
-        const otp = this._otpGenerator.generate()
-        const otpHash = this._tokenHasher.hash(otp)
+    const expiresAt = new Date(Date.now() + this._authConfig.passwordResetOtpExpiresInMs);
 
-        const expiresAt  = new Date(Date.now()+this._authConfig.passwordResetOtpExpiresInMs);
+    await this._passwordResetRepository.create(user.id, otpHash, expiresAt);
 
-        await this._passwordResetRepository.create(user.id,otpHash,expiresAt)
-
-         await this._emailService.send(
-            user.email,
-            "Reset your password",
-            `
+    await this._emailService.send(
+      user.email,
+      "Reset your password",
+      `
                 <h2>Password Reset Request</h2>
 
                 <p>
@@ -61,13 +59,11 @@ export class ForgotPassword implements IForgotPassword {    constructor(
                 <p>
                     This OTP will expire soon.
                 </p>
-            `
-        );
+            `,
+    );
 
-
-        return {
-            message:
-                "Password reset OTP sent successfully"
-        };
-    }
+    return {
+      message: "Password reset OTP sent successfully",
+    };
+  }
 }

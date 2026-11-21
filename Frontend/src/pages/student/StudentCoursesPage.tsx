@@ -1,4 +1,3 @@
-
 import { StudentNavbar } from "../../components/student/StudentNavbar";
 import CoursesPage from "../course/CoursesPage";
 

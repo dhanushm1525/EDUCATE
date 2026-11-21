@@ -1,3 +1,3 @@
 export interface GenerateCourseThumbnailUploadUrlDTO {
-    contentType: string;
+  contentType: string;
 }

@@ -1,3 +1,3 @@
-export interface GetCurrentUserDTO{
-    userId:string
+export interface GetCurrentUserDTO {
+  userId: string;
 }

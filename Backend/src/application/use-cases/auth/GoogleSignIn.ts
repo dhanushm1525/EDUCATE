@@ -14,26 +14,22 @@ import { IGoogleSignIn } from "../../interfaces/auth/IGoogleSignIn";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { UserResponseMapper } from "../../mappers/UserResponseMapper";
 
-export class GoogleSignIn implements IGoogleSignIn{
+export class GoogleSignIn implements IGoogleSignIn {
   constructor(
     private readonly _userRepository: IUserRepository,
     private readonly _googleAuthService: IGoogleAuthService,
     private readonly _jwtService: IJwtService,
     private readonly _refreshTokenRepository: IRefreshTokenRepository,
     private readonly _tokenHasher: ITokenHasher,
-    private readonly _authConfig: IAuthConfig
+    private readonly _authConfig: IAuthConfig,
   ) {}
 
   async execute(request: GoogleSignInDTO): Promise<{
     response: GoogleSignInResponseDTO;
     refreshToken: string;
   }> {
-  
-    const googleUser = await this._googleAuthService.verifyIdToken(
-      request.credential
-    );
+    const googleUser = await this._googleAuthService.verifyIdToken(request.credential);
 
-    
     let user = await this._userRepository.findByEmail(googleUser.email);
 
     if (!user) {
@@ -42,7 +38,7 @@ export class GoogleSignIn implements IGoogleSignIn{
         lastName: googleUser.lastName,
         email: googleUser.email,
         avatar: googleUser.avatar,
-        authProvider:AuthProvider.GOOGLE,
+        authProvider: AuthProvider.GOOGLE,
         role: UserRole.STUDENT,
         status: UserStatus.ACTIVE,
         isVerified: true,
@@ -51,32 +47,23 @@ export class GoogleSignIn implements IGoogleSignIn{
       user = await this._userRepository.create(user);
     }
 
-   
     if (!user.id) {
       throw new Error(AUTH_MESSAGES.USER_ID_IS_MISSING);
     }
 
-   
     const accessToken = this._jwtService.generateAccessToken({
       userId: user.id,
       role: user.role,
     });
 
-   
     const refreshToken = this._jwtService.generateRefreshToken(user.id);
 
-   
     const tokenHash = this._tokenHasher.hash(refreshToken);
 
-    
-    const expiresAt = new Date(
-      Date.now() + this._authConfig.refreshTokenExpiresInMs
-    );
+    const expiresAt = new Date(Date.now() + this._authConfig.refreshTokenExpiresInMs);
 
-    
     await this._refreshTokenRepository.create(user.id, tokenHash, expiresAt);
 
-    
     return {
       response: {
         user: UserResponseMapper.toGoogleSignInUserDTO(user),

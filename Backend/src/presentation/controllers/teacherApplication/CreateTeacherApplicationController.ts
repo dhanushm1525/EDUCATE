@@ -2,64 +2,37 @@ import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 import { Request, Response, NextFunction } from "express";
 
-import { ICreateTeacherApplication }
-    from "../../../application/interfaces/teacherApplication/ICreateTeacherApplication";
+import { ICreateTeacherApplication } from "../../../application/interfaces/teacherApplication/ICreateTeacherApplication";
 
-import { TeacherApplicationCreationMapper }
-    from "../../../application/mappers/TeacherApplicationCreationMapper";
-import { TeacherApplicationResponseMapper }
-    from "../../../application/mappers/TeacherApplicationResponseMapper";
+import { TeacherApplicationCreationMapper } from "../../../application/mappers/TeacherApplicationCreationMapper";
+import { TeacherApplicationResponseMapper } from "../../../application/mappers/TeacherApplicationResponseMapper";
 
-import { successResponse }
-    from "../../../shared/response/apiResponse";
+import { successResponse } from "../../../shared/response/apiResponse";
 import { AppError } from "../../../shared/errors/AppError";
 
-
 export class CreateTeacherApplicationController {
+  constructor(private readonly _createTeacherApplication: ICreateTeacherApplication) {}
 
-    constructor(
-        private readonly _createTeacherApplication:
-            ICreateTeacherApplication
-    ) { }
+  async handle(req: Request, res: Response, next: NextFunction) {
+    try {
+      const dto = TeacherApplicationCreationMapper.toCreateTeacherApplicationDTO(req.body);
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+      if (!req.user) {
+        throw new AppError("Authentication required", HttpStatusCode.UNAUTHORIZED);
+      }
 
-        try {
+      const userId = req.user.userId;
 
-            const dto =
-                TeacherApplicationCreationMapper
-                    .toCreateTeacherApplicationDTO(req.body);
+      const result = await this._createTeacherApplication.execute(userId, dto);
 
-            if (!req.user) {
-                throw new AppError(
-                    "Authentication required",
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
-
-            const userId = req.user.userId;
-
-            const result =
-                await this._createTeacherApplication.execute(
-                    userId,
-                    dto
-                );
-
-            return successResponse(
-                res,
-                HttpStatusCode.CREATED,
-                "Teacher application submitted successfully",
-                TeacherApplicationResponseMapper.toDTO(result)
-            );
-
-        } catch (error) {
-
-            next(error);
-
-        }
+      return successResponse(
+        res,
+        HttpStatusCode.CREATED,
+        "Teacher application submitted successfully",
+        TeacherApplicationResponseMapper.toDTO(result),
+      );
+    } catch (error) {
+      next(error);
     }
+  }
 }

@@ -1,36 +1,15 @@
-import {
-    z
-} from "zod";
+import { z } from "zod";
 
+export const googleSignInSchema = z.object({
+  body: z.object({
+    credential: z.string().min(
+      1,
 
-export const googleSignInSchema =
-    z.object({
+      "Google credential is required",
+    ),
+  }),
 
-        body:
+  params: z.object({}),
 
-            z.object({
-
-                credential:
-
-                    z.string()
-                        .min(
-
-                            1,
-
-                            "Google credential is required"
-
-                        )
-
-            }),
-
-
-        params:
-
-            z.object({}),
-
-
-        query:
-
-            z.object({})
-
-    });
+  query: z.object({}),
+});

@@ -10,26 +10,27 @@ import { AppError } from "../../../shared/errors/AppError";
 import { IImageTypePolicy } from "../../interfaces/user/IImageTypePolicy";
 import { IProfileImagePolicy } from "../../interfaces/user/IProfileImagePolicy";
 
-
-
 export class GenerateProfileImageUploadUrl implements IGenerateProfileImageUrl {
-    constructor(
-        private readonly _storageService: IStorageService,
-        private readonly _imageTypePolicy: IImageTypePolicy,
-        private readonly _profileImagePolicy: IProfileImagePolicy
-    ) { }
+  constructor(
+    private readonly _storageService: IStorageService,
+    private readonly _imageTypePolicy: IImageTypePolicy,
+    private readonly _profileImagePolicy: IProfileImagePolicy,
+  ) {}
 
-    async execute(dto: GenerateProfileImageUploadUrlDTO): Promise<GenerateProfileImageUploadUrlResponseDTO> {
-        if (!this._imageTypePolicy.supports(dto.contentType)) {
-            throw new AppError("invalid image Type",HttpStatusCode.BAD_REQUEST )
-        }
-
-        const key = this._profileImagePolicy.createKey(dto.userId);
-
-        const uploadUrl = await this._storageService.generateUploadUrl(key,dto.contentType)
-
-        return {
-            uploadUrl,key
-        }
+  async execute(
+    dto: GenerateProfileImageUploadUrlDTO,
+  ): Promise<GenerateProfileImageUploadUrlResponseDTO> {
+    if (!this._imageTypePolicy.supports(dto.contentType)) {
+      throw new AppError("invalid image Type", HttpStatusCode.BAD_REQUEST);
     }
+
+    const key = this._profileImagePolicy.createKey(dto.userId);
+
+    const uploadUrl = await this._storageService.generateUploadUrl(key, dto.contentType);
+
+    return {
+      uploadUrl,
+      key,
+    };
+  }
 }

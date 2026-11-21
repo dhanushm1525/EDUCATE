@@ -57,9 +57,7 @@ export default function CourseBuilderPage() {
       return;
     }
 
-    const confirmed = window.confirm(
-      `Are you sure you want to delete "${chapter.title}"?`,
-    );
+    const confirmed = window.confirm(`Are you sure you want to delete "${chapter.title}"?`);
     if (!confirmed) return;
 
     await deleteChapter(chapter);
@@ -101,9 +99,7 @@ export default function CourseBuilderPage() {
       return;
     }
 
-    navigate(
-      `/teacher/courses/${courseId}/chapters/${chapter.chapterId}/lessons`,
-    );
+    navigate(`/teacher/courses/${courseId}/chapters/${chapter.chapterId}/lessons`);
   };
 
   // --------------------------------------------------
@@ -115,10 +111,7 @@ export default function CourseBuilderPage() {
     }
 
     if (course.status !== "draft" && course.status !== "rejected") {
-      addToast(
-        "This course cannot be submitted in its current status.",
-        "error",
-      );
+      addToast("This course cannot be submitted in its current status.", "error");
       setShowSubmitConfirmation(false);
       return;
     }
@@ -133,8 +126,7 @@ export default function CourseBuilderPage() {
   // Permissions
   // --------------------------------------------------
   const canSubmit = course?.status === "draft" || course?.status === "rejected";
-  const canManageContent =
-    course?.status === "draft" || course?.status === "rejected";
+  const canManageContent = course?.status === "draft" || course?.status === "rejected";
 
   // --------------------------------------------------
   // UI
@@ -159,16 +151,12 @@ export default function CourseBuilderPage() {
 
                 <div>
                   <h1 className="text-2xl font-semibold">Course Builder</h1>
-                  <p className="mt-1 text-sm text-slate-400">
-                    Build your course structure.
-                  </p>
+                  <p className="mt-1 text-sm text-slate-400">Build your course structure.</p>
 
                   {course && (
                     <p className="mt-1 text-sm text-slate-400">
                       {course.title} · Status:{" "}
-                      <span className="font-medium text-blue-400">
-                        {course.status}
-                      </span>
+                      <span className="font-medium text-blue-400">{course.status}</span>
                     </p>
                   )}
                 </div>
@@ -176,10 +164,7 @@ export default function CourseBuilderPage() {
 
               <div className="flex flex-wrap gap-2">
                 {canManageContent && (
-                  <Button
-                    onClick={openCreateModal}
-                    disabled={!courseId || loading || submitting}
-                  >
+                  <Button onClick={openCreateModal} disabled={!courseId || loading || submitting}>
                     <Plus size={16} />
                     Add Chapter
                   </Button>
@@ -188,9 +173,7 @@ export default function CourseBuilderPage() {
                 {canSubmit && (
                   <Button
                     onClick={() => setShowSubmitConfirmation(true)}
-                    disabled={
-                      loading || saving || submitting || Boolean(loadError)
-                    }
+                    disabled={loading || saving || submitting || Boolean(loadError)}
                   >
                     <Send size={16} />
                     Submit for Approval
@@ -237,8 +220,7 @@ export default function CourseBuilderPage() {
                 </div>
 
                 <span className="shrink-0 rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-400">
-                  {chapters.length}{" "}
-                  {chapters.length === 1 ? "Chapter" : "Chapters"}
+                  {chapters.length} {chapters.length === 1 ? "Chapter" : "Chapters"}
                 </span>
               </div>
 
@@ -247,19 +229,12 @@ export default function CourseBuilderPage() {
                   className="rounded-xl border border-slate-800 bg-slate-900 p-10 text-center"
                   role="status"
                 >
-                  <RefreshCw
-                    size={22}
-                    className="mx-auto animate-spin text-blue-400"
-                  />
-                  <p className="mt-3 text-sm text-slate-400">
-                    Loading course content...
-                  </p>
+                  <RefreshCw size={22} className="mx-auto animate-spin text-blue-400" />
+                  <p className="mt-3 text-sm text-slate-400">Loading course content...</p>
                 </div>
               ) : loadError ? (
                 <div className="rounded-xl border border-red-500/20 bg-slate-900 p-8 text-center">
-                  <h3 className="font-medium text-red-400">
-                    Unable to load course content
-                  </h3>
+                  <h3 className="font-medium text-red-400">Unable to load course content</h3>
                   <p className="mt-2 text-sm text-slate-400">{loadError}</p>
 
                   <div className="mt-5 flex justify-center">
@@ -283,20 +258,14 @@ export default function CourseBuilderPage() {
                     canManageContent
                       ? openEditModal
                       : () => {
-                          addToast(
-                            "This course cannot be edited in its current status.",
-                            "error",
-                          );
+                          addToast("This course cannot be edited in its current status.", "error");
                         }
                   }
                   onDelete={
                     canManageContent
                       ? handleDelete
                       : () => {
-                          addToast(
-                            "This course cannot be edited in its current status.",
-                            "error",
-                          );
+                          addToast("This course cannot be edited in its current status.", "error");
                         }
                   }
                   onAddLesson={handleAddLesson}
@@ -309,12 +278,9 @@ export default function CourseBuilderPage() {
         {/* Footer */}
         <footer className="mt-auto w-full border-t border-slate-800 bg-[#0B1120] px-6 py-5">
           <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-between gap-2 sm:flex-row">
-            <span className="text-sm font-bold tracking-wide text-blue-400">
-              EDUCATE
-            </span>
+            <span className="text-sm font-bold tracking-wide text-blue-400">EDUCATE</span>
             <p className="text-xs text-slate-500">
-              © {new Date().getFullYear()} EDUCATE Learning Platform. All rights
-              reserved.
+              © {new Date().getFullYear()} EDUCATE Learning Platform. All rights reserved.
             </p>
           </div>
         </footer>
@@ -326,9 +292,7 @@ export default function CourseBuilderPage() {
         onClose={closeModal}
         title={editingChapter ? "Edit Chapter" : "Add Chapter"}
         description={
-          editingChapter
-            ? "Update your chapter details."
-            : "Create a new chapter for your course."
+          editingChapter ? "Update your chapter details." : "Create a new chapter for your course."
         }
         width="md"
       >

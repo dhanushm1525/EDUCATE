@@ -1,57 +1,35 @@
-
 import { z } from "zod";
 import { LessonType } from "../../../shared/enums/LessonType";
 import { mongoIdSchema } from "../common/mongoIdSchema";
 
 export const createLessonSchema = z.object({
-    body: z.object({
-        title: z
-            .string()
-            .min(3)
-            .max(150)
-            .trim(),
+  body: z.object({
+    title: z.string().min(3).max(150).trim(),
 
-        description: z
-            .string()
-            .max(1000)
-            .trim()
-            .optional(),
+    description: z.string().max(1000).trim().optional(),
 
-        order: z
-            .number()
-            .int()
-            .positive(),
+    order: z.number().int().positive(),
 
-        type: z.enum([
-            LessonType.VIDEO,
-            LessonType.READING,
-        ]),
+    type: z.enum([LessonType.VIDEO, LessonType.READING]),
 
-        videoUrl: z
-            .string()
-            .trim()
-            .transform((value) => value === "" ? undefined : value)
-            .pipe(z.string().url().optional())
-            .optional(),
+    videoUrl: z
+      .string()
+      .trim()
+      .transform((value) => (value === "" ? undefined : value))
+      .pipe(z.string().url().optional())
+      .optional(),
 
-        content: z
-            .string()
-            .optional(),
+    content: z.string().optional(),
 
-        attachments: z
-            .array(z.string().min(1).trim())
-            .optional(),
+    attachments: z.array(z.string().min(1).trim()).optional(),
 
-        duration: z
-            .number()
-            .nonnegative()
-            .optional(),
-    }),
+    duration: z.number().nonnegative().optional(),
+  }),
 
-    params: z.object({
-        courseId: mongoIdSchema,
-        chapterId: mongoIdSchema,
-    }),
+  params: z.object({
+    courseId: mongoIdSchema,
+    chapterId: mongoIdSchema,
+  }),
 
-    query: z.object({}),
+  query: z.object({}),
 });

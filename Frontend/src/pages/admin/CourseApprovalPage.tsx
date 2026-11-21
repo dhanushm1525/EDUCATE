@@ -16,9 +16,7 @@ export default function CourseApprovalPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [processingCourseId, setProcessingCourseId] = useState<string | null>(
-    null,
-  );
+  const [processingCourseId, setProcessingCourseId] = useState<string | null>(null);
 
   const addToast = useToastStore((state) => state.addToast);
 
@@ -87,9 +85,7 @@ export default function CourseApprovalPage() {
     try {
       await courseService.approveCourse(course.courseId);
 
-      setCourses((current) =>
-        current.filter((item) => item.courseId !== course.courseId),
-      );
+      setCourses((current) => current.filter((item) => item.courseId !== course.courseId));
 
       setReviewModalOpen(false);
       setSelectedCourse(null);
@@ -108,9 +104,7 @@ export default function CourseApprovalPage() {
     try {
       await courseService.rejectCourse(course.courseId, rejectionReason);
 
-      setCourses((current) =>
-        current.filter((item) => item.courseId !== course.courseId),
-      );
+      setCourses((current) => current.filter((item) => item.courseId !== course.courseId));
 
       setReviewModalOpen(false);
       setSelectedCourse(null);

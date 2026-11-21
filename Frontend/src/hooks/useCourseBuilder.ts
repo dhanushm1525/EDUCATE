@@ -14,18 +14,12 @@ export function useCourseBuilder(courseId: string | undefined) {
   const addToast = useToastStore((state) => state.addToast);
   const [course, setCourse] = useState<Course | null>(null);
   const [chapters, setChapters] = useState<Chapter[]>([]);
-  const [lessonsByChapter, setLessonsByChapter] = useState<
-    Record<string, Lesson[]>
-  >({});
+  const [lessonsByChapter, setLessonsByChapter] = useState<Record<string, Lesson[]>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [deletingChapterId, setDeletingChapterId] = useState<string | null>(
-    null,
-  );
-  const [expandedChapterId, setExpandedChapterId] = useState<
-    string | undefined
-  >();
+  const [deletingChapterId, setDeletingChapterId] = useState<string | null>(null);
+  const [expandedChapterId, setExpandedChapterId] = useState<string | undefined>();
   const [loadError, setLoadError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -48,19 +42,11 @@ export function useCourseBuilder(courseId: string | undefined) {
         ]);
         if (cancelled) return;
 
-        const sortedChapters = [...chapterResult].sort(
-          (a, b) => a.order - b.order,
-        );
+        const sortedChapters = [...chapterResult].sort((a, b) => a.order - b.order);
         const lessonResults = await Promise.all(
           sortedChapters.map(async (chapter) => {
-            const lessons = await lessonService.getLessons(
-              courseId,
-              chapter.chapterId,
-            );
-            return [
-              chapter.chapterId,
-              [...lessons].sort((a, b) => a.order - b.order),
-            ] as const;
+            const lessons = await lessonService.getLessons(courseId, chapter.chapterId);
+            return [chapter.chapterId, [...lessons].sort((a, b) => a.order - b.order)] as const;
           }),
         );
         if (cancelled) return;
@@ -103,17 +89,13 @@ export function useCourseBuilder(courseId: string | undefined) {
         );
         setChapters((current) =>
           current
-            .map((chapter) =>
-              chapter.chapterId === updated.chapterId ? updated : chapter,
-            )
+            .map((chapter) => (chapter.chapterId === updated.chapterId ? updated : chapter))
             .sort((a, b) => a.order - b.order),
         );
         addToast("Chapter updated successfully", "success");
       } else {
         const created = await chapterService.createChapter(courseId, data);
-        setChapters((current) =>
-          [...current, created].sort((a, b) => a.order - b.order),
-        );
+        setChapters((current) => [...current, created].sort((a, b) => a.order - b.order));
         setLessonsByChapter((current) => ({
           ...current,
           [created.chapterId]: [],
@@ -135,17 +117,13 @@ export function useCourseBuilder(courseId: string | undefined) {
     try {
       setDeletingChapterId(chapter.chapterId);
       await chapterService.deleteChapter(courseId, chapter.chapterId);
-      setChapters((current) =>
-        current.filter((item) => item.chapterId !== chapter.chapterId),
-      );
+      setChapters((current) => current.filter((item) => item.chapterId !== chapter.chapterId));
       setLessonsByChapter((current) => {
         const updated = { ...current };
         delete updated[chapter.chapterId];
         return updated;
       });
-      setExpandedChapterId((current) =>
-        current === chapter.chapterId ? undefined : current,
-      );
+      setExpandedChapterId((current) => (current === chapter.chapterId ? undefined : current));
       addToast("Chapter deleted successfully", "success");
     } catch (error) {
       addToast(getApiErrorMessage(error), "error");
@@ -157,10 +135,7 @@ export function useCourseBuilder(courseId: string | undefined) {
   const submitCourse = async (): Promise<boolean> => {
     if (!courseId || !course || submitting || saving) return false;
     if (course.status !== "draft" && course.status !== "rejected") {
-      addToast(
-        "This course cannot be submitted in its current status.",
-        "error",
-      );
+      addToast("This course cannot be submitted in its current status.", "error");
       return false;
     }
 

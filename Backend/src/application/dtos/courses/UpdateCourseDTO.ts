@@ -1,24 +1,24 @@
 import { CourseLevel } from "../../../shared/enums/CourseLevel";
 
 export interface UpdateCourseDTO {
-    title?: string;
-    subtitle?: string;
-    description?: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
 
-    categoryId?: string;
+  categoryId?: string;
 
-    thumbnail?: string;
-    trailer?: string;
+  thumbnail?: string;
+  trailer?: string;
 
-    language?: string;
-    level?: CourseLevel;
+  language?: string;
+  level?: CourseLevel;
 
-    duration?: number;
+  duration?: number;
 
-    price?: number;
-    discount?: number;
+  price?: number;
+  discount?: number;
 
-    tags?: string[];
-    objectives?: string[];
-    requirements?: string[];
+  tags?: string[];
+  objectives?: string[];
+  requirements?: string[];
 }

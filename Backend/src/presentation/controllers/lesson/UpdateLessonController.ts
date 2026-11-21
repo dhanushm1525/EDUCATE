@@ -1,10 +1,6 @@
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-import {
-    Request,
-    Response,
-    NextFunction,
-} from "express";
+import { Request, Response, NextFunction } from "express";
 
 import { AppError } from "../../../shared/errors/AppError";
 
@@ -13,65 +9,45 @@ import { LessonResponseMapper } from "../../../application/mappers/LessonRespons
 import { IUpdateLessonUseCase } from "../../../application/interfaces/lesson/IUpdateLessonUseCase";
 
 export class UpdateLessonController {
+  constructor(private readonly _updateLessonUseCase: IUpdateLessonUseCase) {}
 
-    constructor(
-        private readonly _updateLessonUseCase:
-            IUpdateLessonUseCase
-    ) {}
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError("Authentication required", HttpStatusCode.UNAUTHORIZED);
+      }
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
+      const { courseId, chapterId, lessonId } = req.params;
 
-        try {
+      if (Array.isArray(chapterId)) {
+        throw new AppError("Invalid chapter ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            if (!req.user) {
-                throw new AppError(
-                    "Authentication required",
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+      if (Array.isArray(courseId)) {
+        throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            const {
-                courseId,
-                chapterId,
-                lessonId,
-            } = req.params;
+      if (Array.isArray(lessonId)) {
+        throw new AppError("Invalid lesson ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-             if (Array.isArray(chapterId)) {
-                throw new AppError("Invalid chapter ID", HttpStatusCode.BAD_REQUEST);
-            }
+      const dto = LessonCreationMapper.toUpdateLessonDTO(req.body);
 
-             if (Array.isArray(courseId)) {
-                throw new AppError("Invalid course ID", HttpStatusCode.BAD_REQUEST);
-            }
+      const updatedLesson = await this._updateLessonUseCase.execute(
+        courseId,
+        chapterId,
+        lessonId,
+        req.user.userId,
+        dto,
+      );
 
-             if (Array.isArray(lessonId)) {
-                throw new AppError("Invalid lesson ID", HttpStatusCode.BAD_REQUEST);
-            }
-
-            const dto =
-                LessonCreationMapper.toUpdateLessonDTO(req.body);
-
-            const updatedLesson =
-                await this._updateLessonUseCase.execute(
-                    courseId,
-                    chapterId,
-                    lessonId,
-                    req.user.userId,
-                    dto
-                );
-
-            res.status(HttpStatusCode.OK).json({
-                success: true,
-                message: "Lesson updated successfully",
-                data: LessonResponseMapper.toDTO(updatedLesson),
-            });
-
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        message: "Lesson updated successfully",
+        data: LessonResponseMapper.toDTO(updatedLesson),
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

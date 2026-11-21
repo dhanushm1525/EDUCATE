@@ -24,9 +24,7 @@ export default function AssignmentQuestionCard({
             Question {index + 1}
           </p>
 
-          <h3 className="mt-2 font-semibold leading-7 text-slate-900">
-            {question.question}
-          </h3>
+          <h3 className="mt-2 font-semibold leading-7 text-slate-900">{question.question}</h3>
         </div>
 
         <span className="shrink-0 rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700">

@@ -17,8 +17,7 @@ export default function CoursesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
 
-  const { courses, isLoading, errorMessage, refetch } =
-    usePublishedCourses(filters);
+  const { courses, isLoading, errorMessage, refetch } = usePublishedCourses(filters);
 
   // Update an individual filter without removing the others.
   const updateFilter = <K extends keyof CourseSearchFilters>(
@@ -53,9 +52,7 @@ export default function CoursesPage() {
         const result = await categoryService.getCategories();
 
         if (isActive) {
-          setCategories(
-            result.filter((category) => category.status === "active"),
-          );
+          setCategories(result.filter((category) => category.status === "active"));
         }
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -76,21 +73,14 @@ export default function CoursesPage() {
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-10">
       <div className="mx-auto max-w-7xl">
-        <Link
-          to="/"
-          className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
-        >
+        <Link to="/" className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
           ← Back to home
         </Link>
 
         <header className="mb-8 mt-5">
-          <h1 className="text-3xl font-extrabold text-slate-900">
-            Explore Courses
-          </h1>
+          <h1 className="text-3xl font-extrabold text-slate-900">Explore Courses</h1>
 
-          <p className="mt-2 text-slate-500">
-            Find courses that match your learning goals.
-          </p>
+          <p className="mt-2 text-slate-500">Find courses that match your learning goals.</p>
         </header>
 
         {/* Search and filters */}
@@ -100,9 +90,7 @@ export default function CoursesPage() {
         >
           {/* Search */}
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">
-              Search
-            </span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Search</span>
 
             <input
               type="search"
@@ -115,22 +103,16 @@ export default function CoursesPage() {
 
           {/* Category */}
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">
-              Category
-            </span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Category</span>
 
             <select
               value={filters.categoryId ?? ""}
-              onChange={(event) =>
-                updateFilter("categoryId", event.target.value || undefined)
-              }
+              onChange={(event) => updateFilter("categoryId", event.target.value || undefined)}
               disabled={isLoadingCategories}
               className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 disabled:cursor-not-allowed disabled:bg-slate-100"
             >
               <option value="">
-                {isLoadingCategories
-                  ? "Loading categories..."
-                  : "All categories"}
+                {isLoadingCategories ? "Loading categories..." : "All categories"}
               </option>
 
               {categories.map((category) => (
@@ -143,17 +125,12 @@ export default function CoursesPage() {
 
           {/* Level */}
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">
-              Level
-            </span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Level</span>
 
             <select
               value={filters.level ?? ""}
               onChange={(event) =>
-                updateFilter(
-                  "level",
-                  (event.target.value || undefined) as CourseLevel | undefined,
-                )
+                updateFilter("level", (event.target.value || undefined) as CourseLevel | undefined)
               }
               className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
             >
@@ -166,9 +143,7 @@ export default function CoursesPage() {
 
           {/* Minimum price */}
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">
-              Minimum price (₹)
-            </span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Minimum price (₹)</span>
 
             <input
               type="number"
@@ -177,10 +152,7 @@ export default function CoursesPage() {
               onChange={(event) => {
                 const value = event.target.value;
 
-                updateFilter(
-                  "minPrice",
-                  value === "" ? undefined : Number(value),
-                );
+                updateFilter("minPrice", value === "" ? undefined : Number(value));
               }}
               className="w-full rounded-lg border border-slate-300 px-3 py-2.5"
               placeholder="No minimum"
@@ -189,9 +161,7 @@ export default function CoursesPage() {
 
           {/* Maximum price */}
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">
-              Maximum price (₹)
-            </span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Maximum price (₹)</span>
 
             <input
               type="number"
@@ -200,10 +170,7 @@ export default function CoursesPage() {
               onChange={(event) => {
                 const value = event.target.value;
 
-                updateFilter(
-                  "maxPrice",
-                  value === "" ? undefined : Number(value),
-                );
+                updateFilter("maxPrice", value === "" ? undefined : Number(value));
               }}
               className="w-full rounded-lg border border-slate-300 px-3 py-2.5"
               placeholder="No maximum"
@@ -231,14 +198,10 @@ export default function CoursesPage() {
 
         {/* Course count */}
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900">
-            Available courses
-          </h2>
+          <h2 className="text-lg font-bold text-slate-900">Available courses</h2>
 
           {!isLoading && !errorMessage && (
-            <span className="text-sm text-slate-500">
-              {courses.length} courses
-            </span>
+            <span className="text-sm text-slate-500">{courses.length} courses</span>
           )}
         </div>
 
@@ -260,9 +223,7 @@ export default function CoursesPage() {
         )}
 
         {/* Course results */}
-        {!isLoading && !errorMessage && courses.length > 0 && (
-          <CourseGrid courses={courses} />
-        )}
+        {!isLoading && !errorMessage && courses.length > 0 && <CourseGrid courses={courses} />}
       </div>
     </main>
   );

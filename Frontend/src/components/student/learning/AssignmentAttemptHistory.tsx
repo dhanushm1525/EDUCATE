@@ -18,9 +18,7 @@ export default function AssignmentAttemptHistory({ results }: Props) {
             className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-50 p-4"
           >
             <div>
-              <p className="text-sm font-semibold text-slate-800">
-                Attempt {result.attemptNumber}
-              </p>
+              <p className="text-sm font-semibold text-slate-800">Attempt {result.attemptNumber}</p>
 
               <p className="mt-1 text-xs text-slate-500">
                 {new Date(result.submittedAt).toLocaleString()}

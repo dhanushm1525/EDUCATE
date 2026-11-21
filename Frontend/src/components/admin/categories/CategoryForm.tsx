@@ -14,11 +14,7 @@ interface CategoryFormProps {
   loading?: boolean;
 }
 
-export function CategoryForm({
-  onSubmit,
-  onCancel,
-  loading = false,
-}: CategoryFormProps) {
+export function CategoryForm({ onSubmit, onCancel, loading = false }: CategoryFormProps) {
   const [name, setName] = useState("");
 
   const [description, setDescription] = useState("");

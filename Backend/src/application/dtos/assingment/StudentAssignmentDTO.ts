@@ -1,45 +1,44 @@
-
 export interface StudentAssignmentQuestionDTO {
-    questionId: string;
-    question: string;
-    options: string[];
-    marks: number;
+  questionId: string;
+  question: string;
+  options: string[];
+  marks: number;
 }
 
 export interface StudentAssignmentAnswerDTO {
-    questionId: string;
-    selectedAnswer: string;
+  questionId: string;
+  selectedAnswer: string;
 }
 
 export interface StudentActiveAttemptDTO {
-    submissionId: string;
-    attemptNumber: number;
-    startedAt: Date;
-    expiresAt?: Date;
-    answers: StudentAssignmentAnswerDTO[];
+  submissionId: string;
+  attemptNumber: number;
+  startedAt: Date;
+  expiresAt?: Date;
+  answers: StudentAssignmentAnswerDTO[];
 }
 
 export interface StudentAssignmentDTO {
-    assignmentId: string;
-    lessonId: string;
+  assignmentId: string;
+  lessonId: string;
 
-    title: string;
-    description?: string;
+  title: string;
+  description?: string;
 
-    questions: StudentAssignmentQuestionDTO[];
+  questions: StudentAssignmentQuestionDTO[];
 
-    totalMarks: number;
-    passingMarks: number;
+  totalMarks: number;
+  passingMarks: number;
 
-    timeLimit?: number;
-    attemptsAllowed?: number;
-    dueDate?: Date | null;
+  timeLimit?: number;
+  attemptsAllowed?: number;
+  dueDate?: Date | null;
 
-    attemptsUsed: number;
-    attemptsRemaining: number | null;
+  attemptsUsed: number;
+  attemptsRemaining: number | null;
 
-    isExpired: boolean;
-    canAttempt: boolean;
+  isExpired: boolean;
+  canAttempt: boolean;
 
-    activeAttempt: StudentActiveAttemptDTO | null;
+  activeAttempt: StudentActiveAttemptDTO | null;
 }

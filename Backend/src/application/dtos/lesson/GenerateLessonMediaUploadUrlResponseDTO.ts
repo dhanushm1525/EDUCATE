@@ -1,4 +1,4 @@
 export interface GenerateLessonMediaUploadUrlResponseDTO {
-    uploadUrl: string;
-    key: string;
+  uploadUrl: string;
+  key: string;
 }

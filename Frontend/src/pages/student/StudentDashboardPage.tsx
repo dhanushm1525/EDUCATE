@@ -1,4 +1,3 @@
-
 import { Footer } from "../../components/layout/Footer";
 
 import { HeroSection } from "../../components/landing/HeroSection";
@@ -7,30 +6,24 @@ import { TrendingCoursesSection } from "../../components/landing/TrendingCourses
 import { QaCommunitySection } from "../../components/landing/QaCommunitySection";
 import { StudentNavbar } from "../../components/student/StudentNavbar";
 
-
 function LandingPage() {
-    return (
-        <div className="min-h-screen bg-slate-50 text-slate-800">
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800">
+      <StudentNavbar />
 
-            <StudentNavbar />
+      <main>
+        <HeroSection />
 
-            <main>
+        <CategorySection />
 
-                <HeroSection />
+        <TrendingCoursesSection />
 
-                <CategorySection />
+        <QaCommunitySection />
+      </main>
 
-                <TrendingCoursesSection />
-
-                <QaCommunitySection />
-
-            </main>
-
-            <Footer />
-
-        </div>
-    );
+      <Footer />
+    </div>
+  );
 }
-
 
 export default LandingPage;

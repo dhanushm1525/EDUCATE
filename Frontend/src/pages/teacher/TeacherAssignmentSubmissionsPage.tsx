@@ -22,9 +22,7 @@ export default function TeacherAssignmentSubmissionsPage() {
 
   const navigate = useNavigate();
 
-  const [submissions, setSubmissions] = useState<TeacherAssignmentSubmission[]>(
-    [],
-  );
+  const [submissions, setSubmissions] = useState<TeacherAssignmentSubmission[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,8 +42,7 @@ export default function TeacherAssignmentSubmissionsPage() {
         setLoading(true);
         setError(null);
 
-        const response =
-          await assignmentService.getTeacherSubmissions(assignmentId);
+        const response = await assignmentService.getTeacherSubmissions(assignmentId);
 
         if (!cancelled) {
           setSubmissions(response.data);
@@ -73,10 +70,7 @@ export default function TeacherAssignmentSubmissionsPage() {
   };
 
   return (
-    <TeacherLayout
-      contentClassName="mx-auto w-full max-w-6xl"
-      mainClassName="min-h-screen p-6"
-    >
+    <TeacherLayout contentClassName="mx-auto w-full max-w-6xl" mainClassName="min-h-screen p-6">
       <div className="space-y-8">
         {/* Header */}
         <header>
@@ -97,9 +91,7 @@ export default function TeacherAssignmentSubmissionsPage() {
             <div>
               <h1 className="text-2xl font-bold">Assignment Submissions</h1>
 
-              <p className="mt-1 text-sm text-slate-400">
-                Review student attempts and grades.
-              </p>
+              <p className="mt-1 text-sm text-slate-400">Review student attempts and grades.</p>
             </div>
           </div>
         </header>
@@ -108,9 +100,7 @@ export default function TeacherAssignmentSubmissionsPage() {
         {loading && <LoadingState message="Loading submissions..." />}
 
         {/* Error */}
-        {!loading && error && (
-          <ErrorState message={error} onRetry={handleRetry} />
-        )}
+        {!loading && error && <ErrorState message={error} onRetry={handleRetry} />}
 
         {/* Empty */}
         {!loading && !error && submissions.length === 0 && (
@@ -127,9 +117,7 @@ export default function TeacherAssignmentSubmissionsPage() {
             <div className="border-b border-slate-800 p-5">
               <h2 className="font-semibold">Student Submissions</h2>
 
-              <p className="mt-1 text-sm text-slate-400">
-                {submissions.length} submission(s)
-              </p>
+              <p className="mt-1 text-sm text-slate-400">{submissions.length} submission(s)</p>
             </div>
 
             <div className="overflow-x-auto">
@@ -148,19 +136,13 @@ export default function TeacherAssignmentSubmissionsPage() {
 
                 <tbody className="divide-y divide-slate-800">
                   {submissions.map((submission) => (
-                    <tr
-                      key={submission.submissionId}
-                      className="transition hover:bg-slate-800/40"
-                    >
+                    <tr key={submission.submissionId} className="transition hover:bg-slate-800/40">
                       <td className="px-5 py-4">
                         <p className="font-medium text-white">
-                          {submission.student.firstName}{" "}
-                          {submission.student.lastName}
+                          {submission.student.firstName} {submission.student.lastName}
                         </p>
 
-                        <p className="mt-1 text-xs text-slate-400">
-                          {submission.student.email}
-                        </p>
+                        <p className="mt-1 text-xs text-slate-400">{submission.student.email}</p>
                       </td>
 
                       <td className="px-5 py-4">{submission.attemptNumber}</td>
@@ -169,9 +151,7 @@ export default function TeacherAssignmentSubmissionsPage() {
                         {submission.score}/{submission.totalMarks}
                       </td>
 
-                      <td className="px-5 py-4">
-                        {submission.percentage.toFixed(1)}%
-                      </td>
+                      <td className="px-5 py-4">{submission.percentage.toFixed(1)}%</td>
 
                       <td className="px-5 py-4">
                         <StatusBadge status={submission.status} />

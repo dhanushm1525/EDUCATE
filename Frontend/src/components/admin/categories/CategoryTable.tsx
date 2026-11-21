@@ -102,9 +102,7 @@ export function CategoryTable({ categories, onView }: CategoryTableProps) {
                                         text-slate-400
                                     "
                 >
-                  <span className="line-clamp-2">
-                    {category.description || "No description"}
-                  </span>
+                  <span className="line-clamp-2">{category.description || "No description"}</span>
                 </td>
 
                 <td className="px-5 py-4">

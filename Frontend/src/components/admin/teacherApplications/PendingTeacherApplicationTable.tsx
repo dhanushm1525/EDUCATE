@@ -48,15 +48,11 @@ export default function PendingTeacherApplicationTable({
 
         <tbody className="divide-y divide-slate-100">
           {applications.map((application) => {
-            const applicantName = [
-              application.applicant.firstName,
-              application.applicant.lastName,
-            ]
+            const applicantName = [application.applicant.firstName, application.applicant.lastName]
               .filter(Boolean)
               .join(" ");
 
-            const isProcessing =
-              processingApplicationId === application.applicationId;
+            const isProcessing = processingApplicationId === application.applicationId;
 
             return (
               <tr key={application.applicationId}>
@@ -70,31 +66,21 @@ export default function PendingTeacherApplicationTable({
                       />
                     ) : (
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 font-semibold text-indigo-600">
-                        {application.applicant.firstName
-                          .charAt(0)
-                          .toUpperCase()}
+                        {application.applicant.firstName.charAt(0).toUpperCase()}
                       </div>
                     )}
 
                     <div>
-                      <p className="font-medium text-slate-800">
-                        {applicantName}
-                      </p>
+                      <p className="font-medium text-slate-800">{applicantName}</p>
 
-                      <p className="mt-1 text-sm text-slate-500">
-                        {application.applicant.email}
-                      </p>
+                      <p className="mt-1 text-sm text-slate-500">{application.applicant.email}</p>
                     </div>
                   </div>
                 </td>
 
-                <td className="px-5 py-4 text-sm text-slate-600">
-                  {application.qualification}
-                </td>
+                <td className="px-5 py-4 text-sm text-slate-600">{application.qualification}</td>
 
-                <td className="px-5 py-4 text-sm text-slate-600">
-                  {application.experience} years
-                </td>
+                <td className="px-5 py-4 text-sm text-slate-600">{application.experience} years</td>
 
                 <td className="px-5 py-4 text-sm text-slate-600">
                   {new Date(application.createdAt).toLocaleDateString("en-IN")}

@@ -1,8 +1,3 @@
-
 export interface ICompleteLessonUseCase {
-    execute(
-        userId: string,
-        courseId: string,
-        lessonId: string
-    ): Promise<void>;
+  execute(userId: string, courseId: string, lessonId: string): Promise<void>;
 }

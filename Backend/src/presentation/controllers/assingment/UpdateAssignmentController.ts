@@ -1,8 +1,4 @@
-import {
-    Request,
-    Response,
-    NextFunction
-} from "express";
+import { Request, Response, NextFunction } from "express";
 
 import { IUpdateAssignmentUseCase } from "../../../application/interfaces/assingment/IUpdateAssignmentUseCase";
 import { IIdentifierValidator } from "../../../application/interfaces/services/IIdentifierValidator";
@@ -16,71 +12,46 @@ import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
 export class UpdateAssignmentController {
+  constructor(
+    private readonly _updateAssignmentUseCase: IUpdateAssignmentUseCase,
+    private readonly _identifierValidator: IIdentifierValidator,
+  ) {}
 
-    constructor(
-        private readonly _updateAssignmentUseCase:
-            IUpdateAssignmentUseCase,
-        private readonly _identifierValidator: IIdentifierValidator
-    ) { }
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError(AUTH_MESSAGES.AUTHENTICATION_REQUIRED, HttpStatusCode.UNAUTHORIZED);
+      }
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
+      const { assignmentId } = req.params;
 
-        try {
+      if (Array.isArray(assignmentId)) {
+        throw new AppError("Invalid assignment ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            if (!req.user) {
-                throw new AppError(
-                    AUTH_MESSAGES.AUTHENTICATION_REQUIRED,
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+      if (!assignmentId) {
+        throw new AppError("Assignment ID is required", HttpStatusCode.BAD_REQUEST);
+      }
 
-            const { assignmentId } = req.params;
+      if (!this._identifierValidator.isValid(assignmentId)) {
+        throw new AppError("Invalid assignment ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            if (Array.isArray(assignmentId)) {
-                throw new AppError(
-                    "Invalid assignment ID",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
+      const dto = AssignmentCreationMapper.toUpdateAssignmentDTO(req.body);
 
-            if (!assignmentId) {
-                throw new AppError(
-                    "Assignment ID is required",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
+      const assignment = await this._updateAssignmentUseCase.execute(
+        assignmentId,
+        dto,
+        req.user.userId,
+      );
 
-            if (!this._identifierValidator.isValid(assignmentId)) {
-                throw new AppError(
-                    "Invalid assignment ID",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
-
-            const dto =
-                AssignmentCreationMapper.toUpdateAssignmentDTO(
-                    req.body
-                );
-
-            const assignment =
-                await this._updateAssignmentUseCase.execute(
-                    assignmentId,
-                    dto,
-                    req.user.userId
-                );
-
-            res.status(HttpStatusCode.OK).json({
-                success: true,
-                message: "Assignment updated successfully",
-                data: AssignmentResponseMapper.toDTO(assignment),
-            });
-
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        message: "Assignment updated successfully",
+        data: AssignmentResponseMapper.toDTO(assignment),
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

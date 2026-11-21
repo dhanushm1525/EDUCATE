@@ -1,56 +1,47 @@
 import { HttpStatusCode } from "../../../../shared/enums/HttpStatusCode";
 
-import { Request,Response,NextFunction, CookieOptions } from "express";
+import { Request, Response, NextFunction, CookieOptions } from "express";
 import { successResponse } from "../../../../shared/response/apiResponse";
 import { IRefreshAccessToken } from "../../../../application/interfaces/auth/IRefreshToken";
 import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMapper";
 
+export class RefreshTokenController {
+  constructor(
+    private readonly _refreshAccessToken: IRefreshAccessToken,
+    private readonly _refreshTokenCookie: {
+      name: string;
+      options: CookieOptions;
+    },
+  ) {}
 
-export class RefreshTokenController{
-    constructor(
-        private readonly _refreshAccessToken:IRefreshAccessToken,
-        private readonly _refreshTokenCookie:{
-            name:string;
-            options:CookieOptions;
-        }
-    ){}
+  async handle(req: Request, res: Response, next: NextFunction) {
+    try {
+      const refreshToken = req.cookies[this._refreshTokenCookie.name];
 
-    async handle(
-        req:Request,
-        res:Response,
-        next:NextFunction
-    ){
-        try{
-            const refreshToken = req.cookies[this._refreshTokenCookie.name]
+      if (!refreshToken) {
+        return res.status(HttpStatusCode.UNAUTHORIZED).json({
+          success: false,
+          message: "Refresh token is required",
+        });
+      }
 
-            if(!refreshToken){
-                return res.status(HttpStatusCode.UNAUTHORIZED).json({
-                    success:false,
-                    message:"Refresh token is required"
-                });
-            }
+      const dto = AuthRequestMapper.toRefreshAccessTokenDTO(refreshToken);
 
-            const dto = AuthRequestMapper.toRefreshAccessTokenDTO(refreshToken);
+      const result = await this._refreshAccessToken.execute(dto);
 
-            const result = await this._refreshAccessToken.execute(dto);
+      res.cookie(
+        this._refreshTokenCookie.name,
+        result.refreshToken,
+        this._refreshTokenCookie.options,
+      );
 
-            res.cookie(
-                this._refreshTokenCookie.name,
-                result.refreshToken,
-                this._refreshTokenCookie.options
-            );
+      return successResponse(res, HttpStatusCode.OK, "access token refreshed successfully", {
+        accessToken: result.accessToken,
+      });
+    } catch (error) {
+      console.error("REFRESH TOKEN ERROR:", error);
 
-            return successResponse(res,HttpStatusCode.OK,"access token refreshed successfully",{accessToken:result.accessToken});
-
-
-        }catch(error){
-             console.error(
-        "REFRESH TOKEN ERROR:",
-        error
-    );
-
-            next(error)
-        }
+      next(error);
     }
-
+  }
 }

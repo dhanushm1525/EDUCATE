@@ -1,57 +1,51 @@
-import {
-    Document,
-    Schema,
-    model,
-    Types,
-} from "mongoose";
+import { Document, Schema, model, Types } from "mongoose";
 
 export interface ChapterDocument extends Document {
-    courseId: Types.ObjectId;
+  courseId: Types.ObjectId;
 
-    title: string;
-    description?: string;
+  title: string;
+  description?: string;
 
-    order: number;
-    outcomes: string[];
+  order: number;
+  outcomes: string[];
 
-    createdAt: Date;
-    updatedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const chapterSchema = new Schema<ChapterDocument>(
-    {
-        courseId: {
-            type: Schema.Types.ObjectId,
-            ref: "Course",
-            required: true,
-        },
-
-        title: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-
-        description: {
-            type: String,
-            trim: true,
-        },
-
-        order: {
-            type: Number,
-            required: true,
-            min: 1,
-        },
-
-        outcomes: {
-            type: [String],
-            default: [],
-        },
+  {
+    courseId: {
+      type: Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
     },
-    {
-        timestamps: true,
-    }
+
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    description: {
+      type: String,
+      trim: true,
+    },
+
+    order: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+
+    outcomes: {
+      type: [String],
+      default: [],
+    },
+  },
+  {
+    timestamps: true,
+  },
 );
 
-export const ChapterModel =
-    model<ChapterDocument>("Chapter", chapterSchema);
+export const ChapterModel = model<ChapterDocument>("Chapter", chapterSchema);

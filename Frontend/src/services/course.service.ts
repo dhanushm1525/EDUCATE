@@ -4,190 +4,134 @@ import axios from "axios";
 import { API_ROUTES } from "../constants/apiRoutes";
 
 import type {
-    Course,
-    CourseApiResponse,
-    CourseSearchFilters,
-    CreateCourseRequest,
-    UpdateCourseRequest,
-    GenerateCourseThumbnailUploadUrlResponse,
+  Course,
+  CourseApiResponse,
+  CourseSearchFilters,
+  CreateCourseRequest,
+  UpdateCourseRequest,
+  GenerateCourseThumbnailUploadUrlResponse,
 } from "../types/course";
 
 import type {
-    CourseLearningContent,
-    CourseLearningContentApiResponse,
+  CourseLearningContent,
+  CourseLearningContentApiResponse,
 } from "../types/courseLearningContent";
 
 export const courseService = {
+  createCourse: async (payload: CreateCourseRequest): Promise<Course> => {
+    const response = await apiClient.post<CourseApiResponse<Course>>(
+      API_ROUTES.courses.base,
+      payload,
+    );
 
-    createCourse: async (
-        payload: CreateCourseRequest
-    ): Promise<Course> => {
+    return response.data.data;
+  },
 
-        const response =
-            await apiClient.post<CourseApiResponse<Course>>(
-                API_ROUTES.courses.base,
-                payload
-            );
+  getCourses: async (filters: CourseSearchFilters = {}): Promise<Course[]> => {
+    const response = await apiClient.get<CourseApiResponse<Course[]>>(API_ROUTES.courses.base, {
+      params: filters,
+    });
 
-        return response.data.data;
-    },
+    return response.data.data;
+  },
 
-    getCourses: async (
-        filters: CourseSearchFilters = {}
-    ): Promise<Course[]> => {
-        const response = await apiClient.get<
-            CourseApiResponse<Course[]>
-        >(API_ROUTES.courses.base, {
-            params: filters,
-        });
+  getCourse: async (courseId: string): Promise<Course> => {
+    const response = await apiClient.get<CourseApiResponse<Course>>(
+      API_ROUTES.courses.byId(courseId),
+    );
 
-        return response.data.data;
-    },
+    return response.data.data;
+  },
 
-    getCourse: async (
-        courseId: string
-    ): Promise<Course> => {
+  getTeacherCourseById: async (courseId: string): Promise<Course> => {
+    const response = await apiClient.get<CourseApiResponse<Course>>(
+      API_ROUTES.courses.manage(courseId),
+    );
 
-        const response =
-            await apiClient.get<
-                CourseApiResponse<Course>
-            >(
-                API_ROUTES.courses.byId(courseId)
-            );
+    return response.data.data;
+  },
 
-        return response.data.data;
-    },
+  getMyCourses: async (): Promise<Course[]> => {
+    const response = await apiClient.get<CourseApiResponse<Course[]>>(API_ROUTES.courses.myCourses);
 
-    getTeacherCourseById: async (
-        courseId: string
-    ): Promise<Course> => {
+    return response.data.data;
+  },
 
-        const response =
-            await apiClient.get<CourseApiResponse<Course>>(
-                API_ROUTES.courses.manage(courseId)
-            );
+  updateCourse: async (courseId: string, payload: UpdateCourseRequest): Promise<Course> => {
+    const response = await apiClient.patch<CourseApiResponse<Course>>(
+      API_ROUTES.courses.byId(courseId),
+      payload,
+    );
 
-        return response.data.data;
-    },
+    return response.data.data;
+  },
 
+  submitCourse: async (courseId: string): Promise<Course> => {
+    const response = await apiClient.patch<CourseApiResponse<Course>>(
+      API_ROUTES.courses.submit(courseId),
+    );
 
-    getMyCourses: async (): Promise<Course[]> => {
-        const response = await apiClient.get<
-            CourseApiResponse<Course[]>
-        >(API_ROUTES.courses.myCourses);
+    return response.data.data;
+  },
 
-        return response.data.data;
-    },
+  getPendingCourses: async (): Promise<Course[]> => {
+    const response = await apiClient.get<CourseApiResponse<Course[]>>(API_ROUTES.courses.pending);
 
+    return response.data.data;
+  },
 
-    updateCourse: async (
-        courseId: string,
-        payload: UpdateCourseRequest
-    ): Promise<Course> => {
+  approveCourse: async (courseId: string): Promise<Course> => {
+    const response = await apiClient.patch<CourseApiResponse<Course>>(
+      API_ROUTES.courses.approve(courseId),
+    );
 
-        const response =
-            await apiClient.patch<
-                CourseApiResponse<Course>
-            >(
-                API_ROUTES.courses.byId(courseId),
-                payload
-            );
+    return response.data.data;
+  },
 
-        return response.data.data;
-    },
+  rejectCourse: async (courseId: string, rejectionReason: string): Promise<Course> => {
+    const response = await apiClient.patch<CourseApiResponse<Course>>(
+      API_ROUTES.courses.reject(courseId),
+      { rejectionReason },
+    );
 
-    submitCourse: async (
-        courseId: string
-    ): Promise<Course> => {
+    return response.data.data;
+  },
 
-        const response =
-            await apiClient.patch<
-                CourseApiResponse<Course>
-            >(
-                API_ROUTES.courses.submit(courseId)
-            );
+  getLearningContent: async (courseId: string): Promise<CourseLearningContent> => {
+    const response = await apiClient.get<CourseLearningContentApiResponse>(
+      API_ROUTES.courses.learningContent(courseId),
+    );
 
-        return response.data.data;
-    },
+    return response.data.data;
+  },
 
-    getPendingCourses: async (): Promise<Course[]> => {
-        const response = await apiClient.get<
-            CourseApiResponse<Course[]>
-        >(API_ROUTES.courses.pending);
+  generateThumbnailUploadUrl: async (
+    courseId: string,
+    contentType: string,
+  ): Promise<GenerateCourseThumbnailUploadUrlResponse> => {
+    const response = await apiClient.post<{
+      success: boolean;
+      message: string;
+      data: GenerateCourseThumbnailUploadUrlResponse;
+    }>(API_ROUTES.courses.thumbnailUploadUrl(courseId), { contentType });
 
-        return response.data.data;
-    },
+    return response.data.data;
+  },
 
-    approveCourse: async (
-        courseId: string
-    ): Promise<Course> => {
-        const response = await apiClient.patch<
-            CourseApiResponse<Course>
-        >(
-            API_ROUTES.courses.approve(courseId)
-        );
-
-        return response.data.data;
-    },
-
-    rejectCourse: async (
-        courseId: string,
-        rejectionReason: string
-    ): Promise<Course> => {
-        const response = await apiClient.patch<
-            CourseApiResponse<Course>
-        >(
-            API_ROUTES.courses.reject(courseId),
-            { rejectionReason }
-        );
-
-        return response.data.data;
-    },
-
-    getLearningContent: async (
-        courseId: string
-    ): Promise<CourseLearningContent> => {
-
-        const response =
-            await apiClient.get<CourseLearningContentApiResponse>(
-                API_ROUTES.courses.learningContent(courseId)
-            );
-
-        return response.data.data;
-    },
-
-    generateThumbnailUploadUrl: async (
-        courseId: string,
-        contentType: string
-    ): Promise<GenerateCourseThumbnailUploadUrlResponse> => {
-        const response = await apiClient.post<{
-            success: boolean;
-            message: string;
-            data: GenerateCourseThumbnailUploadUrlResponse;
-        }>(
-            API_ROUTES.courses.thumbnailUploadUrl(courseId),
-            { contentType }
-        );
-
-        return response.data.data;
-    },
-
-    uploadThumbnail: async (
-        uploadUrl: string,
-        file: File,
-        onProgress?: (percentage: number) => void
-    ): Promise<void> => {
-        await axios.put(uploadUrl, file, {
-            headers: {
-                "Content-Type": file.type,
-            },
-            onUploadProgress: (event) => {
-                if (event.total) {
-                    onProgress?.(
-                        Math.round((event.loaded / event.total) * 100)
-                    );
-                }
-            },
-        });
-    },
+  uploadThumbnail: async (
+    uploadUrl: string,
+    file: File,
+    onProgress?: (percentage: number) => void,
+  ): Promise<void> => {
+    await axios.put(uploadUrl, file, {
+      headers: {
+        "Content-Type": file.type,
+      },
+      onUploadProgress: (event) => {
+        if (event.total) {
+          onProgress?.(Math.round((event.loaded / event.total) * 100));
+        }
+      },
+    });
+  },
 };

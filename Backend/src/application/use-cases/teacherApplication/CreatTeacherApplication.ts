@@ -1,108 +1,74 @@
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-import { ICreateTeacherApplication } 
-    from "../../interfaces/teacherApplication/ICreateTeacherApplication";
+import { ICreateTeacherApplication } from "../../interfaces/teacherApplication/ICreateTeacherApplication";
 
-import { ITeacherApplicationRepository } 
-    from "../../../domain/repositories/userRepositories/ITeacherApplicationRepository";
+import { ITeacherApplicationRepository } from "../../../domain/repositories/userRepositories/ITeacherApplicationRepository";
 
-import { IUserRepository } 
-    from "../../../domain/repositories/userRepositories/IUserRepository";
+import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
 
-import { CreateTeacherApplicationDTO } 
-    from "../../dtos/TeacherApplication/CreateTeacherApplicationDTO";
+import { CreateTeacherApplicationDTO } from "../../dtos/TeacherApplication/CreateTeacherApplicationDTO";
 
-import { TeacherApplication } 
-    from "../../../domain/entities/TeacherApplication";
+import { TeacherApplication } from "../../../domain/entities/TeacherApplication";
 
-import { TeacherApplicationStatus } 
-    from "../../../shared/enums/TeacherApplicationStatus";
+import { TeacherApplicationStatus } from "../../../shared/enums/TeacherApplicationStatus";
 
-import { AppError } 
-    from "../../../shared/errors/AppError";
+import { AppError } from "../../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 
+export class CreateTeacherApplication implements ICreateTeacherApplication {
+  constructor(
+    private readonly _teacherApplicationRepository: ITeacherApplicationRepository,
 
-export class CreateTeacherApplication
-    implements ICreateTeacherApplication {
+    private readonly _userRepository: IUserRepository,
+  ) {}
 
-    constructor(
-        private readonly _teacherApplicationRepository:
-            ITeacherApplicationRepository,
+  async execute(userId: string, dto: CreateTeacherApplicationDTO): Promise<TeacherApplication> {
+    const user = await this._userRepository.findById(userId);
 
-        private readonly _userRepository:
-            IUserRepository
-    ) {}
-
-    async execute(
-        userId: string,
-        dto: CreateTeacherApplicationDTO
-    ): Promise<TeacherApplication> {
-
-        const user =
-            await this._userRepository.findById(userId);
-
-        if (!user) {
-            throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND, HttpStatusCode.NOT_FOUND);
-        }
-
-        const applications =
-            await this._teacherApplicationRepository
-                .findByUserId(userId);
-
-        const hasPendingApplication =
-            applications.some(
-                application =>
-                    application.status ===
-                    TeacherApplicationStatus.PENDING
-            );
-
-        if (hasPendingApplication) {
-            throw new AppError(
-                "You already have a pending teacher application",
-                HttpStatusCode.CONFLICT
-            );
-        }
-
-        const hasApprovedApplication =
-            applications.some(
-                application =>
-                    application.status ===
-                    TeacherApplicationStatus.APPROVED
-            );
-
-        if (hasApprovedApplication) {
-            throw new AppError(
-                "You are already a teacher",
-                HttpStatusCode.CONFLICT
-            );
-        }
-
-        const application: TeacherApplication = {
-
-            userId,
-
-            qualification: dto.qualification,
-
-            experience: dto.experience,
-
-            skills: dto.skills,
-
-            bio: dto.bio,
-
-            documents: dto.documents ?? [],
-
-            certificates: dto.certificates ?? [],
-
-            status: TeacherApplicationStatus.PENDING,
-
-            createdAt: new Date(),
-
-            updatedAt: new Date()
-        };
-
-        return await this._teacherApplicationRepository.create(
-            application
-        );
+    if (!user) {
+      throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND, HttpStatusCode.NOT_FOUND);
     }
+
+    const applications = await this._teacherApplicationRepository.findByUserId(userId);
+
+    const hasPendingApplication = applications.some(
+      (application) => application.status === TeacherApplicationStatus.PENDING,
+    );
+
+    if (hasPendingApplication) {
+      throw new AppError("You already have a pending teacher application", HttpStatusCode.CONFLICT);
+    }
+
+    const hasApprovedApplication = applications.some(
+      (application) => application.status === TeacherApplicationStatus.APPROVED,
+    );
+
+    if (hasApprovedApplication) {
+      throw new AppError("You are already a teacher", HttpStatusCode.CONFLICT);
+    }
+
+    const application: TeacherApplication = {
+      userId,
+
+      qualification: dto.qualification,
+
+      experience: dto.experience,
+
+      skills: dto.skills,
+
+      bio: dto.bio,
+
+      documents: dto.documents ?? [],
+
+      certificates: dto.certificates ?? [],
+
+      status: TeacherApplicationStatus.PENDING,
+
+      createdAt: new Date(),
+
+      updatedAt: new Date(),
+    };
+
+    return await this._teacherApplicationRepository.create(application);
+  }
 }

@@ -1,30 +1,23 @@
-import {
-    UserRole
-} from "../../../shared/enums/UserRole";
+import { UserRole } from "../../../shared/enums/UserRole";
 
-import {
-    UserStatus
-} from "../../../shared/enums/UserStatus";
-
+import { UserStatus } from "../../../shared/enums/UserStatus";
 
 export interface GetMyProfileResponseDTO {
+  id: string;
 
-    id: string;
+  firstName: string;
 
-    firstName: string;
+  lastName: string;
 
-    lastName: string;
+  email: string;
 
-    email: string;
+  avatar?: string;
 
-    avatar?: string;
+  role: UserRole;
 
-    role: UserRole;
+  status: UserStatus;
 
-    status: UserStatus;
+  isVerified: boolean;
 
-    isVerified: boolean;
-
-    createdAt: Date;
-
+  createdAt: Date;
 }

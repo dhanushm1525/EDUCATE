@@ -1,83 +1,52 @@
-import {
-    useNavigate
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import {
-    authService
-} from "../services/auth.service";
+import { authService } from "../services/auth.service";
 
-import {
-    useAuthStore
-} from "../store/authStore";
+import { useAuthStore } from "../store/authStore";
 
 import { logger } from "../services/logger";
 
-
 export function useLogout() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const clearAuth = useAuthStore((state) => state.clearAuth);
 
+  const logout = async () => {
+    try {
+      /*
+       * Tell backend to revoke
+       * refresh token and clear cookie.
+       */
 
-    const clearAuth =
-        useAuthStore(
-            (state) =>
-                state.clearAuth
-        );
+      await authService.logout();
+    } catch (error) {
+      /*
+       * Even if the backend request fails,
+       * clear local authentication state.
+       *
+       * The user should still be logged out
+       * from the frontend.
+       */
 
+      logger.error("Logout failed", { error });
+    } finally {
+      /*
+       * Clear Zustand and sessionStorage.
+       */
 
-    const logout =
-        async () => {
+      clearAuth();
 
-            try {
+      /*
+       * Redirect to login.
+       */
 
-                /*
-                 * Tell backend to revoke
-                 * refresh token and clear cookie.
-                 */
+      navigate("/login", {
+        replace: true,
+      });
+    }
+  };
 
-                await authService.logout();
-
-            } catch (error) {
-
-                /*
-                 * Even if the backend request fails,
-                 * clear local authentication state.
-                 *
-                 * The user should still be logged out
-                 * from the frontend.
-                 */
-
-                logger.error("Logout failed", { error });
-
-            } finally {
-
-                /*
-                 * Clear Zustand and sessionStorage.
-                 */
-
-                clearAuth();
-
-
-                /*
-                 * Redirect to login.
-                 */
-
-                navigate(
-                    "/login",
-                    {
-                        replace: true
-                    }
-                );
-
-            }
-
-        };
-
-
-    return {
-
-        logout
-
-    };
-
+  return {
+    logout,
+  };
 }

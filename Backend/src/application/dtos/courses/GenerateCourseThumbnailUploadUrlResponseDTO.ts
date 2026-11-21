@@ -1,4 +1,4 @@
 export interface GenerateCourseThumbnailUploadUrlResponseDTO {
-    uploadUrl: string;
-    key: string;
+  uploadUrl: string;
+  key: string;
 }

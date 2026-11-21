@@ -1,12 +1,11 @@
-
 import { CreateCourseUseCase } from "../../application/use-cases/course/CreateCourseUseCase";
 import { CreateCourseController } from "../../presentation/controllers/course/CreateCourseController";
 
 import {
-    chapterRepository,
-    courseRepository,
-    lessonRepository,
-    assignmentRepository
+  chapterRepository,
+  courseRepository,
+  lessonRepository,
+  assignmentRepository,
 } from "./repositoryDependencies";
 
 import { UpdateCourseUseCase } from "../../application/use-cases/course/UpdateCourseUseCase";
@@ -16,7 +15,6 @@ import { DefaultCourseStatusPolicy } from "../../domain/policies/CourseStatusPol
 
 import { SubmitCourseUseCase } from "../../application/use-cases/course/SubmitCourseUseCase";
 import { SubmitCourseController } from "../../presentation/controllers/course/SubmitCourseController";
-
 
 import { GetMyCoursesUseCase } from "../../application/use-cases/course/GetMyCoursesUseCase";
 import { GetMyCoursesController } from "../../presentation/controllers/course/GetMyCoursesController";
@@ -57,193 +55,149 @@ import { env } from "../config/env";
 // Course response service
 import { CourseResponseService } from "../../application/services/CourseResponseService";
 
-
 // ============================================
 // COURSE STATUS POLICY
 // ============================================
 
 const courseStatusPolicy = new DefaultCourseStatusPolicy();
 
-
 // ============================================
 // COURSE RESPONSE SERVICE
 // ============================================
 
-export const courseResponseService =
-    new CourseResponseService(s3StorageService);
-
+export const courseResponseService = new CourseResponseService(s3StorageService);
 
 // ============================================
 // COURSE CREATION
 // ============================================
 
-export const createCourseUseCase =
-    new CreateCourseUseCase(courseRepository);
+export const createCourseUseCase = new CreateCourseUseCase(courseRepository);
 
-export const createCourseController =
-    new CreateCourseController(
-        createCourseUseCase,
-        courseResponseService
-    );
-
+export const createCourseController = new CreateCourseController(
+  createCourseUseCase,
+  courseResponseService,
+);
 
 // ============================================
 // COURSE UPDATE
 // ============================================
 
-export const updateCourseUseCase =
-    new UpdateCourseUseCase(
-        courseRepository,
-        courseStatusPolicy
-    );
+export const updateCourseUseCase = new UpdateCourseUseCase(courseRepository, courseStatusPolicy);
 
-export const updateCourseController =
-    new UpdateCourseController(
-        updateCourseUseCase,
-        courseResponseService
-    );
+export const updateCourseController = new UpdateCourseController(
+  updateCourseUseCase,
+  courseResponseService,
+);
 
 // ============================================
 // COURSE SUBMISSION
 // ============================================
 
-const submitCourseUseCase =
-    new SubmitCourseUseCase(
-        courseRepository,
-        chapterRepository,
-        lessonRepository,
-        assignmentRepository,
-        courseStatusPolicy
-    );
+const submitCourseUseCase = new SubmitCourseUseCase(
+  courseRepository,
+  chapterRepository,
+  lessonRepository,
+  assignmentRepository,
+  courseStatusPolicy,
+);
 
-export const submitCourseController =
-    new SubmitCourseController(
-        submitCourseUseCase,
-        courseResponseService
-    );
-
+export const submitCourseController = new SubmitCourseController(
+  submitCourseUseCase,
+  courseResponseService,
+);
 
 // ============================================
 // TEACHER COURSES
 // ============================================
 
-export const getMyCoursesUseCase =
-    new GetMyCoursesUseCase(courseRepository);
+export const getMyCoursesUseCase = new GetMyCoursesUseCase(courseRepository);
 
-export const getMyCoursesController =
-    new GetMyCoursesController(
-        getMyCoursesUseCase,
-        courseResponseService
-    );
+export const getMyCoursesController = new GetMyCoursesController(
+  getMyCoursesUseCase,
+  courseResponseService,
+);
 
+export const getTeacherCourseByIdUseCase = new GetTeacherCourseByIdUseCase(courseRepository);
 
-export const getTeacherCourseByIdUseCase =
-    new GetTeacherCourseByIdUseCase(courseRepository);
-
-export const getTeacherCourseByIdController =
-    new GetTeacherCourseByIdController(
-        getTeacherCourseByIdUseCase,
-        courseResponseService
-    );
-
+export const getTeacherCourseByIdController = new GetTeacherCourseByIdController(
+  getTeacherCourseByIdUseCase,
+  courseResponseService,
+);
 
 // ============================================
 // PUBLIC COURSES
 // ============================================
 
-export const getPublishedCoursesUseCase =
-    new GetPublishedCoursesUseCase(courseRepository);
+export const getPublishedCoursesUseCase = new GetPublishedCoursesUseCase(courseRepository);
 
-export const getPublishedCoursesController =
-    new GetPublishedCoursesController(
-        getPublishedCoursesUseCase,
-        courseResponseService
-    );
+export const getPublishedCoursesController = new GetPublishedCoursesController(
+  getPublishedCoursesUseCase,
+  courseResponseService,
+);
 
+export const getPublishedCourseByIdUseCase = new GetPublishedCourseByIdUseCase(courseRepository);
 
-export const getPublishedCourseByIdUseCase =
-    new GetPublishedCourseByIdUseCase(courseRepository);
-
-export const getPublishedCourseByIdController =
-    new GetPublishedCourseByIdController(
-        getPublishedCourseByIdUseCase,
-        courseResponseService
-    );
-
+export const getPublishedCourseByIdController = new GetPublishedCourseByIdController(
+  getPublishedCourseByIdUseCase,
+  courseResponseService,
+);
 
 // ============================================
 // ADMIN COURSE MANAGEMENT
 // ============================================
 
-export const getPendingCoursesUseCase =
-    new GetPendingCoursesUseCase(courseRepository);
+export const getPendingCoursesUseCase = new GetPendingCoursesUseCase(courseRepository);
 
-export const getPendingCoursesController =
-    new GetPendingCoursesController(
-        getPendingCoursesUseCase,
-        courseResponseService
-    );
+export const getPendingCoursesController = new GetPendingCoursesController(
+  getPendingCoursesUseCase,
+  courseResponseService,
+);
 
+export const approveCourseUseCase = new ApproveCourseUseCase(courseRepository);
 
-export const approveCourseUseCase =
-    new ApproveCourseUseCase(courseRepository);
+export const approveCourseController = new ApproveCourseController(
+  approveCourseUseCase,
+  courseResponseService,
+);
 
-export const approveCourseController =
-    new ApproveCourseController(
-        approveCourseUseCase,
-        courseResponseService
-    );
+export const rejectCourseUseCase = new RejectCourseUseCase(courseRepository);
 
-
-export const rejectCourseUseCase =
-    new RejectCourseUseCase(courseRepository);
-
-export const rejectCourseController =
-    new RejectCourseController(
-        rejectCourseUseCase,
-        courseResponseService
-    );
-
+export const rejectCourseController = new RejectCourseController(
+  rejectCourseUseCase,
+  courseResponseService,
+);
 
 // ============================================
 // COURSE LEARNING CONTENT
 // ============================================
 
-export const getCourseLearningContentUseCase =
-    new GetCourseLearningContentUseCase(
-        courseRepository,
-        chapterRepository,
-        lessonRepository,
-        s3StorageService
-    );
+export const getCourseLearningContentUseCase = new GetCourseLearningContentUseCase(
+  courseRepository,
+  chapterRepository,
+  lessonRepository,
+  s3StorageService,
+);
 
-export const getCourseLearningContentController =
-    new GetCourseLearningContentController(
-        getCourseLearningContentUseCase
-    );
-
+export const getCourseLearningContentController = new GetCourseLearningContentController(
+  getCourseLearningContentUseCase,
+);
 
 // ============================================
 // COURSE THUMBNAIL UPLOAD
 // ============================================
 
-const courseThumbnailKeyPolicy =
-    new S3CourseThumbnailKeyPolicy();
+const courseThumbnailKeyPolicy = new S3CourseThumbnailKeyPolicy();
 
-const courseThumbnailTypePolicy =
-    new CourseThumbnailTypePolicy();
+const courseThumbnailTypePolicy = new CourseThumbnailTypePolicy();
 
-export const generateCourseThumbnailUploadUrlUseCase =
-    new GenerateCourseThumbnailUploadUrlUseCase(
-        courseRepository,
-        courseStatusPolicy,
-        s3Client,
-        courseThumbnailKeyPolicy,
-        courseThumbnailTypePolicy,
-        env.awsS3BucketName
-    );
+export const generateCourseThumbnailUploadUrlUseCase = new GenerateCourseThumbnailUploadUrlUseCase(
+  courseRepository,
+  courseStatusPolicy,
+  s3Client,
+  courseThumbnailKeyPolicy,
+  courseThumbnailTypePolicy,
+  env.awsS3BucketName,
+);
 
 export const generateCourseThumbnailUploadUrlController =
-    new GenerateCourseThumbnailUploadUrlController(
-        generateCourseThumbnailUploadUrlUseCase
-    );
+  new GenerateCourseThumbnailUploadUrlController(generateCourseThumbnailUploadUrlUseCase);

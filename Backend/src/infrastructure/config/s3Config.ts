@@ -1,11 +1,11 @@
 import { env } from "./env";
 
 export const s3Config = {
-    region: env.awsRegion,
+  region: env.awsRegion,
 
-    accessKeyId: env.awsAccessKeyId,
+  accessKeyId: env.awsAccessKeyId,
 
-    secretAccessKey: env.awsSecretAccessKey,
+  secretAccessKey: env.awsSecretAccessKey,
 
-    bucketName: env.awsS3BucketName,
+  bucketName: env.awsS3BucketName,
 };

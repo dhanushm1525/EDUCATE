@@ -5,25 +5,19 @@ import { IGetCategoriesUseCase } from "../../../application/interfaces/category/
 import { CategoryResponseMapper } from "../../../application/mappers/CategoryResponseMapper";
 
 export class GetCategoriesController {
-    constructor(
-        private readonly _getCategoriesUseCase: IGetCategoriesUseCase
-    ) {}
+  constructor(private readonly _getCategoriesUseCase: IGetCategoriesUseCase) {}
 
-    async handle(
-        _req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
-        try {
-            const categories = await this._getCategoriesUseCase.execute();
+  async handle(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const categories = await this._getCategoriesUseCase.execute();
 
-            res.status(HttpStatusCode.OK).json({
-                success: true,
-                message: "Categories fetched successfully",
-                data: CategoryResponseMapper.toDTOList(categories)
-            });
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        message: "Categories fetched successfully",
+        data: CategoryResponseMapper.toDTOList(categories),
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

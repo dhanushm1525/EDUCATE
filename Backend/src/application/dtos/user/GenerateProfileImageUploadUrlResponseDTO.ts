@@ -1,4 +1,4 @@
-export interface GenerateProfileImageUploadUrlResponseDTO{
-    uploadUrl:string;
-    key:string;
+export interface GenerateProfileImageUploadUrlResponseDTO {
+  uploadUrl: string;
+  key: string;
 }

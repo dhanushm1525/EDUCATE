@@ -2,8 +2,7 @@ import { useId, useState, type InputHTMLAttributes, type ReactNode } from "react
 import type { LucideIcon } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
 
-interface AuthFieldProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "type"> {
+interface AuthFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "type"> {
   label: string;
   type?: InputHTMLAttributes<HTMLInputElement>["type"];
   icon?: LucideIcon;
@@ -32,19 +31,14 @@ export default function AuthField({
   return (
     <div className={className}>
       <div className="mb-1.5 flex items-center justify-between">
-        <label
-          htmlFor={id}
-          className="block text-xs font-medium text-slate-300"
-        >
+        <label htmlFor={id} className="block text-xs font-medium text-slate-300">
           {label}
         </label>
         {labelAction}
       </div>
 
       <div className="relative flex items-center">
-        {Icon && (
-          <Icon className="pointer-events-none absolute left-3.5 h-4 w-4 text-slate-500" />
-        )}
+        {Icon && <Icon className="pointer-events-none absolute left-3.5 h-4 w-4 text-slate-500" />}
         <input
           {...inputProps}
           id={id}
@@ -59,11 +53,7 @@ export default function AuthField({
             aria-pressed={isPasswordVisible}
             className="absolute right-3.5 text-slate-500 transition-colors hover:text-slate-300 focus:outline-none"
           >
-            {isPasswordVisible ? (
-              <EyeOff className="h-4 w-4" />
-            ) : (
-              <Eye className="h-4 w-4" />
-            )}
+            {isPasswordVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         )}
       </div>

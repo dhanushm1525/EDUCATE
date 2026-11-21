@@ -3,29 +3,28 @@ import { GenerateProfileImageUploadUrlDTO } from "../dtos/user/GenerateProfileIm
 import { UpdateProfileImageDTO } from "../dtos/user/UpdateProfileImageDTO";
 
 export class UserRequestMapper {
+  static toGetMyProfileDTO(userId: string): GetMyProfileDTO {
+    return { userId };
+  }
 
-    static toGetMyProfileDTO(userId: string): GetMyProfileDTO {
-        return { userId };
-    }
+  static toGenerateProfileImageUploadUrlDTO(
+    userId: string,
+    body: Omit<GenerateProfileImageUploadUrlDTO, "userId">,
+  ): GenerateProfileImageUploadUrlDTO {
+    return {
+      userId,
+      fileName: body.fileName,
+      contentType: body.contentType,
+    };
+  }
 
-    static toGenerateProfileImageUploadUrlDTO(
-        userId: string,
-        body: Omit<GenerateProfileImageUploadUrlDTO, "userId">
-    ): GenerateProfileImageUploadUrlDTO {
-        return {
-            userId,
-            fileName: body.fileName,
-            contentType: body.contentType,
-        };
-    }
-
-    static toUpdateProfileImageDTO(
-        userId: string,
-        body: Omit<UpdateProfileImageDTO, "userId">
-    ): UpdateProfileImageDTO {
-        return {
-            userId,
-            avatarKey: body.avatarKey,
-        };
-    }
+  static toUpdateProfileImageDTO(
+    userId: string,
+    body: Omit<UpdateProfileImageDTO, "userId">,
+  ): UpdateProfileImageDTO {
+    return {
+      userId,
+      avatarKey: body.avatarKey,
+    };
+  }
 }

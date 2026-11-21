@@ -59,13 +59,9 @@ export default function LoginForm() {
   return (
     <AuthCard>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold tracking-tight text-white">
-          Welcome Back
-        </h2>
+        <h2 className="text-2xl font-bold tracking-tight text-white">Welcome Back</h2>
 
-        <p className="mt-1 text-xs text-slate-400">
-          Sign in to continue learning
-        </p>
+        <p className="mt-1 text-xs text-slate-400">Sign in to continue learning</p>
       </div>
 
       <form onSubmit={handleSubmit} noValidate className="space-y-4">

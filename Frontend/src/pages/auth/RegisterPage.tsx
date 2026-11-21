@@ -1,73 +1,55 @@
-import {
-    GraduationCap,
-    Users,
-    TrendingUp,
-} from "lucide-react";
+import { GraduationCap, Users, TrendingUp } from "lucide-react";
 
 import AuthLayout from "../../components/auth/AuthLayout";
 import AuthFeatures from "../../components/auth/AuthFeatures";
 import RegisterForm from "../../components/auth/RegisterForm";
 
-
 const registerFeatures = [
+  {
+    title: "100+ Courses",
 
-    {
-        title: "100+ Courses",
+    description:
+      "Deep-dive into comprehensive modules designed by industry veterans to ensure practical mastery.",
 
-        description:
-            "Deep-dive into comprehensive modules designed by industry veterans to ensure practical mastery.",
+    icon: GraduationCap,
 
-        icon: GraduationCap,
+    iconColor: "text-indigo-400",
 
-        iconColor:
-            "text-indigo-400",
+    iconBg: "bg-indigo-950/60 border border-indigo-800/40",
+  },
 
-        iconBg:
-            "bg-indigo-950/60 border border-indigo-800/40",
-    },
+  {
+    title: "Expert Instructors",
 
+    description:
+      "Learn directly from senior professionals who bring real-world experience and case studies to your screen.",
 
-    {
-        title: "Expert Instructors",
+    icon: Users,
 
-        description:
-            "Learn directly from senior professionals who bring real-world experience and case studies to your screen.",
+    iconColor: "text-amber-400",
 
-        icon: Users,
+    iconBg: "bg-amber-950/40 border border-amber-800/30",
+  },
 
-        iconColor:
-            "text-amber-400",
+  {
+    title: "Career Growth",
 
-        iconBg:
-            "bg-amber-950/40 border border-amber-800/30",
-    },
+    description:
+      "Earn industry-recognized certificates that validate your skills and accelerate your professional advancement.",
 
+    icon: TrendingUp,
 
-    {
-        title: "Career Growth",
+    iconColor: "text-teal-400",
 
-        description:
-            "Earn industry-recognized certificates that validate your skills and accelerate your professional advancement.",
-
-        icon: TrendingUp,
-
-        iconColor:
-            "text-teal-400",
-
-        iconBg:
-            "bg-teal-950/50 border border-teal-800/30",
-    },
-
+    iconBg: "bg-teal-950/50 border border-teal-800/30",
+  },
 ];
 
-
 function RegisterPage() {
-
-    return (
-
-        <AuthLayout>
-
-            <div className="
+  return (
+    <AuthLayout>
+      <div
+        className="
                 grid
                 grid-cols-1
                 lg:grid-cols-12
@@ -75,56 +57,39 @@ function RegisterPage() {
                 lg:gap-16
                 items-center
                 w-full
-            ">
+            "
+      >
+        <AuthFeatures
+          title={
+            <>
+              Start Your Learning
+              <br />
+              <span className="text-slate-100">Journey Today</span>
+            </>
+          }
 
+          description={
+            "Create your account and join thousands of learners building practical skills through high-quality education."
+          }
 
-                <AuthFeatures
+          features={registerFeatures}
+        />
 
-                    title={
-                        <>
-                            Start Your Learning
-                            <br />
-
-                            <span className="text-slate-100">
-                                Journey Today
-                            </span>
-                        </>
-                    }
-
-                    description={
-                        "Create your account and join thousands of learners building practical skills through high-quality education."
-                    }
-
-                    features={
-                        registerFeatures
-                    }
-
-                />
-
-
-                <section className="
+        <section
+          className="
                     lg:col-span-5
                     flex
                     justify-center
                     lg:justify-end
-                ">
-
-                    <div className="w-full max-w-md">
-
-                        <RegisterForm />
-
-                    </div>
-
-                </section>
-
-
-            </div>
-
-        </AuthLayout>
-
-    );
-
+                "
+        >
+          <div className="w-full max-w-md">
+            <RegisterForm />
+          </div>
+        </section>
+      </div>
+    </AuthLayout>
+  );
 }
-
 
 export default RegisterPage;

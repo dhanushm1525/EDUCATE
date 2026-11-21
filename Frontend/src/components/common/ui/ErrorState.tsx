@@ -7,11 +7,7 @@ interface ErrorStateProps {
   className?: string;
 }
 
-export function ErrorState({
-  message,
-  onRetry,
-  className = "",
-}: ErrorStateProps) {
+export function ErrorState({ message, onRetry, className = "" }: ErrorStateProps) {
   return (
     <div
       className={`flex flex-col items-center justify-center rounded-xl border border-red-500/20 bg-slate-900 p-10 text-center ${className}`}
@@ -22,13 +18,7 @@ export function ErrorState({
       <p className="mt-3 text-sm text-red-400">{message}</p>
 
       {onRetry && (
-        <Button
-          type="button"
-          variant="secondary"
-          size="sm"
-          onClick={onRetry}
-          className="mt-5"
-        >
+        <Button type="button" variant="secondary" size="sm" onClick={onRetry} className="mt-5">
           <RefreshCw size={14} />
           Try Again
         </Button>

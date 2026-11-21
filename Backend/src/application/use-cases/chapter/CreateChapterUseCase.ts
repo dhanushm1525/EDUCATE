@@ -14,53 +14,30 @@ import { ChapterCreationMapper } from "../../mappers/ChapterCreationMapper";
 
 import { AppError } from "../../../shared/errors/AppError";
 
-export class CreateChapterUseCase
-    implements ICreateChapterUseCase {
+export class CreateChapterUseCase implements ICreateChapterUseCase {
+  constructor(
+    private readonly _chapterRepository: IChapterRepository,
+    private readonly _courseRepository: ICourseRepository,
+    private readonly _courseStatusPolicy: ICourseStatusPolicy,
+  ) {}
 
-    constructor(
-        private readonly _chapterRepository: IChapterRepository,
-        private readonly _courseRepository: ICourseRepository,
-        private readonly _courseStatusPolicy: ICourseStatusPolicy
-    ) {}
+  async execute(courseId: string, teacherId: string, dto: CreateChapterDTO): Promise<Chapter> {
+    const course = await this._courseRepository.findById(courseId);
 
-    async execute(
-        courseId: string,
-        teacherId: string,
-        dto: CreateChapterDTO
-    ): Promise<Chapter> {
-
-        const course =
-            await this._courseRepository.findById(courseId);
-
-        if (!course) {
-            throw new AppError(
-                "Course not found",
-                HttpStatusCode.NOT_FOUND
-            );
-        }
-
-        if (course.teacherId !== teacherId) {
-            throw new AppError(
-                "You are not authorized to modify this course",
-                HttpStatusCode.FORBIDDEN
-            );
-        }
-
-        if (!this._courseStatusPolicy.canEdit(course.status)) {
-            throw new AppError(
-                "This course cannot be modified",
-                HttpStatusCode.BAD_REQUEST
-            );
-        }
-
-        const chapter =
-            ChapterCreationMapper.toEntity(
-                courseId,
-                dto
-            );
-
-        return await this._chapterRepository.create(
-            chapter
-        );
+    if (!course) {
+      throw new AppError("Course not found", HttpStatusCode.NOT_FOUND);
     }
+
+    if (course.teacherId !== teacherId) {
+      throw new AppError("You are not authorized to modify this course", HttpStatusCode.FORBIDDEN);
+    }
+
+    if (!this._courseStatusPolicy.canEdit(course.status)) {
+      throw new AppError("This course cannot be modified", HttpStatusCode.BAD_REQUEST);
+    }
+
+    const chapter = ChapterCreationMapper.toEntity(courseId, dto);
+
+    return await this._chapterRepository.create(chapter);
+  }
 }

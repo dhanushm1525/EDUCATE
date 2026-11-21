@@ -1,4 +1,4 @@
 export interface SubmitCourseDTO {
-    courseId: string;
-    teacherId: string;
+  courseId: string;
+  teacherId: string;
 }

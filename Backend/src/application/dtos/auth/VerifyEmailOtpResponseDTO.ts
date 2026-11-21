@@ -1,3 +1,3 @@
 export interface VerifyEmailOtpResponseDTO {
-    message: string;
+  message: string;
 }

@@ -1,33 +1,19 @@
-import type {
-    UserRole
-} from "../../../shared/enums/UserRole";
-
+import type { UserRole } from "../../../shared/enums/UserRole";
 
 export interface GoogleSignInResponseDTO {
+  user: {
+    id: string;
 
-    user: {
+    firstName: string;
 
-        id:
-            string;
+    lastName: string;
 
-        firstName:
-            string;
+    email: string;
 
-        lastName:
-            string;
+    avatar?: string;
 
-        email:
-            string;
+    role: UserRole;
+  };
 
-        avatar?:
-            string;
-
-        role:
-            UserRole;
-
-    };
-
-    accessToken:
-        string;
-
+  accessToken: string;
 }

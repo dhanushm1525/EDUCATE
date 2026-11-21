@@ -1,74 +1,55 @@
 import { HttpStatusCode } from "../../shared/enums/HttpStatusCode";
 
-import jwt,{SignOptions,JwtPayload} from "jsonwebtoken";
-import {AccessTokenPayload,IJwtService} from "../../application/interfaces/auth/IJwtService";
-import {env} from "../config/env";
+import jwt, { SignOptions, JwtPayload } from "jsonwebtoken";
+import { AccessTokenPayload, IJwtService } from "../../application/interfaces/auth/IJwtService";
+import { env } from "../config/env";
 import { UserRole } from "../../shared/enums/UserRole";
 import { AppError } from "../../shared/errors/AppError";
 import { AUTH_MESSAGES } from "../../shared/messages/authMessages";
 
+export class JwtService implements IJwtService {
+  generateAccessToken(payload: AccessTokenPayload): string {
+    return jwt.sign(payload, env.jwtAccessSecret, {
+      expiresIn: env.jwtAccessExpiresIn as SignOptions["expiresIn"],
+    });
+  }
 
-export class JwtService implements IJwtService{
-    generateAccessToken(payload: AccessTokenPayload): string {
-        return jwt.sign(payload,env.jwtAccessSecret,{expiresIn:env.jwtAccessExpiresIn as SignOptions["expiresIn"]});
+  generateRefreshToken(userId: string): string {
+    return jwt.sign({ userId, jti: crypto.randomUUID }, env.jwtRefreshSecret, {
+      expiresIn: env.jwtRefreshExpiresIn as SignOptions["expiresIn"],
+    });
+  }
+
+  verifyAccessToken(token: string): AccessTokenPayload {
+    const decoded = jwt.verify(token, env.jwtAccessSecret);
+
+    if (typeof decoded === "string" || !this._isAccessTokenPayload(decoded)) {
+      throw new AppError(AUTH_MESSAGES.INVALID_ACCESS_TOKEN, HttpStatusCode.UNAUTHORIZED);
     }
 
+    return decoded;
+  }
 
-    generateRefreshToken(userId: string): string {
-        return jwt.sign({userId,jti:crypto.randomUUID},env.jwtRefreshSecret,{expiresIn:env.jwtRefreshExpiresIn as SignOptions["expiresIn"]});
+  verifyRefreshToken(token: string): { userId: string } {
+    const decoded = jwt.verify(token, env.jwtRefreshSecret);
+
+    if (typeof decoded === "string" || !this._isRefreshTokenPayload(decoded)) {
+      throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN, HttpStatusCode.UNAUTHORIZED);
     }
 
+    return { userId: decoded.userId };
+  }
 
-     verifyAccessToken(token: string): AccessTokenPayload {
+  private _isAccessTokenPayload(payload: string | JwtPayload): payload is AccessTokenPayload {
+    return (
+      typeof payload === "object" &&
+      payload !== null &&
+      typeof payload.userId === "string" &&
+      Object.values(UserRole).includes(payload.role as UserRole)
+    );
+  }
 
-        const decoded = jwt.verify(
-            token,
-            env.jwtAccessSecret
-        );
-
-
-        if (
-            typeof decoded === "string" ||
-            !this._isAccessTokenPayload(decoded)
-        ) {
-            throw new AppError(AUTH_MESSAGES.INVALID_ACCESS_TOKEN,HttpStatusCode.UNAUTHORIZED);
-        }
-
-
-        return decoded;
-    }
-
-
-    verifyRefreshToken(token: string): { userId: string } {
-
-    const decoded = jwt.verify(token,env.jwtRefreshSecret);
-
-
-    if (typeof decoded === "string" ||!this._isRefreshTokenPayload(decoded)){
-        throw new AppError(AUTH_MESSAGES.INVALID_REFRESH_TOKEN,HttpStatusCode.UNAUTHORIZED);}
-
-        return {userId: decoded.userId};
-    }
-
-    private _isAccessTokenPayload(payload: string |JwtPayload): payload is AccessTokenPayload {
-
-        return (
-            typeof payload === "object" &&
-            payload !== null &&
-            typeof payload.userId === "string" &&
-            Object.values(UserRole).includes(
-                payload.role as UserRole
-            )
-        );
-    }
-
-
-    private _isRefreshTokenPayload(payload: string | JwtPayload): payload is { userId: string } {
-
-        return (
-            typeof payload === "object" &&
-            payload !== null &&
-            typeof payload.userId === "string"
-        );
-    }
+  private _isRefreshTokenPayload(payload: string | JwtPayload): payload is { userId: string } {
+    return typeof payload === "object" && payload !== null && typeof payload.userId === "string";
+  }
 }

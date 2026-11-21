@@ -1,57 +1,59 @@
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-import { User } from "../../../domain/entities/User"
-import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository"
-import { IPasswordHasher } from "../../interfaces/services/IPasswordHasher"
-import { AppError } from "../../../shared/errors/AppError"
-import { RegisterUserDTO } from "../../dtos/auth/RegisterUserDTO"
+import { User } from "../../../domain/entities/User";
+import { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
+import { IPasswordHasher } from "../../interfaces/services/IPasswordHasher";
+import { AppError } from "../../../shared/errors/AppError";
+import { RegisterUserDTO } from "../../dtos/auth/RegisterUserDTO";
 import { UserRole } from "../../../shared/enums/UserRole";
 import { UserStatus } from "../../../shared/enums/UserStatus";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { RegisterUserResponseDTO } from "../../dtos/auth/RegisterUserResponseDTO";
-import { ISendVerificationOtp } from "../../interfaces/auth/ISendVerificationOtp"
-import { AuthProvider } from "../../../shared/enums/AuthProvider"
-import { IRegisterUser } from "../../interfaces/auth/IRegisterUser"
-import { UserResponseMapper } from "../../mappers/UserResponseMapper"
-
+import { ISendVerificationOtp } from "../../interfaces/auth/ISendVerificationOtp";
+import { AuthProvider } from "../../../shared/enums/AuthProvider";
+import { IRegisterUser } from "../../interfaces/auth/IRegisterUser";
+import { UserResponseMapper } from "../../mappers/UserResponseMapper";
 
 export class RegisterUser implements IRegisterUser {
-    constructor(private readonly _userRepository: IUserRepository, private readonly _passwordHasher: IPasswordHasher,private readonly _sendVerificationOtp:ISendVerificationOtp) { }
+  constructor(
+    private readonly _userRepository: IUserRepository,
+    private readonly _passwordHasher: IPasswordHasher,
+    private readonly _sendVerificationOtp: ISendVerificationOtp,
+  ) {}
 
-    async execute(request: RegisterUserDTO): Promise<RegisterUserResponseDTO> {
-        const email = request.email.trim().toLowerCase();
+  async execute(request: RegisterUserDTO): Promise<RegisterUserResponseDTO> {
+    const email = request.email.trim().toLowerCase();
 
-        const exists = await this._userRepository.existsByEmail(email);
+    const exists = await this._userRepository.existsByEmail(email);
 
-        if (exists) {
-            throw new AppError(AUTH_MESSAGES.EMAIL_ALREADY_EXISTS,HttpStatusCode.CONFLICT);
-        }
-
-        const hashedPassword = await this._passwordHasher.hash(request.password);
-
-        const user = new User({
-            firstName: request.firstName.trim(),
-            lastName: request.lastName.trim(),
-            email,
-            password: hashedPassword,
-            authProvider:AuthProvider.LOCAL,
-            role: UserRole.STUDENT,
-            status: UserStatus.ACTIVE,
-            isVerified: false
-        });
-
-        const createdUser = await this._userRepository.create(user);
-
-        if(!createdUser.id){
-            throw new AppError("user creation failed",HttpStatusCode.INTERNAL_SERVER_ERROR,false)
-        }
-
-        await this._sendVerificationOtp.execute({
-            userId:createdUser.id,
-            email:createdUser.email
-        })
-
-        
-        return UserResponseMapper.toRegisterUserDTO(createdUser);
+    if (exists) {
+      throw new AppError(AUTH_MESSAGES.EMAIL_ALREADY_EXISTS, HttpStatusCode.CONFLICT);
     }
+
+    const hashedPassword = await this._passwordHasher.hash(request.password);
+
+    const user = new User({
+      firstName: request.firstName.trim(),
+      lastName: request.lastName.trim(),
+      email,
+      password: hashedPassword,
+      authProvider: AuthProvider.LOCAL,
+      role: UserRole.STUDENT,
+      status: UserStatus.ACTIVE,
+      isVerified: false,
+    });
+
+    const createdUser = await this._userRepository.create(user);
+
+    if (!createdUser.id) {
+      throw new AppError("user creation failed", HttpStatusCode.INTERNAL_SERVER_ERROR, false);
+    }
+
+    await this._sendVerificationOtp.execute({
+      userId: createdUser.id,
+      email: createdUser.email,
+    });
+
+    return UserResponseMapper.toRegisterUserDTO(createdUser);
+  }
 }

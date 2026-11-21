@@ -17,19 +17,18 @@ import { createCourseProgressRoutes } from "./courseProgressRoutes";
 export const createApiRouter = (dependencies: RouteDependencies) => {
   const router = Router();
 
-  router.get(
-    "/health",
-    (_req, res) => {
-      return res.status(HttpStatusCode.OK).json({
-        success: true,
-        message:
-          "EDUCATE API is running",
-        data: null
-      });
-    }
-  );
+  router.get("/health", (_req, res) => {
+    return res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "EDUCATE API is running",
+      data: null,
+    });
+  });
 
-  router.use("/auth", createAuthRoutes({ ...dependencies.auth, authenticateUser: dependencies.authenticateUser }));
+  router.use(
+    "/auth",
+    createAuthRoutes({ ...dependencies.auth, authenticateUser: dependencies.authenticateUser }),
+  );
 
   router.use("/users", createUserRoutes(dependencies));
 
@@ -51,6 +50,6 @@ export const createApiRouter = (dependencies: RouteDependencies) => {
 
   router.use("/admin/users", createAdminUserRoutes(dependencies));
 
-  router.use("/course-progress",createCourseProgressRoutes(dependencies));
+  router.use("/course-progress", createCourseProgressRoutes(dependencies));
   return router;
 };

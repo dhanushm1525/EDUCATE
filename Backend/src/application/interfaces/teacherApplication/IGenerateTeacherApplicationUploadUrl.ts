@@ -3,7 +3,7 @@ import { GenerateTeacherApplicationUploadUrlDTO } from "../../dtos/TeacherApplic
 import { GenerateTeacherApplicationUploadUrlResponseDTO } from "../../dtos/TeacherApplication/GenerateTeacherApplicationUploadUrlResponseDTO";
 
 export interface IGenerateTeacherApplicationUploadUrl {
-    execute(
-        dto: GenerateTeacherApplicationUploadUrlDTO
-    ): Promise<GenerateTeacherApplicationUploadUrlResponseDTO>;
+  execute(
+    dto: GenerateTeacherApplicationUploadUrlDTO,
+  ): Promise<GenerateTeacherApplicationUploadUrlResponseDTO>;
 }

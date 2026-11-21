@@ -17,10 +17,7 @@ export default function CourseListState({
         aria-label="Loading courses"
       >
         {Array.from({ length: 4 }).map((_, index) => (
-          <div
-            key={index}
-            className="overflow-hidden rounded-2xl border border-slate-200 bg-white"
-          >
+          <div key={index} className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
             <div className="h-40 animate-pulse bg-slate-100" />
             <div className="space-y-3 p-4">
               <div className="h-4 w-24 animate-pulse rounded bg-slate-100" />
@@ -48,9 +45,7 @@ export default function CourseListState({
   if (isEmpty) {
     return (
       <div className="rounded-2xl border border-dashed border-slate-300 px-6 py-12 text-center">
-        <h3 className="text-lg font-bold text-slate-800">
-          No courses available
-        </h3>
+        <h3 className="text-lg font-bold text-slate-800">No courses available</h3>
         <p className="mt-2 text-sm text-slate-500">
           Published courses will appear here when they become available.
         </p>

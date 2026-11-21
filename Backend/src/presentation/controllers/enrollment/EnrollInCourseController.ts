@@ -1,4 +1,3 @@
-
 import { Request, Response, NextFunction } from "express";
 
 import { IEnrollInCourseUseCase } from "../../../application/interfaces/enrollment/IEnrollInCourseUseCase";
@@ -8,44 +7,29 @@ import { AppError } from "../../../shared/errors/AppError";
 import { EnrollmentResponseMapper } from "../../../application/mappers/EnrollmentResponseMapper";
 
 export class EnrollInCourseController {
-    constructor(
-        private readonly _enrollInCourseUseCase: IEnrollInCourseUseCase
-    ) { }
+  constructor(private readonly _enrollInCourseUseCase: IEnrollInCourseUseCase) {}
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
-        try {
-            if (!req.user) {
-                throw new AppError(
-                    "Unauthorized",
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError("Unauthorized", HttpStatusCode.UNAUTHORIZED);
+      }
 
-            const courseId = req.params.courseId;
+      const courseId = req.params.courseId;
 
-            if (typeof courseId !== "string" || !courseId.trim()) {
-                throw new AppError(
-                    "A valid course ID is required",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
+      if (typeof courseId !== "string" || !courseId.trim()) {
+        throw new AppError("A valid course ID is required", HttpStatusCode.BAD_REQUEST);
+      }
 
-            const enrollment = await this._enrollInCourseUseCase.execute(
-                req.user.userId,
-                courseId
-            );
+      const enrollment = await this._enrollInCourseUseCase.execute(req.user.userId, courseId);
 
-            res.status(HttpStatusCode.CREATED).json({
-                success: true,
-                message: "Enrolled in course successfully",
-                data: EnrollmentResponseMapper.toDTO(enrollment),
-            });
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.CREATED).json({
+        success: true,
+        message: "Enrolled in course successfully",
+        data: EnrollmentResponseMapper.toDTO(enrollment),
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

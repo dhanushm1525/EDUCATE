@@ -9,7 +9,7 @@ import { AuthRequestMapper } from "../../../../application/mappers/AuthRequestMa
 export class GoogleSignInController {
   constructor(
     private readonly _googleSignIn: IGoogleSignIn,
-    private readonly _refreshTokenCookie: IRefreshTokenCookie
+    private readonly _refreshTokenCookie: IRefreshTokenCookie,
   ) {}
 
   async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -22,16 +22,11 @@ export class GoogleSignInController {
       res.cookie(
         this._refreshTokenCookie.name,
         result.refreshToken,
-        this._refreshTokenCookie.options
+        this._refreshTokenCookie.options,
       );
 
       // Return user data and access token
-      successResponse(
-        res,
-        HttpStatusCode.OK,
-        "Google sign-in successful",
-        result.response
-      );
+      successResponse(res, HttpStatusCode.OK, "Google sign-in successful", result.response);
     } catch (error) {
       next(error);
     }

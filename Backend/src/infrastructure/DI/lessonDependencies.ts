@@ -3,11 +3,11 @@ import { CreateLessonUseCase } from "../../application/use-cases/lesson/CreateLe
 import { CreateLessonController } from "../../presentation/controllers/lesson/CreateLessonController";
 
 import {
-    lessonRepository,
-    chapterRepository,
-    courseRepository,
-    enrollmentRepository,
-    assignmentRepository
+  lessonRepository,
+  chapterRepository,
+  courseRepository,
+  enrollmentRepository,
+  assignmentRepository,
 } from "./repositoryDependencies";
 
 import { DefaultCourseStatusPolicy } from "../../domain/policies/CourseStatusPolicy";
@@ -43,137 +43,102 @@ import { env } from "../config/env";
 import { CleanupLessonMediaUseCase } from "../../application/use-cases/lesson/CleanupLessonMediaUseCase";
 import { CleanupLessonMediaController } from "../../presentation/controllers/lesson/CleanupLessonMediaController";
 
-
 import { GetStudentLessonUseCase } from "../../application/use-cases/lesson/GetStudentLessonUseCase";
 import { GetStudentLessonController } from "../../presentation/controllers/lesson/GetStudentLessonController";
 
-
 import { s3StorageService } from "./storageDependencies";
 
-const courseStatusPolicy =
-    new DefaultCourseStatusPolicy();
+const courseStatusPolicy = new DefaultCourseStatusPolicy();
 
-export const createLessonUseCase =
-    new CreateLessonUseCase(
-        lessonRepository,
-        chapterRepository,
-        courseRepository,
-        courseStatusPolicy
-    );
+export const createLessonUseCase = new CreateLessonUseCase(
+  lessonRepository,
+  chapterRepository,
+  courseRepository,
+  courseStatusPolicy,
+);
 
-export const createLessonController =
-    new CreateLessonController(
-        createLessonUseCase
-    );
+export const createLessonController = new CreateLessonController(createLessonUseCase);
 
-export const getLessonsByChapterUseCase =
-    new GetLessonsByChapterUseCase(
-        lessonRepository,
-        chapterRepository,
-        courseRepository
-    );
+export const getLessonsByChapterUseCase = new GetLessonsByChapterUseCase(
+  lessonRepository,
+  chapterRepository,
+  courseRepository,
+);
 
-export const getLessonsByChapterController =
-    new GetLessonsByChapterController(
-        getLessonsByChapterUseCase
-    );
+export const getLessonsByChapterController = new GetLessonsByChapterController(
+  getLessonsByChapterUseCase,
+);
 
+export const getLessonByIdUseCase = new GetLessonByIdUseCase(
+  lessonRepository,
+  chapterRepository,
+  courseRepository,
+);
 
-
-export const getLessonByIdUseCase =
-    new GetLessonByIdUseCase(
-        lessonRepository,
-        chapterRepository,
-        courseRepository
-    );
-
-export const getLessonByIdController =
-    new GetLessonByIdController(
-        getLessonByIdUseCase
-    );
-
+export const getLessonByIdController = new GetLessonByIdController(getLessonByIdUseCase);
 
 const lessonMediaKeyPolicy = new S3LessonMediaKeyPolicy();
 
-export const updateLessonUseCase =
-    new UpdateLessonUseCase(
-        lessonRepository,
-        chapterRepository,
-        courseRepository,
-        courseStatusPolicy,
-        lessonMediaKeyPolicy
-    );
-
-export const updateLessonController =
-    new UpdateLessonController(
-        updateLessonUseCase
-    );
-
-
-export const deleteLessonUseCase = new DeleteLessonUseCase(
-    lessonRepository,
-    chapterRepository,
-    courseRepository,
-    courseStatusPolicy,
-    s3Client,
-    lessonMediaKeyPolicy,
-    assignmentRepository,
-    env.awsS3BucketName
+export const updateLessonUseCase = new UpdateLessonUseCase(
+  lessonRepository,
+  chapterRepository,
+  courseRepository,
+  courseStatusPolicy,
+  lessonMediaKeyPolicy,
 );
 
-export const deleteLessonController =
-    new DeleteLessonController(
-        deleteLessonUseCase
-    );
+export const updateLessonController = new UpdateLessonController(updateLessonUseCase);
 
+export const deleteLessonUseCase = new DeleteLessonUseCase(
+  lessonRepository,
+  chapterRepository,
+  courseRepository,
+  courseStatusPolicy,
+  s3Client,
+  lessonMediaKeyPolicy,
+  assignmentRepository,
+  env.awsS3BucketName,
+);
+
+export const deleteLessonController = new DeleteLessonController(deleteLessonUseCase);
 
 const lessonMediaTypePolicy = new LessonMediaTypePolicy();
 
+export const generateLessonMediaUploadUrlUseCase = new GenerateLessonMediaUploadUrlUseCase(
+  lessonRepository,
+  chapterRepository,
+  courseRepository,
+  courseStatusPolicy,
+  s3Client,
+  lessonMediaTypePolicy,
+  lessonMediaKeyPolicy,
+  env.awsS3BucketName,
+);
 
+export const generateLessonMediaUploadUrlController = new GenerateLessonMediaUploadUrlController(
+  generateLessonMediaUploadUrlUseCase,
+);
 
-export const generateLessonMediaUploadUrlUseCase =
-    new GenerateLessonMediaUploadUrlUseCase(
-        lessonRepository,
-        chapterRepository,
-        courseRepository,
-        courseStatusPolicy,
-        s3Client,
-        lessonMediaTypePolicy,
-        lessonMediaKeyPolicy,
-        env.awsS3BucketName
-    );
+export const cleanupLessonMediaUseCase = new CleanupLessonMediaUseCase(
+  lessonRepository,
+  chapterRepository,
+  courseRepository,
+  courseStatusPolicy,
+  lessonMediaKeyPolicy,
+  s3Client,
+  env.awsS3BucketName,
+);
 
-export const generateLessonMediaUploadUrlController =
-    new GenerateLessonMediaUploadUrlController(
-        generateLessonMediaUploadUrlUseCase
-    );
+export const cleanupLessonMediaController = new CleanupLessonMediaController(
+  cleanupLessonMediaUseCase,
+);
 
+export const getStudentLessonUseCase = new GetStudentLessonUseCase(
+  lessonRepository,
+  chapterRepository,
+  courseRepository,
+  enrollmentRepository,
+  s3StorageService,
+);
 
-export const cleanupLessonMediaUseCase =
-    new CleanupLessonMediaUseCase(
-        lessonRepository,
-        chapterRepository,
-        courseRepository,
-        courseStatusPolicy,
-        lessonMediaKeyPolicy,
-        s3Client,
-        env.awsS3BucketName
-    );
-
-export const cleanupLessonMediaController =
-    new CleanupLessonMediaController(cleanupLessonMediaUseCase);
-
-
-export const getStudentLessonUseCase =
-    new GetStudentLessonUseCase(
-        lessonRepository,
-        chapterRepository,
-        courseRepository,
-        enrollmentRepository,
-        s3StorageService
-    );
-
-export const getStudentLessonController =
-    new GetStudentLessonController(
-        getStudentLessonUseCase
-    );
+export const getStudentLessonController = new GetStudentLessonController(getStudentLessonUseCase);

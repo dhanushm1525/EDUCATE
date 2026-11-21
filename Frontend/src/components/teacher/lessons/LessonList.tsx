@@ -11,12 +11,7 @@ interface LessonListProps {
   onAssignment: (lesson: Lesson) => void;
 }
 
-export function LessonList({
-  lessons,
-  onEdit,
-  onDelete,
-  onAssignment,
-}: LessonListProps) {
+export function LessonList({ lessons, onEdit, onDelete, onAssignment }: LessonListProps) {
   if (lessons.length === 0) {
     return (
       <div className="rounded-lg border border-dashed border-slate-700 p-6 text-center">
@@ -44,9 +39,7 @@ export function LessonList({
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-white">
-                {lesson.title}
-              </p>
+              <p className="truncate text-sm font-medium text-white">{lesson.title}</p>
 
               <div className="mt-1 flex items-center gap-2 text-[11px] text-slate-500">
                 <span>{isVideo ? "Video" : "Reading"}</span>

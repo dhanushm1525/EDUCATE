@@ -1,3 +1,3 @@
 export interface ICourseThumbnailTypePolicy {
-    supports(contentType: string): boolean;
+  supports(contentType: string): boolean;
 }

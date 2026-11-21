@@ -1,13 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import {
-  BookOpen,
-  Clock3,
-  Users,
-  Pencil,
-  Eye,
-  MessageSquareWarning,
-} from "lucide-react";
+import { BookOpen, Clock3, Users, Pencil, Eye, MessageSquareWarning } from "lucide-react";
 
 import { Button } from "../../common/ui/Button";
 import CourseStatusBadge from "./CourseStatusBadge";
@@ -24,10 +17,7 @@ interface CourseAction {
   destination: string;
 }
 
-const getCourseAction = (
-  courseId: string,
-  status: CourseStatus,
-): CourseAction => {
+const getCourseAction = (courseId: string, status: CourseStatus): CourseAction => {
   switch (status) {
     case "draft":
       return {
@@ -89,13 +79,9 @@ export default function CourseCard({ course }: CourseCardProps) {
       <div className="space-y-4 p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h3 className="line-clamp-2 font-semibold text-white">
-              {course.title}
-            </h3>
+            <h3 className="line-clamp-2 font-semibold text-white">{course.title}</h3>
 
-            <p className="mt-1 line-clamp-2 text-sm text-slate-400">
-              {course.subtitle}
-            </p>
+            <p className="mt-1 line-clamp-2 text-sm text-slate-400">{course.subtitle}</p>
           </div>
 
           <CourseStatusBadge status={course.status} />
@@ -120,12 +106,8 @@ export default function CourseCard({ course }: CourseCardProps) {
 
         {course.status === "rejected" && course.rejectionReason && (
           <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-3">
-            <p className="text-xs font-medium text-red-400">
-              Rejection feedback
-            </p>
-            <p className="mt-1 text-sm text-slate-300">
-              {course.rejectionReason}
-            </p>
+            <p className="text-xs font-medium text-red-400">Rejection feedback</p>
+            <p className="mt-1 text-sm text-slate-300">{course.rejectionReason}</p>
           </div>
         )}
 
@@ -134,12 +116,7 @@ export default function CourseCard({ course }: CourseCardProps) {
             {course.finalPrice === 0 ? "Free" : `₹${course.finalPrice}`}
           </span>
 
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={handleOpenCourse}
-          >
+          <Button type="button" variant="secondary" size="sm" onClick={handleOpenCourse}>
             <span className="flex items-center gap-2">
               <ActionIcon size={14} />
               {action.label}

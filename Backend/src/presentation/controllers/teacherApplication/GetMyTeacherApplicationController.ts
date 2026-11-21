@@ -8,44 +8,24 @@ import { successResponse } from "../../../shared/response/apiResponse";
 import { TeacherApplicationResponseMapper } from "../../../application/mappers/TeacherApplicationResponseMapper";
 
 export class GetMyTeacherApplicationController {
+  constructor(private readonly _getMyTeacherApplication: IGetMyTeacherApplication) {}
 
-    constructor(
-        private readonly _getMyTeacherApplication:
-            IGetMyTeacherApplication
-    ) {}
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError("User not authenticated", HttpStatusCode.UNAUTHORIZED);
+      }
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
+      const result = await this._getMyTeacherApplication.execute(req.user.userId);
 
-        try {
-            if (!req.user) {
-                throw new AppError(
-                    "User not authenticated",
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
-
-            const result =
-                await this._getMyTeacherApplication.execute(
-                    req.user.userId
-                );
-
-            successResponse(
-                res,
-                HttpStatusCode.OK,
-                result
-                    ? "Teacher application retrieved successfully"
-                    : "No teacher application found",
-                result
-                    ? TeacherApplicationResponseMapper.toDTO(result)
-                    : null
-            );
-
-        } catch (error) {
-            next(error);
-        }
+      successResponse(
+        res,
+        HttpStatusCode.OK,
+        result ? "Teacher application retrieved successfully" : "No teacher application found",
+        result ? TeacherApplicationResponseMapper.toDTO(result) : null,
+      );
+    } catch (error) {
+      next(error);
     }
+  }
 }

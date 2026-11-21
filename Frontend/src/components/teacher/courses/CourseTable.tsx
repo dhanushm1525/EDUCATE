@@ -44,11 +44,7 @@ export function CourseTable({ courses, onView, onEdit }: CourseTableProps) {
                   <div className="flex items-center gap-3">
                     <div className="h-11 w-16 overflow-hidden rounded-md bg-slate-800">
                       {course.thumbnail ? (
-                        <img
-                          src={course.thumbnail}
-                          alt=""
-                          className="h-full w-full object-cover"
-                        />
+                        <img src={course.thumbnail} alt="" className="h-full w-full object-cover" />
                       ) : (
                         <div className="flex h-full items-center justify-center text-xs text-slate-500">
                           No image
@@ -59,18 +55,12 @@ export function CourseTable({ courses, onView, onEdit }: CourseTableProps) {
                       <p className="max-w-xs truncate text-sm font-medium text-white">
                         {course.title}
                       </p>
-                      <p className="max-w-xs truncate text-xs text-slate-500">
-                        {course.subtitle}
-                      </p>
+                      <p className="max-w-xs truncate text-xs text-slate-500">{course.subtitle}</p>
                     </div>
                   </div>
                 </td>
-                <td className="px-5 py-4 text-sm text-slate-400">
-                  {course.level}
-                </td>
-                <td className="px-5 py-4 text-sm text-slate-400">
-                  {course.totalStudents ?? 0}
-                </td>
+                <td className="px-5 py-4 text-sm text-slate-400">{course.level}</td>
+                <td className="px-5 py-4 text-sm text-slate-400">{course.totalStudents ?? 0}</td>
                 <td className="px-5 py-4">
                   <StatusBadge status={course.status} />
                 </td>

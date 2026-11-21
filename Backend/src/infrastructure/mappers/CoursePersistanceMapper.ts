@@ -1,103 +1,92 @@
-import { Course } from "../../domain/entities/Course"
+import { Course } from "../../domain/entities/Course";
 import { CourseDocument } from "../database/models/CourseModel";
 
 export class CoursePersistenceMapper {
+  static toDomain(document: CourseDocument): Course {
+    return {
+      courseId: document._id.toString(),
 
-    static toDomain(
-        document: CourseDocument
-    ): Course {
+      teacherId: document.teacherId.toString(),
+      categoryId: document.categoryId.toString(),
 
-        return {
-            courseId: document._id.toString(),
+      title: document.title,
+      subtitle: document.subtitle,
+      description: document.description,
 
-            teacherId: document.teacherId.toString(),
-            categoryId: document.categoryId.toString(),
+      thumbnail: document.thumbnail,
+      trailer: document.trailer,
 
-            title: document.title,
-            subtitle: document.subtitle,
-            description: document.description,
+      language: document.language,
+      level: document.level as Course["level"],
 
-            thumbnail: document.thumbnail,
-            trailer: document.trailer,
+      duration: document.duration,
 
-            language: document.language,
-            level: document.level as Course["level"],
+      price: document.price,
+      discount: document.discount,
+      finalPrice: document.finalPrice,
 
-            duration: document.duration,
+      tags: document.tags,
 
-            price: document.price,
-            discount: document.discount,
-            finalPrice: document.finalPrice,
+      objectives: document.objectives,
+      requirements: document.requirements,
 
-            tags: document.tags,
+      featured: document.featured,
 
-            objectives: document.objectives,
-            requirements: document.requirements,
+      averageRating: document.averageRating,
+      totalStudents: document.totalStudents,
 
-            featured: document.featured,
+      status: document.status as Course["status"],
+      rejectionReason: document.rejectionReason,
 
-            averageRating: document.averageRating,
-            totalStudents: document.totalStudents,
+      createdAt: document.createdAt,
+      updatedAt: document.updatedAt,
+    };
+  }
 
-            status: document.status as Course["status"],
-            rejectionReason: document.rejectionReason,
+  static toPersistence(course: Course) {
+    return {
+      teacherId: course.teacherId,
+      categoryId: course.categoryId,
 
-            createdAt: document.createdAt,
-            updatedAt: document.updatedAt
-        };
-    }
+      title: course.title,
+      subtitle: course.subtitle,
+      description: course.description,
 
+      thumbnail: course.thumbnail,
+      trailer: course.trailer,
 
-    static toPersistence(
-        course: Course
-    ) {
+      language: course.language,
+      level: course.level,
 
-        return {
-            teacherId: course.teacherId,
-            categoryId: course.categoryId,
+      duration: course.duration,
 
-            title: course.title,
-            subtitle: course.subtitle,
-            description: course.description,
+      price: course.price,
+      discount: course.discount,
+      finalPrice: course.finalPrice,
 
-            thumbnail: course.thumbnail,
-            trailer: course.trailer,
+      tags: course.tags ?? [],
 
-            language: course.language,
-            level: course.level,
+      objectives: course.objectives ?? [],
+      requirements: course.requirements ?? [],
 
-            duration: course.duration,
+      featured: course.featured ?? false,
 
-            price: course.price,
-            discount: course.discount,
-            finalPrice: course.finalPrice,
+      averageRating: course.averageRating ?? 0,
+      totalStudents: course.totalStudents ?? 0,
 
-            tags: course.tags ?? [],
+      status: course.status,
+      rejectionReason: course.rejectionReason,
+    };
+  }
 
-            objectives: course.objectives ?? [],
-            requirements: course.requirements ?? [],
-
-            featured: course.featured ?? false,
-
-            averageRating: course.averageRating ?? 0,
-            totalStudents: course.totalStudents ?? 0,
-
-            status: course.status,
-            rejectionReason: course.rejectionReason
-        };
-    }
-
-
-static toPersistenceUpdate(
-    course: Partial<Course>
-) {
+  static toPersistenceUpdate(course: Partial<Course>) {
     const {
-        courseId: _courseId,
-        createdAt: _createdAt,
-        updatedAt: _updatedAt,
-        ...updateData
+      courseId: _courseId,
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      ...updateData
     } = course;
 
     return updateData;
-}
+  }
 }

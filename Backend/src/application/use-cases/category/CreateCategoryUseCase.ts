@@ -10,30 +10,18 @@ import { ICreateCategoryUseCase } from "../../interfaces/category/ICreateCategor
 
 import { AppError } from "../../../shared/errors/AppError";
 
-export class CreateCategoryUseCase
-    implements ICreateCategoryUseCase {
+export class CreateCategoryUseCase implements ICreateCategoryUseCase {
+  constructor(private readonly _categoryRepository: ICategoryRepository) {}
 
-    constructor(
-        private readonly _categoryRepository: ICategoryRepository
-    ) {}
+  async execute(dto: CreateCategoryDTO): Promise<Category> {
+    const existingCategory = await this._categoryRepository.findByName(dto.name);
 
-    async execute(
-        dto: CreateCategoryDTO
-    ): Promise<Category> {
-
-        const existingCategory =
-            await this._categoryRepository.findByName(dto.name);
-
-        if (existingCategory) {
-            throw new AppError(
-                "Category already exists",
-                HttpStatusCode.CONFLICT
-            );
-        }
-
-        const category =
-            CategoryCreationMapper.toEntity(dto);
-
-        return await this._categoryRepository.create(category);
+    if (existingCategory) {
+      throw new AppError("Category already exists", HttpStatusCode.CONFLICT);
     }
+
+    const category = CategoryCreationMapper.toEntity(dto);
+
+    return await this._categoryRepository.create(category);
+  }
 }

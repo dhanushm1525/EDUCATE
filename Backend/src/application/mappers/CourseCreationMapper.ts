@@ -1,74 +1,68 @@
 import { Course } from "../../domain/entities/Course";
-import { CreateCourseDTO } from "../dtos/courses/CreateCourseDTO"
+import { CreateCourseDTO } from "../dtos/courses/CreateCourseDTO";
 import { CourseStatus } from "../../shared/enums/CourseStatus";
 
 export class CourseMapper {
+  static toCreateCourseDTO(
+    body: Omit<CreateCourseDTO, "teacherId">,
+    teacherId: string,
+  ): CreateCourseDTO {
+    return {
+      teacherId,
+      categoryId: body.categoryId,
+      title: body.title,
+      subtitle: body.subtitle,
+      description: body.description,
+      thumbnail: body.thumbnail,
+      trailer: body.trailer,
+      language: body.language,
+      level: body.level,
+      duration: body.duration,
+      price: body.price,
+      discount: body.discount,
+      tags: body.tags,
+      objectives: body.objectives,
+      requirements: body.requirements,
+    };
+  }
 
-    static toCreateCourseDTO(
-        body: Omit<CreateCourseDTO, "teacherId">,
-        teacherId: string
-    ): CreateCourseDTO {
+  static toEntity(dto: CreateCourseDTO): Course {
+    const finalPrice = dto.price - (dto.price * dto.discount) / 100;
 
-        return {
-            teacherId,
-            categoryId: body.categoryId,
-            title: body.title,
-            subtitle: body.subtitle,
-            description: body.description,
-            thumbnail: body.thumbnail,
-            trailer: body.trailer,
-            language: body.language,
-            level: body.level,
-            duration: body.duration,
-            price: body.price,
-            discount: body.discount,
-            tags: body.tags,
-            objectives: body.objectives,
-            requirements: body.requirements,
-        };
-    }
+    return {
+      teacherId: dto.teacherId,
+      categoryId: dto.categoryId,
 
-    static toEntity(dto: CreateCourseDTO): Course {
+      title: dto.title,
+      subtitle: dto.subtitle,
+      description: dto.description,
 
-        const finalPrice =
-            dto.price - (dto.price * dto.discount) / 100;
+      thumbnail: dto.thumbnail,
+      trailer: dto.trailer,
 
-        return {
-            
+      language: dto.language,
+      level: dto.level,
 
-            teacherId: dto.teacherId,
-            categoryId: dto.categoryId,
+      duration: dto.duration,
 
-            title: dto.title,
-            subtitle: dto.subtitle,
-            description: dto.description,
+      price: dto.price,
+      discount: dto.discount,
+      finalPrice,
 
-            thumbnail: dto.thumbnail,
-            trailer: dto.trailer,
+      tags: dto.tags,
 
-            language: dto.language,
-            level: dto.level,
+      objectives: dto.objectives,
+      requirements: dto.requirements,
 
-            duration: dto.duration,
+      featured: false,
 
-            price: dto.price,
-            discount: dto.discount,
-            finalPrice,
+      averageRating: 0,
+      totalStudents: 0,
 
-            tags: dto.tags,
+      status: CourseStatus.DRAFT,
 
-            objectives: dto.objectives,
-            requirements: dto.requirements,
-
-            featured: false,
-
-            averageRating: 0,
-            totalStudents: 0,
-
-            status: CourseStatus.DRAFT,
-
-            createdAt: new Date(),
-            updatedAt: new Date()
-        };
-    }
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+  }
 }

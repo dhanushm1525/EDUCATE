@@ -1,3 +1,3 @@
-export interface ForgotPasswordResponseDTO{
-    message:string
+export interface ForgotPasswordResponseDTO {
+  message: string;
 }

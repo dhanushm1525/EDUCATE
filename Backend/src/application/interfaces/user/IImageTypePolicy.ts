@@ -1,3 +1,3 @@
 export interface IImageTypePolicy {
-    supports(contentType: string): boolean;
+  supports(contentType: string): boolean;
 }

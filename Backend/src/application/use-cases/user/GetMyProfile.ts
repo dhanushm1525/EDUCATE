@@ -5,53 +5,38 @@ import { AppError } from "../../../shared/errors/AppError";
 import type { IUserRepository } from "../../../domain/repositories/userRepositories/IUserRepository";
 import type { IStorageService } from "../../interfaces/storage/IStorageService";
 
-import type {
-    GetMyProfileDTO,
-} from "../../dtos/user/GetMyProfileDTO";
-import { GetMyProfileResponseDTO } from "../../dtos/user/GetMyProfileResponseDTO"
+import type { GetMyProfileDTO } from "../../dtos/user/GetMyProfileDTO";
+import { GetMyProfileResponseDTO } from "../../dtos/user/GetMyProfileResponseDTO";
 import { IProfileImagePolicy } from "../../interfaces/user/IProfileImagePolicy";
 import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
 import { UserResponseMapper } from "../../mappers/UserResponseMapper";
 
 export class GetMyProfile {
-    constructor(
-        private readonly _userRepository: IUserRepository,
-        private readonly _storageService: IStorageService,
-        private readonly _profileImagePolicy: IProfileImagePolicy
-    ) { }
+  constructor(
+    private readonly _userRepository: IUserRepository,
+    private readonly _storageService: IStorageService,
+    private readonly _profileImagePolicy: IProfileImagePolicy,
+  ) {}
 
-    async execute(
-        request: GetMyProfileDTO
-    ): Promise<GetMyProfileResponseDTO> {
-        const user = await this._userRepository.findById(
-            request.userId
-        );
+  async execute(request: GetMyProfileDTO): Promise<GetMyProfileResponseDTO> {
+    const user = await this._userRepository.findById(request.userId);
 
-        if (!user) {
-            throw new AppError(
-                AUTH_MESSAGES.USER_NOT_FOUND,
-                HttpStatusCode.NOT_FOUND
-            );
-        }
-
-        if (!user.id) {
-            throw new AppError(
-                AUTH_MESSAGES.USER_ID_IS_MISSING,
-                HttpStatusCode.INTERNAL_SERVER_ERROR
-            );
-        }
-
-        let avatar = user.avatar;
-
-        // Convert only custom S3 object keys into download URLs.
-        // Google profile image URLs should remain unchanged.
-        if (avatar && this._profileImagePolicy.isManagedImage(avatar)) {
-            avatar =
-                await this._storageService.generateDownloadUrl(
-                    avatar
-                );
-        }
-
-        return UserResponseMapper.toProfileDTO(user, avatar);
+    if (!user) {
+      throw new AppError(AUTH_MESSAGES.USER_NOT_FOUND, HttpStatusCode.NOT_FOUND);
     }
+
+    if (!user.id) {
+      throw new AppError(AUTH_MESSAGES.USER_ID_IS_MISSING, HttpStatusCode.INTERNAL_SERVER_ERROR);
+    }
+
+    let avatar = user.avatar;
+
+    // Convert only custom S3 object keys into download URLs.
+    // Google profile image URLs should remain unchanged.
+    if (avatar && this._profileImagePolicy.isManagedImage(avatar)) {
+      avatar = await this._storageService.generateDownloadUrl(avatar);
+    }
+
+    return UserResponseMapper.toProfileDTO(user, avatar);
+  }
 }

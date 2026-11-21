@@ -1,14 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Search,
-  Users,
-  UserCheck,
-  UserX,
-  Mail,
-  CalendarDays,
-  ShieldAlert,
-  X,
-} from "lucide-react";
+import { Search, Users, UserCheck, UserX, Mail, CalendarDays, ShieldAlert, X } from "lucide-react";
 
 import { adminUserService } from "../../../services/adminUser.service";
 
@@ -60,8 +51,7 @@ export default function AdminUserManagement({
 
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
 
-  const [selectedUser, setSelectedUser] =
-    useState<StatusChangeConfirmation | null>(null);
+  const [selectedUser, setSelectedUser] = useState<StatusChangeConfirmation | null>(null);
 
   // Changing this value triggers a fresh API request.
   const [refreshKey, setRefreshKey] = useState(0);
@@ -107,8 +97,7 @@ export default function AdminUserManagement({
 
   // Opens the confirmation modal.
   const handleStatusChange = (user: AdminUser) => {
-    const nextStatus: AdminUserStatus =
-      user.status === "active" ? "blocked" : "active";
+    const nextStatus: AdminUserStatus = user.status === "active" ? "blocked" : "active";
 
     const action = nextStatus === "blocked" ? "block" : "activate";
 
@@ -128,10 +117,7 @@ export default function AdminUserManagement({
     try {
       setUpdatingUserId(user.id);
 
-      const updatedUser = await adminUserService.updateUserStatus(
-        user.id,
-        nextStatus,
-      );
+      const updatedUser = await adminUserService.updateUserStatus(user.id, nextStatus);
 
       setUsers((currentUsers) =>
         currentUsers.map((currentUser) =>
@@ -141,10 +127,7 @@ export default function AdminUserManagement({
 
       setSelectedUser(null);
 
-      addToast(
-        `User ${action === "block" ? "blocked" : "activated"} successfully.`,
-        "success",
-      );
+      addToast(`User ${action === "block" ? "blocked" : "activated"} successfully.`, "success");
     } catch {
       addToast(`Unable to ${action} this user. Please try again.`, "error");
     } finally {
@@ -255,10 +238,7 @@ export default function AdminUserManagement({
       {loading ? (
         <LoadingState message={`Loading ${role}s...`} />
       ) : error ? (
-        <ErrorState
-          message={error}
-          onRetry={() => setRefreshKey((current) => current + 1)}
-        />
+        <ErrorState message={error} onRetry={() => setRefreshKey((current) => current + 1)} />
       ) : users.length === 0 ? (
         <EmptyState
           title={`No ${role}s found`}
@@ -295,10 +275,7 @@ export default function AdminUserManagement({
 
               <tbody className="divide-y divide-slate-800">
                 {users.map((user) => (
-                  <tr
-                    key={user.id}
-                    className="transition hover:bg-slate-800/30"
-                  >
+                  <tr key={user.id} className="transition hover:bg-slate-800/30">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {user.avatar ? (
@@ -327,9 +304,7 @@ export default function AdminUserManagement({
                     </td>
 
                     <td className="px-6 py-4">
-                      <StatusBadge
-                        status={user.isVerified ? "Verified" : "Unverified"}
-                      />
+                      <StatusBadge status={user.isVerified ? "Verified" : "Unverified"} />
                     </td>
 
                     <td className="px-6 py-4">
@@ -345,16 +320,12 @@ export default function AdminUserManagement({
 
                     <td className="px-6 py-4 text-right">
                       {user.status === "pending" ? (
-                        <span className="text-xs text-slate-500">
-                          No action
-                        </span>
+                        <span className="text-xs text-slate-500">No action</span>
                       ) : (
                         <Button
                           type="button"
                           size="sm"
-                          variant={
-                            user.status === "active" ? "danger" : "primary"
-                          }
+                          variant={user.status === "active" ? "danger" : "primary"}
                           loading={updatingUserId === user.id}
                           disabled={updatingUserId !== null}
                           onClick={() => handleStatusChange(user)}
@@ -385,9 +356,7 @@ export default function AdminUserManagement({
                 variant="secondary"
                 size="sm"
                 disabled={page <= 1}
-                onClick={() =>
-                  setPage((currentPage) => Math.max(1, currentPage - 1))
-                }
+                onClick={() => setPage((currentPage) => Math.max(1, currentPage - 1))}
               >
                 Previous
               </Button>
@@ -401,11 +370,7 @@ export default function AdminUserManagement({
                 variant="secondary"
                 size="sm"
                 disabled={page >= totalPages}
-                onClick={() =>
-                  setPage((currentPage) =>
-                    Math.min(totalPages, currentPage + 1),
-                  )
-                }
+                onClick={() => setPage((currentPage) => Math.min(totalPages, currentPage + 1))}
               >
                 Next
               </Button>
@@ -453,13 +418,8 @@ export default function AdminUserManagement({
               </button>
             </div>
 
-            <h2
-              id="confirmation-title"
-              className="mt-5 text-xl font-semibold text-white"
-            >
-              {selectedUser.action === "block"
-                ? "Block this user?"
-                : "Activate this user?"}
+            <h2 id="confirmation-title" className="mt-5 text-xl font-semibold text-white">
+              {selectedUser.action === "block" ? "Block this user?" : "Activate this user?"}
             </h2>
 
             <p className="mt-2 text-sm leading-6 text-slate-400">
@@ -502,9 +462,7 @@ export default function AdminUserManagement({
                 disabled={updatingUserId !== null}
                 onClick={confirmStatusChange}
               >
-                {selectedUser.action === "block"
-                  ? "Confirm Block"
-                  : "Confirm Activate"}
+                {selectedUser.action === "block" ? "Confirm Block" : "Confirm Activate"}
               </Button>
             </div>
           </div>

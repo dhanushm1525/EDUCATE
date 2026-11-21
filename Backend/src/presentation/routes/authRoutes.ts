@@ -14,74 +14,59 @@ import { resetPasswordSchema } from "../../shared/schema/auth/resetPasswordSchem
 import { googleSignInSchema } from "../../shared/schema/auth/googleSignInSchema";
 import type { RouteDependencies } from "./routeDependencies";
 
+export const createAuthRoutes = (
+  dependencies: RouteDependencies["auth"] & Pick<RouteDependencies, "authenticateUser">,
+) => {
+  const router = Router();
+  const { authenticateUser } = dependencies;
+  const {
+    register,
+    login,
+    refreshToken,
+    logout,
+    resetPassword,
+    getCurrentUser,
+    googleSignIn,
+    verifyEmailOtp,
+    resendVerificationOtp,
+    forgotPassword,
+  } = dependencies;
 
-export const createAuthRoutes = (dependencies: RouteDependencies["auth"] & Pick<RouteDependencies, "authenticateUser">) => {
-const router = Router();
-const { authenticateUser } = dependencies;
-const { register, login, refreshToken, logout, resetPassword, getCurrentUser, googleSignIn, verifyEmailOtp, resendVerificationOtp, forgotPassword } = dependencies;
+  router.post("/register", validate(registerSchema), register.handle.bind(register));
 
+  router.post("/login", validate(loginSchema), login.handle.bind(login));
 
+  router.post("/refresh", refreshToken.handle.bind(refreshToken));
 
+  router.post("/logout", logout.handle.bind(logout));
 
-
-
-router.post(
-    "/register",
-    validate(registerSchema),
-    register.handle.bind(register)
-);
-
-router.post(
-    "/login",
-    validate(loginSchema),
-    login.handle.bind(login)
-);
-
-router.post(
-    "/refresh",
-    refreshToken.handle.bind(refreshToken)
-);
-
-router.post(
-    "/logout",
-    logout.handle.bind(logout)
-)
-
-
-router.post(
+  router.post(
     "/verify-email",
     validate(verifyEmailOtpSchema),
-    verifyEmailOtp.handle.bind(verifyEmailOtp)
-);
+    verifyEmailOtp.handle.bind(verifyEmailOtp),
+  );
 
-
-router.post(
+  router.post(
     "/resend-verification-otp",
     validate(resendVerificationOtpSchema),
-    resendVerificationOtp.handle.bind(resendVerificationOtp)
-);
+    resendVerificationOtp.handle.bind(resendVerificationOtp),
+  );
 
-
-router.post(
+  router.post(
     "/forgot-password",
     validate(forgotPasswordSchema),
-    forgotPassword.handle.bind(forgotPassword)
-);
+    forgotPassword.handle.bind(forgotPassword),
+  );
 
-
-router.post(
+  router.post(
     "/reset-password",
     validate(resetPasswordSchema),
-    resetPassword.handle.bind(resetPassword)
-);
+    resetPassword.handle.bind(resetPassword),
+  );
 
-router.get(
-    "/me",
-    authenticateUser,
-    getCurrentUser.handle.bind(getCurrentUser)
-)
+  router.get("/me", authenticateUser, getCurrentUser.handle.bind(getCurrentUser));
 
-router.post("/google",validate(googleSignInSchema),googleSignIn.handle.bind(googleSignIn))
+  router.post("/google", validate(googleSignInSchema), googleSignIn.handle.bind(googleSignIn));
 
-return router;
+  return router;
 };

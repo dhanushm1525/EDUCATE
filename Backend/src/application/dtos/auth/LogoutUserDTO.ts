@@ -1,3 +1,3 @@
-export interface LogoutUserDTO{
-    refreshToken?:string
+export interface LogoutUserDTO {
+  refreshToken?: string;
 }

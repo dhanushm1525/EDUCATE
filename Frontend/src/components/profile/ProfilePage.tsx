@@ -14,9 +14,7 @@ interface ProfilePageProps {
   title?: string;
 }
 
-export default function ProfilePage({
-  title = "My Profile",
-}: ProfilePageProps) {
+export default function ProfilePage({ title = "My Profile" }: ProfilePageProps) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
@@ -71,12 +69,10 @@ export default function ProfilePage({
       setIsUploadingAvatar(true);
 
       // 1. Generate the presigned upload URL
-      const uploadResponse = await storageService.generateProfileImageUploadUrl(
-        {
-          fileName: file.name,
-          contentType: file.type,
-        },
-      );
+      const uploadResponse = await storageService.generateProfileImageUploadUrl({
+        fileName: file.name,
+        contentType: file.type,
+      });
 
       const { uploadUrl, key } = uploadResponse.data;
 
@@ -123,9 +119,7 @@ export default function ProfilePage({
         <div className="mb-8">
           <h1 className="text-2xl font-bold">{title}</h1>
 
-          <p className="mt-1 text-sm text-slate-400">
-            Manage your personal information.
-          </p>
+          <p className="mt-1 text-sm text-slate-400">Manage your personal information.</p>
         </div>
 
         {/* Hidden file input */}
@@ -198,13 +192,9 @@ export default function ProfilePage({
             </div>
 
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                Role
-              </p>
+              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Role</p>
 
-              <p className="mt-2 text-sm capitalize text-slate-200">
-                {profile.role}
-              </p>
+              <p className="mt-2 text-sm capitalize text-slate-200">{profile.role}</p>
             </div>
 
             <div>
@@ -218,13 +208,9 @@ export default function ProfilePage({
             </div>
 
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                User ID
-              </p>
+              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">User ID</p>
 
-              <p className="mt-2 break-all text-sm text-slate-200">
-                {profile.id}
-              </p>
+              <p className="mt-2 break-all text-sm text-slate-200">{profile.id}</p>
             </div>
           </div>
         </div>

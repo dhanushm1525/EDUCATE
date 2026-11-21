@@ -8,8 +8,7 @@ import { MongoChapterRepository } from "../repositories/MongoChapterRepository";
 
 import { MongoLessonRepository } from "../repositories/MongoLessonRepository";
 
-import { MongoTeacherApplicationRepository }
-    from "../repositories/MongoTeacherApplicationRepository";
+import { MongoTeacherApplicationRepository } from "../repositories/MongoTeacherApplicationRepository";
 
 import { MongoEnrollmentRepository } from "../repositories/MongoEnrollmentRepository";
 
@@ -17,7 +16,6 @@ import { MongoAssignmentSubmissionRepository } from "../repositories/MongoAssign
 
 import { MongoCourseProgressRepository } from "../repositories/MongoCourseProgressRepository";
 import { MongoAssignmentRepository } from "../repositories/MongoAssignmentRepository";
-
 
 export const userRepository = new MongoUserRepository();
 
@@ -33,9 +31,7 @@ export const teacherApplicationRepository = new MongoTeacherApplicationRepositor
 
 export const enrollmentRepository = new MongoEnrollmentRepository();
 
-export const assignmentSubmissionRepository =
-    new MongoAssignmentSubmissionRepository();
-
+export const assignmentSubmissionRepository = new MongoAssignmentSubmissionRepository();
 
 export const courseProgressRepository = new MongoCourseProgressRepository();
 

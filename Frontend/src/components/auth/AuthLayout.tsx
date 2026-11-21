@@ -4,24 +4,22 @@ import AuthLogo from "./AuthLogo";
 import AuthFooter from "./AuthFooter";
 
 interface AuthLayoutProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
-function AuthLayout({
-    children,
-}: AuthLayoutProps) {
-
-    return (
-
-        <div className="
+function AuthLayout({ children }: AuthLayoutProps) {
+  return (
+    <div
+      className="
             min-h-screen
             bg-[#0B1120]
             text-slate-100
             flex
             flex-col
-        ">
-
-            <main className="
+        "
+    >
+      <main
+        className="
                 flex-1
                 max-w-7xl
                 w-full
@@ -32,42 +30,37 @@ function AuthLayout({
                 lg:py-16
                 flex
                 flex-col
-            ">
+            "
+      >
+        {/* Logo */}
 
-                {/* Logo */}
-
-                <div className="
+        <div
+          className="
                     flex
                     items-center
                     mb-10
                     lg:mb-12
-                ">
+                "
+        >
+          <AuthLogo />
+        </div>
 
-                    <AuthLogo />
+        {/* Page Content */}
 
-                </div>
-
-
-                {/* Page Content */}
-
-                <div className="
+        <div
+          className="
                     flex-1
                     flex
                     items-center
-                ">
-
-                    {children}
-
-                </div>
-
-            </main>
-
-
-            <AuthFooter />
-
+                "
+        >
+          {children}
         </div>
+      </main>
 
-    );
+      <AuthFooter />
+    </div>
+  );
 }
 
 export default AuthLayout;

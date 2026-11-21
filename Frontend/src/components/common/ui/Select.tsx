@@ -13,14 +13,7 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   error?: string;
 }
 
-export function Select({
-  label,
-  options,
-  error,
-  id,
-  className = "",
-  ...props
-}: SelectProps) {
+export function Select({ label, options, error, id, className = "", ...props }: SelectProps) {
   return (
     <div className="space-y-1.5">
       {label && (

@@ -1,13 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { isAxiosError } from "axios";
-import {
-  AlertCircle,
-  ClipboardList,
-  Clock3,
-  LoaderCircle,
-  Play,
-  Send,
-} from "lucide-react";
+import { AlertCircle, ClipboardList, Clock3, LoaderCircle, Play, Send } from "lucide-react";
 
 import { assignmentService } from "../../../services/assingment.service";
 import { getApiErrorMessage } from "../../../utils/apiError";
@@ -40,10 +33,7 @@ const formatTime = (seconds: number): string => {
   ].join(":");
 };
 
-export default function AssignmentPanel({
-  lessonId,
-  onAssignmentSubmitted,
-}: Props) {
+export default function AssignmentPanel({ lessonId, onAssignmentSubmitted }: Props) {
   const [assignment, setAssignment] = useState<StudentAssignment | null>(null);
 
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -86,9 +76,7 @@ export default function AssignmentPanel({
       if (attempt.expiresAt) {
         const expiryTime = new Date(attempt.expiresAt).getTime();
 
-        setRemainingSeconds(
-          Math.max(0, Math.ceil((expiryTime - Date.now()) / 1000)),
-        );
+        setRemainingSeconds(Math.max(0, Math.ceil((expiryTime - Date.now()) / 1000)));
       } else {
         setRemainingSeconds(0);
       }
@@ -101,9 +89,7 @@ export default function AssignmentPanel({
 
     if (data.attemptsUsed > 0) {
       try {
-        const resultResponse = await assignmentService.getResults(
-          data.assignmentId,
-        );
+        const resultResponse = await assignmentService.getResults(data.assignmentId);
 
         setResults(resultResponse.data);
       } catch {
@@ -164,10 +150,7 @@ export default function AssignmentPanel({
     const updateCountdown = () => {
       const expiryTime = new Date(activeAttempt.expiresAt!).getTime();
 
-      const remaining = Math.max(
-        0,
-        Math.ceil((expiryTime - Date.now()) / 1000),
-      );
+      const remaining = Math.max(0, Math.ceil((expiryTime - Date.now()) / 1000));
 
       setRemainingSeconds(remaining);
     };
@@ -207,26 +190,15 @@ export default function AssignmentPanel({
     };
 
     void expireAttempt();
-  }, [
-    isTimeExpired,
-    activeAttempt?.submissionId,
-    activeAttempt?.expiresAt,
-    loadAssignment,
-  ]);
+  }, [isTimeExpired, activeAttempt?.submissionId, activeAttempt?.expiresAt, loadAssignment]);
 
   // Queue answer saves so older requests cannot overwrite newer answers.
   const queueAnswerSave = useCallback(
-    (
-      assignmentId: string,
-      attemptId: string,
-      answerSnapshot: Record<string, string>,
-    ) => {
-      const answerPayload = Object.entries(answerSnapshot).map(
-        ([questionId, selectedAnswer]) => ({
-          questionId,
-          selectedAnswer,
-        }),
-      );
+    (assignmentId: string, attemptId: string, answerSnapshot: Record<string, string>) => {
+      const answerPayload = Object.entries(answerSnapshot).map(([questionId, selectedAnswer]) => ({
+        questionId,
+        selectedAnswer,
+      }));
 
       setSavingAnswers(true);
 
@@ -239,16 +211,10 @@ export default function AssignmentPanel({
             return;
           }
 
-          await assignmentService.saveAnswers(
-            assignmentId,
-            attemptId,
-            answerPayload,
-          );
+          await assignmentService.saveAnswers(assignmentId, attemptId, answerPayload);
         })
         .catch((error: unknown) => {
-          setErrorMessage(
-            `Unable to save your answers: ${getApiErrorMessage(error)}`,
-          );
+          setErrorMessage(`Unable to save your answers: ${getApiErrorMessage(error)}`);
         })
         .finally(() => {
           setSavingAnswers(false);
@@ -274,11 +240,7 @@ export default function AssignmentPanel({
 
       setErrorMessage(null);
 
-      queueAnswerSave(
-        assignment.assignmentId,
-        activeAttempt.submissionId,
-        updatedAnswers,
-      );
+      queueAnswerSave(assignment.assignmentId, activeAttempt.submissionId, updatedAnswers);
     },
     [assignment, activeAttempt, submitting, isTimeExpired, queueAnswerSave],
   );
@@ -390,9 +352,7 @@ export default function AssignmentPanel({
       <div className="mt-10 flex items-center justify-center rounded-2xl border border-slate-200 bg-white p-10">
         <LoaderCircle className="animate-spin text-indigo-600" />
 
-        <span className="ml-3 text-sm text-slate-500">
-          Loading assignment...
-        </span>
+        <span className="ml-3 text-sm text-slate-500">Loading assignment...</span>
       </div>
     );
   }
@@ -404,9 +364,7 @@ export default function AssignmentPanel({
           <ClipboardList className="text-slate-400" size={23} />
 
           <div>
-            <h3 className="font-semibold text-slate-800">
-              No assignment for this lesson
-            </h3>
+            <h3 className="font-semibold text-slate-800">No assignment for this lesson</h3>
 
             <p className="mt-1 text-sm text-slate-500">
               Your instructor hasn't added an assignment here.
@@ -420,9 +378,7 @@ export default function AssignmentPanel({
   if (errorMessage && !assignment) {
     return (
       <div className="mt-10 rounded-xl border border-red-200 bg-red-50 p-6">
-        <p className="text-sm font-semibold text-red-700">
-          Unable to load assignment
-        </p>
+        <p className="text-sm font-semibold text-red-700">Unable to load assignment</p>
 
         <p className="mt-2 text-sm text-red-600">{errorMessage}</p>
       </div>
@@ -432,8 +388,7 @@ export default function AssignmentPanel({
   if (!assignment) return null;
 
   const latestResult = [...results].sort(
-    (a, b) =>
-      new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime(),
+    (a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime(),
   )[0];
 
   const allAnswered = assignment.questions.every((question) =>
@@ -458,16 +413,12 @@ export default function AssignmentPanel({
               Lesson assignment
             </p>
 
-            <h2 className="mt-1 text-xl font-bold text-slate-900">
-              {assignment.title}
-            </h2>
+            <h2 className="mt-1 text-xl font-bold text-slate-900">{assignment.title}</h2>
           </div>
         </div>
 
         {assignment.description && (
-          <p className="mt-4 text-sm leading-7 text-slate-600">
-            {assignment.description}
-          </p>
+          <p className="mt-4 text-sm leading-7 text-slate-600">{assignment.description}</p>
         )}
 
         <div className="mt-5 flex flex-wrap gap-3">
@@ -518,9 +469,7 @@ export default function AssignmentPanel({
       {/* Before starting */}
       {!activeAttempt ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <h3 className="text-lg font-bold text-slate-900">
-            Assignment instructions
-          </h3>
+          <h3 className="text-lg font-bold text-slate-900">Assignment instructions</h3>
 
           <ul className="mt-4 space-y-3 text-sm text-slate-600">
             <li>• Total questions: {assignment.questions.length}</li>
@@ -536,9 +485,7 @@ export default function AssignmentPanel({
 
             <li>
               • Attempts remaining:{" "}
-              {assignment.attemptsRemaining === null
-                ? "Unlimited"
-                : assignment.attemptsRemaining}
+              {assignment.attemptsRemaining === null ? "Unlimited" : assignment.attemptsRemaining}
             </li>
           </ul>
 
@@ -549,11 +496,7 @@ export default function AssignmentPanel({
               disabled={starting}
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {starting ? (
-                <LoaderCircle size={17} className="animate-spin" />
-              ) : (
-                <Play size={17} />
-              )}
+              {starting ? <LoaderCircle size={17} className="animate-spin" /> : <Play size={17} />}
 
               {starting ? "Starting..." : "Start Attempt"}
             </button>
@@ -596,9 +539,7 @@ export default function AssignmentPanel({
             <div className="mb-5">
               <h3 className="font-bold text-slate-900">Questions</h3>
 
-              <p className="mt-1 text-sm text-slate-500">
-                Select one answer for each question.
-              </p>
+              <p className="mt-1 text-sm text-slate-500">Select one answer for each question.</p>
             </div>
 
             <div className="space-y-5">
@@ -618,8 +559,7 @@ export default function AssignmentPanel({
           {/* Submit section */}
           <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-slate-500">
-              Answered {answeredCount} of {assignment.questions.length}{" "}
-              questions
+              Answered {answeredCount} of {assignment.questions.length} questions
             </p>
 
             <button

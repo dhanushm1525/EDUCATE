@@ -1,3 +1,3 @@
-export interface GetMyProfileDTO{
-    userId:string
+export interface GetMyProfileDTO {
+  userId: string;
 }

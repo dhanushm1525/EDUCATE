@@ -8,10 +8,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-import type {
-  ChapterPreview,
-  LessonPreview,
-} from "../../../types/courseLearningContent";
+import type { ChapterPreview, LessonPreview } from "../../../types/courseLearningContent";
 
 interface LearningSidebarProps {
   chapters: ChapterPreview[];
@@ -46,9 +43,7 @@ export default function LearningSidebar({
           <h2 className="font-bold text-slate-900">Course content</h2>
         </div>
 
-        <p className="mt-1 text-xs text-slate-500">
-          {chapters.length} chapters
-        </p>
+        <p className="mt-1 text-xs text-slate-500">{chapters.length} chapters</p>
       </div>
 
       <div className="flex-1 overflow-y-auto">
@@ -72,9 +67,7 @@ export default function LearningSidebar({
                   </span>
 
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-slate-800">
-                      {chapter.title}
-                    </p>
+                    <p className="text-sm font-semibold text-slate-800">{chapter.title}</p>
 
                     <p className="mt-1 text-xs text-slate-400">
                       {completedInChapter}/{chapter.lessons.length} completed
@@ -93,17 +86,13 @@ export default function LearningSidebar({
                 <div className="pb-2">
                   {chapter.lessons.map((lesson) => {
                     const selected = selectedLessonId === lesson.lessonId;
-                    const completed = completedLessonIds.includes(
-                      lesson.lessonId,
-                    );
+                    const completed = completedLessonIds.includes(lesson.lessonId);
 
                     return (
                       <button
                         key={lesson.lessonId}
                         type="button"
-                        onClick={() =>
-                          onSelectLesson(chapter.chapterId, lesson)
-                        }
+                        onClick={() => onSelectLesson(chapter.chapterId, lesson)}
                         className={`flex w-full items-center gap-3 px-5 py-3 text-left transition ${
                           selected
                             ? "border-r-2 border-indigo-600 bg-indigo-50"
@@ -111,23 +100,16 @@ export default function LearningSidebar({
                         }`}
                       >
                         {completed ? (
-                          <CheckCircle2
-                            size={17}
-                            className="shrink-0 text-green-600"
-                          />
+                          <CheckCircle2 size={17} className="shrink-0 text-green-600" />
                         ) : lesson.type === "video" ? (
                           <PlayCircle
                             size={17}
-                            className={
-                              selected ? "text-indigo-600" : "text-slate-400"
-                            }
+                            className={selected ? "text-indigo-600" : "text-slate-400"}
                           />
                         ) : (
                           <FileText
                             size={17}
-                            className={
-                              selected ? "text-indigo-600" : "text-slate-400"
-                            }
+                            className={selected ? "text-indigo-600" : "text-slate-400"}
                           />
                         )}
 
@@ -145,9 +127,7 @@ export default function LearningSidebar({
                           </p>
 
                           {lesson.duration !== undefined && (
-                            <p className="mt-1 text-xs text-slate-400">
-                              {lesson.duration} minutes
-                            </p>
+                            <p className="mt-1 text-xs text-slate-400">{lesson.duration} minutes</p>
                           )}
                         </div>
                       </button>

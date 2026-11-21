@@ -1,4 +1,3 @@
-
 import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
 import { Request, Response, NextFunction } from "express";
@@ -10,44 +9,30 @@ import { CourseResponseService } from "../../../application/services/CourseRespo
 import { AppError } from "../../../shared/errors/AppError";
 
 export class CreateCourseController {
+  constructor(
+    private readonly _createCourseUseCase: ICreateCourseUseCase,
+    private readonly _courseResponseService: CourseResponseService,
+  ) {}
 
-    constructor(
-        private readonly _createCourseUseCase: ICreateCourseUseCase,
-        private readonly _courseResponseService: CourseResponseService
-    ) { }
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError("Unauthorized", HttpStatusCode.UNAUTHORIZED);
+      }
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
+      const dto = CourseMapper.toCreateCourseDTO(req.body, req.user.userId);
 
-        try {
+      const course = await this._createCourseUseCase.execute(dto);
 
-            if (!req.user) {
-                throw new AppError(
-                    "Unauthorized",
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+      const responseData = await this._courseResponseService.toDTO(course);
 
-            const dto =
-                CourseMapper.toCreateCourseDTO(req.body, req.user.userId);
-
-            const course =
-                await this._createCourseUseCase.execute(dto);
-
-            const responseData =
-                await this._courseResponseService.toDTO(course);
-
-            res.status(HttpStatusCode.CREATED).json({
-                success: true,
-                message: "Course created successfully",
-                data: responseData
-            });
-
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.CREATED).json({
+        success: true,
+        message: "Course created successfully",
+        data: responseData,
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }

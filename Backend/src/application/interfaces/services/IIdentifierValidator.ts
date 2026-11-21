@@ -1,3 +1,3 @@
 export interface IIdentifierValidator {
-    isValid(identifier: string): boolean;
+  isValid(identifier: string): boolean;
 }

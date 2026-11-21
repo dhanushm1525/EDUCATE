@@ -1,85 +1,53 @@
-import {
-    Request,
-    Response,
-    NextFunction
-} from "express";
+import { Request, Response, NextFunction } from "express";
 
-import { IGetAssignmentByLessonUseCase }
-    from "../../../application/interfaces/assingment/IGetAssignmentByLessonUseCase";
-import { IIdentifierValidator }
-    from "../../../application/interfaces/services/IIdentifierValidator";
+import { IGetAssignmentByLessonUseCase } from "../../../application/interfaces/assingment/IGetAssignmentByLessonUseCase";
+import { IIdentifierValidator } from "../../../application/interfaces/services/IIdentifierValidator";
 
-import { AppError }
-    from "../../../shared/errors/AppError";
+import { AppError } from "../../../shared/errors/AppError";
 
-import { HttpStatusCode }
-    from "../../../shared/enums/HttpStatusCode";
+import { HttpStatusCode } from "../../../shared/enums/HttpStatusCode";
 
-import { AUTH_MESSAGES }
-    from "../../../shared/messages/authMessages";
-import { AssignmentResponseMapper }
-    from "../../../application/mappers/AssignmentResponseMapper";
+import { AUTH_MESSAGES } from "../../../shared/messages/authMessages";
+import { AssignmentResponseMapper } from "../../../application/mappers/AssignmentResponseMapper";
 
 export class GetAssignmentByLessonController {
+  constructor(
+    private readonly _getAssignmentByLessonUseCase: IGetAssignmentByLessonUseCase,
+    private readonly _identifierValidator: IIdentifierValidator,
+  ) {}
 
-    constructor(
-        private readonly _getAssignmentByLessonUseCase:
-            IGetAssignmentByLessonUseCase,
-        private readonly _identifierValidator: IIdentifierValidator
-    ) { }
+  async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError(AUTH_MESSAGES.AUTHENTICATION_REQUIRED, HttpStatusCode.UNAUTHORIZED);
+      }
 
-    async handle(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
+      const { lessonId } = req.params;
 
-        try {
+      if (Array.isArray(lessonId)) {
+        throw new AppError("Invalid lesson ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            if (!req.user) {
-                throw new AppError(
-                    AUTH_MESSAGES.AUTHENTICATION_REQUIRED,
-                    HttpStatusCode.UNAUTHORIZED
-                );
-            }
+      if (!lessonId) {
+        throw new AppError("Lesson ID is required", HttpStatusCode.BAD_REQUEST);
+      }
 
-            const { lessonId } = req.params;
+      if (!this._identifierValidator.isValid(lessonId)) {
+        throw new AppError("Invalid lesson ID", HttpStatusCode.BAD_REQUEST);
+      }
 
-            if (Array.isArray(lessonId)) {
-                throw new AppError(
-                    "Invalid lesson ID",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
+      const assignment = await this._getAssignmentByLessonUseCase.execute(
+        lessonId,
+        req.user.userId,
+      );
 
-            if (!lessonId) {
-                throw new AppError(
-                    "Lesson ID is required",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
-
-            if (!this._identifierValidator.isValid(lessonId)) {
-                throw new AppError(
-                    "Invalid lesson ID",
-                    HttpStatusCode.BAD_REQUEST
-                );
-            }
-
-            const assignment =
-                await this._getAssignmentByLessonUseCase.execute(
-                    lessonId,
-                    req.user.userId
-                );
-
-            res.status(HttpStatusCode.OK).json({
-                success: true,
-                message: "Assignment fetched successfully",
-                data: AssignmentResponseMapper.toDTO(assignment),
-            });
-
-        } catch (error) {
-            next(error);
-        }
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        message: "Assignment fetched successfully",
+        data: AssignmentResponseMapper.toDTO(assignment),
+      });
+    } catch (error) {
+      next(error);
     }
+  }
 }
